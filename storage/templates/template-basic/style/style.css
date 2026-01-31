@@ -1,0 +1,811 @@
+@import url(css.css);
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    font-size: 16px;
+    font-family: Montserrat, sans-serif;
+    line-height: 1.5;
+    background-color: #0f1011;
+    color: #e6e6e6;
+    margin: 0;
+    padding: 0;
+    }
+    
+.container {
+    width: 100%;
+    max-width: 1024px;
+    display: block;
+    background: #212123;
+    }
+    
+.logo {
+    display: flex;
+    height: 68px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Контейнер в шапке */
+
+.header-info {
+    height: 352px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 10px;
+    margin: var(--margin);
+}
+.product-info {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+#product-name {
+    font-weight: bold;
+    font-size: 44px;
+}
+#product-bonus {
+    font-size: 14px;
+    color: #000;
+}
+.header-button {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin: 20px 0 0;
+}
+#header-login {
+    padding: 10px;
+    margin: 0 5px;
+    border: 1px solid #fff;
+    border-radius: 4px;
+    transition: var(--transition-duration);
+    text-decoration: none;
+    background-color: #7750ad;
+    color: #e6e6e6;
+}
+#header-login:hover {
+    background-color: #ef4136;
+}
+#header-register {
+    padding: 10px;
+    margin: 0 5px;
+    border-radius: 4px;
+    background-color: #ef4136;
+    color: #fff;
+    transition: var(--transition-duration);
+    text-decoration: none;
+}
+#header-register:hover {
+    background-color: #7750ad;
+}
+
+table {
+    margin: 15px 10px;
+    width: calc(100% - 20px);
+    border-radius: 10px;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 80%;
+}
+tbody {
+    border-color: #507089;
+}
+
+/* Преимущества */
+
+.benefits {
+    display: grid;
+    grid-template: 1fr / 1fr 1fr 1fr 1fr;
+    padding: 10px 0;
+    margin: var(--margin);
+    gap: 10px;
+}
+.benefits-blocks {
+    background-color: #2f485d;
+    border-radius: 10px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+    box-sizing: border-box;
+}
+.benefits-blocks p {
+    padding-left: 10px;
+}
+
+/* Характеристики слотов */
+.slot-char {
+    display: grid;
+    grid-template: 1fr / 1fr 1fr 1fr 1fr;
+    padding: 0 0 10px;
+    margin: var(--margin);
+    gap: 10px;
+}
+.char-meta {
+    background-color: #2f485d;
+    border-radius: 10px;
+    display: flex;
+    align-content: center;
+    padding: 10px 0;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#char-head {
+    font-weight: bold;
+}
+
+/* Оглавление */
+
+#table-of-contents {
+    background-color: #2f485d;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
+  }
+  
+#table-of-contents ol {
+    margin-left: 0; 
+    padding-left: 20px;
+  }
+
+#table-of-contents p {
+    color: #725ef5;
+    font-size: 120%;
+    font-weight: bold;
+    margin: 5px 0 10px 0;
+  }
+  
+#table-of-contents li {
+    list-style-type: decimal;
+    margin: 5px 0;
+    text-align: left;
+  }
+#table-of-contents a {
+    color: #e6e6e6;
+    text-decoration: none;
+    transition: 0.3s;
+}
+#table-of-contents a:hover {
+    color: #725ef0;
+}
+
+/* FAQ */
+
+.faq-main {
+    margin: 10px;
+  }
+.faq summary {
+    display: block;
+    padding: 10px 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+.faq p {
+    font-size: 90%;
+}
+.faq details {
+    display: block;
+    background: #2f485d;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 7px 0 7px;
+}
+
+/* Контент */
+
+#button-play {
+    text-decoration: none;
+    background-color: #dafe31;
+    font-weight: bold;
+    border-radius: var(--border-radius);
+    transition: var(--transition-duration);
+    color: #000;
+    text-align: center;
+    padding: 10px 5px;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+#button-play:hover {
+    background-color: #edff98;
+}
+
+.content-image {
+    max-width: 100%;
+    height: auto;
+}
+img {
+    margin: 10px;
+    max-width: 100%;
+    height: auto;
+}
+.screen {
+    border-radius: 10px;
+    border: 2px solid #2C3B46;
+    height: auto;
+}
+#info {
+    border: 2px dashed #DAFE31;
+    border-radius: 10px;
+    padding: 10px;
+    margin: var(--margin);
+}
+.container p a {
+    color: #2071e0;
+    text-decoration: none;
+}
+.container li a {
+    color: #2071e0;
+    text-decoration: none;
+}
+.promo {
+    display: flex;
+    margin: 10px;
+    background-image: linear-gradient(105.99deg, #7451a3 1.11%, #6632ba 100%);
+    padding: 10px;
+    border-radius: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#promo-name {
+    font-size: 200%;
+    font-weight: bold;
+    color: #dcff00;
+    padding: 0 0 30px;
+}
+#promo-info {
+    font-size: 110%;
+    font-weight: bold;
+    color: #fff;
+    padding: 30px 0 0;
+}
+
+.slot {
+    margin: 10px;
+}
+iframe {
+    width: 100%;
+    height: 565px;
+        border-radius: 10px;
+}
+.video {
+    margin: 0 10px;
+}
+
+/* Новости */
+
+.news-container {
+    margin: var(--margin);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    flex-wrap: nowrap;
+    transition: 0.3s;
+    background-color: #3c4460;
+    border-radius: 10px;
+    padding: 10px;
+}
+.news-container img {
+    width: 450px;
+    height: auto;
+    border-radius: 10px;
+    margin: 0;
+}
+.news-meta {
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    padding-left: 10px;
+}
+#news-head {
+    height: auto;
+    text-decoration: none;
+    color: #9a89ff;
+    font-weight: bold;
+    font-size: 20px;
+    margin: 0;
+    padding-bottom: 10px;
+    text-align: left;
+}
+#news-description {
+    height: auto;
+    margin: 0;
+}
+#news-button {
+    text-decoration: none;
+    display: flex;
+    height: auto;
+    background-color: #5b4fa1;
+    justify-content: center;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 10px;
+    color: white;
+    font-size: 14px;
+    transition: 0.3s;
+}
+#news-button:hover {
+    background-color: #6859c3;
+}
+.rules {
+    display: flex;
+    margin: 0 10px;
+    justify-content: space-between;
+}
+.rules-menu {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    margin: 15px 10px 10px 0;
+}
+.rules-menu-sticky {
+    position: sticky;
+    top: 15px;
+    display: flex;
+    flex-direction: column;
+}
+.rules-menu a {
+    padding: 10px;
+    background-color: #2f485d;
+    transition: 0.3s;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.rules-menu a:hover  {
+    background-color: #38536a;
+}
+.rules-meta {
+    width: 70%;
+}
+.rules-meta p {
+    padding: 0;
+    padding-left: 10px;
+}
+.rules-menu-sticky a {
+    text-decoration: none;
+    color: #e6e6e6;
+}
+
+/* Игры */
+
+.table-games {
+    display: grid;
+    grid-template: 1fr / 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    margin: var(--margin);
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.default-game {
+    position: relative;
+}
+
+.default-game img {
+    border-radius: 10px;
+    transition: 0.3s;
+    margin: 0;
+}
+
+.default-game img:hover {
+    transform: scale(1.03);
+}
+
+.game-text {
+    position: absolute;
+    bottom: 10px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+/* Таблица игроков */
+
+.table-player {
+    margin: var(--margin);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    background-color: #3c4460;
+    border-radius: 10px;
+}
+.player-name {
+    display: flex;
+    flex-direction: column;
+}
+.table-name,.table-game,.table-bet,.table-x,.table-win,.table-time {
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+}
+.table-name {
+    width: 20%;
+}
+.table-game {
+    width: 20%;
+}
+.table-head {
+    padding: 20px 10px;
+    border-bottom: solid 1px #464e6b;
+    font-size: 14px;
+}
+.table-column {
+    font-size: 14px;
+    padding: 15px 10px;
+    border-bottom: solid 1px #464e6b;
+    display: flex;
+    align-items: center;
+}
+.table-column img {
+    margin: 0;
+    padding-right: 5px;
+    
+}
+.table-column.finish {
+    border-bottom: none;
+}
+
+/* Слоты */
+
+.slots {
+    display:grid;
+    grid-template:1fr/1fr 1fr 1fr 1fr;
+    padding:10px 0;
+    margin:var(--margin);
+    gap:10px
+}
+.slots-blocks {
+    border-radius:10px;
+    overflow:hidden
+}
+.slots-blocks {
+    background-color:#2f485d;
+    display:flex;
+    align-content:center;
+    justify-content:center;
+    align-items:center;
+    box-sizing:border-box;
+    height:150px;
+    position:relative;
+    transition:transform .3s ease-in-out,box-shadow .3s ease-in-out
+}
+.slots-blocks::before,.slots-overlay {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+}
+.slots-blocks::before {
+    content:'';
+    background-color:rgba(0,0,0,.6);
+    border-radius:inherit;
+}
+.slots-blocks:hover {
+    transform:scale(1.05);
+}
+.slots-blocks .image-container {
+    width:100%;
+    height:100%;
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+    border-radius:inherit
+}.slots-overlay {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+.slots-text {
+    color:#fff;
+    font-size:16px;
+    font-weight:700;
+    text-align:center;
+    margin-bottom:10px
+}
+
+.play-button {
+    font-weight:700;
+    cursor:pointer;
+}
+.play-button {
+    background-color:#fff;
+    color:#2f485d;
+    border:0;
+    border-radius:20px;
+    padding:5px 20px;
+    font-size:14px;
+    transition:background-color .3s ease-in-out,color .3s ease-in-out;
+    text-decoration:none;
+}
+.play-button:hover {
+    background-color:#d0f426;
+    color:#000
+}
+.slot-meta {
+    display: flex;
+    justify-content: space-between;
+}
+.slot-meta span {
+    font-size: 12px;
+    padding: 0;
+    margin: 0 10px;
+    margin-bottom: 10px;
+}
+
+
+/* Подвал */
+
+.breadcrumb {
+    max-width: 100%;
+    height: auto;
+    background-color: #735cfc;
+    border-radius: var(--border-radius);
+    text-align: center;
+    padding: 5px 0;
+    margin: var(--margin);
+}
+.breadcrumb-item a {
+    text-decoration: none;
+    color: #e6e6e6;
+    font-size: 14px;
+}
+.menu-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    margin: 20px 10px;
+}
+.back-menu {
+    text-decoration: none;
+    font-size: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    margin: 20px 10px;
+}
+.back-menu a {
+    text-decoration: none;
+    padding: 0 5px;
+    color: #d0f426;
+    transition: 0.3s
+}
+.back-menu a:hover {
+    color: #378ad0;
+}
+#button-menu {
+    padding: 5px 10px;
+    font-size: 15px;
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    width: auto;
+    transition: var(--transition-duration);
+}
+#button-menu:hover {
+    color: #c9e63f;
+}
+.providers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    max-width: 100%;
+    margin: 10px;
+}
+.providers-container {
+    display: flex;
+    justify-content: center;
+    width: 20%;
+    height: 50px;
+    background-color: #2f485d;
+    border-radius: var(--border-radius);
+}
+.copyright {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding-bottom: 30px;
+}
+#licensed {
+    font-size: 11px;
+    color: #7c7c7c;
+}
+
+/* Медиа-запрос для телефона */
+@media (max-width: 767.99px) {
+    body, html, header, footer {
+        width: 100%;
+    }
+    .benefits {
+        grid-template: 1fr 1fr 1fr 1fr / 1fr;
+    }
+    .slot-char {
+        grid-template: 1fr 1fr / 1fr 1fr;
+    }
+    .slots {
+        grid-template: 1fr 1fr / 1fr 1fr;
+    }
+    .screen {
+        width: calc(100% - 25px);
+    }
+    .providers {
+        flex-wrap: wrap;
+    }
+    .providers-container {
+        width: 30%;
+    }
+    #product-name {
+        font-size: 250%;
+    }
+    #product-bonus {
+        font-size: 80%;
+    }
+    .menu-container {
+        grid-template: 1fr 1fr 1fr 1fr / 1fr;
+    }
+    iframe {
+        height: 260px;
+    }
+    .news-container {
+        flex-wrap: wrap;
+    }
+    .news-container img {
+        width: 100%;
+    }
+    .news-meta {
+        padding-top: 10px;
+        padding-left: 0;
+    }
+    .table-games {
+        grid-template: 1fr 1fr / 1fr 1fr;
+    }
+    .table-time,.table-x {
+        display: none;
+    }
+    .table-name,.table-game,.table-bet,.table-x,.table-win,.table-time {
+        width: 20%;
+    }
+    .table-name,.table-game {
+        width: 30%;
+    }
+    .slot-meta {
+        display: flex;
+        flex-direction: column;
+    }
+    .rules-menu {
+        display: none;
+    }
+    .rules-meta {
+        width: 100%;
+    }
+    .rules-meta p {
+        padding-left: 0;
+    }
+    .rules-meta h1,.rules-meta h2,.rules-meta h3,.rules-meta h4 {
+        padding-left: 0;
+    }
+}
+
+/* Медиа-запрос для планшета и ниже */
+@media (max-width: 1023.99px) {
+    header, .container {
+        width: 100%;
+    }
+    iframe {
+        height: 341px;
+    }
+}
+
+/* Медиа-запрос для планшета */
+@media (min-width: 768px) and (max-width: 1023.99px) {
+    .benefits {
+        grid-template: 1fr 1fr / 1fr 1fr;
+    }
+    .screen {
+        width: calc(100% - 25px);
+    }
+    .menu-container {
+        grid-template: 1fr 1fr / 1fr 1fr;
+    }
+    iframe {
+        height: 480px;
+    }
+    .news-container img {
+        width: 320px;
+    }
+}
+
+/* Медиа-запрос для ноутбука */
+@media (min-width: 1024px) and (max-width: 1365.99px) {
+    .container {
+        width: 970px;
+    }
+    .screen {
+        width: calc(100% - 20px);
+    }
+    iframe {
+        height: 535px;
+    }
+}
+
+/* Медиа-запрос для компьютера */
+@media (min-width: 1366px) {
+    .container {
+        width: 1024px;
+    }
+    .screen {
+        width: calc(100% - 20px);
+    }
+}
+
+:root {
+    --transition-duration: 0.3s;
+    --border-radius: 10px;
+    --margin: 0 10px;
+}
+
+a:-webkit-any-link {
+    text-decoration-color: #d0f426;
+}
+p, li {
+    text-align: justify;
+    padding: 0 10px;
+}
+h1 {
+    margin: 15px 0 0;
+    color: #000;
+    font-size: 24px;
+    padding: 0 10px;
+}
+h2 {
+    margin: 15px 0 0;
+    color: #ff7a00;
+    font-size: 21px;
+    padding: 0 10px;
+}
+h3 {
+    margin: 10px 0 5px;
+    color: #ff7a00;
+    font-size: 18px;
+    padding: 0 10px;
+}
+h4 {
+    margin: 10px 0 5px;
+    color: #ff7a00;
+    font-size: 16px;
+    padding: 0 10px;
+}

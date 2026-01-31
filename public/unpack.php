@@ -1,0 +1,65 @@
+<?php
+// __hub_unpack.php
+// Одноразовая распаковка zip в текущей директории.
+// Защита: token + expiry + allow only specific zip name.
+
+$token = $_GET['token'] ?? '';
+$expires = (int)($_GET['exp'] ?? 0);
+
+if ($token === '' || $expires === 0 || time() > $expires) {
+    http_response_code(403);
+    echo "Forbidden\n";
+    exit;
+}
+
+// token кладем в файл .hub_token при первой заливке или каждый раз обновляем
+$tokenFile = __DIR__ . '/.hub_token';
+if (!is_file($tokenFile)) {
+    http_response_code(403);
+    echo "Token file missing\n";
+    exit;
+}
+
+$expected = trim((string)@file_get_contents($tokenFile));
+if (!hash_equals($expected, $token)) {
+    http_response_code(403);
+    echo "Bad token\n";
+    exit;
+}
+
+$zip = __DIR__ . '/__hub_build.zip';
+if (!is_file($zip)) {
+    http_response_code(404);
+    echo "Zip not found\n";
+    exit;
+}
+
+$za = new ZipArchive();
+if ($za->open($zip) !== true) {
+    http_response_code(500);
+    echo "Cannot open zip\n";
+    exit;
+}
+
+// защита от zip-slip
+for ($i = 0; $i < $za->numFiles; $i++) {
+    $name = $za->getNameIndex($i);
+    if (strpos($name, '..') !== false || str_starts_with($name, '/') || str_contains($name, '\\')) {
+        http_response_code(400);
+        echo "Bad zip entry: {$name}\n";
+        exit;
+    }
+}
+
+$ok = $za->extractTo(__DIR__);
+$za->close();
+
+if (!$ok) {
+    http_response_code(500);
+    echo "Extract failed\n";
+    exit;
+}
+
+@unlink($zip);
+
+echo "OK\n";

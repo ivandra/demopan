@@ -1,0 +1,14 @@
+{
+    "ok": true,
+    "errors": [],
+    "warnings": [
+        "Есть неиспользуемые texts-файлы: 404.php, game.php, home.php, play.php"
+    ],
+    "created_texts": [],
+    "unused_texts": [
+        "404.php",
+        "game.php",
+        "home.php",
+        "play.php"
+    ]
+}
