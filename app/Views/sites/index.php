@@ -101,6 +101,7 @@
     | <a href="/deploy?id=<?= (int)($site['id'] ?? 0) ?>">Deploy</a>
     | <a href="/domains?id=<?= (int)($site['id'] ?? 0) ?>">Domains</a>
 | <a href="/sites/subdomains?id=<?= (int)($site['id'] ?? 0) ?>">Subs</a>
+	 | <a href="/sites/subcfg?id=<?= (int)$site['id'] ?>">SubCfg</a>
 
     | <a href="/sites/resetFastpanelState?id=<?= (int)($site['id'] ?? 0) ?>"
          onclick="return confirm('Сбросить статусы VPS/FTP/Files?')">Reset</a>

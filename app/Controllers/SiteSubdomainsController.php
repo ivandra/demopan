@@ -513,6 +513,21 @@ class SiteSubdomainsController extends Controller
             $fqdns[] = $fqdn;
             $ins->execute([$siteId, $l, $fqdn, 1, 1]);
         }
+		
+		// --- PATCH2: автосоздание subs/<label>/... для template-multy
+		$site = $this->loadSite($siteId);
+		if (($site['template'] ?? '') === 'template-multy') {
+			require_once __DIR__ . '/../Services/SubdomainProvisioner.php';
+			$prov = new SubdomainProvisioner();
+
+			foreach ($rows as $r) {
+				$lb = (string)($r['label'] ?? '');
+				if ($lb !== '') {
+					$prov->ensureForSite($siteId, $lb);
+				}
+			}
+		}
+
 
         // 3) FastPanel aliases
         $vpsOk = ((int)($site['fp_site_created'] ?? 0) === 1 && (int)($site['fp_site_id'] ?? 0) > 0);

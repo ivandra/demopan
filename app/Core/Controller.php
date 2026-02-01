@@ -19,4 +19,6 @@ abstract class Controller
         echo '<script>location.href=' . json_encode($url) . ';</script>';
         exit;
     }
+	
+	
 }

@@ -1,23 +1,44 @@
+<?php
+/** @var array $site */
+/** @var array $pages */
+/** @var array $textFiles */
+/** @var array $used */
+/** @var string $configTargetPath */
+/** @var string $label */
+
+$label = isset($label) ? (string)$label : '_default';
+$labelEnc = urlencode($label);
+$labelEsc = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
+
+// В Files у тебя редактируются только корневые файлы build.
+// Для template-multy корневой файл — config.default.php, а не config.php.
+$configFileForFiles = (($site['template'] ?? '') === 'template-multy') ? 'config.default.php' : 'config.php';
+?>
+
 <h2>Pages: <?= htmlspecialchars($site['domain']) ?></h2>
 <p style="font-size:13px;opacity:.85;">
-    config.php генерируется в: <code><?= htmlspecialchars($configTargetPath) ?></code>
-    | <a href="/sites/files/edit?id=<?= (int)$site['id'] ?>&file=config.php">открыть в Files</a>
+    label: <code><?= $labelEsc ?></code>
+    | config.php генерируется в: <code><?= htmlspecialchars($configTargetPath) ?></code>
+    | <a href="/sites/files/edit?id=<?= (int)$site['id'] ?>&label=<?= $labelEnc ?>&file=<?= rawurlencode($configFileForFiles) ?>">открыть в Files</a>
 </p>
 
 <p>
-    <a href="/sites/edit?id=<?= (int)$site['id'] ?>">← назад к SEO</a> |
-    <a href="/sites/texts?id=<?= (int)$site['id'] ?>">Texts</a>
+    <a href="/sites/edit?id=<?= (int)$site['id'] ?>&label=<?= $labelEnc ?>">← назад к SEO</a> |
+    <a href="/sites/texts?id=<?= (int)$site['id'] ?>&label=<?= $labelEnc ?>">Texts</a>
 </p>
 
 <hr>
 
-<form method="post" action="/sites/pages/text-new?id=<?= (int)$site['id'] ?>" style="margin-bottom:12px;">
+<form method="post" action="/sites/pages/text-new?id=<?= (int)$site['id'] ?>&label=<?= $labelEnc ?>" style="margin-bottom:12px;">
+    <input type="hidden" name="label" value="<?= $labelEsc ?>">
     <label>Быстро создать файл в texts</label>
     <input name="new_file" placeholder="new.php">
     <button type="submit">Создать и открыть</button>
 </form>
 
-<form method="post" action="/sites/pages?id=<?= (int)$site['id'] ?>">
+<form method="post" action="/sites/pages?id=<?= (int)$site['id'] ?>&label=<?= $labelEnc ?>">
+    <input type="hidden" name="label" value="<?= $labelEsc ?>">
+
     <table>
         <tr>
             <th>URL</th>
@@ -53,7 +74,7 @@
                 </select>
                 <?php if ($currentFile): ?>
                     <div style="font-size:12px;margin-top:4px;">
-                        <a href="/sites/texts/edit?id=<?= (int)$site['id'] ?>&file=<?= rawurlencode($currentFile) ?>">редактировать</a>
+                        <a href="/sites/texts/edit?id=<?= (int)$site['id'] ?>&label=<?= $labelEnc ?>&file=<?= rawurlencode($currentFile) ?>">редактировать</a>
                     </div>
                 <?php endif; ?>
             </td>

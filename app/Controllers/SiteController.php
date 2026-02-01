@@ -9,246 +9,325 @@ class SiteController extends Controller
         }
     }
 
-    public function index(): void
-{
-    $this->requireAuth();
-
-    $sites = DB::pdo()->query('SELECT * FROM sites ORDER BY id DESC')->fetchAll();
-
-    // runtime SSL статусы из FastPanel (группируем по server_id, логин 1 раз на сервер)
-    $sslMap = $this->fetchSslStatusForSites($sites);
-
-    foreach ($sites as &$s) {
-        $id = (int)($s['id'] ?? 0);
-        $st = $sslMap[$id] ?? [];
-
-        $s['ssl_ready']    = (int)($st['ready'] ?? 0);     // enabled==true
-        $s['ssl_has_cert'] = (int)($st['has_cert'] ?? 0);  // certId>0
-        $s['ssl_cert_id']  = (int)($st['cert_id'] ?? 0);
-        $s['ssl_error']    = (string)($st['error'] ?? '');
-    }
-    unset($s);
-
-    $this->view('sites/index', compact('sites'));
-}
-
-
-
-
-   public function createForm(): void
-{
-    $this->requireAuth();
-
-    require_once __DIR__ . '/../Services/TemplateService.php';
-    $templates = (new TemplateService())->listTemplates();
-
-    $accounts = DB::pdo()->query("
-        SELECT * FROM registrar_accounts
-        WHERE provider='namecheap'
-        ORDER BY is_sandbox ASC, id DESC
-    ")->fetchAll();
-
-    $this->view('sites/create', compact('templates', 'accounts'));
-}
-
-
-
-  public function store(): void
-{
-    $this->requireAuth();
-
-    $domainInput = (string)($_POST['domain'] ?? '');
-    $template    = trim((string)($_POST['template'] ?? 'default'));
-
-    $domain = $this->normalizeDomainInput($domainInput);
-
-    if ($domain === '' || !$this->isValidDomain($domain)) {
-        die('bad domain');
+    private function appRoot(): string
+    {
+        if (defined('APP_ROOT')) return rtrim(APP_ROOT, '/\\');
+        // fallback: /public_html/app/Controllers -> ../../ = /public_html
+        $root = realpath(__DIR__ . '/../../');
+        return rtrim($root ?: (__DIR__ . '/../../'), '/\\');
     }
 
-    DB::pdo()->beginTransaction();
-
-    try {
-        $configPath = "storage/configs/site_" . time() . ".json";
-
-        $stmt = DB::pdo()->prepare(
-            "INSERT INTO sites (domain, template, config_path)
-             VALUES (?, ?, ?)"
-        );
-        $stmt->execute([$domain, $template, $configPath]);
-        $siteId = (int)DB::pdo()->lastInsertId();
-
-        $cfg = $this->defaultConfig($domain);
-        $stmt = DB::pdo()->prepare("INSERT INTO site_configs (site_id, json) VALUES (?, ?)");
-        $stmt->execute([$siteId, json_encode($cfg, JSON_UNESCAPED_UNICODE)]);
-
-        require_once __DIR__ . '/../Services/TemplateService.php';
-
-        $buildRel = 'storage/builds/site_' . $siteId;
-        $buildAbs = __DIR__ . '/../../' . $buildRel;
-
-        (new TemplateService())->copyTemplate($template, $buildAbs);
-
-        $stmt = DB::pdo()->prepare("UPDATE sites SET build_path=? WHERE id=?");
-        $stmt->execute([$buildRel, $siteId]);
-
-        $this->regenerateConfigPhp($siteId, $cfg);
-
-        DB::pdo()->commit();
-        $this->redirect('/');
-    } catch (Throwable $e) {
-        DB::pdo()->rollBack();
-        http_response_code(500);
-        echo $e->getMessage();
-    }
-}
-
-
-
-public function editForm(): void
-{
-    $this->requireAuth();
-
-    $siteId = (int)($_GET['id'] ?? 0);
-    if ($siteId <= 0) die('bad id');
-
-    [$site, $cfg] = $this->loadSiteAndConfig($siteId);
-
-    $configTargetPath = $this->getConfigTargetPath($siteId);
-
-    // --- NEW: registrar accounts list (Namecheap) ---
-    $pdo = DB::pdo();
-    $st = $pdo->prepare("
-        SELECT id, provider, is_sandbox, api_user, username, client_ip, is_default
-        FROM registrar_accounts
-        WHERE provider='namecheap'
-        ORDER BY is_default DESC, is_sandbox ASC, id ASC
-    ");
-    $st->execute();
-    $registrarAccounts = $st->fetchAll();
-    // --- /NEW ---
-
-    $this->view('sites/edit', compact('site', 'cfg', 'configTargetPath', 'registrarAccounts'));
-}
-
-
-
-
-    public function update(): void
-{
-    $this->requireAuth();
-
-    $siteId = (int)($_GET['id'] ?? 0);
-    if ($siteId <= 0) die('bad id');
-
-    [$site, $cfg] = $this->loadSiteAndConfig($siteId);
-
-    // обновляем поля
-    $cfg['domain'] = $this->normalizeDomainInput((string)($_POST['domain'] ?? (string)$cfg['domain']));
-
-    if ($cfg['domain'] === '' || !$this->isValidDomain($cfg['domain'])) {
-        die('bad domain');
+    private function storageRoot(): string
+    {
+        if (defined('STORAGE_ROOT')) return rtrim(STORAGE_ROOT, '/\\');
+        return $this->appRoot() . '/storage';
     }
 
-    $cfg['yandex_verification'] = trim($_POST['yandex_verification'] ?? '');
-    $cfg['yandex_metrika']      = trim($_POST['yandex_metrika'] ?? '');
-    $cfg['promolink']           = trim($_POST['promolink'] ?? '/play');
-
-    $cfg['title']       = trim($_POST['title'] ?? '');
-    $cfg['description'] = trim($_POST['description'] ?? '');
-    $cfg['keywords']    = trim($_POST['keywords'] ?? '');
-    $cfg['h1']          = trim($_POST['h1'] ?? '');
-
-    $cfg['partner_override_url'] = trim($_POST['partner_override_url'] ?? '');
-    $cfg['internal_reg_url']     = trim($_POST['internal_reg_url'] ?? '');
-    $cfg['redirect_enabled']     = (int)($_POST['redirect_enabled'] ?? 0);
-    $cfg['base_new_url']         = trim($_POST['base_new_url'] ?? '');
-    $cfg['base_second_url']      = trim($_POST['base_second_url'] ?? '');
-
-    // --- NEW: registrar account id ---
-    $registrarAccountId = (int)($_POST['registrar_account_id'] ?? 0);
-    if ($registrarAccountId <= 0) {
-        $registrarAccountId = null; // снимем привязку
-    } else {
-        // optional: проверим что такой аккаунт существует
-        $chk = DB::pdo()->prepare("SELECT id FROM registrar_accounts WHERE id=? AND provider='namecheap' LIMIT 1");
-        $chk->execute([$registrarAccountId]);
-        if (!$chk->fetchColumn()) {
-            $registrarAccountId = null;
+    private function log(string $msg, array $ctx = []): void
+    {
+        if (function_exists('hub_log')) {
+            hub_log($msg, $ctx);
         }
     }
-    // --- /NEW ---
 
-    // сохраняем config json
-    $stmt = DB::pdo()->prepare("UPDATE site_configs SET json=? WHERE site_id=?");
-    $stmt->execute([json_encode($cfg, JSON_UNESCAPED_UNICODE), $siteId]);
+    // ----------------------------
+    // Index (list sites)
+    // ----------------------------
+    public function index(): void
+    {
+        $this->requireAuth();
 
-    // синхронизируем домен и в sites
-    $stmt = DB::pdo()->prepare("UPDATE sites SET domain=? WHERE id=?");
-    $stmt->execute([$cfg['domain'], $siteId]);
+        $sites = DB::pdo()->query('SELECT * FROM sites ORDER BY id DESC')->fetchAll();
 
-    // --- NEW: update registrar_account_id отдельно, чтобы не словить HY093 ---
-    $stmt = DB::pdo()->prepare("UPDATE sites SET registrar_account_id=? WHERE id=?");
-    $stmt->execute([$registrarAccountId, $siteId]);
-    // --- /NEW ---
+        $sslMap = $this->fetchSslStatusForSites($sites);
 
-    // перегенерация config.php
-    $this->regenerateConfigPhp($siteId, $cfg);
+        foreach ($sites as &$s) {
+            $id = (int)($s['id'] ?? 0);
+            $st = $sslMap[$id] ?? [];
 
-    $this->redirect('/sites/edit?id=' . $siteId);
-}
+            $s['ssl_ready']    = (int)($st['ready'] ?? 0);
+            $s['ssl_has_cert'] = (int)($st['has_cert'] ?? 0);
+            $s['ssl_cert_id']  = (int)($st['cert_id'] ?? 0);
+            $s['ssl_error']    = (string)($st['error'] ?? '');
+        }
+        unset($s);
 
+        $this->view('sites/index', compact('sites'));
+    }
 
+    // ----------------------------
+    // Create
+    // ----------------------------
+    public function createForm(): void
+    {
+        $this->requireAuth();
+
+        require_once $this->appRoot() . '/app/Services/TemplateService.php';
+        $templates = (new TemplateService())->listTemplates();
+
+        $accounts = DB::pdo()->query("
+            SELECT * FROM registrar_accounts
+            WHERE provider='namecheap'
+            ORDER BY is_sandbox ASC, id DESC
+        ")->fetchAll();
+
+        $this->view('sites/create', compact('templates', 'accounts'));
+    }
+
+    public function store(): void
+    {
+        $this->requireAuth();
+
+        $pdo = DB::pdo();
+
+        $domainInput = (string)($_POST['domain'] ?? '');
+        $template    = trim((string)($_POST['template'] ?? 'default'));
+        $domain      = $this->normalizeDomainInput($domainInput);
+
+        if ($domain === '' || !$this->isValidDomain($domain)) {
+            die('bad domain');
+        }
+
+        $registrarAccountId = (int)($_POST['registrar_account_id'] ?? 0);
+        if ($registrarAccountId <= 0) {
+            $registrarAccountId = 0;
+        }
+
+        $pdo->beginTransaction();
+
+        try {
+            $configPath = "storage/configs/site_" . time() . ".json";
+
+            if ($registrarAccountId > 0) {
+                $stmt = $pdo->prepare(
+                    "INSERT INTO sites (domain, template, config_path, registrar_account_id)
+                     VALUES (?, ?, ?, ?)"
+                );
+                $stmt->execute([$domain, $template, $configPath, $registrarAccountId]);
+            } else {
+                $stmt = $pdo->prepare(
+                    "INSERT INTO sites (domain, template, config_path)
+                     VALUES (?, ?, ?)"
+                );
+                $stmt->execute([$domain, $template, $configPath]);
+            }
+
+            $siteId = (int)$pdo->lastInsertId();
+
+            $cfg = $this->defaultConfig($domain);
+            $stmt = $pdo->prepare("INSERT INTO site_configs (site_id, json) VALUES (?, ?)");
+            $stmt->execute([$siteId, json_encode($cfg, JSON_UNESCAPED_UNICODE)]);
+
+            require_once $this->appRoot() . '/app/Services/TemplateService.php';
+
+            $buildRel = 'storage/builds/site_' . $siteId;
+            $buildAbs = $this->appRoot() . '/' . ltrim($buildRel, '/');
+
+            $this->log('STORE.copyTemplate', [
+                'siteId' => $siteId,
+                'template' => $template,
+                'buildRel' => $buildRel,
+                'buildAbs' => $buildAbs,
+                'APP_ROOT' => $this->appRoot(),
+                'STORAGE_ROOT' => $this->storageRoot(),
+            ]);
+
+            (new TemplateService())->copyTemplate($template, $buildAbs);
+
+            $stmt = $pdo->prepare("UPDATE sites SET build_path=? WHERE id=?");
+            $stmt->execute([$buildRel, $siteId]);
+
+            if ($template === 'template-multy') {
+                $this->upsertSiteDefaultConfig($siteId, $cfg);
+                $this->ensureSubdomainConfigExists($siteId, '_default');
+            }
+
+            $this->regenerateConfigPhp($siteId, $cfg, '_default');
+
+            $pdo->commit();
+            $this->redirect('/');
+        } catch (Throwable $e) {
+            $pdo->rollBack();
+            http_response_code(500);
+            echo $e->getMessage();
+        }
+    }
+
+    // ----------------------------
+    // Domain check (простая)
+    // ----------------------------
+    public function checkDomain(): void
+    {
+        $this->requireAuth();
+
+        header('Content-Type: application/json; charset=utf-8');
+
+        $domainInput = (string)($_POST['domain'] ?? $_GET['domain'] ?? '');
+        $domain = $this->normalizeDomainInput($domainInput);
+
+        if ($domain === '' || !$this->isValidDomain($domain)) {
+            echo json_encode(['ok' => false, 'error' => 'bad_domain', 'domain' => $domain], JSON_UNESCAPED_UNICODE);
+            return;
+        }
+
+        $st = DB::pdo()->prepare("SELECT id FROM sites WHERE domain=? LIMIT 1");
+        $st->execute([$domain]);
+        $exists = (bool)$st->fetchColumn();
+
+        echo json_encode(['ok' => true, 'domain' => $domain, 'exists' => $exists], JSON_UNESCAPED_UNICODE);
+    }
+
+    // ----------------------------
+    // Edit + Update
+    // ----------------------------
+    public function editForm(): void
+    {
+        $this->requireAuth();
+
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
+
+        [$site, $cfg] = $this->loadSiteAndConfig($siteId);
+
+        $configTargetPath = $this->getConfigTargetPath($siteId);
+
+        $pdo = DB::pdo();
+        $st = $pdo->prepare("
+            SELECT id, provider, is_sandbox, api_user, username, client_ip, is_default
+            FROM registrar_accounts
+            WHERE provider='namecheap'
+            ORDER BY is_default DESC, is_sandbox ASC, id ASC
+        ");
+        $st->execute();
+        $registrarAccounts = $st->fetchAll();
+
+        $this->view('sites/edit', compact('site', 'cfg', 'configTargetPath', 'registrarAccounts'));
+    }
+
+    public function update(): void
+    {
+        $this->requireAuth();
+
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
+
+        [$site, $cfg] = $this->loadSiteAndConfig($siteId);
+
+        $cfg['domain'] = $this->normalizeDomainInput((string)($_POST['domain'] ?? (string)($cfg['domain'] ?? '')));
+        if ($cfg['domain'] === '' || !$this->isValidDomain($cfg['domain'])) {
+            die('bad domain');
+        }
+
+        $cfg['yandex_verification'] = trim((string)($_POST['yandex_verification'] ?? ''));
+        $cfg['yandex_metrika']      = trim((string)($_POST['yandex_metrika'] ?? ''));
+        $cfg['promolink']           = trim((string)($_POST['promolink'] ?? '/play'));
+
+        $cfg['title']       = trim((string)($_POST['title'] ?? ''));
+        $cfg['description'] = trim((string)($_POST['description'] ?? ''));
+        $cfg['keywords']    = trim((string)($_POST['keywords'] ?? ''));
+        $cfg['h1']          = trim((string)($_POST['h1'] ?? ''));
+
+        $cfg['partner_override_url'] = trim((string)($_POST['partner_override_url'] ?? ''));
+        $cfg['internal_reg_url']     = trim((string)($_POST['internal_reg_url'] ?? ''));
+        $cfg['redirect_enabled']     = (int)($_POST['redirect_enabled'] ?? 0);
+        $cfg['base_new_url']         = trim((string)($_POST['base_new_url'] ?? ''));
+        $cfg['base_second_url']      = trim((string)($_POST['base_second_url'] ?? ''));
+
+        $registrarAccountId = (int)($_POST['registrar_account_id'] ?? 0);
+        if ($registrarAccountId <= 0) {
+            $registrarAccountId = 0;
+        } else {
+            $chk = DB::pdo()->prepare("SELECT id FROM registrar_accounts WHERE id=? AND provider='namecheap' LIMIT 1");
+            $chk->execute([$registrarAccountId]);
+            if (!$chk->fetchColumn()) {
+                $registrarAccountId = 0;
+            }
+        }
+
+        DB::pdo()->prepare("UPDATE site_configs SET json=? WHERE site_id=?")
+            ->execute([json_encode($cfg, JSON_UNESCAPED_UNICODE), $siteId]);
+
+        DB::pdo()->prepare("UPDATE sites SET domain=? WHERE id=?")
+            ->execute([$cfg['domain'], $siteId]);
+
+        DB::pdo()->prepare("UPDATE sites SET registrar_account_id=? WHERE id=?")
+            ->execute([$registrarAccountId > 0 ? $registrarAccountId : null, $siteId]);
+
+        $labelForRegen = (($site['template'] ?? '') === 'template-multy') ? '_default' : null;
+
+        $this->regenerateConfigPhp($siteId, $cfg, $labelForRegen);
+
+        $this->redirect('/sites/edit?id=' . $siteId);
+    }
+
+    // ----------------------------
+    // Pages
+    // ----------------------------
     public function pagesForm(): void
-	{
-		$this->requireAuth();
+    {
+        $this->requireAuth();
 
-		$siteId = (int)($_GET['id'] ?? 0);
-		if ($siteId <= 0) die('bad id');
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
 
-		[$site, $cfg] = $this->loadSiteAndConfig($siteId);
-		$pages = $cfg['pages'] ?? [];
+        [$site, $cfg] = $this->loadSiteAndConfig($siteId);
+        $pages = $cfg['pages'] ?? [];
+        if (!is_array($pages)) $pages = [];
 
-		$textsDir = $this->getTextsDir($site);
-		$textFiles = $this->listTextFiles($textsDir);
+        $label = $this->getLabelFromRequest('_default');
 
-		$used = [];
-		foreach ($pages as $p) {
-			$f = basename((string)($p['text_file'] ?? ''));
-			if ($f !== '') $used[$f] = true;
-		}
+        if (($site['template'] ?? '') === 'template-multy') {
+            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+            (new SubdomainProvisioner())->ensureForSite($siteId, $label);
+        }
 
-		$configTargetPath = $this->getConfigTargetPath($siteId);
+        $textsDir  = $this->getTextsDir($site, $label);
+        $textFiles = $this->listTextFiles($textsDir);
 
-		$this->view('sites/pages', compact('site', 'cfg', 'pages', 'textFiles', 'used', 'configTargetPath'));
+        $used = [];
+        foreach ($pages as $p) {
+            $f = basename((string)($p['text_file'] ?? ''));
+            if ($f !== '') $used[$f] = true;
+        }
 
-	}
-	
-	
-	public function pagesTextNew(): void
-	{
-		$this->requireAuth();
+        $configTargetPath = $this->getConfigTargetPath($siteId);
 
-		$siteId = (int)($_GET['id'] ?? 0);
-		if ($siteId <= 0) die('bad id');
+        $this->view('sites/pages', compact('site', 'cfg', 'pages', 'textFiles', 'used', 'configTargetPath', 'label'));
+    }
 
-		$newFile = (string)($_POST['new_file'] ?? '');
-		if ($newFile === '') die('new_file required');
+    public function pagesTextNew(): void
+    {
+        $this->requireAuth();
 
-		$site = $this->loadSite($siteId);
-		$textsDir = $this->getTextsDir($site);
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
 
-		$safeFile = $this->sanitizeTextFilename($newFile);
-		$path = $textsDir . '/' . $safeFile;
+        $newFile = (string)($_POST['new_file'] ?? '');
+        if ($newFile === '') die('new_file required');
 
-		if (!is_file($path)) {
-			file_put_contents($path, "<?php\n\n");
-		}
+        $label = $this->getLabelFromRequest('_default');
 
-		// открыть редактор
-		$this->redirect('/sites/texts/edit?id=' . $siteId . '&file=' . rawurlencode($safeFile));
-	}
+        $site = $this->loadSite($siteId);
 
+        if (($site['template'] ?? '') === 'template-multy') {
+            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+            (new SubdomainProvisioner())->ensureForSite($siteId, $label);
+        }
+
+        $textsDir = $this->getTextsDir($site, $label);
+        if ($textsDir === '' || !is_dir($textsDir)) {
+            die('textsDir not found');
+        }
+
+        $safeFile = $this->sanitizeTextFilename($newFile);
+        $path = rtrim($textsDir, '/\\') . '/' . $safeFile;
+
+        if (!is_file($path)) {
+            file_put_contents($path, "<?php\n\n");
+        }
+
+        $this->redirect('/sites/texts/edit?id=' . $siteId . '&label=' . urlencode($label) . '&file=' . rawurlencode($safeFile));
+    }
 
     public function pagesUpdate(): void
     {
@@ -259,14 +338,16 @@ public function editForm(): void
 
         [$site, $cfg] = $this->loadSiteAndConfig($siteId);
 
-        $urls        = $_POST['url'] ?? [];
-        $titles      = $_POST['title'] ?? [];
-        $h1s         = $_POST['h1'] ?? [];
-        $descs       = $_POST['description'] ?? [];
-        $keys        = $_POST['keywords'] ?? [];
-        $texts       = $_POST['text_file'] ?? [];
-        $priorities  = $_POST['priority'] ?? [];
-        $sitemaps    = $_POST['sitemap'] ?? [];
+        $label = $this->getLabelFromRequest('_default');
+
+        $urls       = $_POST['url'] ?? [];
+        $titles     = $_POST['title'] ?? [];
+        $h1s        = $_POST['h1'] ?? [];
+        $descs      = $_POST['description'] ?? [];
+        $keys       = $_POST['keywords'] ?? [];
+        $texts      = $_POST['text_file'] ?? [];
+        $priorities = $_POST['priority'] ?? [];
+        $sitemaps   = $_POST['sitemap'] ?? [];
 
         $newPages = [];
 
@@ -274,14 +355,13 @@ public function editForm(): void
             $url = trim((string)$url);
             if ($url === '') continue;
 
-            // нормализуем url
             if ($url[0] !== '/') $url = '/' . $url;
 
             $newPages[$url] = [
-                'title'       => $this->inheritOrValue($titles[$i] ?? ''),
-                'h1'          => $this->inheritOrValue($h1s[$i] ?? ''),
-                'description' => $this->inheritOrValue($descs[$i] ?? ''),
-                'keywords'    => $this->inheritOrValue($keys[$i] ?? ''),
+                'title'       => $this->inheritOrValue((string)($titles[$i] ?? '')),
+                'h1'          => $this->inheritOrValue((string)($h1s[$i] ?? '')),
+                'description' => $this->inheritOrValue((string)($descs[$i] ?? '')),
+                'keywords'    => $this->inheritOrValue((string)($keys[$i] ?? '')),
                 'text_file'   => basename(trim((string)($texts[$i] ?? 'home.php'))),
             ];
 
@@ -290,7 +370,6 @@ public function editForm(): void
                 $newPages[$url]['priority'] = $p;
             }
 
-            // sitemap checkbox: если НЕ отмечен — false
             if (!isset($sitemaps[$i])) {
                 $newPages[$url]['sitemap'] = false;
             }
@@ -298,184 +377,555 @@ public function editForm(): void
 
         $cfg['pages'] = $newPages;
 
-        $stmt = DB::pdo()->prepare("UPDATE site_configs SET json=? WHERE site_id=?");
-        $stmt->execute([json_encode($cfg, JSON_UNESCAPED_UNICODE), $siteId]);
+        DB::pdo()->prepare("UPDATE site_configs SET json=? WHERE site_id=?")
+            ->execute([json_encode($cfg, JSON_UNESCAPED_UNICODE), $siteId]);
 
-        $this->regenerateConfigPhp($siteId, $cfg);
+        $regenLabel = (($site['template'] ?? '') === 'template-multy') ? $label : null;
+        $this->regenerateConfigPhp($siteId, $cfg, $regenLabel);
 
-        $this->redirect('/sites/pages?id=' . $siteId);
+        $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
     }
-	
-	public function textsIndex(): void
-	{
-		$this->requireAuth();
 
-		$siteId = (int)($_GET['id'] ?? 0);
-		if ($siteId <= 0) die('bad id');
+    // ----------------------------
+    // Texts
+    // ----------------------------
+    public function textsIndex(): void
+    {
+        $this->requireAuth();
 
-		$site = $this->loadSite($siteId);
-		$configTargetPath = $this->getConfigTargetPath($siteId);
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
 
+        $site = $this->loadSite($siteId);
+        $label = $this->getLabelFromRequest('_default');
 
-		$textsDir = $this->getTextsDir($site);
-		$files = $this->listTextFiles($textsDir);
+        if (($site['template'] ?? '') === 'template-multy') {
+            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+            (new SubdomainProvisioner())->ensureForSite($siteId, $label);
+        }
 
-		$this->view('texts/index', compact('site', 'files', 'configTargetPath'));
+        $configTargetPath = $this->getConfigTargetPath($siteId);
+        $textsDir = $this->getTextsDir($site, $label);
+        $files = $this->listTextFiles($textsDir);
 
-	}
+        $this->view('texts/index', compact('site', 'files', 'configTargetPath', 'label'));
+    }
 
-	public function textsEdit(): void
-	{
-		$this->requireAuth();
+    public function textsEdit(): void
+    {
+        $this->requireAuth();
 
-		$siteId = (int)($_GET['id'] ?? 0);
-		$file   = (string)($_GET['file'] ?? '');
+        $siteId = (int)($_GET['id'] ?? 0);
+        $file   = (string)($_GET['file'] ?? '');
+        if ($siteId <= 0) die('bad id');
 
-		if ($siteId <= 0) die('bad id');
+        $site = $this->loadSite($siteId);
+        $label = $this->getLabelFromRequest('_default');
 
-		$site = $this->loadSite($siteId);
-		$configTargetPath = $this->getConfigTargetPath($siteId);
-		$textsDir = $this->getTextsDir($site);
+        if (($site['template'] ?? '') === 'template-multy') {
+            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+            (new SubdomainProvisioner())->ensureForSite($siteId, $label);
+        }
 
-		$safeFile = $this->sanitizeTextFilename($file);
-		$path = $textsDir . '/' . $safeFile;
+        $configTargetPath = $this->getConfigTargetPath($siteId);
+        $textsDir = $this->getTextsDir($site, $label);
 
-		if (!is_file($path)) {
-			http_response_code(404);
-			echo 'file not found';
-			return;
-		}
+        $safeFile = $this->sanitizeTextFilename($file);
+        $path = rtrim($textsDir, '/\\') . '/' . $safeFile;
 
-		$content = file_get_contents($path);
-		if ($content === false) $content = '';
+        if (!is_file($path)) {
+            http_response_code(404);
+            echo 'file not found';
+            return;
+        }
 
-		$this->view('texts/edit', compact('site', 'safeFile', 'content', 'configTargetPath'));
+        $content = file_get_contents($path);
+        if ($content === false) $content = '';
 
-	}
+        $this->view('texts/edit', compact('site', 'safeFile', 'content', 'configTargetPath', 'label'));
+    }
 
-	public function textsSave(): void
-	{
-		$this->requireAuth();
+    public function textsSave(): void
+    {
+        $this->requireAuth();
 
-		$siteId = (int)($_GET['id'] ?? 0);
-		if ($siteId <= 0) die('bad id');
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
 
-		$file = (string)($_POST['file'] ?? '');
-		$content = (string)($_POST['content'] ?? '');
+        $file    = (string)($_POST['file'] ?? '');
+        $content = (string)($_POST['content'] ?? '');
 
-		$site = $this->loadSite($siteId);
-		$textsDir = $this->getTextsDir($site);
+        $site  = $this->loadSite($siteId);
+        $label = $this->getLabelFromRequest('_default');
 
-		$safeFile = $this->sanitizeTextFilename($file);
-		$path = $textsDir . '/' . $safeFile;
+        if (($site['template'] ?? '') === 'template-multy') {
+            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+            (new SubdomainProvisioner())->ensureForSite($siteId, $label);
+        }
 
-		// атомарная запись
-		$tmp = $path . '.tmp_' . time();
-		file_put_contents($tmp, $content);
-		rename($tmp, $path);
+        $textsDir = $this->getTextsDir($site, $label);
 
-		$this->redirect('/sites/texts/edit?id=' . $siteId . '&file=' . rawurlencode($safeFile));
-	}
+        $safeFile = $this->sanitizeTextFilename($file);
+        $path = rtrim($textsDir, '/\\') . '/' . $safeFile;
 
-	public function textsNew(): void
-	{
-		$this->requireAuth();
+        $tmp = $path . '.tmp_' . time();
+        file_put_contents($tmp, $content);
+        rename($tmp, $path);
 
-		$siteId = (int)($_GET['id'] ?? 0);
-		if ($siteId <= 0) die('bad id');
+        $this->redirect('/sites/texts/edit?id=' . $siteId . '&label=' . urlencode($label) . '&file=' . rawurlencode($safeFile));
+    }
 
-		$newFile = (string)($_POST['new_file'] ?? '');
-		$site = $this->loadSite($siteId);
-		$textsDir = $this->getTextsDir($site);
+    public function textsNew(): void
+    {
+        $this->requireAuth();
 
-		$safeFile = $this->sanitizeTextFilename($newFile);
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
 
-		$path = $textsDir . '/' . $safeFile;
-		if (is_file($path)) {
-			die('file already exists');
-		}
+        $newFile = (string)($_POST['new_file'] ?? '');
 
-		file_put_contents($path, "<?php\n\n");
-		$this->redirect('/sites/texts/edit?id=' . $siteId . '&file=' . rawurlencode($safeFile));
-	}
+        $site  = $this->loadSite($siteId);
+        $label = $this->getLabelFromRequest('_default');
 
-	public function textsDelete(): void
-	{
-		$this->requireAuth();
+        if (($site['template'] ?? '') === 'template-multy') {
+            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+            (new SubdomainProvisioner())->ensureForSite($siteId, $label);
+        }
 
-		$siteId = (int)($_GET['id'] ?? 0);
-		if ($siteId <= 0) die('bad id');
+        $textsDir = $this->getTextsDir($site, $label);
 
-		$file = (string)($_POST['file'] ?? '');
+        $safeFile = $this->sanitizeTextFilename($newFile);
+        $path = rtrim($textsDir, '/\\') . '/' . $safeFile;
 
-		$site = $this->loadSite($siteId);
-		$textsDir = $this->getTextsDir($site);
+        if (is_file($path)) {
+            die('file already exists');
+        }
 
-		$safeFile = $this->sanitizeTextFilename($file);
-		$path = $textsDir . '/' . $safeFile;
+        file_put_contents($path, "<?php\n\n");
+        $this->redirect('/sites/texts/edit?id=' . $siteId . '&label=' . urlencode($label) . '&file=' . rawurlencode($safeFile));
+    }
 
-		if (is_file($path)) {
-			@unlink($path);
-		}
+    public function textsDelete(): void
+    {
+        $this->requireAuth();
 
-		$this->redirect('/sites/texts?id=' . $siteId);
-	}
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
 
+        $file = (string)($_POST['file'] ?? '');
 
+        $site  = $this->loadSite($siteId);
+        $label = $this->getLabelFromRequest('_default');
+
+        $textsDir = $this->getTextsDir($site, $label);
+
+        $safeFile = $this->sanitizeTextFilename($file);
+        $path = rtrim($textsDir, '/\\') . '/' . $safeFile;
+
+        if (is_file($path)) {
+            @unlink($path);
+        }
+
+        $this->redirect('/sites/texts?id=' . $siteId . '&label=' . urlencode($label));
+    }
+
+    // ----------------------------
+    // Build helper action
+    // ----------------------------
+    public function build(): void
+    {
+        $this->requireAuth();
+
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
+
+        [$site, $cfg] = $this->loadSiteAndConfig($siteId);
+
+        $label = $this->getLabelFromRequest('_default');
+
+        $buildDir = $this->getBuildDir($site);
+        $textsDir = $this->getTextsDir($site, (($site['template'] ?? '') === 'template-multy') ? $label : null);
+
+        $pages = $cfg['pages'] ?? [];
+        if (!is_array($pages)) $pages = [];
+
+        $report = [
+            'ok' => true,
+            'errors' => [],
+            'warnings' => [],
+            'created_texts' => [],
+            'unused_texts' => [],
+        ];
+
+        $used = [];
+        foreach ($pages as $url => $p) {
+            $tf = (string)($p['text_file'] ?? '');
+            $tf = basename(trim($tf));
+            if ($tf === '') {
+                $report['warnings'][] = "Страница {$url}: text_file пустой";
+                continue;
+            }
+
+            if (!preg_match('~\.php$~i', $tf)) $tf .= '.php';
+
+            $used[$tf] = true;
+
+            $path = rtrim($textsDir, '/\\') . '/' . $tf;
+            if (!is_file($path)) {
+                $init = "<?php\n\n";
+                if (file_put_contents($path, $init) === false) {
+                    $report['ok'] = false;
+                    $report['errors'][] = "Не удалось создать texts/{$tf} (проверь права)";
+                } else {
+                    $report['created_texts'][] = $tf;
+                    $report['warnings'][] = "Создан отсутствующий файл texts/{$tf}";
+                }
+            }
+        }
+
+        $allTextFiles = $this->listTextFiles($textsDir);
+        foreach ($allTextFiles as $f) {
+            if (!isset($used[$f])) {
+                $report['unused_texts'][] = $f;
+            }
+        }
+        if (!empty($report['unused_texts'])) {
+            $report['warnings'][] = 'Есть неиспользуемые texts-файлы: ' . implode(', ', $report['unused_texts']);
+        }
+
+        try {
+            $regenLabel = (($site['template'] ?? '') === 'template-multy') ? $label : null;
+            $this->regenerateConfigPhp($siteId, $cfg, $regenLabel);
+        } catch (Throwable $e) {
+            $report['ok'] = false;
+            $report['errors'][] = 'Ошибка генерации config.php: ' . $e->getMessage();
+        }
+
+        $logDir = $this->storageRoot() . '/build_reports';
+        if (!is_dir($logDir)) @mkdir($logDir, 0775, true);
+
+        $ts = date('Ymd_His');
+        $reportPath = $logDir . "/site_{$siteId}_{$ts}.json";
+        @file_put_contents($reportPath, json_encode($report, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+
+        $configTargetPath = $this->getConfigTargetPath($siteId);
+        $this->view('sites/build', compact('site', 'cfg', 'report', 'configTargetPath', 'label'));
+    }
+
+    // ----------------------------
+    // Files editor
+    // ----------------------------
+    public function filesIndex(): void
+    {
+        $this->requireAuth();
+
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
+
+        $site = $this->loadSite($siteId);
+        $buildDir = $this->getBuildDir($site);
+
+        $allowed = $this->allowedSiteFiles();
+
+        $files = [];
+        foreach ($allowed as $f) {
+            $path = rtrim($buildDir, '/\\') . '/' . $f;
+            $files[] = [
+                'name' => $f,
+                'exists' => is_file($path),
+                'size' => is_file($path) ? filesize($path) : 0,
+            ];
+        }
+
+        $this->view('files/index', compact('site', 'files'));
+    }
+
+    public function filesEdit(): void
+    {
+        $this->requireAuth();
+
+        $siteId = (int)($_GET['id'] ?? 0);
+        $file   = (string)($_GET['file'] ?? '');
+        if ($siteId <= 0) die('bad id');
+
+        $site = $this->loadSite($siteId);
+        $buildDir = $this->getBuildDir($site);
+
+        $safeFile = $this->sanitizeAllowedFile($file);
+        $path = rtrim($buildDir, '/\\') . '/' . $safeFile;
+
+        $content = '';
+        if (is_file($path)) {
+            $c = file_get_contents($path);
+            $content = ($c === false) ? '' : $c;
+        }
+
+        $backups = [];
+        $pattern = rtrim($buildDir, '/\\') . '/' . $safeFile . '.bak_*';
+        foreach (glob($pattern) ?: [] as $bp) {
+            $backups[] = basename($bp);
+        }
+        rsort($backups);
+
+        $this->view('files/edit', compact('site', 'safeFile', 'content', 'backups'));
+    }
+
+    public function filesSave(): void
+    {
+        $this->requireAuth();
+
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
+
+        $file    = (string)($_POST['file'] ?? '');
+        $content = (string)($_POST['content'] ?? '');
+
+        $site = $this->loadSite($siteId);
+        $buildDir = $this->getBuildDir($site);
+
+        $safeFile = $this->sanitizeAllowedFile($file);
+        $path = rtrim($buildDir, '/\\') . '/' . $safeFile;
+
+        if (is_file($path)) {
+            $ts = date('Ymd_His');
+            $bak = $path . '.bak_' . $ts;
+            @copy($path, $bak);
+        }
+
+        $tmp = $path . '.tmp_' . time();
+        file_put_contents($tmp, $content);
+        rename($tmp, $path);
+
+        $this->redirect('/sites/files/edit?id=' . $siteId . '&file=' . rawurlencode($safeFile));
+    }
+
+    public function filesRestore(): void
+    {
+        $this->requireAuth();
+
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
+
+        $file   = (string)($_POST['file'] ?? '');
+        $backup = (string)($_POST['backup'] ?? '');
+
+        $site = $this->loadSite($siteId);
+        $buildDir = $this->getBuildDir($site);
+
+        $safeFile = $this->sanitizeAllowedFile($file);
+
+        if (strpos($backup, $safeFile . '.bak_') !== 0) {
+            die('bad backup');
+        }
+        if (strpos($backup, '/') !== false || strpos($backup, '\\') !== false || strpos($backup, '..') !== false) {
+            die('bad backup');
+        }
+
+        $src = rtrim($buildDir, '/\\') . '/' . $backup;
+        $dst = rtrim($buildDir, '/\\') . '/' . $safeFile;
+
+        if (!is_file($src)) {
+            die('backup not found');
+        }
+
+        if (is_file($dst)) {
+            $ts = date('Ymd_His');
+            @copy($dst, $dst . '.bak_' . $ts);
+        }
+
+        @copy($src, $dst);
+
+        $this->redirect('/sites/files/edit?id=' . $siteId . '&file=' . rawurlencode($safeFile));
+    }
+
+    // ----------------------------
+    // Delete / export
+    // ----------------------------
+    public function delete(): void
+    {
+        $this->requireAuth();
+
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
+
+        $stmt = DB::pdo()->prepare("SELECT * FROM sites WHERE id=?");
+        $stmt->execute([$siteId]);
+        $site = $stmt->fetch();
+        if (!$site) {
+            $this->redirect('/');
+        }
+
+        $buildRel = (string)($site['build_path'] ?? '');
+        $buildAbs = $buildRel !== '' ? ($this->appRoot() . '/' . ltrim($buildRel, '/')) : '';
+        $generatedAbs = $this->storageRoot() . '/generated/site_' . $siteId;
+
+        DB::pdo()->beginTransaction();
+
+        try {
+            DB::pdo()->prepare("DELETE FROM site_configs WHERE site_id=?")->execute([$siteId]);
+            DB::pdo()->prepare("DELETE FROM sites WHERE id=?")->execute([$siteId]);
+
+            DB::pdo()->commit();
+
+            if ($buildAbs !== '' && is_dir($buildAbs)) {
+                $this->rrmdir($buildAbs);
+            }
+            if (is_dir($generatedAbs)) {
+                $this->rrmdir($generatedAbs);
+            }
+
+            $zipPath = $this->storageRoot() . '/zips/site_' . $siteId . '.zip';
+            if (is_file($zipPath)) {
+                @unlink($zipPath);
+            }
+
+            $this->redirect('/');
+        } catch (Throwable $e) {
+            DB::pdo()->rollBack();
+            http_response_code(500);
+            echo $e->getMessage();
+        }
+    }
+
+    public function exportZip(): void
+    {
+        $this->requireAuth();
+
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
+
+        $stmt = DB::pdo()->prepare("SELECT * FROM sites WHERE id=?");
+        $stmt->execute([$siteId]);
+        $site = $stmt->fetch();
+        if (!$site) die('site not found');
+
+        $buildRel = (string)($site['build_path'] ?? '');
+        if ($buildRel === '') die('build not found');
+
+        $buildAbs = $this->appRoot() . '/' . ltrim($buildRel, '/');
+
+        require_once $this->appRoot() . '/app/Services/ZipService.php';
+
+        $zipDir = $this->storageRoot() . '/zips';
+        if (!is_dir($zipDir)) mkdir($zipDir, 0775, true);
+
+        $zipPath = $zipDir . '/site_' . $siteId . '.zip';
+        (new ZipService())->makeZip($buildAbs, $zipPath);
+
+        header('Content-Type: application/zip');
+        header('Content-Disposition: attachment; filename="site_' . $siteId . '.zip"');
+        header('Content-Length: ' . filesize($zipPath));
+        readfile($zipPath);
+        exit;
+    }
+
+    // ----------------------------
+    // Core helpers
+    // ----------------------------
     private function inheritOrValue(string $v): string
     {
         $v = trim($v);
-        // если поле пустое — считаем inherit (как у тебя на главной)
         return $v === '' ? '$inherit' : $v;
     }
 
-   private function loadSiteAndConfig(int $siteId): array
-	{
-		$stmt = DB::pdo()->prepare('SELECT * FROM sites WHERE id=?');
-		$stmt->execute([$siteId]);
-		$site = $stmt->fetch();
-		if (!$site) die('site not found');
+    private function loadSiteAndConfig(int $siteId): array
+    {
+        $stmt = DB::pdo()->prepare('SELECT * FROM sites WHERE id=?');
+        $stmt->execute([$siteId]);
+        $site = $stmt->fetch();
+        if (!$site) die('site not found');
 
-		$stmt = DB::pdo()->prepare('SELECT json FROM site_configs WHERE site_id=?');
-		$stmt->execute([$siteId]);
-		$row = $stmt->fetch();
+        $stmt = DB::pdo()->prepare('SELECT json FROM site_configs WHERE site_id=?');
+        $stmt->execute([$siteId]);
+        $row = $stmt->fetch();
 
-		// если конфига нет — создаем дефолтный
-		if (!$row) {
-			$cfg = $this->defaultConfig((string)$site['domain']);
-			$stmtIns = DB::pdo()->prepare("INSERT INTO site_configs (site_id, json) VALUES (?, ?)");
-			$stmtIns->execute([$siteId, json_encode($cfg, JSON_UNESCAPED_UNICODE)]);
-			return [$site, $cfg];
-		}
+        if (!$row) {
+            $cfg = $this->defaultConfig((string)$site['domain']);
+            $stmtIns = DB::pdo()->prepare("INSERT INTO site_configs (site_id, json) VALUES (?, ?)");
+            $stmtIns->execute([$siteId, json_encode($cfg, JSON_UNESCAPED_UNICODE)]);
+            return [$site, $cfg];
+        }
 
-		$cfg = json_decode($row['json'], true);
-		if (!is_array($cfg)) $cfg = [];
+        $cfg = json_decode((string)($row['json'] ?? ''), true);
+        if (!is_array($cfg)) $cfg = [];
 
-		return [$site, $cfg];
-	}
+        return [$site, $cfg];
+    }
 
+    private function regenerateConfigPhp(int $siteId, array $cfg, ?string $label = null): void
+    {
+        $stmt = DB::pdo()->prepare("SELECT build_path, template, domain FROM sites WHERE id=?");
+        $stmt->execute([$siteId]);
+        $siteRow = $stmt->fetch();
 
-	 private function regenerateConfigPhp(int $siteId, array $cfg): void
-	{
-		require_once __DIR__ . '/../Services/SiteConfigWriter.php';
+        $template = (string)($siteRow['template'] ?? '');
+        $domain   = (string)($siteRow['domain'] ?? ($cfg['domain'] ?? ''));
 
-		// Берем build_path из sites
-		$stmt = DB::pdo()->prepare("SELECT build_path FROM sites WHERE id=?");
-		$stmt->execute([$siteId]);
-		$row = $stmt->fetch();
+        if ($siteRow && !empty($siteRow['build_path'])) {
+            $dir = $this->appRoot() . '/' . ltrim((string)$siteRow['build_path'], '/');
+        } else {
+            $dir = $this->storageRoot() . '/generated/site_' . $siteId;
+            @mkdir($dir, 0775, true);
+        }
 
-		if ($row && !empty($row['build_path'])) {
-			// Пишем в build-папку (рядом с index.php)
-			$dir = __DIR__ . '/../../' . ltrim((string)$row['build_path'], '/');
-		} else {
-			// Фоллбек (если build_path еще нет)
-			$dir = __DIR__ . '/../../storage/generated/site_' . $siteId;
-		}
+        $this->log('REGEN.start', [
+            'siteId' => $siteId,
+            'template' => $template,
+            'dir' => $dir,
+            'label' => $label,
+            'APP_ROOT' => $this->appRoot(),
+            'STORAGE_ROOT' => $this->storageRoot(),
+        ]);
 
-		(new SiteConfigWriter())->write($dir, $cfg);
-	}
+        if ($template === 'template-multy') {
+            require_once $this->appRoot() . '/app/Services/MultiSiteConfigWriter.php';
+            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
 
+            $label = $this->normalizeSubLabel((string)($label ?? '_default'));
 
+            $this->saveSiteDefaultConfig($siteId, $cfg);
+            $subCfg = $this->ensureSubdomainConfigExists($siteId, $label);
+
+            $prov = new SubdomainProvisioner();
+            $prov->ensureForSite($siteId, $label);
+
+            // writer
+            $w = class_exists('App\\Services\\MultiSiteConfigWriter')
+                ? new \App\Services\MultiSiteConfigWriter()
+                : new MultiSiteConfigWriter();
+
+            if (!method_exists($w, 'writeConfigDefaultPhp')) {
+                throw new RuntimeException('MultiSiteConfigWriter::writeConfigDefaultPhp not found');
+            }
+            $w->writeConfigDefaultPhp($dir, $domain, $cfg);
+
+            if (method_exists($w, 'writeSubConfigPhp')) {
+                $w->writeSubConfigPhp($dir, $label, $subCfg, $cfg);
+            } elseif (method_exists($w, 'writeSubConfig')) {
+                $w->writeSubConfig(rtrim($dir, '/\\') . '/subs/' . $label, $subCfg, $cfg);
+            } else {
+                throw new RuntimeException('MultiSiteConfigWriter sub writer method not found');
+            }
+
+            $this->log('REGEN.done.multy', [
+                'dir' => $dir,
+                'config_default' => rtrim($dir, '/\\') . '/config.default.php',
+                'sub_config' => rtrim($dir, '/\\') . '/subs/' . $label . '/config.php',
+            ]);
+
+            return;
+        }
+
+        // default templates
+        require_once $this->appRoot() . '/app/Services/SiteConfigWriter.php';
+
+        $this->log('REGEN.write.single', [
+            'dir' => $dir,
+            'target' => rtrim($dir, '/\\') . '/config.php',
+        ]);
+
+        (new SiteConfigWriter())->write($dir, $cfg);
+    }
 
     private function defaultConfig(string $domain): array
     {
@@ -483,7 +933,7 @@ public function editForm(): void
             'domain' => $domain,
             'yandex_verification' => '',
             'yandex_metrika' => '',
-            'promolink' => '/play',
+            'promolink' => '/reg',
 
             'title' => 'Новый сайт',
             'description' => '',
@@ -515,855 +965,386 @@ public function editForm(): void
             'base_second_url' => '',
         ];
     }
-	
-	public function delete(): void
-{
-    $this->requireAuth();
 
-    $siteId = (int)($_GET['id'] ?? 0);
-    if ($siteId <= 0) die('bad id');
-
-    // 1) грузим сайт заранее (нужны build_path, fp_site_id, server_id)
-    $stmt = DB::pdo()->prepare("SELECT * FROM sites WHERE id=?");
-    $stmt->execute([$siteId]);
-    $site = $stmt->fetch();
-    if (!$site) {
-        $this->redirect('/');
+    private function loadSite(int $siteId): array
+    {
+        $stmt = DB::pdo()->prepare('SELECT * FROM sites WHERE id=?');
+        $stmt->execute([$siteId]);
+        $site = $stmt->fetch();
+        if (!$site) die('site not found');
+        return $site;
     }
 
-    // пути для локальной чистки (соберем заранее)
-    $buildRel = (string)($site['build_path'] ?? '');
-    $buildAbs = $buildRel !== '' ? (__DIR__ . '/../../' . ltrim($buildRel, '/')) : '';
-    $generatedAbs = __DIR__ . '/../../storage/generated/site_' . $siteId;
+    private function getTextsDir(array $site, ?string $label = null): string
+    {
+        $buildRel = (string)($site['build_path'] ?? '');
+        if ($buildRel === '') return '';
 
-    // 2) СНАЧАЛА удаляем на сервере (FastPanel)
-    $serverId = (int)($site['fastpanel_server_id'] ?? 0);
-    $fpSiteId = (int)($site['fp_site_id'] ?? 0);
-    $created  = (int)($site['fp_site_created'] ?? 0) === 1;
+        $buildAbs = $this->appRoot() . '/' . ltrim($buildRel, '/');
+        $template = (string)($site['template'] ?? '');
 
-    if ($created && $serverId > 0 && $fpSiteId > 0) {
-        require_once __DIR__ . '/../Services/Crypto.php';
-        require_once __DIR__ . '/../Services/FastpanelClient.php';
-
-        // грузим сервер
-        $st = DB::pdo()->prepare("SELECT * FROM fastpanel_servers WHERE id=?");
-        $st->execute([$serverId]);
-        $server = $st->fetch();
-        if (!$server) {
-            http_response_code(500);
-            echo "FastPanel server not found (id={$serverId}). Site not deleted.";
-            return;
+        if ($template === 'template-multy') {
+            if ($label === null) {
+                $label = $this->getLabelFromRequest('_default');
+            }
+            $label = $this->normalizeSubLabel($label);
+            return rtrim($buildAbs, '/\\') . '/subs/' . $label . '/texts';
         }
 
-        try {
-            $password = Crypto::decrypt((string)$server['password_enc']);
-
-            $client = new FastpanelClient(
-                (string)$server['host'],
-                (bool)$server['verify_tls'],
-                (int)config('fastpanel.timeout', 30)
-            );
-            $client->login((string)$server['username'], $password);
-
-            // удаляем сайт в FastPanel
-            $client->deleteSite($fpSiteId);
-
-        } catch (Throwable $e) {
-            // ВАЖНО: если не удалилось на сервере — не удаляем локально,
-            // чтобы не потерять состояние и можно было повторить.
-            http_response_code(500);
-            header('Content-Type: text/plain; charset=utf-8');
-            echo "FastPanel delete failed: " . $e->getMessage();
-            return;
-        }
+        return rtrim($buildAbs, '/\\') . '/texts';
     }
 
-    // 3) Теперь удаляем в панели (БД) + чистим локальные папки
-    DB::pdo()->beginTransaction();
+    private function normalizeSubLabel(string $label): string
+    {
+        $label = strtolower(trim($label));
+        if ($label === '' || $label === '_default') return '_default';
 
-    try {
-        // Если site_configs с FK ON DELETE CASCADE — можно только sites.
-        // Но безопаснее явно:
-        DB::pdo()->prepare("DELETE FROM site_configs WHERE site_id=?")->execute([$siteId]);
-        DB::pdo()->prepare("DELETE FROM sites WHERE id=?")->execute([$siteId]);
+        $label = preg_replace('~[^a-z0-9\-]+~', '', $label);
+        $label = trim($label, '-');
 
-        DB::pdo()->commit();
-
-        // 4) удалить локальные build / generated папки
-        if ($buildAbs !== '' && is_dir($buildAbs)) {
-            $this->rrmdir($buildAbs);
-        }
-        if (is_dir($generatedAbs)) {
-            $this->rrmdir($generatedAbs);
-        }
-
-        // 5) опционально: удалить zip (если хочешь чистить storage/zips)
-        $zipPath = __DIR__ . '/../../storage/zips/site_' . $siteId . '.zip';
-        if (is_file($zipPath)) {
-            @unlink($zipPath);
-        }
-
-        $this->redirect('/');
-
-    } catch (Throwable $e) {
-        DB::pdo()->rollBack();
-        http_response_code(500);
-        echo $e->getMessage();
+        return $label !== '' ? $label : '_default';
     }
-}
 
-
-	private function rrmdir(string $dir): void
-	{
-		if (!is_dir($dir)) return;
-
-		$items = scandir($dir);
-		if ($items === false) return;
-
-		foreach ($items as $item) {
-			if ($item === '.' || $item === '..') continue;
-
-			$path = $dir . DIRECTORY_SEPARATOR . $item;
-
-			if (is_dir($path)) {
-				$this->rrmdir($path);
-			} else {
-				@unlink($path);
-			}
-		}
-
-		@rmdir($dir);
-	}
-	
-	public function exportZip(): void
-	{
-		$this->requireAuth();
-
-		$siteId = (int)($_GET['id'] ?? 0);
-		if ($siteId <= 0) die('bad id');
-
-		$stmt = DB::pdo()->prepare("SELECT * FROM sites WHERE id=?");
-		$stmt->execute([$siteId]);
-		$site = $stmt->fetch();
-		if (!$site) die('site not found');
-
-		$buildRel = $site['build_path'] ?? '';
-		if ($buildRel === '') die('build not found');
-
-		$buildAbs = __DIR__ . '/../../' . ltrim($buildRel, '/');
-
-		require_once __DIR__ . '/../Services/ZipService.php';
-
-		$zipDir = __DIR__ . '/../../storage/zips';
-		if (!is_dir($zipDir)) mkdir($zipDir, 0775, true);
-
-		$zipPath = $zipDir . '/site_' . $siteId . '.zip';
-		(new ZipService())->makeZip($buildAbs, $zipPath);
-
-		header('Content-Type: application/zip');
-		header('Content-Disposition: attachment; filename="site_' . $siteId . '.zip"');
-		header('Content-Length: ' . filesize($zipPath));
-		readfile($zipPath);
-		exit;
-	}
-
-
-	private function loadSite(int $siteId): array
-	{
-		$stmt = DB::pdo()->prepare('SELECT * FROM sites WHERE id=?');
-		$stmt->execute([$siteId]);
-		$site = $stmt->fetch();
-		if (!$site) die('site not found');
-		return $site;
-	}
-
-	private function getTextsDir(array $site): string
-	{
-		$buildRel = (string)($site['build_path'] ?? '');
-		if ($buildRel === '') die('build_path empty');
-
-		$buildAbs = __DIR__ . '/../../' . ltrim($buildRel, '/');
-		$textsDir = $buildAbs . '/texts';
-
-		if (!is_dir($textsDir)) {
-			// если вдруг в шаблоне нет texts, создадим
-			mkdir($textsDir, 0775, true);
-		}
-
-		return $textsDir;
-	}
-
-	private function listTextFiles(string $textsDir): array
-	{
-		$items = scandir($textsDir);
-		if ($items === false) return [];
-
-		$files = [];
-		foreach ($items as $f) {
-			if ($f === '.' || $f === '..') continue;
-			$path = $textsDir . '/' . $f;
-			if (is_file($path) && preg_match('~\.php$~i', $f)) {
-				$files[] = $f;
-			}
-		}
-		sort($files);
-		return $files;
-	}
-
-	/**
-	 * Разрешаем только простые имена вида: home.php, play.php, 404.php
-	 * Запрещаем слеши, точки типа ../ и любые странные символы.
-	 */
-	private function sanitizeTextFilename(string $name): string
-	{
-		$name = trim($name);
-
-		// часто пользователи вводят "/home.php"
-		$name = ltrim($name, '/\\');
-
-		// базовая валидация
-		if ($name === '' || strlen($name) > 120) {
-			die('bad filename');
-		}
-
-		// только латиница/цифры/подчеркивание/дефис/точка
-		if (!preg_match('~^[a-zA-Z0-9_\-\.]+$~', $name)) {
-			die('bad filename');
-		}
-
-		// запрет на ../
-		if (str_contains($name, '..')) {
-			die('bad filename');
-		}
-
-		// принудительно .php
-		if (!preg_match('~\.php$~i', $name)) {
-			$name .= '.php';
-		}
-
-		return $name;
-	}
-
-	private function allowedSiteFiles(): array
-	{
-		return [
-			'index.php',
-			'config.php',
-			'header.php',
-			'footer.php',
-			'guard.php',
-			'robots.php',
-			'sitemap.php',
-			'.htaccess',
-		];
-	}
-	
-	private function getBuildDir(array $site): string
-	{
-		$buildRel = (string)($site['build_path'] ?? '');
-		if ($buildRel === '') die('build_path empty');
-
-		return __DIR__ . '/../../' . ltrim($buildRel, '/');
-	}
-	
-	private function sanitizeAllowedFile(string $file): string
-	{
-		$file = trim($file);
-
-		// запрещаем слеши и traversal
-		if ($file === '' || strpos($file, '/') !== false || strpos($file, '\\') !== false) {
-			die('bad file');
-		}
-		if (strpos($file, '..') !== false) {
-			die('bad file');
-		}
-
-		$allowed = $this->allowedSiteFiles();
-		if (!in_array($file, $allowed, true)) {
-			die('file not allowed');
-		}
-
-		return $file;
-	}
-
-	public function filesIndex(): void
-	{
-		$this->requireAuth();
-
-		$siteId = (int)($_GET['id'] ?? 0);
-		if ($siteId <= 0) die('bad id');
-
-		$site = $this->loadSite($siteId);
-		$buildDir = $this->getBuildDir($site);
-
-		$allowed = $this->allowedSiteFiles();
-
-		$files = [];
-		foreach ($allowed as $f) {
-			$path = $buildDir . '/' . $f;
-			$files[] = [
-				'name' => $f,
-				'exists' => is_file($path),
-				'size' => is_file($path) ? filesize($path) : 0,
-			];
-		}
-
-		$this->view('files/index', compact('site', 'files'));
-	}
-
-	public function filesEdit(): void
-	{
-		$this->requireAuth();
-
-		$siteId = (int)($_GET['id'] ?? 0);
-		$file   = (string)($_GET['file'] ?? '');
-
-		if ($siteId <= 0) die('bad id');
-
-		$site = $this->loadSite($siteId);
-		$buildDir = $this->getBuildDir($site);
-
-		$safeFile = $this->sanitizeAllowedFile($file);
-		$path = $buildDir . '/' . $safeFile;
-
-		$content = '';
-		if (is_file($path)) {
-			$c = file_get_contents($path);
-			$content = ($c === false) ? '' : $c;
-		}
-
-		// найти бэкапы
-		$backups = [];
-		$pattern = $buildDir . '/' . $safeFile . '.bak_*';
-		foreach (glob($pattern) ?: [] as $bp) {
-			$backups[] = basename($bp);
-		}
-		rsort($backups);
-
-		$this->view('files/edit', compact('site', 'safeFile', 'content', 'backups'));
-	}
-
-	public function filesSave(): void
-	{
-		$this->requireAuth();
-
-		$siteId = (int)($_GET['id'] ?? 0);
-		if ($siteId <= 0) die('bad id');
-
-		$file = (string)($_POST['file'] ?? '');
-		$content = (string)($_POST['content'] ?? '');
-
-		$site = $this->loadSite($siteId);
-		$buildDir = $this->getBuildDir($site);
-
-		$safeFile = $this->sanitizeAllowedFile($file);
-		$path = $buildDir . '/' . $safeFile;
-
-		// backup если файл существует
-		if (is_file($path)) {
-			$ts = date('Ymd_His');
-			$bak = $path . '.bak_' . $ts;
-			@copy($path, $bak);
-		}
-
-		// атомарная запись
-		$tmp = $path . '.tmp_' . time();
-		file_put_contents($tmp, $content);
-		rename($tmp, $path);
-
-		$this->redirect('/sites/files/edit?id=' . $siteId . '&file=' . rawurlencode($safeFile));
-	}
-
-	public function filesRestore(): void
-	{
-		$this->requireAuth();
-
-		$siteId = (int)($_GET['id'] ?? 0);
-		if ($siteId <= 0) die('bad id');
-
-		$file = (string)($_POST['file'] ?? '');
-		$backup = (string)($_POST['backup'] ?? '');
-
-		$site = $this->loadSite($siteId);
-		$buildDir = $this->getBuildDir($site);
-
-		$safeFile = $this->sanitizeAllowedFile($file);
-
-		// backup имя: "<file>.bak_YYYYMMDD_HHMMSS"
-		if (strpos($backup, $safeFile . '.bak_') !== 0) {
-			die('bad backup');
-		}
-		if (strpos($backup, '/') !== false || strpos($backup, '\\') !== false || strpos($backup, '..') !== false) {
-			die('bad backup');
-		}
-
-		$src = $buildDir . '/' . $backup;
-		$dst = $buildDir . '/' . $safeFile;
-
-		if (!is_file($src)) {
-			die('backup not found');
-		}
-
-		// перед восстановлением делаем бэкап текущего
-		if (is_file($dst)) {
-			$ts = date('Ymd_His');
-			@copy($dst, $dst . '.bak_' . $ts);
-		}
-
-		@copy($src, $dst);
-
-		$this->redirect('/sites/files/edit?id=' . $siteId . '&file=' . rawurlencode($safeFile));
-	}
-
-	private function getConfigTargetPath(int $siteId): string
-	{
-		$stmt = DB::pdo()->prepare("SELECT build_path FROM sites WHERE id=?");
-		$stmt->execute([$siteId]);
-		$row = $stmt->fetch();
-
-		if ($row && !empty($row['build_path'])) {
-			return rtrim((string)$row['build_path'], '/') . '/config.php';
-		}
-
-		return 'storage/generated/site_' . $siteId . '/config.php';
-	}
-
-	public function build(): void
-	{
-		$this->requireAuth();
-
-		$siteId = (int)($_GET['id'] ?? 0);
-		if ($siteId <= 0) die('bad id');
-
-		[$site, $cfg] = $this->loadSiteAndConfig($siteId);
-
-		// куда пишем/где лежит сайт
-		$buildDir = $this->getBuildDir($site);
-		$textsDir = $this->getTextsDir($site);
-
-		$pages = $cfg['pages'] ?? [];
-		if (!is_array($pages)) $pages = [];
-
-		$report = [
-			'ok' => true,
-			'errors' => [],
-			'warnings' => [],
-			'created_texts' => [],
-			'unused_texts' => [],
-		];
-
-		// 1) Проверка text_file в pages
-		$used = [];
-		foreach ($pages as $url => $p) {
-			$tf = (string)($p['text_file'] ?? '');
-			$tf = basename(trim($tf));
-			if ($tf === '') {
-				$report['warnings'][] = "Страница {$url}: text_file пустой";
-				continue;
-			}
-
-			// нормализуем расширение
-			if (!preg_match('~\.php$~i', $tf)) $tf .= '.php';
-
-			$used[$tf] = true;
-
-			$path = $textsDir . '/' . $tf;
-			if (!is_file($path)) {
-				// создаем отсутствующий файл (чтобы не ломался сайт)
-				$init = "<?php\n\n";
-				if (file_put_contents($path, $init) === false) {
-					$report['ok'] = false;
-					$report['errors'][] = "Не удалось создать texts/{$tf} (проверь права)";
-				} else {
-					$report['created_texts'][] = $tf;
-					$report['warnings'][] = "Создан отсутствующий файл texts/{$tf}";
-				}
-			}
-		}
-
-		// 2) Найти неиспользуемые тексты
-		$allTextFiles = $this->listTextFiles($textsDir);
-		foreach ($allTextFiles as $f) {
-			if (!isset($used[$f])) {
-				$report['unused_texts'][] = $f;
-			}
-		}
-
-		if (!empty($report['unused_texts'])) {
-			$report['warnings'][] = 'Есть неиспользуемые texts-файлы: ' . implode(', ', $report['unused_texts']);
-		}
-
-		// 3) Перегенерировать config.php
-		try {
-			$this->regenerateConfigPhp($siteId, $cfg);
-		} catch (Throwable $e) {
-			$report['ok'] = false;
-			$report['errors'][] = 'Ошибка генерации config.php: ' . $e->getMessage();
-		}
-
-		// 4) Сохранить отчет в storage (и показать)
-		$logDir = __DIR__ . '/../../storage/build_reports';
-		if (!is_dir($logDir)) @mkdir($logDir, 0775, true);
-
-		$ts = date('Ymd_His');
-		$reportPath = $logDir . "/site_{$siteId}_{$ts}.json";
-		@file_put_contents($reportPath, json_encode($report, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-
-		// Показать отчет
-		$configTargetPath = $this->getConfigTargetPath($siteId);
-		$this->view('sites/build', compact('site', 'cfg', 'report', 'configTargetPath'));
-	}
-	
-	public function resetFastpanelState(): void
-{
-    $this->requireAuth();
-
-    $id = (int)($_GET['id'] ?? 0);
-    if ($id <= 0) die('bad id');
-
-    $stmt = DB::pdo()->prepare("
-        UPDATE sites SET
-            fp_site_created = 0,
-            fp_site_id = NULL,
-            fp_index_dir = NULL,
-            fp_ftp_ready = 0,
-            fp_ftp_user = NULL,
-            fp_ftp_last_ok = NULL,
-            fp_files_ready = 0,
-            fp_files_last_ok = NULL
-        WHERE id = ?
-    ");
-    $stmt->execute([$id]);
-
-    $this->redirect('/');
-}
-private function loadServer(int $id): array
-{
-    $stmt = DB::pdo()->prepare("SELECT * FROM fastpanel_servers WHERE id=?");
-    $stmt->execute([$id]);
-    $row = $stmt->fetch();
-    if (!$row) throw new RuntimeException('server not found: ' . $id);
-    return $row;
-}
-
-private function fetchSslStatusForSites(array $sites): array
-{
-    require_once __DIR__ . '/../Services/Crypto.php';
-    require_once __DIR__ . '/../Services/FastpanelClient.php';
-
-    $byServer = [];
-    foreach ($sites as $s) {
-        $localSiteId = (int)($s['id'] ?? 0);
-        $serverId    = (int)($s['fastpanel_server_id'] ?? 0);
-        $fpSiteId    = (int)($s['fp_site_id'] ?? 0);
-        $created     = (int)($s['fp_site_created'] ?? 0) === 1;
-
-        if ($localSiteId <= 0 || !$created || $serverId <= 0 || $fpSiteId <= 0) continue;
-
-        $byServer[$serverId][] = [
-            'local_site_id' => $localSiteId,
-            'fp_site_id'    => $fpSiteId,
+    private function listTextFiles(string $textsDir): array
+    {
+        if ($textsDir === '' || !is_dir($textsDir)) return [];
+
+        $items = scandir($textsDir);
+        if ($items === false) return [];
+
+        $files = [];
+        foreach ($items as $f) {
+            if ($f === '.' || $f === '..') continue;
+            $path = rtrim($textsDir, '/\\') . '/' . $f;
+            if (is_file($path) && preg_match('~\.php$~i', $f)) {
+                $files[] = $f;
+            }
+        }
+        sort($files);
+        return $files;
+    }
+
+    private function sanitizeTextFilename(string $name): string
+    {
+        $name = trim($name);
+        $name = ltrim($name, '/\\');
+
+        if ($name === '' || strlen($name) > 120) {
+            die('bad filename');
+        }
+        if (!preg_match('~^[a-zA-Z0-9_\-\.]+$~', $name)) {
+            die('bad filename');
+        }
+        if (strpos($name, '..') !== false) {
+            die('bad filename');
+        }
+        if (!preg_match('~\.php$~i', $name)) {
+            $name .= '.php';
+        }
+        return $name;
+    }
+
+    private function allowedSiteFiles(): array
+    {
+        return [
+            'index.php',
+            'config.php',
+            'header.php',
+            'footer.php',
+            'guard.php',
+            'robots.php',
+            'sitemap.php',
+            '.htaccess',
+            'config.default.php',
         ];
     }
 
-    $result = [];
+    private function getBuildDir(array $site): string
+    {
+        $buildRel = (string)($site['build_path'] ?? '');
+        if ($buildRel === '') die('build_path empty');
 
-    foreach ($byServer as $serverId => $items) {
-        try {
-            $server = $this->loadServer((int)$serverId);
-            $password = Crypto::decrypt((string)$server['password_enc']);
+        return $this->appRoot() . '/' . ltrim($buildRel, '/');
+    }
 
-            $client = new FastpanelClient(
-                (string)$server['host'],
-                (bool)$server['verify_tls'],
-                (int)config('fastpanel.timeout', 20)
-            );
-            $client->login((string)$server['username'], $password);
+    private function sanitizeAllowedFile(string $file): string
+    {
+        $file = trim($file);
 
-            foreach ($items as $it) {
-                $localSiteId = (int)$it['local_site_id'];
-                $fpSiteId    = (int)$it['fp_site_id'];
+        if ($file === '' || strpos($file, '/') !== false || strpos($file, '\\') !== false) {
+            die('bad file');
+        }
+        if (strpos($file, '..') !== false) {
+            die('bad file');
+        }
 
-                try {
-                    $remote = $client->site($fpSiteId);
-                    $cert = $remote['certificate'] ?? null;
+        $allowed = $this->allowedSiteFiles();
+        if (!in_array($file, $allowed, true)) {
+            die('file not allowed');
+        }
 
-                    $certId = 0;
-                    $enabled = false;
+        return $file;
+    }
 
-                    if (is_array($cert)) {
-                        $certId  = (int)($cert['id'] ?? 0);
-                        $enabled = (bool)($cert['enabled'] ?? false);
-                    } elseif (is_numeric($cert)) {
-                        $certId = (int)$cert;
+    private function getConfigTargetPath(int $siteId): string
+    {
+        $stmt = DB::pdo()->prepare("SELECT build_path, template FROM sites WHERE id=?");
+        $stmt->execute([$siteId]);
+        $row = $stmt->fetch();
+
+        $buildPath = (string)($row['build_path'] ?? '');
+        $template  = (string)($row['template'] ?? '');
+
+        $buildAbs = $this->appRoot() . '/' . ltrim($buildPath, '/');
+
+        if ($template === 'template-multy') {
+            return $buildAbs . '/config.default.php';
+        }
+
+        return $buildAbs . '/config.php';
+    }
+
+    private function rrmdir(string $dir): void
+    {
+        if (!is_dir($dir)) return;
+
+        $items = scandir($dir);
+        if ($items === false) return;
+
+        foreach ($items as $item) {
+            if ($item === '.' || $item === '..') continue;
+
+            $path = $dir . DIRECTORY_SEPARATOR . $item;
+
+            if (is_dir($path)) {
+                $this->rrmdir($path);
+            } else {
+                @unlink($path);
+            }
+        }
+
+        @rmdir($dir);
+    }
+
+    private function fetchSslStatusForSites(array $sites): array
+    {
+        require_once $this->appRoot() . '/app/Services/Crypto.php';
+        require_once $this->appRoot() . '/app/Services/FastpanelClient.php';
+
+        $byServer = [];
+        foreach ($sites as $s) {
+            $localSiteId = (int)($s['id'] ?? 0);
+            $serverId    = (int)($s['fastpanel_server_id'] ?? 0);
+            $fpSiteId    = (int)($s['fp_site_id'] ?? 0);
+            $created     = (int)($s['fp_site_created'] ?? 0) === 1;
+
+            if ($localSiteId <= 0 || !$created || $serverId <= 0 || $fpSiteId <= 0) continue;
+
+            $byServer[$serverId][] = [
+                'local_site_id' => $localSiteId,
+                'fp_site_id'    => $fpSiteId,
+            ];
+        }
+
+        $result = [];
+
+        foreach ($byServer as $serverId => $items) {
+            try {
+                $server = $this->loadServer((int)$serverId);
+                $password = Crypto::decrypt((string)$server['password_enc']);
+
+                $client = new FastpanelClient(
+                    (string)$server['host'],
+                    (bool)$server['verify_tls'],
+                    (int)config('fastpanel.timeout', 20)
+                );
+                $client->login((string)$server['username'], $password);
+
+                foreach ($items as $it) {
+                    $localSiteId = (int)$it['local_site_id'];
+                    $fpSiteId    = (int)$it['fp_site_id'];
+
+                    try {
+                        $remote = $client->site($fpSiteId);
+                        $cert = $remote['certificate'] ?? null;
+
+                        $certId = 0;
+                        $enabled = false;
+
+                        if (is_array($cert)) {
+                            $certId  = (int)($cert['id'] ?? 0);
+                            $enabled = (bool)($cert['enabled'] ?? false);
+                        } elseif (is_numeric($cert)) {
+                            $certId = (int)$cert;
+                        }
+
+                        $result[$localSiteId] = [
+                            'ready'    => ($certId > 0 && $enabled) ? 1 : 0,
+                            'has_cert' => ($certId > 0) ? 1 : 0,
+                            'cert_id'  => $certId,
+                            'error'    => '',
+                        ];
+                    } catch (Throwable $eSite) {
+                        $result[$localSiteId] = [
+                            'ready' => 0, 'has_cert' => 0, 'cert_id' => 0,
+                            'error' => $eSite->getMessage(),
+                        ];
                     }
-
-                    $result[$localSiteId] = [
-                        'ready'    => ($certId > 0 && $enabled) ? 1 : 0,
-                        'has_cert' => ($certId > 0) ? 1 : 0,
-                        'cert_id'  => $certId,
-                        'error'    => '',
-                    ];
-                } catch (Throwable $eSite) {
+                }
+            } catch (Throwable $eServer) {
+                foreach ($items as $it) {
+                    $localSiteId = (int)$it['local_site_id'];
                     $result[$localSiteId] = [
                         'ready' => 0, 'has_cert' => 0, 'cert_id' => 0,
-                        'error' => $eSite->getMessage(),
+                        'error' => 'server error: ' . $eServer->getMessage(),
                     ];
                 }
             }
-        } catch (Throwable $eServer) {
-            foreach ($items as $it) {
-                $localSiteId = (int)$it['local_site_id'];
-                $result[$localSiteId] = [
-                    'ready' => 0, 'has_cert' => 0, 'cert_id' => 0,
-                    'error' => 'server error: ' . $eServer->getMessage(),
-                ];
+        }
+
+        return $result;
+    }
+
+    private function loadServer(int $id): array
+    {
+        $stmt = DB::pdo()->prepare("SELECT * FROM fastpanel_servers WHERE id=?");
+        $stmt->execute([$id]);
+        $row = $stmt->fetch();
+        if (!$row) throw new RuntimeException('server not found: ' . $id);
+        return $row;
+    }
+
+    private function normalizeDomainInput(string $input): string
+    {
+        $s = trim($input);
+
+        $s = preg_replace('~^https?://~i', '', $s);
+        $s = preg_replace('~^www\.~i', '', $s);
+
+        $parts = preg_split('~[/?#]~', $s, 2);
+        $s = (string)($parts[0] ?? '');
+
+        $s = strtolower(trim($s));
+        $s = rtrim($s, "./");
+
+        return $s;
+    }
+
+    private function isValidDomain(string $domain): bool
+    {
+        return (bool)preg_match('~^[a-z0-9](?:[a-z0-9\-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9\-]{0,61}[a-z0-9])?)+$~i', $domain);
+    }
+
+    // ----------------------------
+    // template-multy DB helpers
+    // ----------------------------
+    private function upsertSiteDefaultConfig(int $siteId, array $cfg): void
+    {
+        $json = json_encode($cfg, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        $stmt = DB::pdo()->prepare("
+            INSERT INTO site_default_configs (site_id, config_json)
+            VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE
+              config_json = VALUES(config_json),
+              updated_at = CURRENT_TIMESTAMP
+        ");
+        $stmt->execute([$siteId, $json]);
+    }
+
+    private function defaultSubdomainConfig(string $label): array
+    {
+        return [
+            'label'   => $label,
+            'logo'    => 'logo.png',
+            'favicon' => 'favicon.png',
+            'pages'   => [],
+        ];
+    }
+
+    private function ensureSubdomainConfigExists(int $siteId, string $label): array
+    {
+        $label = trim($label) !== '' ? trim($label) : '_default';
+
+        $stmt = DB::pdo()->prepare("SELECT config_json FROM site_subdomain_configs WHERE site_id=? AND label=? LIMIT 1");
+        $stmt->execute([$siteId, $label]);
+        $row = $stmt->fetch();
+
+        if ($row && isset($row['config_json'])) {
+            $cfg = json_decode((string)$row['config_json'], true);
+            return is_array($cfg) ? $cfg : $this->defaultSubdomainConfig($label);
+        }
+
+        $cfg = $this->defaultSubdomainConfig($label);
+        $json = json_encode($cfg, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        $ins = DB::pdo()->prepare("
+            INSERT INTO site_subdomain_configs (site_id, label, config_json)
+            VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE
+              config_json = VALUES(config_json),
+              updated_at = CURRENT_TIMESTAMP
+        ");
+        $ins->execute([$siteId, $label, $json]);
+
+        return $cfg;
+    }
+
+    private function loadSiteDefaultConfig(int $siteId, string $domain): array
+    {
+        $pdo = DB::pdo();
+
+        $st = $pdo->prepare("SELECT config_json FROM site_default_configs WHERE site_id=? LIMIT 1");
+        $st->execute([$siteId]);
+        $row = $st->fetch();
+
+        if ($row && isset($row['config_json'])) {
+            $cfg = json_decode((string)$row['config_json'], true);
+            if (is_array($cfg)) {
+                if (empty($cfg['domain'])) $cfg['domain'] = $domain;
+                return $cfg;
             }
         }
-    }
 
-    return $result;
-}
+        $st = $pdo->prepare("SELECT json FROM site_configs WHERE site_id=? LIMIT 1");
+        $st->execute([$siteId]);
+        $row = $st->fetch();
 
-public function checkDomain(): void
-{
-    $this->requireAuth();
-
-    $domainInput = trim((string)($_POST['domain'] ?? ''));
-    $template    = trim((string)($_POST['template'] ?? 'template-basic'));
-
-    require_once __DIR__ . '/../Services/TemplateService.php';
-    $templates = (new TemplateService())->listTemplates();
-	
-	$accounts = DB::pdo()->query("
-		SELECT * FROM registrar_accounts
-		WHERE provider='namecheap'
-		ORDER BY is_sandbox ASC, id DESC
-	")->fetchAll();
-
-
-    if ($domainInput === '') {
-        $this->view('sites/create', [
-            'templates' => $templates,
-            'domain'    => $domainInput,
-            'template'  => $template,
-			'accounts'  => $accounts,
-			'registrar_account_id' => (int)($_POST['registrar_account_id'] ?? 0),
-            'checkResult' => ['error' => 'Введите домен'],
-        ]);
-        return;
-    }
-
-    $domain = $this->normalizeDomainInput($domainInput);
-
-    if ($domain === '' || !$this->isValidDomain($domain)) {
-        $this->view('sites/create', [
-            'templates' => $templates,
-            'domain'    => $domainInput,
-            'template'  => $template,
-			'accounts'  => $accounts,
-			'registrar_account_id' => (int)($_POST['registrar_account_id'] ?? 0),
-            'checkResult' => [
-                'domain' => $domain,
-                'error'  => 'Некорректныи формат домена',
-            ],
-        ]);
-        return;
-    }
-
-   $accountId = (int)($_POST['registrar_account_id'] ?? 0);
-
-	$acc = null;
-	if ($accountId > 0) {
-		$st = DB::pdo()->prepare("SELECT * FROM registrar_accounts WHERE id=? AND provider='namecheap'");
-		$st->execute([$accountId]);
-		$acc = $st->fetch();
-	}
-
-	if (!$acc) {
-		// fallback: последний (чтобы не падало)
-		$acc = DB::pdo()->query("
-			SELECT * FROM registrar_accounts
-			WHERE provider='namecheap'
-			ORDER BY id DESC
-			LIMIT 1
-		")->fetch();
-	}
-
-    if (!$acc) {
-        $this->view('sites/create', [
-            'templates' => $templates,
-            'domain'    => $domainInput,
-            'template'  => $template,
-			'accounts'  => $accounts,
-			'registrar_account_id' => (int)($_POST['registrar_account_id'] ?? 0),
-            'checkResult' => [
-                'domain' => $domain,
-                'error'  => 'Не наиден аккаунт регистратора (сначала добавьте Namecheap account)',
-            ],
-        ]);
-        return;
-    }
-
-    require_once __DIR__ . '/../Services/Crypto.php';
-    require_once __DIR__ . '/../Services/NamecheapClient.php';
-
-    try {
-        $isSandbox = (int)($acc['is_sandbox'] ?? 1) === 1;
-        $endpoint  = $isSandbox ? (string)config('namecheap.endpoint_sandbox') : (string)config('namecheap.endpoint');
-        $apiKey    = Crypto::decrypt((string)$acc['api_key_enc']);
-
-        $client = new NamecheapClient(
-            $endpoint,
-            (string)$acc['api_user'],
-            $apiKey,
-            (string)$acc['username'],
-            (string)$acc['client_ip'],
-            (int)config('namecheap.timeout', 30)
-        );
-
-        $check = $client->checkDomain($domain);
-        [, $tld] = $client->splitSldTld($domain);
-
-        $decision = 'checked';
-        $max = (float)config('namecheap.max_price_usd', 200);
-
-        $price = 0.0;
-        $variants = null;
-
-        // premium: если премиум — берем PremiumRegistrationPrice (как раньше),
-        // а variants можно попытаться тоже вытащить (но часто для premium оно не релевантно)
-        if (!empty($check['premium'])) {
-            $raw = $check['raw'] ?? [];
-            $premiumPrice = $raw['@PremiumRegistrationPrice'] ?? null;
-            if (is_numeric($premiumPrice)) {
-                $price = (float)$premiumPrice;
-            } else {
-                // fallback
-                $variants = $client->getPricingRegister1YVariants($tld);
-                $price = (float)$variants['price'];
+        if ($row && isset($row['json'])) {
+            $cfg = json_decode((string)$row['json'], true);
+            if (is_array($cfg)) {
+                if (empty($cfg['domain'])) $cfg['domain'] = $domain;
+                return $cfg;
             }
+        }
+
+        return $this->defaultConfig($domain);
+    }
+
+    private function saveSiteDefaultConfig(int $siteId, array $cfg): void
+    {
+        $pdo = DB::pdo();
+        $json = json_encode($cfg, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        $chk = $pdo->prepare("SELECT 1 FROM site_default_configs WHERE site_id=? LIMIT 1");
+        $chk->execute([$siteId]);
+        $exists = (bool)$chk->fetchColumn();
+
+        if ($exists) {
+            $up = $pdo->prepare("UPDATE site_default_configs SET config_json=?, updated_at=CURRENT_TIMESTAMP WHERE site_id=?");
+            $up->execute([$json, $siteId]);
         } else {
-            // ВОТ ТУТ ГЛАВНОЕ: берем variants
-            $variants = $client->getPricingRegister1YVariants($tld);
-            $price = (float)$variants['price'];
+            $ins = $pdo->prepare("INSERT INTO site_default_configs (site_id, config_json) VALUES (?, ?)");
+            $ins->execute([$siteId, $json]);
         }
-
-        if (($check['available'] ?? false) !== true) {
-            $decision = 'unavailable';
-        } elseif ($price > $max) {
-            $decision = 'too_expensive';
-        }
-
-        $this->view('sites/create', [
-            'templates' => $templates,
-            'domain'    => $domainInput, // как ввели
-            'template'  => $template,
-			'accounts'  => $accounts,
-			'registrar_account_id' => (int)($_POST['registrar_account_id'] ?? 0),
-            'checkResult' => [
-                'domain'    => $domain,
-                'available' => (bool)($check['available'] ?? false),
-                'premium'   => (bool)($check['premium'] ?? false),
-                'price_usd' => $price,
-                'decision'  => $decision,
-
-                // ДОБАВИЛИ: variants/pricing для отображения
-                'pricing' => $variants ? [
-                    'price'         => $variants['price'],
-                    'regular_price' => $variants['regular_price'],
-                    'your_price'    => $variants['your_price'],
-                    'coupon_price'  => $variants['coupon_price'],
-                    'promo_code'    => $variants['promo_code'] ?? null,
-                    'candidates'    => $variants['candidates'] ?? [],
-                ] : null,
-            ],
-        ]);
-    } catch (Throwable $e) {
-        $this->view('sites/create', [
-            'templates' => $templates,
-            'domain'    => $domainInput,
-            'template'  => $template,
-			'accounts'  => $accounts,
-			'registrar_account_id' => (int)($_POST['registrar_account_id'] ?? 0),
-            'checkResult' => [
-                'domain' => $domain,
-                'error'  => $e->getMessage(),
-            ],
-        ]);
-    }
-}
-
-
-private function normalizeDomainInput(string $input): string
-{
-    $s = trim($input);
-
-    // убираем протокол
-    $s = preg_replace('~^https?://~i', '', $s);
-
-    // убираем www. (по желанию, я бы убирал)
-    $s = preg_replace('~^www\.~i', '', $s);
-
-    // отрезаем / ? # и все что дальше
-    $parts = preg_split('~[/?#]~', $s, 2);
-    $s = (string)($parts[0] ?? '');
-
-    $s = strtolower(trim($s));
-    $s = rtrim($s, "./");
-
-    return $s;
-}
-
-private function isValidDomain(string $domain): bool
-{
-    // базовая проверка (без IDN/punycode)
-    // пример валидных: a-b.com, testovoe.casino
-    return (bool)preg_match('~^[a-z0-9](?:[a-z0-9\-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9\-]{0,61}[a-z0-9])?)+$~i', $domain);
-}
-
-public function deleteRemote(): void
-{
-    $this->requireAuth();
-
-    $siteId = (int)($_GET['id'] ?? 0);
-    if ($siteId <= 0) die('bad id');
-
-    $site = $this->loadSite($siteId);
-
-    $serverId = (int)($site['fastpanel_server_id'] ?? 0);
-    $fpSiteId = (int)($site['fp_site_id'] ?? 0);
-    $created  = (int)($site['fp_site_created'] ?? 0) === 1;
-
-    // 1) Сначала удаляем в FastPanel (если сайт реально создавался)
-    if ($created && $serverId > 0 && $fpSiteId > 0) {
-        require_once __DIR__ . '/../Services/Crypto.php';
-        require_once __DIR__ . '/../Services/FastpanelClient.php';
-
-        $server = $this->loadServer($serverId); // у тебя такой helper уже есть в SiteController
-        $password = Crypto::decrypt((string)$server['password_enc']);
-
-        $client = new FastpanelClient(
-            (string)$server['host'],
-            (bool)$server['verify_tls'],
-            (int)config('fastpanel.timeout', 30)
-        );
-        $client->login((string)$server['username'], $password);
-
-        // Удаляем сайт на сервере
-        $client->deleteSite($fpSiteId);
-
-        // (опционально) удалить FTP-аккаунт, если ты хранишь его id
-        // $ftpId = (int)($site['fp_ftp_id'] ?? 0);
-        // if ($ftpId > 0) $client->deleteFtpAccount($ftpId);
     }
 
-    // 2) Потом удаляем в панели (БД + storage как в твоем delete())
-    $_GET['id'] = $siteId;
-    $this->delete();
+    // ----------------------------
+    // Label helper
+    // ----------------------------
+    private function getLabelFromRequest(string $fallback = '_default'): string
+    {
+        $label = (string)($_GET['label'] ?? $_POST['label'] ?? $fallback);
+        return $this->normalizeSubLabel($label);
+    }
 }
-
-
-}
-
-

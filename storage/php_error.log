@@ -1,38 +1,5 @@
-[30-Jan-2026 00:05:36 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]
-[30-Jan-2026 00:05:36 Europe/Moscow] [availableIps] count=6 siteId=9
-[30-Jan-2026 00:05:42 Europe/Moscow] [NC makeClient] acc_id=2 app_key_len=32 api_key_enc_len=88
-[30-Jan-2026 00:05:42 Europe/Moscow] [Namecheap getHosts] domain=kazik2.casino raw_count=2 norm_count=2 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":1799},{"host":"www","type":"CNAME","address":"kazik2.casino.","ttl":1799}]
-[30-Jan-2026 00:05:43 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]
-[30-Jan-2026 00:05:43 Europe/Moscow] [availableIps] count=6 siteId=9
-[30-Jan-2026 00:06:01 Europe/Moscow] [NC makeClient] acc_id=2 app_key_len=32 api_key_enc_len=88
-[30-Jan-2026 00:06:02 Europe/Moscow] [Namecheap getHosts] domain=kazik2.casino raw_count=2 norm_count=2 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":1799},{"host":"www","type":"CNAME","address":"kazik2.casino.","ttl":1799}]
-[30-Jan-2026 00:06:03 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]
-[30-Jan-2026 00:06:03 Europe/Moscow] [availableIps] count=6 siteId=9
-[30-Jan-2026 00:06:35 Europe/Moscow] [NC makeClient] acc_id=2 app_key_len=32 api_key_enc_len=88
-[30-Jan-2026 00:06:36 Europe/Moscow] [Namecheap getHosts] domain=kazik2.casino raw_count=131 norm_count=131 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":1799},{"host":"1go","type":"A","address":"95.129.234.20","ttl":300},{"host":"1win","type":"A","address":"95.129.234.20","ttl":300}]
-[30-Jan-2026 00:06:37 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]
-[30-Jan-2026 00:06:37 Europe/Moscow] [availableIps] count=6 siteId=9
-[30-Jan-2026 00:07:13 Europe/Moscow] availableIps count=6 siteId=6
-[30-Jan-2026 00:07:18 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]
-[30-Jan-2026 00:07:18 Europe/Moscow] [availableIps] count=6 siteId=6
-[30-Jan-2026 00:07:56 Europe/Moscow] [NC makeClient] acc_id=2 app_key_len=32 api_key_enc_len=88
-[30-Jan-2026 00:07:57 Europe/Moscow] [Namecheap getHosts] domain=testovoe.casino raw_count=2 norm_count=2 sample=[{"host":"@","type":"A","address":"95.129.234.77","ttl":1800},{"host":"www","type":"CNAME","address":"testovoe.casino.","ttl":1800}]
-[30-Jan-2026 00:07:58 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]
-[30-Jan-2026 00:07:58 Europe/Moscow] [availableIps] count=6 siteId=6
-[30-Jan-2026 01:24:57 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]
-[30-Jan-2026 01:24:57 Europe/Moscow] [availableIps] count=6 siteId=6
-[30-Jan-2026 01:54:01 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]
-[30-Jan-2026 01:54:01 Europe/Moscow] [availableIps] count=6 siteId=6
-[30-Jan-2026 01:54:49 Europe/Moscow] [NC makeClient] acc_id=2 app_key_len=32 api_key_enc_len=88
-[30-Jan-2026 01:54:50 Europe/Moscow] [Namecheap getHosts] domain=testovoe.casino raw_count=131 norm_count=131 sample=[{"host":"@","type":"A","address":"95.129.234.77","ttl":1800},{"host":"1go","type":"A","address":"95.129.234.20","ttl":300},{"host":"1win","type":"A","address":"95.129.234.20","ttl":300}]
-[30-Jan-2026 01:54:51 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]
-[30-Jan-2026 01:54:51 Europe/Moscow] [availableIps] count=6 siteId=6
-[30-Jan-2026 01:55:11 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]
-[30-Jan-2026 01:55:11 Europe/Moscow] [availableIps] count=6 siteId=6
-[30-Jan-2026 01:55:33 Europe/Moscow] [NC makeClient] acc_id=2 app_key_len=32 api_key_enc_len=88
-[30-Jan-2026 01:55:34 Europe/Moscow] [Namecheap getHosts] domain=testovoe.casino raw_count=2 norm_count=2 sample=[{"host":"@","type":"A","address":"95.129.234.77","ttl":1800},{"host":"www","type":"CNAME","address":"testovoe.casino.","ttl":1800}]
-[30-Jan-2026 01:55:34 Europe/Moscow] [DNS] targetIp=95.129.234.77 domain=testovoe.casino
-[30-Jan-2026 01:55:34 Europe/Moscow] [DNS] merged_sample=[{"host":"@","type":"A","address":"95.129.234.77","ttl":1800},{"host":"1go","type":"A","address":"95.129.234.77","ttl":300},{"host":"1win","type":"A","address":"95.129.234.77","ttl":300}]
-[30-Jan-2026 01:55:35 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]
-[30-Jan-2026 01:55:35 Europe/Moscow] [availableIps] count=6 siteId=6
-[30-Jan-2026 02:18:22 Europe/Moscow] availableIps count=6 siteId=9
+[01-Feb-2026 00:15:39 Europe/Moscow] PHP Fatal error:  Uncaught TypeError: Router::post(): Argument #2 ($handler) must be of type callable, array given, called in /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php on line 88 and defined in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php:12
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(88): Router->post('/sites/check-do...', Array)
+#1 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php on line 12

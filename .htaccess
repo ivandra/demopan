@@ -1,3 +1,16 @@
 RewriteEngine On
-RewriteRule ^$ public/index.php [L]
-RewriteRule ^(.*)$ public/index.php [L]
+Options -Indexes -MultiViews
+
+# 0) Разрешаем прямой доступ к диагностике/утилитам в корне (если нужно)
+RewriteRule ^(__hub_paths\.php|__hub_unpack\.php)$ - [L]
+
+# 1) Если реально существует файл в корне public_html — отдаем напрямую
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# 2) (Опционально) Если файл существует в /public — отдаем его без префикса /public
+RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f
+RewriteRule ^(.*)$ public/$1 [L]
+
+# 3) Все остальное — во фронт-контроллер
+RewriteRule ^ public/index.php [L]

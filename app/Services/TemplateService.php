@@ -2,9 +2,19 @@
 
 class TemplateService
 {
+    private function storageRoot(): string
+    {
+        if (defined('STORAGE_ROOT')) return rtrim(STORAGE_ROOT, '/\\');
+        if (defined('APP_ROOT')) return rtrim(APP_ROOT, '/\\') . '/storage';
+
+        // fallback (на всякий)
+        $root = realpath(__DIR__ . '/../../storage');
+        return rtrim($root ?: (__DIR__ . '/../../storage'), '/\\');
+    }
+
     public function listTemplates(): array
     {
-        $base = __DIR__ . '/../../storage/templates';
+        $base = $this->storageRoot() . '/templates';
         if (!is_dir($base)) return [];
 
         $items = scandir($base);
@@ -23,7 +33,7 @@ class TemplateService
 
     public function copyTemplate(string $templateName, string $targetDir): void
     {
-        $src = __DIR__ . '/../../storage/templates/' . $templateName;
+        $src = $this->storageRoot() . '/templates/' . $templateName;
         if (!is_dir($src)) {
             throw new RuntimeException("Template not found: {$templateName}");
         }
@@ -51,7 +61,7 @@ class TemplateService
             if (is_dir($srcPath)) {
                 $this->rcopy($srcPath, $dstPath);
             } else {
-                copy($srcPath, $dstPath);
+                @copy($srcPath, $dstPath);
             }
         }
         closedir($dir);

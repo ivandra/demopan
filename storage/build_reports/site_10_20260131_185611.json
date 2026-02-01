@@ -1,0 +1,14 @@
+{
+    "ok": false,
+    "errors": [
+        "Ошибка генерации config.php: Call to undefined method MultiSiteConfigWriter::writeConfigDefaultPhp()"
+    ],
+    "warnings": [
+        "Есть неиспользуемые texts-файлы: game.php, play.php"
+    ],
+    "created_texts": [],
+    "unused_texts": [
+        "game.php",
+        "play.php"
+    ]
+}
