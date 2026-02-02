@@ -1,11 +1,16 @@
 <?php
 
+// app/Core/Controller.php
+// Paths bootstrap должен быть подключен в public/index.php (или другом bootstrap) ДО загрузки контроллеров.
+
 abstract class Controller
 {
     protected function view(string $path, array $data = []): void
     {
         extract($data);
-        require __DIR__ . '/../Views/layout.php';
+
+        $layout = Paths::appRoot() . '/app/Views/layout.php';
+        require $layout;
     }
 
     protected function redirect(string $url): void
@@ -15,10 +20,7 @@ abstract class Controller
             exit;
         }
 
-        echo '<meta http-equiv="refresh" content="0;url=' . htmlspecialchars($url, ENT_QUOTES) . '">';
-        echo '<script>location.href=' . json_encode($url) . ';</script>';
+        echo '<meta http-equiv="refresh" content="0;url=' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '">';
         exit;
     }
-	
-	
 }

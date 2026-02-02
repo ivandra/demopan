@@ -1,5 +1,1 @@
-[01-Feb-2026 00:15:39 Europe/Moscow] PHP Fatal error:  Uncaught TypeError: Router::post(): Argument #2 ($handler) must be of type callable, array given, called in /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php on line 88 and defined in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php:12
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(88): Router->post('/sites/check-do...', Array)
-#1 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php on line 12
+[02-Feb-2026 23:36:41 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]

@@ -2,27 +2,19 @@
 
 class SiteController extends Controller
 {
+    // ----------------------------
+    // Auth + paths
+    // ----------------------------
     private function requireAuth(): void
     {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            @session_start();
+        }
+
         if (empty($_SESSION['user_id'])) {
             $this->redirect('/login');
         }
     }
-
-    private function appRoot(): string
-    {
-        if (defined('APP_ROOT')) return rtrim(APP_ROOT, '/\\');
-        // fallback: /public_html/app/Controllers -> ../../ = /public_html
-        $root = realpath(__DIR__ . '/../../');
-        return rtrim($root ?: (__DIR__ . '/../../'), '/\\');
-    }
-
-    private function storageRoot(): string
-    {
-        if (defined('STORAGE_ROOT')) return rtrim(STORAGE_ROOT, '/\\');
-        return $this->appRoot() . '/storage';
-    }
-
     private function log(string $msg, array $ctx = []): void
     {
         if (function_exists('hub_log')) {
@@ -38,7 +30,6 @@ class SiteController extends Controller
         $this->requireAuth();
 
         $sites = DB::pdo()->query('SELECT * FROM sites ORDER BY id DESC')->fetchAll();
-
         $sslMap = $this->fetchSslStatusForSites($sites);
 
         foreach ($sites as &$s) {
@@ -62,7 +53,7 @@ class SiteController extends Controller
     {
         $this->requireAuth();
 
-        require_once $this->appRoot() . '/app/Services/TemplateService.php';
+        require_once Paths::appRoot() . '/app/Services/TemplateService.php';
         $templates = (new TemplateService())->listTemplates();
 
         $accounts = DB::pdo()->query("
@@ -96,7 +87,7 @@ class SiteController extends Controller
         $pdo->beginTransaction();
 
         try {
-            $configPath = "storage/configs/site_" . time() . ".json";
+            $configPath = 'configs/site_' . time() . '.json';
 
             if ($registrarAccountId > 0) {
                 $stmt = $pdo->prepare(
@@ -115,21 +106,21 @@ class SiteController extends Controller
             $siteId = (int)$pdo->lastInsertId();
 
             $cfg = $this->defaultConfig($domain);
+
+            // всегда сохраняем в site_configs для совместимости (и для обычных шаблонов это основной источник)
             $stmt = $pdo->prepare("INSERT INTO site_configs (site_id, json) VALUES (?, ?)");
             $stmt->execute([$siteId, json_encode($cfg, JSON_UNESCAPED_UNICODE)]);
 
-            require_once $this->appRoot() . '/app/Services/TemplateService.php';
+            require_once Paths::appRoot() . '/app/Services/TemplateService.php';
 
-            $buildRel = 'storage/builds/site_' . $siteId;
-            $buildAbs = $this->appRoot() . '/' . ltrim($buildRel, '/');
+            $buildRel = 'builds/site_' . $siteId;
+            $buildAbs = $this->toBuildAbs($buildRel);
 
             $this->log('STORE.copyTemplate', [
                 'siteId' => $siteId,
                 'template' => $template,
                 'buildRel' => $buildRel,
                 'buildAbs' => $buildAbs,
-                'APP_ROOT' => $this->appRoot(),
-                'STORAGE_ROOT' => $this->storageRoot(),
             ]);
 
             (new TemplateService())->copyTemplate($template, $buildAbs);
@@ -137,12 +128,16 @@ class SiteController extends Controller
             $stmt = $pdo->prepare("UPDATE sites SET build_path=? WHERE id=?");
             $stmt->execute([$buildRel, $siteId]);
 
+            // template-multy: создаем базовый конфиг и _default оверлей
             if ($template === 'template-multy') {
                 $this->upsertSiteDefaultConfig($siteId, $cfg);
-                $this->ensureSubdomainConfigExists($siteId, '_default');
+
+                // создаст запись в site_subdomain_configs для _default, если ее нет
+                $this->ensureSubdomainConfigExists($siteId, '_default', $cfg);
             }
 
-            $this->regenerateConfigPhp($siteId, $cfg, '_default');
+            $labelForRegen = ($template === 'template-multy') ? '_default' : null;
+            $this->regenerateConfigPhp($siteId, $cfg, $labelForRegen);
 
             $pdo->commit();
             $this->redirect('/');
@@ -154,7 +149,7 @@ class SiteController extends Controller
     }
 
     // ----------------------------
-    // Domain check (простая)
+    // Domain check
     // ----------------------------
     public function checkDomain(): void
     {
@@ -178,7 +173,7 @@ class SiteController extends Controller
     }
 
     // ----------------------------
-    // Edit + Update
+    // Edit + Update (базовый конфиг)
     // ----------------------------
     public function editForm(): void
     {
@@ -188,7 +183,6 @@ class SiteController extends Controller
         if ($siteId <= 0) die('bad id');
 
         [$site, $cfg] = $this->loadSiteAndConfig($siteId);
-
         $configTargetPath = $this->getConfigTargetPath($siteId);
 
         $pdo = DB::pdo();
@@ -212,6 +206,7 @@ class SiteController extends Controller
         if ($siteId <= 0) die('bad id');
 
         [$site, $cfg] = $this->loadSiteAndConfig($siteId);
+        $template = (string)($site['template'] ?? '');
 
         $cfg['domain'] = $this->normalizeDomainInput((string)($_POST['domain'] ?? (string)($cfg['domain'] ?? '')));
         if ($cfg['domain'] === '' || !$this->isValidDomain($cfg['domain'])) {
@@ -244,24 +239,35 @@ class SiteController extends Controller
             }
         }
 
-        DB::pdo()->prepare("UPDATE site_configs SET json=? WHERE site_id=?")
-            ->execute([json_encode($cfg, JSON_UNESCAPED_UNICODE), $siteId]);
+        // домен и registrar_account_id в sites
+        DB::pdo()->prepare("UPDATE sites SET domain=?, registrar_account_id=? WHERE id=?")
+            ->execute([$cfg['domain'], ($registrarAccountId > 0 ? $registrarAccountId : null), $siteId]);
 
-        DB::pdo()->prepare("UPDATE sites SET domain=? WHERE id=?")
-            ->execute([$cfg['domain'], $siteId]);
+        // Вариант 2:
+        // - для обычных шаблонов: обновляем site_configs
+        // - для template-multy: обновляем site_default_configs И дублируем в site_configs (для совместимости)
+        if ($template === 'template-multy') {
+            $this->saveSiteDefaultConfig($siteId, $cfg);
 
-        DB::pdo()->prepare("UPDATE sites SET registrar_account_id=? WHERE id=?")
-            ->execute([$registrarAccountId > 0 ? $registrarAccountId : null, $siteId]);
+            DB::pdo()->prepare("UPDATE site_configs SET json=? WHERE site_id=?")
+                ->execute([json_encode($cfg, JSON_UNESCAPED_UNICODE), $siteId]);
 
-        $labelForRegen = (($site['template'] ?? '') === 'template-multy') ? '_default' : null;
+            // гарантируем наличие _default оверлея (на случай старых данных)
+            $this->ensureSubdomainConfigExists($siteId, '_default', $cfg);
 
-        $this->regenerateConfigPhp($siteId, $cfg, $labelForRegen);
+            $this->regenerateConfigPhp($siteId, $cfg, '_default');
+        } else {
+            DB::pdo()->prepare("UPDATE site_configs SET json=? WHERE site_id=?")
+                ->execute([json_encode($cfg, JSON_UNESCAPED_UNICODE), $siteId]);
+
+            $this->regenerateConfigPhp($siteId, $cfg, null);
+        }
 
         $this->redirect('/sites/edit?id=' . $siteId);
     }
 
     // ----------------------------
-    // Pages
+    // Pages (для template-multy храним страницы в site_subdomain_configs по label)
     // ----------------------------
     public function pagesForm(): void
     {
@@ -270,18 +276,29 @@ class SiteController extends Controller
         $siteId = (int)($_GET['id'] ?? 0);
         if ($siteId <= 0) die('bad id');
 
-        [$site, $cfg] = $this->loadSiteAndConfig($siteId);
-        $pages = $cfg['pages'] ?? [];
-        if (!is_array($pages)) $pages = [];
-
         $label = $this->getLabelFromRequest('_default');
 
-        if (($site['template'] ?? '') === 'template-multy') {
-            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+        $site = $this->loadSite($siteId);
+        $template = (string)($site['template'] ?? '');
+
+        $cfg = ($template === 'template-multy')
+            ? $this->loadSiteDefaultConfig($siteId, (string)($site['domain'] ?? ''))
+            : $this->loadSiteConfigFromSiteConfigs($siteId, (string)($site['domain'] ?? ''));
+
+        $pages = [];
+        if ($template === 'template-multy') {
+            require_once Paths::appRoot() . '/app/Services/SubdomainProvisioner.php';
             (new SubdomainProvisioner())->ensureForSite($siteId, $label);
+
+            $subCfg = $this->ensureSubdomainConfigExists($siteId, $label, $cfg);
+            $pages = $subCfg['pages'] ?? [];
+        } else {
+            $pages = $cfg['pages'] ?? [];
         }
 
-        $textsDir  = $this->getTextsDir($site, $label);
+        if (!is_array($pages)) $pages = [];
+
+        $textsDir  = $this->getTextsDir($site, ($template === 'template-multy') ? $label : null);
         $textFiles = $this->listTextFiles($textsDir);
 
         $used = [];
@@ -306,11 +323,10 @@ class SiteController extends Controller
         if ($newFile === '') die('new_file required');
 
         $label = $this->getLabelFromRequest('_default');
-
-        $site = $this->loadSite($siteId);
+        $site  = $this->loadSite($siteId);
 
         if (($site['template'] ?? '') === 'template-multy') {
-            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+            require_once Paths::appRoot() . '/app/Services/SubdomainProvisioner.php';
             (new SubdomainProvisioner())->ensureForSite($siteId, $label);
         }
 
@@ -322,6 +338,7 @@ class SiteController extends Controller
         $safeFile = $this->sanitizeTextFilename($newFile);
         $path = rtrim($textsDir, '/\\') . '/' . $safeFile;
 
+        Paths::ensureDir($textsDir);
         if (!is_file($path)) {
             file_put_contents($path, "<?php\n\n");
         }
@@ -336,9 +353,10 @@ class SiteController extends Controller
         $siteId = (int)($_GET['id'] ?? 0);
         if ($siteId <= 0) die('bad id');
 
-        [$site, $cfg] = $this->loadSiteAndConfig($siteId);
-
         $label = $this->getLabelFromRequest('_default');
+
+        $site = $this->loadSite($siteId);
+        $template = (string)($site['template'] ?? '');
 
         $urls       = $_POST['url'] ?? [];
         $titles     = $_POST['title'] ?? [];
@@ -375,13 +393,33 @@ class SiteController extends Controller
             }
         }
 
-        $cfg['pages'] = $newPages;
+        if ($template === 'template-multy') {
+            $defaultCfg = $this->loadSiteDefaultConfig($siteId, (string)($site['domain'] ?? ''));
 
-        DB::pdo()->prepare("UPDATE site_configs SET json=? WHERE site_id=?")
-            ->execute([json_encode($cfg, JSON_UNESCAPED_UNICODE), $siteId]);
+            // сохраняем страницы в site_subdomain_configs для выбранного label
+            $subCfg = $this->ensureSubdomainConfigExists($siteId, $label, $defaultCfg);
+            $subCfg['pages'] = $newPages;
+            $this->saveSubdomainConfig($siteId, $label, $subCfg);
 
-        $regenLabel = (($site['template'] ?? '') === 'template-multy') ? $label : null;
-        $this->regenerateConfigPhp($siteId, $cfg, $regenLabel);
+            // если редактируем _default, синхронизируем базовый конфиг (чтобы новые label получали актуальные страницы)
+            if ($label === '_default') {
+                $defaultCfg['pages'] = $newPages;
+                $this->saveSiteDefaultConfig($siteId, $defaultCfg);
+                DB::pdo()->prepare("UPDATE site_configs SET json=? WHERE site_id=?")
+                    ->execute([json_encode($defaultCfg, JSON_UNESCAPED_UNICODE), $siteId]);
+            }
+
+            $this->regenerateConfigPhp($siteId, $defaultCfg, $label);
+        } else {
+            // обычные шаблоны: страницы живут в site_configs
+            $cfg = $this->loadSiteConfigFromSiteConfigs($siteId, (string)($site['domain'] ?? ''));
+            $cfg['pages'] = $newPages;
+
+            DB::pdo()->prepare("UPDATE site_configs SET json=? WHERE site_id=?")
+                ->execute([json_encode($cfg, JSON_UNESCAPED_UNICODE), $siteId]);
+
+            $this->regenerateConfigPhp($siteId, $cfg, null);
+        }
 
         $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
     }
@@ -400,7 +438,7 @@ class SiteController extends Controller
         $label = $this->getLabelFromRequest('_default');
 
         if (($site['template'] ?? '') === 'template-multy') {
-            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+            require_once Paths::appRoot() . '/app/Services/SubdomainProvisioner.php';
             (new SubdomainProvisioner())->ensureForSite($siteId, $label);
         }
 
@@ -423,7 +461,7 @@ class SiteController extends Controller
         $label = $this->getLabelFromRequest('_default');
 
         if (($site['template'] ?? '') === 'template-multy') {
-            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+            require_once Paths::appRoot() . '/app/Services/SubdomainProvisioner.php';
             (new SubdomainProvisioner())->ensureForSite($siteId, $label);
         }
 
@@ -459,7 +497,7 @@ class SiteController extends Controller
         $label = $this->getLabelFromRequest('_default');
 
         if (($site['template'] ?? '') === 'template-multy') {
-            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+            require_once Paths::appRoot() . '/app/Services/SubdomainProvisioner.php';
             (new SubdomainProvisioner())->ensureForSite($siteId, $label);
         }
 
@@ -468,6 +506,8 @@ class SiteController extends Controller
         $safeFile = $this->sanitizeTextFilename($file);
         $path = rtrim($textsDir, '/\\') . '/' . $safeFile;
 
+        Paths::ensureDir(dirname($path));
+        Paths::ensureDir(dirname($path));
         $tmp = $path . '.tmp_' . time();
         file_put_contents($tmp, $content);
         rename($tmp, $path);
@@ -488,7 +528,7 @@ class SiteController extends Controller
         $label = $this->getLabelFromRequest('_default');
 
         if (($site['template'] ?? '') === 'template-multy') {
-            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+            require_once Paths::appRoot() . '/app/Services/SubdomainProvisioner.php';
             (new SubdomainProvisioner())->ensureForSite($siteId, $label);
         }
 
@@ -501,6 +541,7 @@ class SiteController extends Controller
             die('file already exists');
         }
 
+        Paths::ensureDir($textsDir);
         file_put_contents($path, "<?php\n\n");
         $this->redirect('/sites/texts/edit?id=' . $siteId . '&label=' . urlencode($label) . '&file=' . rawurlencode($safeFile));
     }
@@ -539,14 +580,27 @@ class SiteController extends Controller
         $siteId = (int)($_GET['id'] ?? 0);
         if ($siteId <= 0) die('bad id');
 
-        [$site, $cfg] = $this->loadSiteAndConfig($siteId);
-
+        $site = $this->loadSite($siteId);
         $label = $this->getLabelFromRequest('_default');
+        $template = (string)($site['template'] ?? '');
+
+        $defaultCfg = ($template === 'template-multy')
+            ? $this->loadSiteDefaultConfig($siteId, (string)($site['domain'] ?? ''))
+            : $this->loadSiteConfigFromSiteConfigs($siteId, (string)($site['domain'] ?? ''));
 
         $buildDir = $this->getBuildDir($site);
-        $textsDir = $this->getTextsDir($site, (($site['template'] ?? '') === 'template-multy') ? $label : null);
+        $textsDir = $this->getTextsDir($site, ($template === 'template-multy') ? $label : null);
 
-        $pages = $cfg['pages'] ?? [];
+        $pages = [];
+        if ($template === 'template-multy') {
+            require_once Paths::appRoot() . '/app/Services/SubdomainProvisioner.php';
+            (new SubdomainProvisioner())->ensureForSite($siteId, $label);
+
+            $subCfg = $this->ensureSubdomainConfigExists($siteId, $label, $defaultCfg);
+            $pages = $subCfg['pages'] ?? [];
+        } else {
+            $pages = $defaultCfg['pages'] ?? [];
+        }
         if (!is_array($pages)) $pages = [];
 
         $report = [
@@ -567,12 +621,12 @@ class SiteController extends Controller
             }
 
             if (!preg_match('~\.php$~i', $tf)) $tf .= '.php';
-
             $used[$tf] = true;
 
             $path = rtrim($textsDir, '/\\') . '/' . $tf;
             if (!is_file($path)) {
                 $init = "<?php\n\n";
+                Paths::ensureDir(dirname($path));
                 if (file_put_contents($path, $init) === false) {
                     $report['ok'] = false;
                     $report['errors'][] = "Не удалось создать texts/{$tf} (проверь права)";
@@ -594,21 +648,23 @@ class SiteController extends Controller
         }
 
         try {
-            $regenLabel = (($site['template'] ?? '') === 'template-multy') ? $label : null;
-            $this->regenerateConfigPhp($siteId, $cfg, $regenLabel);
+            $regenLabel = ($template === 'template-multy') ? $label : null;
+            $this->regenerateConfigPhp($siteId, $defaultCfg, $regenLabel);
         } catch (Throwable $e) {
             $report['ok'] = false;
             $report['errors'][] = 'Ошибка генерации config.php: ' . $e->getMessage();
         }
 
-        $logDir = $this->storageRoot() . '/build_reports';
-        if (!is_dir($logDir)) @mkdir($logDir, 0775, true);
-
-        $ts = date('Ymd_His');
+        $logDir = Paths::storage('build_reports');
+        Paths::ensureDir($logDir);
+$ts = date('Ymd_His');
         $reportPath = $logDir . "/site_{$siteId}_{$ts}.json";
+        Paths::ensureDir(dirname($reportPath));
         @file_put_contents($reportPath, json_encode($report, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
         $configTargetPath = $this->getConfigTargetPath($siteId);
+        $cfg = $defaultCfg;
+
         $this->view('sites/build', compact('site', 'cfg', 'report', 'configTargetPath', 'label'));
     }
 
@@ -692,6 +748,8 @@ class SiteController extends Controller
             @copy($path, $bak);
         }
 
+        Paths::ensureDir(dirname($path));
+        Paths::ensureDir(dirname($path));
         $tmp = $path . '.tmp_' . time();
         file_put_contents($tmp, $content);
         rename($tmp, $path);
@@ -756,12 +814,17 @@ class SiteController extends Controller
         }
 
         $buildRel = (string)($site['build_path'] ?? '');
-        $buildAbs = $buildRel !== '' ? ($this->appRoot() . '/' . ltrim($buildRel, '/')) : '';
-        $generatedAbs = $this->storageRoot() . '/generated/site_' . $siteId;
+        $buildAbs = $buildRel !== '' ? $this->toBuildAbs($buildRel) : '';
+        $generatedAbs = Paths::storage('generated/site_' . $siteId);
 
         DB::pdo()->beginTransaction();
 
         try {
+            // variant 2: чистим все таблицы, связанные с template-multy
+            DB::pdo()->prepare("DELETE FROM site_subdomain_configs WHERE site_id=?")->execute([$siteId]);
+            DB::pdo()->prepare("DELETE FROM site_default_configs WHERE site_id=?")->execute([$siteId]);
+            DB::pdo()->prepare("DELETE FROM site_subdomains WHERE site_id=?")->execute([$siteId]);
+
             DB::pdo()->prepare("DELETE FROM site_configs WHERE site_id=?")->execute([$siteId]);
             DB::pdo()->prepare("DELETE FROM sites WHERE id=?")->execute([$siteId]);
 
@@ -774,7 +837,7 @@ class SiteController extends Controller
                 $this->rrmdir($generatedAbs);
             }
 
-            $zipPath = $this->storageRoot() . '/zips/site_' . $siteId . '.zip';
+            $zipPath = Paths::storage('zips/site_' . $siteId . '.zip');
             if (is_file($zipPath)) {
                 @unlink($zipPath);
             }
@@ -802,12 +865,12 @@ class SiteController extends Controller
         $buildRel = (string)($site['build_path'] ?? '');
         if ($buildRel === '') die('build not found');
 
-        $buildAbs = $this->appRoot() . '/' . ltrim($buildRel, '/');
+        $buildAbs = $this->toBuildAbs($buildRel);
 
-        require_once $this->appRoot() . '/app/Services/ZipService.php';
+        require_once Paths::appRoot() . '/app/Services/ZipService.php';
 
-        $zipDir = $this->storageRoot() . '/zips';
-        if (!is_dir($zipDir)) mkdir($zipDir, 0775, true);
+        $zipDir = Paths::storage('zips');
+        Paths::ensureDir($zipDir);
 
         $zipPath = $zipDir . '/site_' . $siteId . '.zip';
         (new ZipService())->makeZip($buildAbs, $zipPath);
@@ -828,6 +891,11 @@ class SiteController extends Controller
         return $v === '' ? '$inherit' : $v;
     }
 
+    /**
+     * Возвращает:
+     * - для обычных шаблонов: cfg из site_configs
+     * - для template-multy: базовый cfg из site_default_configs (fallback: site_configs)
+     */
     private function loadSiteAndConfig(int $siteId): array
     {
         $stmt = DB::pdo()->prepare('SELECT * FROM sites WHERE id=?');
@@ -835,23 +903,23 @@ class SiteController extends Controller
         $site = $stmt->fetch();
         if (!$site) die('site not found');
 
-        $stmt = DB::pdo()->prepare('SELECT json FROM site_configs WHERE site_id=?');
-        $stmt->execute([$siteId]);
-        $row = $stmt->fetch();
+        $domain = (string)($site['domain'] ?? '');
 
-        if (!$row) {
-            $cfg = $this->defaultConfig((string)$site['domain']);
-            $stmtIns = DB::pdo()->prepare("INSERT INTO site_configs (site_id, json) VALUES (?, ?)");
-            $stmtIns->execute([$siteId, json_encode($cfg, JSON_UNESCAPED_UNICODE)]);
+        if ((string)($site['template'] ?? '') === 'template-multy') {
+            $cfg = $this->loadSiteDefaultConfig($siteId, $domain);
             return [$site, $cfg];
         }
 
-        $cfg = json_decode((string)($row['json'] ?? ''), true);
-        if (!is_array($cfg)) $cfg = [];
-
+        $cfg = $this->loadSiteConfigFromSiteConfigs($siteId, $domain);
         return [$site, $cfg];
     }
 
+    /**
+     * Генерация:
+     * - обычные шаблоны: config.php
+     * - template-multy: config.default.php + subs/<label>/config.php
+     *   (label обязателен для генерации конкретного subs/<label>/config.php)
+     */
     private function regenerateConfigPhp(int $siteId, array $cfg, ?string $label = null): void
     {
         $stmt = DB::pdo()->prepare("SELECT build_path, template, domain FROM sites WHERE id=?");
@@ -862,10 +930,10 @@ class SiteController extends Controller
         $domain   = (string)($siteRow['domain'] ?? ($cfg['domain'] ?? ''));
 
         if ($siteRow && !empty($siteRow['build_path'])) {
-            $dir = $this->appRoot() . '/' . ltrim((string)$siteRow['build_path'], '/');
+            $dir = Paths::appRoot() . '/' . ltrim((string)$siteRow['build_path'], '/');
         } else {
-            $dir = $this->storageRoot() . '/generated/site_' . $siteId;
-            @mkdir($dir, 0775, true);
+            $dir = Paths::storage('generated/site_' . $siteId);
+            Paths::ensureDir($dir);
         }
 
         $this->log('REGEN.start', [
@@ -873,23 +941,22 @@ class SiteController extends Controller
             'template' => $template,
             'dir' => $dir,
             'label' => $label,
-            'APP_ROOT' => $this->appRoot(),
-            'STORAGE_ROOT' => $this->storageRoot(),
         ]);
 
         if ($template === 'template-multy') {
-            require_once $this->appRoot() . '/app/Services/MultiSiteConfigWriter.php';
-            require_once $this->appRoot() . '/app/Services/SubdomainProvisioner.php';
+            require_once Paths::appRoot() . '/app/Services/MultiSiteConfigWriter.php';
+            require_once Paths::appRoot() . '/app/Services/SubdomainProvisioner.php';
 
             $label = $this->normalizeSubLabel((string)($label ?? '_default'));
 
+            // база
             $this->saveSiteDefaultConfig($siteId, $cfg);
-            $subCfg = $this->ensureSubdomainConfigExists($siteId, $label);
 
-            $prov = new SubdomainProvisioner();
-            $prov->ensureForSite($siteId, $label);
+            // гарантируем существование оверлея (и файловой структуры)
+            $this->ensureSubdomainConfigExists($siteId, $label, $cfg);
+            (new SubdomainProvisioner())->ensureForSite($siteId, $label);
 
-            // writer
+            // writer (config.default.php + subs/<label>/config.php)
             $w = class_exists('App\\Services\\MultiSiteConfigWriter')
                 ? new \App\Services\MultiSiteConfigWriter()
                 : new MultiSiteConfigWriter();
@@ -897,7 +964,11 @@ class SiteController extends Controller
             if (!method_exists($w, 'writeConfigDefaultPhp')) {
                 throw new RuntimeException('MultiSiteConfigWriter::writeConfigDefaultPhp not found');
             }
+
             $w->writeConfigDefaultPhp($dir, $domain, $cfg);
+
+            // sub config берем из БД (после ensureSubdomainConfigExists)
+            $subCfg = $this->loadSubdomainConfig($siteId, $label);
 
             if (method_exists($w, 'writeSubConfigPhp')) {
                 $w->writeSubConfigPhp($dir, $label, $subCfg, $cfg);
@@ -917,7 +988,7 @@ class SiteController extends Controller
         }
 
         // default templates
-        require_once $this->appRoot() . '/app/Services/SiteConfigWriter.php';
+        require_once Paths::appRoot() . '/app/Services/SiteConfigWriter.php';
 
         $this->log('REGEN.write.single', [
             'dir' => $dir,
@@ -980,7 +1051,7 @@ class SiteController extends Controller
         $buildRel = (string)($site['build_path'] ?? '');
         if ($buildRel === '') return '';
 
-        $buildAbs = $this->appRoot() . '/' . ltrim($buildRel, '/');
+        $buildAbs = $this->toBuildAbs($buildRel);
         $template = (string)($site['template'] ?? '');
 
         if ($template === 'template-multy') {
@@ -1059,12 +1130,54 @@ class SiteController extends Controller
         ];
     }
 
+
+    /**
+     * build_path в БД хранится как относительный путь внутри storage (например: builds/site_123).
+     * Для обратной совместимости также принимаем префикс "<storage_basename>/..." (если он уже есть в БД).
+     */
+    private function normalizeBuildRel(string $rel): string
+    {
+        $rel = trim($rel);
+        $rel = str_replace('\\', '/', $rel);
+        $rel = ltrim($rel, '/');
+
+        if ($rel === '') return '';
+
+        // legacy: "<storage_basename>/builds/..."
+        $storageBase = basename(rtrim(Paths::storage(''), "/\\"));
+        if ($storageBase !== '' && strpos($rel, $storageBase . '/') === 0) {
+            $rel = substr($rel, strlen($storageBase) + 1);
+        }
+
+        // защита от выходов наверх
+        if (preg_match('~(^|/)\.\.(?:/|$)~', $rel)) {
+            return '';
+        }
+
+        // ожидаем builds/...
+        if (strpos($rel, 'builds/') !== 0) {
+            return '';
+        }
+
+        return $rel;
+    }
+
+    private function toBuildAbs(string $buildRel): string
+    {
+        $rel = $this->normalizeBuildRel($buildRel);
+        if ($rel === '') {
+            die('build_path invalid');
+        }
+
+        return rtrim(Paths::storage($rel), "/\\");
+    }
+
     private function getBuildDir(array $site): string
     {
         $buildRel = (string)($site['build_path'] ?? '');
         if ($buildRel === '') die('build_path empty');
 
-        return $this->appRoot() . '/' . ltrim($buildRel, '/');
+        return $this->toBuildAbs($buildRel);
     }
 
     private function sanitizeAllowedFile(string $file): string
@@ -1095,7 +1208,7 @@ class SiteController extends Controller
         $buildPath = (string)($row['build_path'] ?? '');
         $template  = (string)($row['template'] ?? '');
 
-        $buildAbs = $this->appRoot() . '/' . ltrim($buildPath, '/');
+        $buildAbs = $this->toBuildAbs($buildPath);
 
         if ($template === 'template-multy') {
             return $buildAbs . '/config.default.php';
@@ -1126,10 +1239,13 @@ class SiteController extends Controller
         @rmdir($dir);
     }
 
+    // ----------------------------
+    // SSL status
+    // ----------------------------
     private function fetchSslStatusForSites(array $sites): array
     {
-        require_once $this->appRoot() . '/app/Services/Crypto.php';
-        require_once $this->appRoot() . '/app/Services/FastpanelClient.php';
+        require_once Paths::appRoot() . '/app/Services/Crypto.php';
+        require_once Paths::appRoot() . '/app/Services/FastpanelClient.php';
 
         $byServer = [];
         foreach ($sites as $s) {
@@ -1214,6 +1330,9 @@ class SiteController extends Controller
         return $row;
     }
 
+    // ----------------------------
+    // Domain helpers
+    // ----------------------------
     private function normalizeDomainInput(string $input): string
     {
         $s = trim($input);
@@ -1236,7 +1355,7 @@ class SiteController extends Controller
     }
 
     // ----------------------------
-    // template-multy DB helpers
+    // template-multy DB helpers (вариант 2)
     // ----------------------------
     private function upsertSiteDefaultConfig(int $siteId, array $cfg): void
     {
@@ -1250,75 +1369,6 @@ class SiteController extends Controller
               updated_at = CURRENT_TIMESTAMP
         ");
         $stmt->execute([$siteId, $json]);
-    }
-
-    private function defaultSubdomainConfig(string $label): array
-    {
-        return [
-            'label'   => $label,
-            'logo'    => 'logo.png',
-            'favicon' => 'favicon.png',
-            'pages'   => [],
-        ];
-    }
-
-    private function ensureSubdomainConfigExists(int $siteId, string $label): array
-    {
-        $label = trim($label) !== '' ? trim($label) : '_default';
-
-        $stmt = DB::pdo()->prepare("SELECT config_json FROM site_subdomain_configs WHERE site_id=? AND label=? LIMIT 1");
-        $stmt->execute([$siteId, $label]);
-        $row = $stmt->fetch();
-
-        if ($row && isset($row['config_json'])) {
-            $cfg = json_decode((string)$row['config_json'], true);
-            return is_array($cfg) ? $cfg : $this->defaultSubdomainConfig($label);
-        }
-
-        $cfg = $this->defaultSubdomainConfig($label);
-        $json = json_encode($cfg, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-
-        $ins = DB::pdo()->prepare("
-            INSERT INTO site_subdomain_configs (site_id, label, config_json)
-            VALUES (?, ?, ?)
-            ON DUPLICATE KEY UPDATE
-              config_json = VALUES(config_json),
-              updated_at = CURRENT_TIMESTAMP
-        ");
-        $ins->execute([$siteId, $label, $json]);
-
-        return $cfg;
-    }
-
-    private function loadSiteDefaultConfig(int $siteId, string $domain): array
-    {
-        $pdo = DB::pdo();
-
-        $st = $pdo->prepare("SELECT config_json FROM site_default_configs WHERE site_id=? LIMIT 1");
-        $st->execute([$siteId]);
-        $row = $st->fetch();
-
-        if ($row && isset($row['config_json'])) {
-            $cfg = json_decode((string)$row['config_json'], true);
-            if (is_array($cfg)) {
-                if (empty($cfg['domain'])) $cfg['domain'] = $domain;
-                return $cfg;
-            }
-        }
-
-        $st = $pdo->prepare("SELECT json FROM site_configs WHERE site_id=? LIMIT 1");
-        $st->execute([$siteId]);
-        $row = $st->fetch();
-
-        if ($row && isset($row['json'])) {
-            $cfg = json_decode((string)$row['json'], true);
-            if (is_array($cfg)) {
-                if (empty($cfg['domain'])) $cfg['domain'] = $domain;
-                return $cfg;
-            }
-        }
-
-        return $this->defaultConfig($domain);
     }
 
     private function saveSiteDefaultConfig(int $siteId, array $cfg): void
@@ -1339,6 +1389,116 @@ class SiteController extends Controller
         }
     }
 
+    private function loadSiteDefaultConfig(int $siteId, string $domain): array
+    {
+        $pdo = DB::pdo();
+
+        $st = $pdo->prepare("SELECT config_json FROM site_default_configs WHERE site_id=? LIMIT 1");
+        $st->execute([$siteId]);
+        $row = $st->fetch();
+
+        if ($row && isset($row['config_json'])) {
+            $cfg = json_decode((string)$row['config_json'], true);
+            if (is_array($cfg)) {
+                if (empty($cfg['domain'])) $cfg['domain'] = $domain;
+                return $cfg;
+            }
+        }
+
+        // fallback: site_configs
+        $st = $pdo->prepare("SELECT json FROM site_configs WHERE site_id=? LIMIT 1");
+        $st->execute([$siteId]);
+        $row = $st->fetch();
+
+        if ($row && isset($row['json'])) {
+            $cfg = json_decode((string)$row['json'], true);
+            if (is_array($cfg)) {
+                if (empty($cfg['domain'])) $cfg['domain'] = $domain;
+                return $cfg;
+            }
+        }
+
+        return $this->defaultConfig($domain);
+    }
+
+    private function loadSiteConfigFromSiteConfigs(int $siteId, string $domain): array
+    {
+        $st = DB::pdo()->prepare('SELECT json FROM site_configs WHERE site_id=?');
+        $st->execute([$siteId]);
+        $row = $st->fetch();
+
+        if (!$row) {
+            $cfg = $this->defaultConfig($domain);
+            $ins = DB::pdo()->prepare("INSERT INTO site_configs (site_id, json) VALUES (?, ?)");
+            $ins->execute([$siteId, json_encode($cfg, JSON_UNESCAPED_UNICODE)]);
+            return $cfg;
+        }
+
+        $cfg = json_decode((string)($row['json'] ?? ''), true);
+        if (!is_array($cfg)) $cfg = [];
+        if (empty($cfg['domain'])) $cfg['domain'] = $domain;
+
+        return $cfg;
+    }
+
+    private function ensureSubdomainConfigExists(int $siteId, string $label, ?array $defaultCfg = null): array
+    {
+        $label = $this->normalizeSubLabel($label);
+
+        $stmt = DB::pdo()->prepare("SELECT config_json FROM site_subdomain_configs WHERE site_id=? AND label=? LIMIT 1");
+        $stmt->execute([$siteId, $label]);
+        $row = $stmt->fetch();
+
+        if ($row && isset($row['config_json'])) {
+            $cfg = json_decode((string)$row['config_json'], true);
+            if (is_array($cfg)) return $cfg;
+        }
+
+        if ($defaultCfg === null) {
+            $site = $this->loadSite($siteId);
+            $defaultCfg = $this->loadSiteDefaultConfig($siteId, (string)($site['domain'] ?? ''));
+        }
+
+        $cfg = $defaultCfg;
+        $cfg['label'] = $label;
+        if (empty($cfg['logo'])) $cfg['logo'] = 'assets/logo.webp';
+        if (empty($cfg['favicon'])) $cfg['favicon'] = 'assets/favicon.png';
+
+        $this->saveSubdomainConfig($siteId, $label, $cfg);
+        return $cfg;
+    }
+
+    private function loadSubdomainConfig(int $siteId, string $label): array
+    {
+        $label = $this->normalizeSubLabel($label);
+
+        $stmt = DB::pdo()->prepare("SELECT config_json FROM site_subdomain_configs WHERE site_id=? AND label=? LIMIT 1");
+        $stmt->execute([$siteId, $label]);
+        $row = $stmt->fetch();
+
+        if ($row && isset($row['config_json'])) {
+            $cfg = json_decode((string)$row['config_json'], true);
+            return is_array($cfg) ? $cfg : [];
+        }
+
+        return [];
+    }
+
+    private function saveSubdomainConfig(int $siteId, string $label, array $cfg): void
+    {
+        $label = $this->normalizeSubLabel($label);
+        $json = json_encode($cfg, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        $ins = DB::pdo()->prepare("
+            INSERT INTO site_subdomain_configs (site_id, label, config_json)
+            VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE
+              config_json = VALUES(config_json),
+              updated_at = CURRENT_TIMESTAMP
+        ");
+        $ins->execute([$siteId, $label, $json]);
+    }
+
     // ----------------------------
     // Label helper
     // ----------------------------
@@ -1348,3 +1508,4 @@ class SiteController extends Controller
         return $this->normalizeSubLabel($label);
     }
 }
+

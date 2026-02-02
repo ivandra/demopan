@@ -1,45 +1,41 @@
 <?php
 
+require_once __DIR__ . '/../Core/Paths.php';
+
 class TemplateService
 {
-    private function storageRoot(): string
-    {
-        if (defined('STORAGE_ROOT')) return rtrim(STORAGE_ROOT, '/\\');
-        if (defined('APP_ROOT')) return rtrim(APP_ROOT, '/\\') . '/storage';
-
-        // fallback (на всякий)
-        $root = realpath(__DIR__ . '/../../storage');
-        return rtrim($root ?: (__DIR__ . '/../../storage'), '/\\');
-    }
-
     public function listTemplates(): array
     {
-        $base = $this->storageRoot() . '/templates';
+        $base = Paths::storage('templates');
         if (!is_dir($base)) return [];
 
-        $items = scandir($base);
-        if ($items === false) return [];
-
-        $templates = [];
-        foreach ($items as $name) {
+        $out = [];
+        foreach (scandir($base) ?: [] as $name) {
             if ($name === '.' || $name === '..') continue;
-            $dir = $base . '/' . $name;
-            if (is_dir($dir)) $templates[] = $name;
+            $full = rtrim($base, "/\\") . '/' . $name;
+            if (is_dir($full)) $out[] = $name;
         }
 
-        sort($templates);
-        return $templates;
+        sort($out);
+        return $out;
     }
 
     public function copyTemplate(string $templateName, string $targetDir): void
     {
-        $src = $this->storageRoot() . '/templates/' . $templateName;
+        $templateName = trim($templateName);
+        if ($templateName === '' || preg_match('~[^a-z0-9_\-]~i', $templateName)) {
+            throw new RuntimeException('Bad template name: ' . $templateName);
+        }
+
+        $src = rtrim(Paths::storage('templates'), "/\\") . '/' . $templateName;
         if (!is_dir($src)) {
-            throw new RuntimeException("Template not found: {$templateName}");
+            throw new RuntimeException('Template not found: ' . $src);
         }
 
         if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0775, true);
+            if (!@mkdir($targetDir, 0775, true) && !is_dir($targetDir)) {
+                throw new RuntimeException('Cannot create target dir: ' . $targetDir);
+            }
         }
 
         $this->rcopy($src, $targetDir);
@@ -47,23 +43,35 @@ class TemplateService
 
     private function rcopy(string $src, string $dst): void
     {
-        $dir = opendir($src);
-        if ($dir === false) return;
+        $src = rtrim($src, "/\\");
+        $dst = rtrim($dst, "/\\");
 
-        @mkdir($dst, 0775, true);
-
-        while (($file = readdir($dir)) !== false) {
-            if ($file === '.' || $file === '..') continue;
-
-            $srcPath = $src . '/' . $file;
-            $dstPath = $dst . '/' . $file;
-
-            if (is_dir($srcPath)) {
-                $this->rcopy($srcPath, $dstPath);
-            } else {
-                @copy($srcPath, $dstPath);
+        if (!is_dir($dst)) {
+            if (!@mkdir($dst, 0775, true) && !is_dir($dst)) {
+                throw new RuntimeException('Cannot create dir: ' . $dst);
             }
         }
-        closedir($dir);
+
+        $items = scandir($src);
+        if ($items === false) return;
+
+        foreach ($items as $item) {
+            if ($item === '.' || $item === '..') continue;
+
+            $s = $src . '/' . $item;
+            $d = $dst . '/' . $item;
+
+            if (is_link($s)) {
+                continue;
+            }
+
+            if (is_dir($s)) {
+                $this->rcopy($s, $d);
+            } else {
+                if (!@copy($s, $d)) {
+                    throw new RuntimeException('Copy failed: ' . $s . ' -> ' . $d);
+                }
+            }
+        }
     }
 }

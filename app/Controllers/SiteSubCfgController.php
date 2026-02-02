@@ -38,8 +38,7 @@ class SiteSubCfgController extends Controller
 
         $pdo = DB::pdo();
 
-        $labels = $this->listLabels($pdo, $siteId);
-        if (!$labels) $labels = ['_default'];
+        $labels = $this->listLabels($pdo, $siteId); // всегда включает _default
 
         $label = (string)($_GET['label'] ?? '_default');
         $label = $this->normalizeLabel($label, true);
@@ -48,11 +47,16 @@ class SiteSubCfgController extends Controller
         }
 
         // гарантируем fs+config.php для выбранного
-        require_once __DIR__ . '/../Services/SubdomainProvisioner.php';
         $prov = new SubdomainProvisioner();
         $prov->ensureForSite($siteId, $label);
 
-        $cfg = $this->loadSubCfg($pdo, $siteId, $label);
+        // ВАЖНО:
+        // _default редактируем через site_default_configs
+        if ($label === '_default') {
+            $cfg = $this->loadDefaultCfg($pdo, $siteId);
+        } else {
+            $cfg = $this->loadSubCfg($pdo, $siteId, $label);
+        }
         if ($cfg === null) $cfg = [];
 
         $unused = $this->findUnusedTexts($site, $label, $cfg);
@@ -81,7 +85,13 @@ class SiteSubCfgController extends Controller
         }
 
         $pdo = DB::pdo();
-        $cfg = $this->loadSubCfg($pdo, $siteId, $label);
+
+        // Загружаем текущий cfg
+        if ($label === '_default') {
+            $cfg = $this->loadDefaultCfg($pdo, $siteId);
+        } else {
+            $cfg = $this->loadSubCfg($pdo, $siteId, $label);
+        }
         if ($cfg === null) $cfg = [];
 
         // обновляем только параметры (pages не трогаем тут)
@@ -101,26 +111,16 @@ class SiteSubCfgController extends Controller
         $cfg['logo']    = (string)($_POST['logo'] ?? ($cfg['logo'] ?? 'assets/logo.png'));
         $cfg['favicon'] = (string)($_POST['favicon'] ?? ($cfg['favicon'] ?? 'assets/favicon.png'));
 
-        $this->upsertSubCfg($pdo, $siteId, $label, $cfg);
+        // Пишем в нужную таблицу
+        if ($label === '_default') {
+            $this->upsertDefaultCfg($pdo, $siteId, $cfg);
+        } else {
+            $this->upsertSubCfg($pdo, $siteId, $label, $cfg);
+        }
 
         // fs + config.php
-        require_once __DIR__ . '/../Services/SubdomainProvisioner.php';
         $prov = new SubdomainProvisioner();
         $prov->ensureForSite($siteId, $label);
-		
-		
-		
-		
-		hub_log('SUBCFG_SAVE', [
-			'site_id' => (int)($_POST['site_id'] ?? ($_GET['id'] ?? 0)),
-			'cwd' => getcwd(),
-			'APP_ROOT' => defined('APP_ROOT') ? APP_ROOT : null,
-			'STORAGE_ROOT' => defined('STORAGE_ROOT') ? STORAGE_ROOT : null,
-			'paths_app' => class_exists('Paths') ? Paths::appRoot() : null,
-			'paths_storage' => class_exists('Paths') ? Paths::storageRoot() : null,
-		]);
-
-
 
         $this->redirect('/sites/subcfg?id=' . $siteId . '&label=' . urlencode($label));
         exit;
@@ -156,16 +156,8 @@ class SiteSubCfgController extends Controller
         }
 
         // fs + config.php
-        require_once __DIR__ . '/../Services/SubdomainProvisioner.php';
         $prov = new SubdomainProvisioner();
         $prov->ensureForSite($siteId, $label);
-		
-		$cfg = $this->loadSubCfg($pdo, $siteId, $label);
-		if ($cfg === null) $cfg = $this->loadDefaultCfg($pdo, $siteId);
-
-		
-		
-
 
         $this->redirect('/sites/subcfg?id=' . $siteId . '&label=' . urlencode($label));
         exit;
@@ -226,8 +218,6 @@ class SiteSubCfgController extends Controller
 
         $pdo = DB::pdo();
         $labels = $this->listLabels($pdo, $siteId);
-
-        require_once __DIR__ . '/../Services/SubdomainProvisioner.php';
         $prov = new SubdomainProvisioner();
 
         foreach ($labels as $lb) {
@@ -249,14 +239,20 @@ class SiteSubCfgController extends Controller
         return $row ?: null;
     }
 
+    // ВАЖНО: всегда возвращаем _default + остальные
     private function listLabels(PDO $pdo, int $siteId): array
     {
+        $out = ['_default'];
+
         $st = $pdo->prepare("SELECT label FROM site_subdomain_configs WHERE site_id = ? ORDER BY label");
         $st->execute([$siteId]);
-        $out = [];
+
         while ($r = $st->fetch(PDO::FETCH_ASSOC)) {
-            $out[] = (string)$r['label'];
+            $lb = (string)$r['label'];
+            if ($lb === '' || $lb === '_default') continue;
+            $out[] = $lb;
         }
+
         return $out;
     }
 
@@ -268,6 +264,22 @@ class SiteSubCfgController extends Controller
         if (!$row) return [];
         $cfg = json_decode($row['config_json'] ?? '[]', true);
         return is_array($cfg) ? $cfg : [];
+    }
+
+    private function upsertDefaultCfg(PDO $pdo, int $siteId, array $cfg): void
+    {
+        $json = json_encode($cfg, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+        $st = $pdo->prepare("SELECT 1 FROM site_default_configs WHERE site_id = ? LIMIT 1");
+        $st->execute([$siteId]);
+
+        if ($st->fetchColumn()) {
+            $u = $pdo->prepare("UPDATE site_default_configs SET config_json = ? WHERE site_id = ?");
+            $u->execute([$json, $siteId]);
+        } else {
+            $i = $pdo->prepare("INSERT INTO site_default_configs (site_id, config_json) VALUES (?, ?)");
+            $i->execute([$siteId, $json]);
+        }
     }
 
     private function loadSubCfg(PDO $pdo, int $siteId, string $label): ?array
@@ -331,10 +343,26 @@ class SiteSubCfgController extends Controller
 
     private function toAbsPath(string $rel): string
     {
-        $root = rtrim(dirname(__DIR__, 1), '/\\'); // /public_html/app/Controllers
-        $root = rtrim(dirname($root, 1), '/\\');   // /public_html/app
-        $root = rtrim(dirname($root, 1), '/\\');   // /public_html
-        return $root . '/' . ltrim($rel, '/');
+        $rel = trim($rel);
+        $rel = str_replace('\\', '/', $rel);
+        $rel = ltrim($rel, '/');
+
+        // поддержка legacy: "<storage_basename>/builds/..." и нового формата "builds/..."
+        $storageBase = basename(rtrim(Paths::storage(''), "/\\"));
+        if ($storageBase !== '' && strpos($rel, $storageBase . '/') === 0) {
+            $rel = substr($rel, strlen($storageBase) + 1);
+        }
+
+        if (preg_match('~(^|/)\.\.(?:/|$)~', $rel)) {
+            return Paths::storage('builds/invalid_path');
+        }
+
+        if (strpos($rel, 'builds/') !== 0) {
+            return Paths::storage('builds/invalid_path');
+        }
+
+        $abs = Paths::storage($rel);
+        return rtrim($abs, "/\\");
     }
 
     private function rmDir(string $dir): void

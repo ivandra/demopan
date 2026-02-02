@@ -1,87 +1,46 @@
 <?php
-// ===== BOOT GUARD: detect wrong storage creation =====
-$APP_ROOT = realpath(__DIR__ . '/..');          // /public_html
-$PROJECT_ROOT = realpath($APP_ROOT . '/..');    // /home/.../hub.seotop-one.ru
-$STORAGE_ROOT = $APP_ROOT . '/storage';         // правильный
-$WRONG_STORAGE = $PROJECT_ROOT . '/storage';    // неправильный
+declare(strict_types=1);
 
-if (!defined('APP_ROOT')) define('APP_ROOT', $APP_ROOT);
-if (!defined('STORAGE_ROOT')) define('STORAGE_ROOT', $STORAGE_ROOT);
+// ---------- 0) Roots ----------
+$publicRoot = realpath(__DIR__);
+if ($publicRoot === false) {
+    http_response_code(500);
+    echo "PUBLIC_ROOT resolve failed";
+    exit;
+}
 
-@mkdir(STORAGE_ROOT . '/logs', 0775, true);
+$appRoot = realpath($publicRoot . '/..');
+if ($appRoot === false) {
+    http_response_code(500);
+    echo "APP_ROOT resolve failed";
+    exit;
+}
 
-$wrongBefore = file_exists($WRONG_STORAGE);
+if (!defined('PUBLIC_ROOT')) define('PUBLIC_ROOT', $publicRoot);
+if (!defined('APP_ROOT')) define('APP_ROOT', $appRoot);
 
-register_shutdown_function(function () use ($wrongBefore, $WRONG_STORAGE) {
-    // если в ходе запроса появился /home/.../storage
-    if (!$wrongBefore && file_exists($WRONG_STORAGE)) {
+// ---------- 1) Paths + storage ----------
+require_once APP_ROOT . '/app/Core/Paths.php';
+Paths::ensureStorageTree();
+Paths::ensureDir(Paths::storage('logs'));
 
-        $out = "=== WRONG STORAGE APPEARED ===\n";
-        $out .= "time=" . date('Y-m-d H:i:s') . "\n";
-        $out .= "WRONG_STORAGE={$WRONG_STORAGE}\n";
-        $out .= "cwd=" . getcwd() . "\n";
-        $out .= "SCRIPT_FILENAME=" . ($_SERVER['SCRIPT_FILENAME'] ?? '') . "\n";
-        $out .= "DOCUMENT_ROOT=" . ($_SERVER['DOCUMENT_ROOT'] ?? '') . "\n";
-
-        // что именно там появилось
-        if (is_dir($WRONG_STORAGE)) {
-            $items = @scandir($WRONG_STORAGE) ?: [];
-            $out .= "WRONG_STORAGE CONTENT:\n";
-            foreach ($items as $it) {
-                if ($it === '.' || $it === '..') continue;
-                $out .= " - {$it}\n";
-            }
-        } else {
-            $out .= "WRONG_STORAGE is FILE (not dir)\n";
-        }
-
-        // какие файлы были реально подключены этим запросом
-        $files = get_included_files();
-        $out .= "\nINCLUDED FILES (" . count($files) . "):\n" . implode("\n", $files) . "\n";
-
-        @file_put_contents(STORAGE_ROOT . '/logs/wrong_storage_' . date('Ymd_His') . '.log', $out);
-    }
-});
-
-session_start();
-
-/**
- * public/index.php:
- * __DIR__ = /home/s/.../public_html/public
- */
-
-// 1) Жестко фиксируем корни
-define('PUBLIC_ROOT', realpath(__DIR__));           // .../public_html/public
-define('APP_ROOT',    realpath(PUBLIC_ROOT . '/..')); // .../public_html
-
-// storage ДОЛЖЕН быть внутри public_html
-define('STORAGE_ROOT', APP_ROOT . '/storage');
-
-// 2) На всякий случай фиксируем рабочую директорию
-// (чтобы любые mkdir('storage/...') тоже создавались в public_html)
+// На всякий случай фиксируем рабочую директорию на APP_ROOT,
+// чтобы случайные mkdir('storage/...') создавались внутри public_html
 @chdir(APP_ROOT);
 
-// PROD-safe
+// ---------- 2) PROD-safe error logging ----------
 ini_set('display_errors', '0');
 ini_set('display_startup_errors', '0');
 ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
-// 3) Гарантируем storage + logs
-if (!is_dir(STORAGE_ROOT)) {
-    @mkdir(STORAGE_ROOT, 0775, true);
-}
-if (!is_dir(STORAGE_ROOT . '/logs')) {
-    @mkdir(STORAGE_ROOT . '/logs', 0775, true);
-}
+// Все php ошибки в /public_html/storage/php_error.log
+ini_set('error_log', Paths::storage('php_error.log'));
 
-// общий php_error.log
-ini_set('error_log', STORAGE_ROOT . '/php_error.log');
-
-// 4) Простой логгер (всегда пишет, чтобы лог не был пустой)
+// ---------- 3) Simple logger ----------
 function hub_log(string $msg, array $ctx = []): void
 {
-    $file = STORAGE_ROOT . '/logs/hub.log';
+    $file = Paths::storage('logs/hub.log');
     $line = '[' . date('Y-m-d H:i:s') . '] ' . $msg;
     if ($ctx) {
         $line .= ' | ' . json_encode($ctx, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
@@ -90,7 +49,7 @@ function hub_log(string $msg, array $ctx = []): void
     @file_put_contents($file, $line, FILE_APPEND | LOCK_EX);
 }
 
-// 5) Ловим фаталы и всегда логируем, если все падает
+// Ловим фаталы и пишем в hub.log
 register_shutdown_function(function () {
     $e = error_get_last();
     if ($e && in_array($e['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
@@ -103,18 +62,21 @@ register_shutdown_function(function () {
     }
 });
 
-// 6) Логируем каждый запрос (теперь лог не будет пустым)
+// Логируем каждый запрос (чтобы видеть POST/GET)
 hub_log('REQUEST', [
     'method' => $_SERVER['REQUEST_METHOD'] ?? '',
     'uri'    => $_SERVER['REQUEST_URI'] ?? '',
     'cwd'    => getcwd(),
     'APP_ROOT' => APP_ROOT,
-    'STORAGE_ROOT' => STORAGE_ROOT,
+    'STORAGE'  => Paths::storage(''),
     'DOCUMENT_ROOT' => $_SERVER['DOCUMENT_ROOT'] ?? '',
     'SCRIPT_FILENAME' => $_SERVER['SCRIPT_FILENAME'] ?? '',
 ]);
 
-// 7) Загружаем конфиг
+// ---------- 4) Session ----------
+session_start();
+
+// ---------- 5) Config ----------
 $GLOBALS['APP_CONFIG'] = require APP_ROOT . '/config/app.php';
 
 function config(string $key, $default = null) {
@@ -127,12 +89,22 @@ function config(string $key, $default = null) {
     return $cfg;
 }
 
-// 8) Подключаем ядро
+// ---------- 6) Core ----------
 require APP_ROOT . '/app/Core/DB.php';
 require APP_ROOT . '/app/Core/Router.php';
 require APP_ROOT . '/app/Core/Controller.php';
 
-// Контроллеры
+// ---------- 7) Services (ВАЖНО: без автозагрузчика надо require) ----------
+require APP_ROOT . '/app/Services/Crypto.php';
+require APP_ROOT . '/app/Services/NamecheapClient.php';
+require APP_ROOT . '/app/Services/FastpanelClient.php';
+
+require APP_ROOT . '/app/Services/MultiSiteConfigWriter.php';
+require APP_ROOT . '/app/Services/SubdomainProvisioner.php';
+require APP_ROOT . '/app/Services/ZipBuilder.php';
+require APP_ROOT . '/app/Services/ZipService.php';
+
+// ---------- 8) Controllers ----------
 require APP_ROOT . '/app/Controllers/AuthController.php';
 require APP_ROOT . '/app/Controllers/SiteController.php';
 require APP_ROOT . '/app/Controllers/FastpanelServerController.php';
@@ -144,28 +116,23 @@ require APP_ROOT . '/app/Controllers/SubdomainsController.php';
 require APP_ROOT . '/app/Controllers/SiteSubdomainsController.php';
 require APP_ROOT . '/app/Controllers/SiteSubCfgController.php';
 
-// Сервисы (если используются где-то в контроллерах)
-require APP_ROOT . '/app/Services/Crypto.php';
-require APP_ROOT . '/app/Services/NamecheapClient.php';
-require APP_ROOT . '/app/Services/FastpanelClient.php';
-
-// 9) Обертка для роутов, чтобы не ловить TypeError "callable"
-// (у тебя это было из-за non-callable array handler)
+// ---------- 9) Route wrapper ----------
 function action($obj, string $method): callable {
     return function() use ($obj, $method) {
         return $obj->$method();
     };
 }
 
-// 10) Роутинг
+// ---------- 10) Routing ----------
 $router = new Router();
 
-$fp = new FastpanelServerController();
+$fp     = new FastpanelServerController();
 $deploy = new DeployController();
 
 $auth = new AuthController();
 $site = new SiteController();
-$domains = new DomainsController();
+
+$domains           = new DomainsController();
 $registrarAccounts = new RegistrarAccountsController();
 $registrarContacts = new RegistrarContactsController();
 
@@ -182,28 +149,28 @@ $router->get('/sites/create', action($site, 'createForm'));
 $router->post('/sites/create', action($site, 'store'));
 $router->post('/sites/check-domain', action($site, 'checkDomain'));
 
-$router->get('/sites/pages', action($site, 'pagesForm'));     // ?id=1
-$router->post('/sites/pages', action($site, 'pagesUpdate'));  // ?id=1
-$router->post('/sites/pages/text-new', action($site, 'pagesTextNew')); // ?id=1
+$router->get('/sites/pages', action($site, 'pagesForm'));
+$router->post('/sites/pages', action($site, 'pagesUpdate'));
+$router->post('/sites/pages/text-new', action($site, 'pagesTextNew'));
 
-$router->get('/sites/edit', action($site, 'editForm'));       // ?id=1
-$router->post('/sites/edit', action($site, 'update'));        // ?id=1
-$router->post('/sites/delete', action($site, 'delete'));      // ?id=1
+$router->get('/sites/edit', action($site, 'editForm'));
+$router->post('/sites/edit', action($site, 'update'));
+$router->post('/sites/delete', action($site, 'delete'));
 
-$router->get('/sites/export', action($site, 'exportZip'));    // ?id=1
+$router->get('/sites/export', action($site, 'exportZip'));
 
-$router->get('/sites/texts', action($site, 'textsIndex'));    // ?id=1
-$router->get('/sites/texts/edit', action($site, 'textsEdit')); // ?id=1&file=home.php
-$router->post('/sites/texts/save', action($site, 'textsSave')); // ?id=1
-$router->post('/sites/texts/new', action($site, 'textsNew'));   // ?id=1
-$router->post('/sites/texts/delete', action($site, 'textsDelete')); // ?id=1
+$router->get('/sites/texts', action($site, 'textsIndex'));
+$router->get('/sites/texts/edit', action($site, 'textsEdit'));
+$router->post('/sites/texts/save', action($site, 'textsSave'));
+$router->post('/sites/texts/new', action($site, 'textsNew'));
+$router->post('/sites/texts/delete', action($site, 'textsDelete'));
 
-$router->get('/sites/files', action($site, 'filesIndex'));           // ?id=1
-$router->get('/sites/files/edit', action($site, 'filesEdit'));       // ?id=1&file=header.php
-$router->post('/sites/files/save', action($site, 'filesSave'));      // ?id=1
-$router->post('/sites/files/restore', action($site, 'filesRestore')); // ?id=1
+$router->get('/sites/files', action($site, 'filesIndex'));
+$router->get('/sites/files/edit', action($site, 'filesEdit'));
+$router->post('/sites/files/save', action($site, 'filesSave'));
+$router->post('/sites/files/restore', action($site, 'filesRestore'));
 
-$router->post('/sites/build', action($site, 'build')); // ?id=1
+$router->post('/sites/build', action($site, 'build'));
 
 // Servers
 $router->get('/servers', action($fp, 'index'));
@@ -267,39 +234,27 @@ $router->post('/sites/subcfg/create', action($siteSubCfg, 'create'));
 $router->post('/sites/subcfg/delete', action($siteSubCfg, 'delete'));
 $router->post('/sites/subcfg/regenAll', action($siteSubCfg, 'regenAll'));
 
-// ===== DEBUG =====
-$router->get('/debug/paths', function () {
-    header('Content-Type: text/plain; charset=utf-8');
-
-    echo "=== DEBUG PATHS ===\n";
-    echo "APP_ROOT=" . APP_ROOT . "\n";
-    echo "PUBLIC_ROOT=" . PUBLIC_ROOT . "\n";
-    echo "STORAGE_ROOT=" . STORAGE_ROOT . "\n";
-    echo "getcwd()=" . getcwd() . "\n";
-    echo "DOCUMENT_ROOT=" . ($_SERVER['DOCUMENT_ROOT'] ?? '') . "\n";
-    echo "SCRIPT_FILENAME=" . ($_SERVER['SCRIPT_FILENAME'] ?? '') . "\n";
-    echo "error_log=" . ini_get('error_log') . "\n";
-    echo "\n";
-
-    $parent = realpath(APP_ROOT . '/..');
-    $sibling = $parent ? ($parent . '/storage') : '';
-    echo "PARENT=" . ($parent ?: '') . "\n";
-    echo "SIBLING_STORAGE=" . $sibling . "\n";
-    echo "Sibling exists? " . (is_dir($sibling) ? 'YES' : 'NO') . "\n";
-    echo "Sibling writable? " . (is_writable($sibling) ? 'YES' : 'NO') . "\n";
-});
-
+// Debug
 $router->get('/debug/log', function () {
     header('Content-Type: text/plain; charset=utf-8');
-    $file = STORAGE_ROOT . '/logs/hub.log';
-
-    echo "LOG FILE: $file\n";
+    $file = Paths::storage('logs/hub.log');
+    echo "LOG FILE: $file\n\n";
     if (!is_file($file)) {
         echo "log not found\n";
         return;
     }
-    echo "\n=== CONTENT ===\n";
     readfile($file);
 });
+
+$router->get('/debug/paths', function () {
+    header('Content-Type: text/plain; charset=utf-8');
+
+    echo "APP_ROOT=" . (defined('APP_ROOT') ? APP_ROOT : '') . "\n";
+    echo "PUBLIC_ROOT=" . (defined('PUBLIC_ROOT') ? PUBLIC_ROOT : '') . "\n";
+    echo "STORAGE_ROOT=" . (defined('STORAGE_ROOT') ? STORAGE_ROOT : '') . "\n";
+    echo "cwd=" . getcwd() . "\n";
+    echo "error_log=" . ini_get('error_log') . "\n";
+});
+
 
 $router->dispatch();
