@@ -1,219 +1,222 @@
 <?php
-$site = is_array($site ?? null) ? $site : [];
-$catalog = is_array($catalog ?? null) ? $catalog : [];
-$rows = is_array($rows ?? null) ? $rows : [];
-$registrarAccounts = is_array($registrarAccounts ?? null) ? $registrarAccounts : [];
-$availableIps = is_array($availableIps ?? null) ? $availableIps : [];
+$siteId = (int)($siteId ?? 0);
+$site   = $site ?? [];
+$catalog = $catalog ?? [];
+$siteSubs = $siteSubs ?? [];
+$registrarAccounts = $registrarAccounts ?? [];
 
-$siteId = (int)($site['id'] ?? 0);
+$serverIps = $serverIps ?? []; // array of strings
+$dnsA = $dnsA ?? [];           // array of strings
 
-// домен для отображения
-$siteDomainRaw = (string)($site['domain'] ?? '');
-$siteDomainView = $siteDomainRaw !== '' ? $siteDomainRaw : '(no domain)';
+function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 
-// текущий выбранный IP сайта (то, что сохранено в БД)
-$currentIp = trim((string)($site['vps_ip'] ?? ''));
-if ($currentIp === '' && !empty($availableIps)) {
-    // если в БД пусто — подставим первый из доступных чисто для UI
-    $currentIp = (string)$availableIps[0];
+$attachedMap = [];
+$enabledMap  = [];
+foreach ($siteSubs as $r) {
+    $lb = (string)($r['label'] ?? '');
+    $attachedMap[$lb] = true;
+    $enVal = $r['enabled'] ?? ($r['is_enabled'] ?? 0); // совместимость
+    $enabledMap[$lb] = ((int)$enVal === 1);
 }
 
-// registrar account id
-$rid = (int)($site['registrar_account_id'] ?? 0);
-
-// сформируем читабельный текст текущего аккаунта
-$currentText = 'Не выбран (будет использован default аккаунт Namecheap)';
-if ($rid > 0) {
-    foreach ($registrarAccounts as $a) {
-        if ((int)($a['id'] ?? 0) === $rid) {
-            $mode = ((int)($a['is_sandbox'] ?? 0) === 1) ? 'SANDBOX' : 'PROD';
-            $username = (string)($a['username'] ?? '');
-            $apiUser  = (string)($a['api_user'] ?? '');
-            $clientIp = (string)($a['client_ip'] ?? '');
-            $currentText = $mode . ' | ' . $username . ' | api_user=' . $apiUser . ($clientIp !== '' ? ' | client_ip=' . $clientIp : '');
-            break;
-        }
-    }
-    if ($currentText === 'Не выбран (будет использован default аккаунт Namecheap)') {
-        $currentText = 'Выбран ID=' . $rid . ' (аккаунт не найден в списке registrar_accounts)';
-    }
-}
+$currentVpsIp = (string)($site['vps_ip'] ?? '');
 ?>
+<h1>Поддомены сайта: <?= h($site['domain'] ?? '') ?></h1>
 
-<h2>Поддомены сайта #<?= $siteId ?>: <?= htmlspecialchars($siteDomainView, ENT_QUOTES) ?></h2>
-
-<p>
-  <a href="/">← к сайтам</a>
-  | <a href="/subdomains">Каталог поддоменов</a>
-</p>
-
-<!-- Действия -->
-<div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; margin:10px 0;">
-
-  <!-- APPLY: создаем/обновляем поддомены. ВАЖНО: передаем ip -->
-  <form method="post"
-        action="/sites/subdomains/apply?id=<?= $siteId ?>"
-        onsubmit="return confirm('Создать/обновить поддомены по каталогу?');">
-      <input type="hidden" name="ip" id="apply_ip" value="<?= htmlspecialchars($currentIp, ENT_QUOTES) ?>">
-      <button type="submit">Создать/обновить поддомены по каталогу</button>
-  </form>
-
-  <!-- DELETE CATALOG: удалить записи поддоменов из БД -->
-  <form method="post"
-        action="/sites/subdomains/delete-catalog?id=<?= $siteId ?>"
-        onsubmit="return confirm('Удалить все поддомены, добавленные из каталога?');">
-      <button type="submit">Удалить поддомены каталога</button>
-  </form>
-
-  <!-- DELETE DNS ONLY: удалить DNS-записи поддоменов каталога (без удаления из БД) -->
-  <form method="post"
-        action="/sites/subdomains/delete-catalog-dns?id=<?= $siteId ?>"
-        onsubmit="return confirm('Удалить DNS (только) для поддоменов каталога?');">
-      <input type="hidden" name="ip" id="delete_dns_ip" value="<?= htmlspecialchars($currentIp, ENT_QUOTES) ?>">
-      <button type="submit">Удалить DNS (только)</button>
-  </form>
-
-  <!-- UPDATE IP: обновить IP в DNS для поддоменов каталога -->
-  <form method="post"
-        action="/sites/subdomains/update-ip?id=<?= $siteId ?>"
-        onsubmit="return confirm('Обновить IP в DNS для поддоменов каталога?');">
-    <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-      <div>
-        <label style="font-size:12px;display:block;">DNS IP</label>
-
-        <select name="ip" id="dns_ip_select" style="width:170px;">
-          <?php if ($currentIp !== '' && !in_array($currentIp, $availableIps, true)): ?>
-            <option value="<?= htmlspecialchars($currentIp, ENT_QUOTES) ?>" selected>
-              <?= htmlspecialchars($currentIp, ENT_QUOTES) ?> (текущий)
-            </option>
-          <?php endif; ?>
-
-          <?php foreach ($availableIps as $ip): ?>
-            <option value="<?= htmlspecialchars($ip, ENT_QUOTES) ?>" <?= ($ip === $currentIp ? 'selected' : '') ?>>
-              <?= htmlspecialchars($ip, ENT_QUOTES) ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-      </div>
-
-      <label style="font-size:12px;display:flex;gap:6px;align-items:center;margin-top:18px;">
-        <input type="checkbox" name="update_root" value="1">
-        обновить @ тоже
-      </label>
-
-      <button type="submit" style="margin-top:18px;">Обновить DNS IP</button>
-    </div>
-  </form>
-
+<div style="margin: 10px 0;">
+    <a href="/sites">← К списку сайтов</a>
 </div>
+
+<?php if (($site['template'] ?? '') !== 'template-multy'): ?>
+    <div style="padding:10px;border:1px solid #f00;color:#900;">
+        Этот сайт не template-multy. Сабы и папки subs/* применимы только к template-multy.
+    </div>
+<?php endif; ?>
+
+<hr>
+
+<div style="padding:10px;border:1px solid #ddd;background:#fafafa;margin:10px 0;">
+    <div><b>IP сохранен в панели (sites.vps_ip):</b> <?= $currentVpsIp !== '' ? h($currentVpsIp) : '—' ?></div>
+    <div><b>DNS A сейчас у домена:</b> <?= !empty($dnsA) ? h(implode(', ', $dnsA)) : '— (A не найден)' ?></div>
+</div>
+
+<hr>
+
+<h2>1) Применить список поддоменов (создать/удалить)</h2>
+
+<form method="post" action="/sites/subdomains/apply?id=<?= $siteId ?>">
+    <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
+
+        <div style="min-width:320px;">
+            <div style="margin-bottom:8px;">
+                <button type="button" id="btnAll">Выбрать все</button>
+                <button type="button" id="btnNone">Снять все</button>
+            </div>
+
+            <div style="max-height:260px;overflow:auto;border:1px solid #ddd;padding:10px;">
+                <?php foreach ($catalog as $row): ?>
+                    <?php
+                    $lb = (string)($row['label'] ?? '');
+                    $isActive = (int)($row['is_active'] ?? 0) === 1;
+                    $attached = isset($attachedMap[$lb]); // привязан к сайту
+                    $enabled  = $enabledMap[$lb] ?? false;
+                    ?>
+                    <label style="display:block;margin:4px 0;opacity:<?= $isActive ? '1' : '0.5' ?>">
+                        <input class="lbChk" type="checkbox" name="labels[]" value="<?= h($lb) ?>" <?= $attached ? 'checked' : '' ?>>
+                        <?= h($lb) ?>
+                        <?= $isActive ? '' : ' (неактивен)' ?>
+                        <?= $attached && !$enabled ? ' (выключен)' : '' ?>
+                    </label>
+                <?php endforeach; ?>
+            </div>
+
+            <div style="margin-top:10px;">
+                <label>
+                    <input type="checkbox" name="apply_dns" value="1">
+                    Сразу применить DNS (A) после сохранения
+                </label>
+                <div style="color:#666;font-size:13px;margin-top:4px;">
+                    Если IP не задан, панель попробует взять его из DNS A или с сервера.
+                </div>
+            </div>
+
+            <div style="margin-top:10px;">
+                <button type="submit">Применить выбранные</button>
+            </div>
+        </div>
+
+        <div style="min-width:360px;">
+            <div style="margin-bottom:6px;">Быстро добавить вручную (через запятую/пробел):</div>
+            <textarea name="labels_text" rows="8" style="width:360px;"></textarea>
+
+            <div style="margin-top:10px;color:#666;font-size:13px;">
+                applyBatch = "привести список к выбранному": добавит недостающие и удалит лишние (кроме _default).
+            </div>
+        </div>
+    </div>
+</form>
 
 <script>
-(function() {
-  // Синхронизируем выбранный IP из селекта в скрытые поля форм apply/delete-dns
-  var sel = document.getElementById('dns_ip_select');
-  var a1  = document.getElementById('apply_ip');
-  var a2  = document.getElementById('delete_dns_ip');
-
-  function sync() {
-    if (!sel) return;
-    var v = sel.value || '';
-    if (a1) a1.value = v;
-    if (a2) a2.value = v;
-  }
-  if (sel) {
-    sel.addEventListener('change', sync);
-    sync();
-  }
-})();
+document.getElementById('btnAll').addEventListener('click', function(){
+  document.querySelectorAll('.lbChk').forEach(ch => ch.checked = true);
+});
+document.getElementById('btnNone').addEventListener('click', function(){
+  document.querySelectorAll('.lbChk').forEach(ch => ch.checked = false);
+});
 </script>
 
-<!-- Namecheap аккаунт -->
-<div style="margin:12px 0; padding:10px; border:1px solid #ddd;">
-  <div style="margin-bottom:6px;">
-    <b>Namecheap аккаунт для DNS:</b>
-    <span><?= htmlspecialchars($currentText, ENT_QUOTES) ?></span>
-    <div style="font-size:12px; opacity:.75; margin-top:4px;">
-      Если выбрать неверный аккаунт — будет ошибка “domain not found / not associated”.
-    </div>
-  </div>
+<hr>
 
-  <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-    <form method="post"
-          action="/sites/subdomains/set-registrar?id=<?= $siteId ?>"
-          style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+<h2>2) Текущие поддомены сайта</h2>
 
-      <select name="registrar_account_id">
-        <option value="0" <?= $rid === 0 ? 'selected' : '' ?>>(использовать default)</option>
-
-        <?php foreach ($registrarAccounts as $a): ?>
-          <?php
-            $id = (int)($a['id'] ?? 0);
-            $mode = ((int)($a['is_sandbox'] ?? 0) === 1) ? 'SANDBOX' : 'PROD';
-            $label = $mode . ' | ' . (string)($a['username'] ?? '') . ' | api_user=' . (string)($a['api_user'] ?? '');
-            if ((int)($a['is_default'] ?? 0) === 1) $label .= ' | default';
-            $sel = ($id === $rid) ? 'selected' : '';
-          ?>
-          <option value="<?= $id ?>" <?= $sel ?>><?= htmlspecialchars($label, ENT_QUOTES) ?></option>
-        <?php endforeach; ?>
-      </select>
-
-      <button type="submit">Сохранить</button>
-    </form>
-
-    <form method="post"
-          action="/sites/subdomains/detect-registrar?id=<?= $siteId ?>"
-          onsubmit="return confirm('Попробовать найти Namecheap аккаунт, где лежит домен?');">
-      <button type="submit">Автоопределить</button>
-    </form>
-  </div>
-</div>
-
-<h3 style="margin-top:20px;">Каталог (активный)</h3>
-<div style="font-family:monospace; white-space:pre-wrap;">
-<?php foreach ($catalog as $c): ?>
-<?= htmlspecialchars((string)($c['label'] ?? ''), ENT_QUOTES) . "\n" ?>
-<?php endforeach; ?>
-</div>
-
-<h3 style="margin-top:20px;">Поддомены, привязанные к сайту</h3>
-
-<table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;width:100%">
-  <tr>
-    <th>ID</th>
-    <th>Label</th>
-    <th>FQDN</th>
-    <th>Enabled</th>
-    <th>DNS</th>
-    <th>SSL</th>
-    <th>Last error</th>
-    <th>Actions</th>
-  </tr>
-
-  <?php foreach ($rows as $r): ?>
+<table border="1" cellpadding="6" cellspacing="0">
     <tr>
-      <td><?= (int)($r['id'] ?? 0) ?></td>
-      <td><?= htmlspecialchars((string)($r['label'] ?? ''), ENT_QUOTES) ?></td>
-      <td><?= htmlspecialchars((string)($r['fqdn'] ?? ''), ENT_QUOTES) ?></td>
-      <td><?= ((int)($r['enabled'] ?? 0) === 1) ? '✅' : '❌' ?></td>
-      <td><?= htmlspecialchars((string)($r['dns_status'] ?? ''), ENT_QUOTES) ?></td>
-      <td><?= htmlspecialchars((string)($r['ssl_status'] ?? ''), ENT_QUOTES) ?></td>
-      <td style="max-width:520px; word-break:break-word;">
-        <?= htmlspecialchars((string)($r['last_error'] ?? ''), ENT_QUOTES) ?>
-      </td>
-      <td style="white-space:nowrap;">
-        <form method="post"
-              action="/sites/subdomains/toggle?id=<?= $siteId ?>&sub_id=<?= (int)($r['id'] ?? 0) ?>"
-              style="display:inline">
-          <button type="submit">Toggle</button>
-        </form>
-        |
-        <form method="post"
-              action="/sites/subdomains/delete?id=<?= $siteId ?>&sub_id=<?= (int)($r['id'] ?? 0) ?>"
-              style="display:inline"
-              onsubmit="return confirm('Удалить поддомен?');">
-          <button type="submit">Delete</button>
-        </form>
-      </td>
+        <th>label</th>
+        <th>enabled</th>
+        <th>действия</th>
     </tr>
-  <?php endforeach; ?>
+    <?php foreach ($siteSubs as $r): ?>
+        <?php
+        $lb = (string)($r['label'] ?? '');
+        $enVal = $r['enabled'] ?? ($r['is_enabled'] ?? 0);
+        $en = (int)$enVal === 1;
+        ?>
+        <tr>
+            <td><?= h($lb) ?></td>
+            <td><?= $en ? '1' : '0' ?></td>
+            <td>
+                <form method="post" action="/sites/subdomains/toggle?id=<?= $siteId ?>" style="display:inline;">
+                    <input type="hidden" name="label" value="<?= h($lb) ?>">
+                    <button type="submit">Toggle</button>
+                </form>
+
+                <?php if ($lb !== '_default'): ?>
+                    <form method="post" action="/sites/subdomains/delete?id=<?= $siteId ?>" style="display:inline;margin-left:6px;">
+                        <input type="hidden" name="label" value="<?= h($lb) ?>">
+                        <button type="submit" onclick="return confirm('Удалить поддомен <?= h($lb) ?>?')">Delete</button>
+                    </form>
+                <?php endif; ?>
+            </td>
+        </tr>
+    <?php endforeach; ?>
 </table>
+
+<div style="margin-top:10px;">
+    <form method="post" action="/sites/subdomains/delete-catalog?id=<?= $siteId ?>" style="display:inline;">
+        <button type="submit" onclick="return confirm('Удалить все сабы (кроме _default) и их папки?')">
+            Удалить все сабы (кроме _default)
+        </button>
+    </form>
+</div>
+
+<hr>
+
+<h2>3) Registrar + DNS (Namecheap)</h2>
+
+<form method="post" action="/sites/subdomains/set-registrar?id=<?= $siteId ?>" style="margin-bottom:10px;">
+    <label>Аккаунт Namecheap:
+        <select name="registrar_account_id">
+            <?php foreach ($registrarAccounts as $a): ?>
+                <?php
+                $id = (int)$a['id'];
+                $sel = ((int)($site['registrar_account_id'] ?? 0) === $id) ? 'selected' : '';
+                ?>
+                <option value="<?= $id ?>" <?= $sel ?>>
+                    #<?= $id ?> <?= h($a['title'] ?? '') ?><?= ((int)($a['is_default'] ?? 0) === 1 ? ' (default)' : '') ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </label>
+    <button type="submit">Сохранить</button>
+</form>
+
+<form method="post" action="/sites/subdomains/detect-registrar?id=<?= $siteId ?>" style="margin-bottom:10px;">
+    <button type="submit">Авто-определить аккаунт по домену</button>
+</form>
+
+<form method="post" action="/sites/subdomains/update-ip?id=<?= $siteId ?>" style="margin-bottom:10px;">
+    <div style="margin-bottom:6px;">
+        IP для A-записей:
+
+        <?php if (!empty($serverIps)): ?>
+            <select id="ipSelect" style="width:220px;">
+                <option value="">— выбрать из сервера —</option>
+                <?php foreach ($serverIps as $ip): ?>
+                    <option value="<?= h($ip) ?>" <?= ($currentVpsIp === $ip ? 'selected' : '') ?>><?= h($ip) ?></option>
+                <?php endforeach; ?>
+            </select>
+        <?php endif; ?>
+
+        <input id="ipInput" type="text" name="ip"
+               placeholder="например 1.2.3.4 (можно пусто, тогда попытаемся взять из DNS/сервера)"
+               style="width:360px;"
+               value="<?= h($currentVpsIp) ?>">
+    </div>
+
+    <label>
+        <input type="checkbox" name="update_root" value="1">
+        Также обновить корневой A (@)
+    </label>
+
+    <div style="margin-top:10px;">
+        <button type="submit">Применить DNS (A) для enabled сабов</button>
+    </div>
+</form>
+
+<?php if (!empty($serverIps)): ?>
+<script>
+const sel = document.getElementById('ipSelect');
+const inp = document.getElementById('ipInput');
+if (sel && inp) {
+  sel.addEventListener('change', () => {
+    if (sel.value) inp.value = sel.value;
+  });
+}
+</script>
+<?php endif; ?>
+
+<form method="post" action="/sites/subdomains/delete-catalog-dns?id=<?= $siteId ?>">
+    <button type="submit" onclick="return confirm('Удалить DNS записи для всех сабов этого сайта?')">
+        Удалить DNS для сабов (без удаления папок)
+    </button>
+</form>

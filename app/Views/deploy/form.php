@@ -24,13 +24,17 @@
     <?php if (!empty($ips)): ?>
         <select id="ip" name="ip" required>
             <?php foreach ($ips as $oneIp): ?>
-                <option value="<?= htmlspecialchars($oneIp) ?>">
-                    <?= htmlspecialchars($oneIp) ?>
-                </option>
-            <?php endforeach; ?>
+				<option value="<?= htmlspecialchars($oneIp, ENT_QUOTES, 'UTF-8') ?>"
+					<?= ($selectedIp !== '' && $oneIp === $selectedIp) ? 'selected' : '' ?>>
+					<?= htmlspecialchars($oneIp, ENT_QUOTES, 'UTF-8') ?>
+				</option>
+			<?php endforeach; ?>
         </select>
     <?php else: ?>
-        <input id="ip" type="text" name="ip" placeholder="Например: 95.129.234.93" required>
+        <input id="ip" type="text" name="ip"
+       placeholder="Например: 95.129.234.93"
+       value="<?= htmlspecialchars($selectedIp ?? '', ENT_QUOTES, 'UTF-8') ?>"
+       required>
         <div style="color:#777; font-size:12px; margin-top:6px;">
             Список IP не получен — введи IP вручную.
         </div>

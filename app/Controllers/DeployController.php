@@ -16,56 +16,169 @@ class DeployController extends Controller
     }
 
     public function form(): void
-    {
-        $this->requireAuth();
+	{
+		$this->requireAuth();
 
-        $siteId = (int)($_GET['id'] ?? 0);
-        if ($siteId <= 0) die('bad id');
+		$siteId = (int)($_GET['id'] ?? 0);
+		if ($siteId <= 0) die('bad id');
 
-        $site = $this->loadSite($siteId);
-        $servers = DB::pdo()->query("SELECT * FROM fastpanel_servers ORDER BY id DESC")->fetchAll();
+		$site = $this->loadSite($siteId);
 
-        $serverId = (int)($_GET['server_id'] ?? 0);
-        if ($serverId <= 0 && !empty($servers[0]['id'])) {
-            $serverId = (int)$servers[0]['id'];
-        }
+		$servers = DB::pdo()->query("SELECT * FROM fastpanel_servers ORDER BY id DESC")->fetchAll();
+		if (!$servers) {
+			$servers = [];
+		}
 
-        $ips = [];
-        $ips_error = '';
+		// 1) serverId:
+		// приоритет: GET -> sites.fastpanel_server_id -> первый из списка
+		$serverId = (int)($_GET['server_id'] ?? 0);
+		if ($serverId <= 0) {
+			$serverId = (int)($site['fastpanel_server_id'] ?? 0);
+		}
+		if ($serverId <= 0 && !empty($servers[0]['id'])) {
+			$serverId = (int)$servers[0]['id'];
+		}
 
-        if ($serverId > 0) {
-            $server = $this->loadServer($serverId);
+		// 2) ips list
+		$ips = [];
+		$ips_error = '';
 
-            $extra = trim((string)($server['extra_ips'] ?? ''));
-            if ($extra !== '') {
-                $parts = preg_split('~[,\s]+~', $extra);
-                foreach ($parts as $v) {
-                    $v = trim($v);
-                    if ($v === '') continue;
-                    if (preg_match('~^(?:\d{1,3}\.){3}\d{1,3}$~', $v)) {
-                        $ips[] = $v;
-                    }
-                }
-            }
-            $ips = array_values(array_unique($ips));
+		if ($serverId > 0) {
+			$server = $this->loadServer($serverId);
+			$ips = $this->extractIpsFromServerRow($server);
 
-            if (empty($ips)) {
-                $host = (string)$server['host'];
-                $host = preg_replace('~^https?://~i', '', $host);
-                $host = preg_replace('~:\d+$~', '', $host);
-                $host = trim($host);
+			if (empty($ips)) {
+				$ips_error = 'extra_ips пуст и host не содержит IP — список IP не задан';
+			}
+		} else {
+			$ips_error = 'server_id не определен';
+		}
 
-                if (preg_match('~^\d+\.\d+\.\d+\.\d+$~', $host)) {
-                    $ips = [$host];
-                    $ips_error = 'extra_ips пуст — использован IP из host';
-                } else {
-                    $ips_error = 'extra_ips пуст — список IP не задан';
-                }
-            }
-        }
+		// 3) selected ip: приоритет: sites.vps_ip (если валиден и есть в списке) иначе первый из списка
+		$selectedIp = '';
+		$vpsIp = trim((string)($site['vps_ip'] ?? ''));
+		if ($vpsIp !== '' && $this->isIpv4($vpsIp) && in_array($vpsIp, $ips, true)) {
+			$selectedIp = $vpsIp;
+		} elseif (!empty($ips)) {
+			$selectedIp = (string)$ips[0];
+		}
 
-        $this->view('deploy/form', compact('site', 'servers', 'serverId', 'ips', 'ips_error'));
+		$this->view('deploy/form', compact('site', 'servers', 'serverId', 'ips', 'ips_error', 'selectedIp'));
+	}
+	
+	private function isIpv4(string $ip): bool
+{
+    return (bool)filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+}
+
+private function isListArray(array $arr): bool
+{
+    $i = 0;
+    foreach ($arr as $k => $_) {
+        if ($k !== $i) return false;
+        $i++;
     }
+    return true;
+}
+
+private function extractIpFromHost(string $host): ?string
+{
+    $h = trim($host);
+
+    // если есть схема — parse_url
+    if (preg_match('~^https?://~i', $h)) {
+        $u = @parse_url($h);
+        $candidate = (string)($u['host'] ?? '');
+        if ($this->isIpv4($candidate)) return $candidate;
+        $h = $candidate !== '' ? $candidate : $h;
+    }
+
+    // убираем схему/путь/порт
+    $h = preg_replace('~^[a-z]+://~i', '', $h);
+    $h = preg_split('~[/?#]~', $h, 2)[0] ?? $h;
+    $h = preg_replace('~:\d+$~', '', $h);
+    $h = trim((string)$h);
+
+    if ($this->isIpv4($h)) return $h;
+
+    return null;
+}
+
+private function extractIpsFromMixed($value): array
+{
+    $ips = [];
+
+    if (is_array($value)) {
+        foreach ($value as $v) {
+            $v = trim((string)$v);
+            if ($this->isIpv4($v)) $ips[] = $v;
+        }
+        return array_values(array_unique($ips));
+    }
+
+    $s = trim((string)$value);
+    if ($s === '') return [];
+
+    // JSON?
+    if ($s[0] === '[' || $s[0] === '{') {
+        $decoded = json_decode($s, true);
+        if (is_array($decoded)) {
+            // list: ["1.1.1.1","2.2.2.2"]
+            if ($this->isListArray($decoded)) {
+                foreach ($decoded as $v) {
+                    $v = trim((string)$v);
+                    if ($this->isIpv4($v)) $ips[] = $v;
+                }
+                return array_values(array_unique($ips));
+            }
+
+            // object: {"ips":[...]} или {"extra_ips":[...]}
+            foreach (['ips', 'extra_ips'] as $k) {
+                if (isset($decoded[$k]) && is_array($decoded[$k])) {
+                    foreach ($decoded[$k] as $v) {
+                        $v = trim((string)$v);
+                        if ($this->isIpv4($v)) $ips[] = $v;
+                    }
+                    return array_values(array_unique($ips));
+                }
+            }
+            // если структура иная — упадем в regex ниже
+        }
+    }
+
+    // CSV/пробелы/переносы — вытащим IPv4 регекспом
+    if (preg_match_all('~\b(?:\d{1,3}\.){3}\d{1,3}\b~', $s, $m)) {
+        foreach ($m[0] as $ip) {
+            $ip = trim((string)$ip);
+            if ($this->isIpv4($ip)) $ips[] = $ip;
+        }
+    }
+
+    return array_values(array_unique($ips));
+}
+
+private function extractIpsFromServerRow(array $server): array
+{
+    $ips = [];
+
+    // 1) extra_ips (может быть CSV/JSON/что угодно)
+    $extra = $server['extra_ips'] ?? '';
+    if ($extra !== null && trim((string)$extra) !== '') {
+        $ips = array_merge($ips, $this->extractIpsFromMixed($extra));
+    }
+
+    // 2) fallback: IP из host
+    $host = trim((string)($server['host'] ?? ''));
+    if ($host !== '') {
+        $hostIp = $this->extractIpFromHost($host);
+        if ($hostIp) $ips[] = $hostIp;
+    }
+
+    $ips = array_values(array_unique($ips));
+    return $ips;
+}
+
+
 
     /**
      * Шаг A: создать сайт в Fastpanel (или найти существующий)

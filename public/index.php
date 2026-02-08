@@ -234,6 +234,17 @@ $router->post('/sites/subcfg/create', action($siteSubCfg, 'create'));
 $router->post('/sites/subcfg/delete', action($siteSubCfg, 'delete'));
 $router->post('/sites/subcfg/regenAll', action($siteSubCfg, 'regenAll'));
 
+$router->get('/sites/clone', action($site, 'cloneForm'));     // ?id=1
+$router->post('/sites/clone', action($site, 'cloneDo'));      // ?id=1
+
+// Список сайтов
+$router->get('/sites', action($site, 'index'));
+$router->get('/sites/', action($site, 'index'));
+
+$router->get('/sites/check-domain', action($site, 'checkDomain'));
+
+
+
 // Debug
 $router->get('/debug/log', function () {
     header('Content-Type: text/plain; charset=utf-8');

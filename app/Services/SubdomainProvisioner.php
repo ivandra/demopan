@@ -1,99 +1,175 @@
 <?php
+
 class SubdomainProvisioner
 {
-    private MultiSiteConfigWriter $writer;
-
-    public function __construct()
-    {
-        $this->writer = new MultiSiteConfigWriter();
-    }
-
     public function ensureForSite(int $siteId, string $label): void
     {
-        $pdo = DB::pdo();
+        $label = trim((string)$label);
+        if ($label === '') return;
 
-        $st = $pdo->prepare("SELECT * FROM sites WHERE id = ? LIMIT 1");
-        $st->execute([$siteId]);
-        $site = $st->fetch(PDO::FETCH_ASSOC);
-        if (!$site) {
-            throw new RuntimeException("site not found");
+        $site = $this->loadSite($siteId);
+        if (!$site) return;
+
+        if (($site['template'] ?? '') !== 'template-multy') {
+            return;
         }
 
-        $buildRel = (string)($site['build_path'] ?? '');
-        if ($buildRel === '') {
-            throw new RuntimeException("build_path empty");
-        }
+        $buildAbs = $this->getBuildAbs($siteId, $site);
+        if ($buildAbs === '') return;
 
-        $buildAbs = $this->toAbsBuildPath($buildRel);
+        $subDir = rtrim($buildAbs, '/\\') . '/subs/' . $label;
+        $textsDir = $subDir . '/texts';
+        $assetsDir = $subDir . '/assets';
 
-        // грузим дефолт
-        $cfg = $this->loadDefaultCfg($pdo, $siteId);
+        @mkdir($textsDir, 0775, true);
+        @mkdir($assetsDir, 0775, true);
 
-        // оверлей для label
+        // 1) если текстов нет — копируем из _default/texts
         if ($label !== '_default') {
-            $sub = $this->loadSubCfg($pdo, $siteId, $label);
-            if (is_array($sub)) {
-                $cfg = array_merge($cfg, $sub);
+            $defaultTexts = rtrim($buildAbs, '/\\') . '/subs/_default/texts';
+            if (is_dir($defaultTexts)) {
+                $this->copyRecursiveIfMissing($defaultTexts, $textsDir);
             }
         }
 
-        // гарантируем папки subs/<label>/texts + config.php
-        $subDir = rtrim($buildAbs, "/\\") . '/subs/' . $label;
-        if (!is_dir($subDir)) {
-            @mkdir($subDir, 0775, true);
-        }
+        // 2) гарантируем config.php (из БД, если есть)
+        $baseCfg = $this->loadDefaultCfg($siteId);
+        $subCfg  = $this->loadSubCfg($siteId, $label);
 
-        $textsDir = $subDir . '/texts';
-        if (!is_dir($textsDir)) {
-            @mkdir($textsDir, 0775, true);
-        }
-
-        $this->writer->writeSubConfig($buildAbs, $label, $cfg);
+        $w = new MultiSiteConfigWriter();
+        $w->writeSubConfigPhp($buildAbs, $label, $subCfg, $baseCfg);
     }
 
-    private function loadDefaultCfg(PDO $pdo, int $siteId): array
+    public function deleteFolderForSite(int $siteId, string $label): void
     {
-        $st = $pdo->prepare("SELECT config_json FROM site_default_configs WHERE site_id = ? LIMIT 1");
+        $label = trim((string)$label);
+        if ($label === '' || $label === '_default') return;
+
+        $site = $this->loadSite($siteId);
+        if (!$site) return;
+
+        if (($site['template'] ?? '') !== 'template-multy') {
+            return;
+        }
+
+        $buildAbs = $this->getBuildAbs($siteId, $site);
+        if ($buildAbs === '') return;
+
+        $subDir = rtrim($buildAbs, '/\\') . '/subs/' . $label;
+        if (!is_dir($subDir)) return;
+
+        $this->rrmdir($subDir);
+    }
+
+    // -------------------- DB helpers --------------------
+
+    private function loadSite(int $siteId): ?array
+    {
+        $pdo = DB::pdo();
+        $st = $pdo->prepare("SELECT * FROM sites WHERE id=? LIMIT 1");
         $st->execute([$siteId]);
         $row = $st->fetch(PDO::FETCH_ASSOC);
-        if (!$row) return [];
-        $cfg = json_decode($row['config_json'] ?? '[]', true);
-        return is_array($cfg) ? $cfg : [];
+        return $row ?: null;
     }
 
-    private function loadSubCfg(PDO $pdo, int $siteId, string $label): ?array
+    private function loadDefaultCfg(int $siteId): array
     {
-        $st = $pdo->prepare("SELECT config_json FROM site_subdomain_configs WHERE site_id = ? AND label = ? LIMIT 1");
+        $pdo = DB::pdo();
+        $st = $pdo->prepare("SELECT config_json FROM site_default_configs WHERE site_id=? LIMIT 1");
+        $st->execute([$siteId]);
+        $row = $st->fetch(PDO::FETCH_ASSOC);
+
+        $cfg = [];
+        if ($row && isset($row['config_json'])) {
+            $cfg = json_decode((string)$row['config_json'], true);
+            if (!is_array($cfg)) $cfg = [];
+        }
+        return $cfg;
+    }
+
+    private function loadSubCfg(int $siteId, string $label): array
+    {
+        $pdo = DB::pdo();
+        $st = $pdo->prepare("SELECT config_json FROM site_subdomain_configs WHERE site_id=? AND label=? LIMIT 1");
         $st->execute([$siteId, $label]);
         $row = $st->fetch(PDO::FETCH_ASSOC);
-        if (!$row) return null;
-        $cfg = json_decode($row['config_json'] ?? '[]', true);
-        return is_array($cfg) ? $cfg : [];
+
+        $cfg = [];
+        if ($row && isset($row['config_json'])) {
+            $cfg = json_decode((string)$row['config_json'], true);
+            if (!is_array($cfg)) $cfg = [];
+        }
+        return $cfg;
     }
 
-    private function toAbsBuildPath(string $rel): string
+    // -------------------- Filesystem helpers --------------------
+
+    private function getBuildAbs(int $siteId, array $site): string
     {
-        $rel = trim($rel);
-        $rel = str_replace('\\', '/', $rel);
-        $rel = ltrim($rel, '/');
+        // по умолчанию как у тебя на скрине: storage/builds/site_10
+        $p = trim((string)($site['build_path'] ?? ''));
+        if ($p !== '') {
+            // если абсолютный путь
+            if ($p[0] === '/' && is_dir($p)) return $p;
 
-        // поддержка legacy: "<storage_basename>/builds/..." и нового формата "builds/..."
-        $storageBase = basename(rtrim(Paths::storage(''), "/\\"));
-        if ($storageBase !== '' && strpos($rel, $storageBase . '/') === 0) {
-            $rel = substr($rel, strlen($storageBase) + 1);
+            // если относительный — считаем от APP_ROOT
+            $cand = rtrim(APP_ROOT, '/\\') . '/' . ltrim($p, '/\\');
+            if (is_dir($cand)) return $cand;
         }
 
-        // запрещаем выходы наверх
-        if (preg_match('~(^|/)\.\.(?:/|$)~', $rel)) {
-            return Paths::storage('builds/invalid_path');
-        }
+        $fallback = rtrim(APP_ROOT, '/\\') . '/storage/builds/site_' . $siteId;
+        return $fallback;
+    }
 
-        // ожидаем builds/...
-        if (strpos($rel, 'builds/') !== 0) {
-            return Paths::storage('builds/invalid_path');
-        }
+    private function copyRecursiveIfMissing(string $src, string $dst): void
+    {
+        $src = rtrim($src, '/\\');
+        $dst = rtrim($dst, '/\\');
 
-        $abs = Paths::storage($rel);
-        return rtrim($abs, "/\\");
+        if (!is_dir($src)) return;
+        @mkdir($dst, 0775, true);
+
+        $items = @scandir($src);
+        if (!is_array($items)) return;
+
+        foreach ($items as $it) {
+            if ($it === '.' || $it === '..') continue;
+
+            $from = $src . '/' . $it;
+            $to   = $dst . '/' . $it;
+
+            if (is_dir($from)) {
+                @mkdir($to, 0775, true);
+                $this->copyRecursiveIfMissing($from, $to);
+            } else {
+                if (!is_file($to)) {
+                    @copy($from, $to);
+                    @chmod($to, 0664);
+                }
+            }
+        }
+    }
+
+    private function rrmdir(string $dir): void
+    {
+        $dir = rtrim($dir, '/\\');
+        if (!is_dir($dir)) return;
+
+        $items = @scandir($dir);
+        if (is_array($items)) {
+            foreach ($items as $it) {
+                if ($it === '.' || $it === '..') continue;
+
+                $p = $dir . '/' . $it;
+                if (is_dir($p)) {
+                    $this->rrmdir($p);
+                } else {
+                    @chmod($p, 0664);
+                    @unlink($p);
+                }
+            }
+        }
+        @chmod($dir, 0775);
+        @rmdir($dir);
     }
 }

@@ -1,1 +1,27 @@
-[02-Feb-2026 23:36:41 Europe/Moscow] [NC listAccounts] rows=2 sample=[{"id":2,"username":"AlexViper1507","api_user":"AlexViper1507","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":0,"is_default":1},{"id":1,"username":"AlexViper1507Test","api_user":"AlexViper1507Test","api_key_enc_len":88,"client_ip":"185.225.33.85","is_sandbox":1,"is_default":0}]
+[04-Feb-2026 21:55:23 Europe/Moscow] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'title' in 'field list' in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteSubdomainsController.php:83
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteSubdomainsController.php(83): PDO->prepare('\r\n            S...')
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteSubdomainsController.php(470): SiteSubdomainsController->listNamecheapAccounts()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(122): SiteSubdomainsController->form()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#4 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(271): Router->dispatch()
+#5 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteSubdomainsController.php on line 83
+[04-Feb-2026 22:04:08 Europe/Moscow] [availableIps] count=6 siteId=14
+[04-Feb-2026 22:04:28 Europe/Moscow] [NC makeClient] acc_id=2 app_key_len=32 api_key_enc_len=88
+[04-Feb-2026 22:04:28 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=2 norm_count=2 sample=[{"host":"@","type":"A","address":"95.129.234.77","ttl":1799},{"host":"www","type":"CNAME","address":"kazik1.casino.","ttl":1799}]
+[04-Feb-2026 22:04:29 Europe/Moscow] [availableIps] count=6 siteId=14
+[04-Feb-2026 22:05:31 Europe/Moscow] [NC makeClient] acc_id=2 app_key_len=32 api_key_enc_len=88
+[04-Feb-2026 22:05:32 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=4 norm_count=4 sample=[{"host":"@","type":"A","address":"95.129.234.77","ttl":1799},{"host":"1go","type":"A","address":"95.129.234.77","ttl":300},{"host":"1win","type":"A","address":"95.129.234.77","ttl":300}]
+[04-Feb-2026 22:05:33 Europe/Moscow] [availableIps] count=6 siteId=14
+[04-Feb-2026 22:14:41 Europe/Moscow] [availableIps] count=6 siteId=14
+[04-Feb-2026 22:14:58 Europe/Moscow] [availableIps] count=6 siteId=14
+[04-Feb-2026 22:15:03 Europe/Moscow] [availableIps] count=6 siteId=14
+[04-Feb-2026 22:15:06 Europe/Moscow] [availableIps] count=6 siteId=14
+[04-Feb-2026 22:15:09 Europe/Moscow] [availableIps] count=6 siteId=14
+[04-Feb-2026 22:15:16 Europe/Moscow] [availableIps] count=6 siteId=14
+[04-Feb-2026 22:16:10 Europe/Moscow] [availableIps] count=6 siteId=14
+[08-Feb-2026 21:41:11 Europe/Moscow] [availableIps] count=6 siteId=14
+[08-Feb-2026 21:41:23 Europe/Moscow] [NC makeClient] acc_id=2 app_key_len=32 api_key_enc_len=88
+[08-Feb-2026 21:41:24 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=4 norm_count=4 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":300},{"host":"1go","type":"A","address":"95.129.234.93","ttl":300},{"host":"1win","type":"A","address":"95.129.234.93","ttl":300}]
+[08-Feb-2026 21:41:25 Europe/Moscow] [availableIps] count=6 siteId=14

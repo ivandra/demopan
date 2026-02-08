@@ -1,4 +1,5 @@
 <?php
+// app/Controllers/SiteSubdomainsController.php
 
 class SiteSubdomainsController extends Controller
 {
@@ -6,7 +7,14 @@ class SiteSubdomainsController extends Controller
 
     private function requireAuth(): void
     {
-        if (empty($_SESSION['user_id'])) $this->redirect('/login');
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            @session_start();
+        }
+
+        if (empty($_SESSION['user_id'])) {
+            $this->redirect('/login');
+            exit;
+        }
     }
 
     private function loadSite(int $siteId): array
@@ -33,6 +41,24 @@ class SiteSubdomainsController extends Controller
         return rtrim($domain, '/');
     }
 
+    private function resolveDnsA(string $domain): array
+    {
+        $domain = $this->normalizeDomain($domain);
+        if ($domain === '') return [];
+
+        $ips = [];
+        $recs = @dns_get_record($domain, DNS_A);
+        if (is_array($recs)) {
+            foreach ($recs as $r) {
+                $ip = (string)($r['ip'] ?? '');
+                if ($ip !== '' && preg_match('~^(?:\d{1,3}\.){3}\d{1,3}$~', $ip)) {
+                    $ips[] = $ip;
+                }
+            }
+        }
+        return array_values(array_unique($ips));
+    }
+
     private function guardHostsBeforeSet(string $domain, array $normalizedHosts, array $rawHosts = []): void
     {
         @error_log('[Namecheap getHosts] domain=' . $domain
@@ -51,35 +77,28 @@ class SiteSubdomainsController extends Controller
 
     /* -------------------- registrar helpers -------------------- */
 
-    private function listNamecheapAccounts(): array
-    {
-        $st = DB::pdo()->prepare("
-            SELECT id, provider, is_sandbox, username, api_user, api_key_enc, client_ip, is_default
-            FROM registrar_accounts
-            WHERE provider='namecheap'
-            ORDER BY is_default DESC, is_sandbox ASC, id ASC
-        ");
-        $st->execute();
+   private function listNamecheapAccounts(): array
+{
+    $st = DB::pdo()->prepare("
+        SELECT
+            id,
+            provider,
+            is_sandbox,
+            username,
+            api_user,
+            api_key_enc,
+            client_ip,
+            is_default,
+            username AS title
+        FROM registrar_accounts
+        WHERE provider='namecheap'
+        ORDER BY is_default DESC, is_sandbox ASC, id ASC
+    ");
+    $st->execute();
 
-        $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    return $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+}
 
-        @error_log('[NC listAccounts] rows=' . count($rows) . ' sample=' . json_encode(
-            array_map(function ($r) {
-                return [
-                    'id' => $r['id'] ?? null,
-                    'username' => $r['username'] ?? null,
-                    'api_user' => $r['api_user'] ?? null,
-                    'api_key_enc_len' => strlen((string)($r['api_key_enc'] ?? '')),
-                    'client_ip' => $r['client_ip'] ?? null,
-                    'is_sandbox' => $r['is_sandbox'] ?? null,
-                    'is_default' => $r['is_default'] ?? null,
-                ];
-            }, array_slice($rows, 0, 3)),
-            JSON_UNESCAPED_UNICODE
-        ));
-
-        return $rows;
-    }
 
     private function loadRegistrarAccountById(int $id): ?array
     {
@@ -193,7 +212,6 @@ class SiteSubdomainsController extends Controller
             $ttl  = (string)($h['ttl'] ?? $h['TTL'] ?? 300);
 
             if ($addr === '' && isset($h['Value'])) {
-                // на всякий случай, иногда встречается Value
                 $addr = (string)$h['Value'];
             }
 
@@ -217,9 +235,9 @@ class SiteSubdomainsController extends Controller
     }
 
     /**
-     * ВАЖНО: Upsert логика.
+     * Upsert:
      * 1) Удаляем любые записи для host из labels (любого типа).
-     * 2) Добавляем ровно одну A-запись на нужный IP (чтобы не плодить дубли и чтобы IP реально менялся).
+     * 2) Добавляем ровно одну A-запись на нужный IP.
      */
     private function mergeDnsHostsUpsertSubA(array $existing, array $labels, string $ip, int $ttl = 300): array
     {
@@ -275,7 +293,6 @@ class SiteSubdomainsController extends Controller
 
             if ($host === '' || $type === '' || $addr === '') continue;
 
-            // удаляем любые записи для host из labels (A/CNAME/MX/AAAA и т.д.)
             if (isset($labelsSet[$host])) continue;
 
             $out[] = $h;
@@ -286,10 +303,6 @@ class SiteSubdomainsController extends Controller
 
     /* -------------------- IP helpers -------------------- */
 
-    /**
-     * ТВОЕ требование: IP для поддоменов берем по A(@) текущего домена.
-     * Это основной метод.
-     */
     private function detectRootAFromHosts(array $hosts): string
     {
         foreach ($hosts as $h) {
@@ -305,9 +318,6 @@ class SiteSubdomainsController extends Controller
         return '';
     }
 
-    /**
-     * optional: если ты все же разрешаешь вручную передать ip через форму (updateIp и т.п.)
-     */
     private function normalizePostedIp(): string
     {
         $ip = trim((string)($_POST['ip'] ?? ''));
@@ -315,12 +325,8 @@ class SiteSubdomainsController extends Controller
         return '';
     }
 
-    /**
-     * fallback: если A(@) нет — берем из VPS (как раньше).
-     */
     private function pickServerIpForSite(array $site): string
     {
-        // если руками задан vps_ip — используем
         $manual = trim((string)($site['vps_ip'] ?? ''));
         if ($manual !== '' && preg_match('~^(?:\d{1,3}\.){3}\d{1,3}$~', $manual)) return $manual;
 
@@ -389,6 +395,50 @@ class SiteSubdomainsController extends Controller
         return $ips;
     }
 
+    /* -------------------- Labels normalize for applyBatch -------------------- */
+
+    private function normalizeLabels(array $labelsArr, string $labelsText): array
+    {
+        $out = [];
+
+        foreach ($labelsArr as $x) {
+            $out[] = (string)$x;
+        }
+
+        $labelsText = str_replace(["\r\n", "\r", "\n", "\t"], ' ', $labelsText);
+        foreach (preg_split('~[,\s]+~', $labelsText, -1, PREG_SPLIT_NO_EMPTY) as $x) {
+            $out[] = (string)$x;
+        }
+
+        $res = [];
+        foreach ($out as $raw) {
+            $lb = strtolower(trim($raw));
+            if ($lb === '') continue;
+
+            if ($lb === '_default') {
+                $res[] = '_default';
+                continue;
+            }
+
+            if (!preg_match('~^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$~', $lb)) {
+                continue;
+            }
+
+            $res[] = $lb;
+        }
+
+        $res = array_values(array_unique($res));
+        sort($res);
+        return $res;
+    }
+
+    private function getSiteLabels(int $siteId): array
+    {
+        $st = DB::pdo()->prepare("SELECT label FROM site_subdomains WHERE site_id=? ORDER BY label");
+        $st->execute([$siteId]);
+        return array_map(fn($r) => (string)$r['label'], $st->fetchAll(PDO::FETCH_ASSOC));
+    }
+
     /* -------------------- actions -------------------- */
 
     public function form(): void
@@ -400,20 +450,22 @@ class SiteSubdomainsController extends Controller
 
         $site = $this->loadSite($siteId);
 
-        $catalog = DB::pdo()->query("SELECT * FROM subdomain_catalog WHERE is_active=1 ORDER BY label ASC")
-            ->fetchAll(PDO::FETCH_ASSOC);
+        $catalog = DB::pdo()
+            ->query("SELECT * FROM subdomain_catalog WHERE is_active=1 ORDER BY label ASC")
+            ->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
         $stmt = DB::pdo()->prepare("SELECT * FROM site_subdomains WHERE site_id=? ORDER BY label ASC");
         $stmt->execute([$siteId]);
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        $siteSubs = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
         $registrarAccounts = $this->listNamecheapAccounts();
-        $currentAccount = $this->loadRegistrarAccountById((int)($site['registrar_account_id'] ?? 0));
 
-        $availableIps = $this->getAvailableIpsForSite($site);
+        $serverIps = $this->getAvailableIpsForSite($site);
+        $dnsA = $this->resolveDnsA((string)($site['domain'] ?? ''));
 
+        // ВАЖНО: имена переменных строго под app/Views/sites/subdomains.php
         $this->view('sites/subdomains', compact(
-            'site', 'catalog', 'rows', 'registrarAccounts', 'currentAccount', 'availableIps'
+            'siteId', 'site', 'catalog', 'siteSubs', 'registrarAccounts', 'serverIps', 'dnsA'
         ));
     }
 
@@ -429,6 +481,7 @@ class SiteSubdomainsController extends Controller
         if ($rid === 0) {
             DB::pdo()->prepare("UPDATE sites SET registrar_account_id=NULL WHERE id=?")->execute([$siteId]);
             $this->redirect('/sites/subdomains?id=' . $siteId);
+            return;
         }
 
         $st = DB::pdo()->prepare("SELECT id FROM registrar_accounts WHERE id=? AND provider='namecheap' LIMIT 1");
@@ -467,196 +520,96 @@ class SiteSubdomainsController extends Controller
         $this->redirect('/sites/subdomains?id=' . $siteId);
     }
 
+    /**
+     * APPLY: привести список сабов к выбранному (labels[] + labels_text).
+     * - _default всегда остается
+     * - для template-multy синхронизируем папки subs/<label>/
+     * - если apply_dns=1 => применяем DNS сразу
+     */
     public function applyBatch(): void
     {
         $this->requireAuth();
 
-        require_once __DIR__ . '/../Services/Crypto.php';
-        require_once __DIR__ . '/../Services/FastpanelClient.php';
-        require_once __DIR__ . '/../Services/NamecheapClient.php';
-
         $siteId = (int)($_GET['id'] ?? 0);
         if ($siteId <= 0) die('bad id');
 
-        $pdo = DB::pdo();
-
         $site = $this->loadSite($siteId);
-        $domain = $this->normalizeDomain((string)($site['domain'] ?? ''));
-        if ($domain === '') die('bad domain');
 
-        // 1) labels каталога
-        $catalog = $pdo->query("SELECT label FROM subdomain_catalog WHERE is_active=1")->fetchAll(PDO::FETCH_ASSOC);
-        $labelsMap = [];
-        foreach ($catalog as $c) {
-            $l = strtolower(trim((string)($c['label'] ?? '')));
-            if ($l !== '') $labelsMap[$l] = true;
+        $before = $this->getSiteLabels($siteId);
+
+        $labels = $this->normalizeLabels($_POST['labels'] ?? [], (string)($_POST['labels_text'] ?? ''));
+
+        // _default всегда должен существовать
+        $labelsMap = ['_default' => true];
+        foreach ($labels as $l) {
+            $labelsMap[$l] = true;
         }
         $labels = array_keys($labelsMap);
+        sort($labels);
 
-        if (empty($labels)) {
-            $this->redirect('/sites/subdomains?id=' . $siteId);
+        $pdo = DB::pdo();
+        $pdo->beginTransaction();
+
+        // 1) удаляем то, чего больше нет (кроме _default)
+        $keepNoDefault = array_values(array_filter($labels, fn($x) => $x !== '_default'));
+
+        if (count($keepNoDefault) > 0) {
+            $in = implode(',', array_fill(0, count($keepNoDefault), '?'));
+            $params = array_merge([$siteId], $keepNoDefault);
+
+            $sql = "DELETE FROM site_subdomains
+                    WHERE site_id=?
+                      AND label <> '_default'
+                      AND label NOT IN ($in)";
+            $pdo->prepare($sql)->execute($params);
+
+            // configs тоже чистим
+            $sql2 = "DELETE FROM site_subdomain_configs
+                     WHERE site_id=?
+                       AND label <> '_default'
+                       AND label NOT IN ($in)";
+            $pdo->prepare($sql2)->execute($params);
+        } else {
+            $pdo->prepare("DELETE FROM site_subdomains WHERE site_id=? AND label <> '_default'")->execute([$siteId]);
+            $pdo->prepare("DELETE FROM site_subdomain_configs WHERE site_id=? AND label <> '_default'")->execute([$siteId]);
         }
 
-        // 2) upsert в site_subdomains
-        $ins = $pdo->prepare("
-            INSERT INTO site_subdomains(site_id,label,fqdn,from_catalog,enabled,dns_status,ssl_status,last_error)
-            VALUES(?,?,?,?,?,NULL,NULL,NULL)
-            ON DUPLICATE KEY UPDATE
-                fqdn=VALUES(fqdn),
-                from_catalog=1,
-                updated_at=NOW()
+        // 2) upsert текущего набора (все включаем)
+        $stIns = $pdo->prepare("
+            INSERT INTO site_subdomains(site_id,label,enabled)
+            VALUES(?,?,1)
+            ON DUPLICATE KEY UPDATE enabled=VALUES(enabled)
         ");
 
-        $fqdns = [];
-        foreach ($labels as $l) {
-            $fqdn = $l . '.' . $domain;
-            $fqdns[] = $fqdn;
-            $ins->execute([$siteId, $l, $fqdn, 1, 1]);
+        foreach ($labels as $lb) {
+            $stIns->execute([$siteId, $lb]);
         }
-		
-		// --- PATCH2: автосоздание subs/<label>/... для template-multy
-		$site = $this->loadSite($siteId);
-		if (($site['template'] ?? '') === 'template-multy') {
-			require_once __DIR__ . '/../Services/SubdomainProvisioner.php';
-			$prov = new SubdomainProvisioner();
 
-			foreach ($rows as $r) {
-				$lb = (string)($r['label'] ?? '');
-				if ($lb !== '') {
-					$prov->ensureForSite($siteId, $lb);
-				}
-			}
-		}
+        $pdo->commit();
 
+        $after = $this->getSiteLabels($siteId);
 
-        // 3) FastPanel aliases
-        $vpsOk = ((int)($site['fp_site_created'] ?? 0) === 1 && (int)($site['fp_site_id'] ?? 0) > 0);
-        if ($vpsOk) {
-            $serverId = (int)($site['fastpanel_server_id'] ?? 0);
-            if ($serverId > 0) {
-                $server = $this->loadServer($serverId);
-                $password = Crypto::decrypt((string)$server['password_enc']);
+        // 3) Синхронизация папок (ТОЛЬКО template-multy)
+        if (($site['template'] ?? '') === 'template-multy') {
+            require_once __DIR__ . '/../Services/SubdomainProvisioner.php';
+            $prov = new SubdomainProvisioner();
 
-                $fp = new FastpanelClient(
-                    (string)$server['host'],
-                    (bool)$server['verify_tls'],
-                    (int)config('fastpanel.timeout', 30)
-                );
-                $fp->login((string)$server['username'], $password);
-                $fp->addSiteAliases((int)$site['fp_site_id'], $fqdns);
+            $added   = array_values(array_diff($after, $before));
+            $removed = array_values(array_diff($before, $after));
+
+            foreach ($added as $lb) {
+                if ($lb === '') continue;
+                $prov->ensureForSite($siteId, $lb);
+            }
+            foreach ($removed as $lb) {
+                if ($lb === '' || $lb === '_default') continue;
+                $prov->deleteFolderForSite($siteId, $lb);
             }
         }
 
-        // 4) DNS Namecheap
-        $dnsOk = false;
-        $dnsErr = '';
-
-        try {
-            $acc = $this->loadRegistrarAccountForSite($site);
-            if (!$acc) {
-                $dnsErr = 'registrar account not found (dns skipped)';
-            } else {
-
-                $doDns = function (array $accRow) use ($domain, $site, $labels, &$dnsErr): bool {
-                    $nc = $this->makeNamecheapClientFromRegistrarAccount($accRow);
-                    [$sld, $tld] = $nc->splitSldTld($domain);
-
-                    $existingRaw = $nc->getHosts($sld, $tld);
-                    $existing = $this->normalizeNamecheapHosts($existingRaw);
-
-                    $this->guardHostsBeforeSet($domain, $existing, $existingRaw);
-
-                    // ---- ВАЖНО: IP берем от A(@) домена ----
-                    $targetIp = $this->detectRootAFromHosts($existing);
-
-                    // optional: если хочешь разрешить ручной ip (например, форма могла прислать ip)
-                    // $posted = $this->normalizePostedIp();
-                    // if ($posted !== '') $targetIp = $posted;
-
-                    // fallback: если A(@) нет (на домене еще не настроен DNS)
-                    if ($targetIp === '') {
-                        $targetIp = $this->pickServerIpForSite($site);
-                    }
-
-                    if ($targetIp === '') {
-                        $dnsErr = 'cannot determine target ip (no @ A and no vps ip fallback)';
-                        return false;
-                    }
-
-                    @error_log('[DNS] targetIp=' . $targetIp . ' domain=' . $domain);
-
-                    // Upsert sub A (без дублей + всегда нужный IP)
-                    $merged = $this->mergeDnsHostsUpsertSubA($existing, $labels, $targetIp, 300);
-
-                    @error_log('[DNS] merged_sample=' . json_encode(array_slice(
-                        array_values(array_filter($merged, function ($h) {
-                            return isset($h['type']) && strtoupper((string)$h['type']) === 'A';
-                        })),
-                        0,
-                        3
-                    ), JSON_UNESCAPED_UNICODE));
-
-                    $nc->setHosts($sld, $tld, $merged);
-
-                    return true;
-                };
-
-                try {
-                    $dnsOk = $doDns($acc);
-                } catch (Throwable $e1) {
-                    $dnsErr = $e1->getMessage();
-
-                    // если аккаунт не тот — пробуем автоопределить и ретраим
-                    if ($this->isNamecheapAccountMismatchError($dnsErr)) {
-                        $found = $this->detectRegistrarAccountForDomain($domain);
-                        if ($found) {
-                            $rid = (int)($found['id'] ?? 0);
-
-                            DB::pdo()->prepare("UPDATE sites SET registrar_account_id=? WHERE id=?")
-                                ->execute([$rid, (int)($site['id'] ?? 0)]);
-
-                            $site['registrar_account_id'] = $rid;
-
-                            try {
-                                $dnsOk = $doDns($found);
-                                $dnsErr = '';
-                                @error_log('[DNS] retry OK site_id=' . (int)($site['id'] ?? 0) . ' registrar_account_id=' . $rid);
-                            } catch (Throwable $e2) {
-                                $dnsOk = false;
-                                $dnsErr = $e2->getMessage();
-                                @error_log('[DNS] retry FAIL site_id=' . (int)($site['id'] ?? 0) . ' err=' . $dnsErr);
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Throwable $e) {
-            $dnsErr = $e->getMessage();
-            $dnsOk = false;
-        }
-
-        if ($dnsOk) {
-            $pdo->prepare("UPDATE site_subdomains SET dns_status='ok', last_error=NULL WHERE site_id=? AND from_catalog=1")
-                ->execute([$siteId]);
-        } else {
-            $pdo->prepare("UPDATE site_subdomains SET dns_status='skip', last_error=? WHERE site_id=? AND from_catalog=1")
-                ->execute([$dnsErr, $siteId]);
-            @error_log('[DNS] site_id=' . $siteId . ' dnsOk=0 err=' . $dnsErr);
-        }
-
-        // 5) SSL (если используешь)
-        try {
-            if ($vpsOk) {
-                $sslDone = $this->ensureWildcardSelfSignedIfNeeded($site);
-                if ($sslDone) {
-                    $pdo->prepare("UPDATE site_subdomains SET ssl_status='ok', last_error=NULL WHERE site_id=? AND from_catalog=1")
-                        ->execute([$siteId]);
-                }
-            }
-        } catch (Throwable $e) {
-            @error_log('[SSL] site_id=' . $siteId . ' ' . $e->getMessage());
-            $pdo->prepare("UPDATE site_subdomains SET ssl_status='error', last_error=? WHERE site_id=? AND from_catalog=1")
-                ->execute([$e->getMessage(), $siteId]);
+        // 4) опционально: сразу применить DNS (если галка)
+        if (!empty($_POST['apply_dns'])) {
+            $this->applyDnsForSite($siteId);
         }
 
         $this->redirect('/sites/subdomains?id=' . $siteId);
@@ -666,86 +619,10 @@ class SiteSubdomainsController extends Controller
     {
         $this->requireAuth();
 
-        require_once __DIR__ . '/../Services/Crypto.php';
-        require_once __DIR__ . '/../Services/NamecheapClient.php';
-
         $siteId = (int)($_GET['id'] ?? 0);
         if ($siteId <= 0) die('bad id');
 
-        $site = $this->loadSite($siteId);
-
-        $domain = $this->normalizeDomain((string)($site['domain'] ?? ''));
-        if ($domain === '') die('bad domain');
-
-        $newIp = trim((string)($_POST['ip'] ?? ''));
-        if ($newIp === '' || !preg_match('~^(?:\d{1,3}\.){3}\d{1,3}$~', $newIp)) die('bad ip');
-
-        $updateRoot = (int)($_POST['update_root'] ?? 0) === 1;
-
-        DB::pdo()->prepare("UPDATE sites SET vps_ip=? WHERE id=?")->execute([$newIp, $siteId]);
-
-        // labels каталога
-        $pdo = DB::pdo();
-        $catalog = $pdo->query("SELECT label FROM subdomain_catalog WHERE is_active=1")->fetchAll(PDO::FETCH_ASSOC);
-        $labelsSet = [];
-        foreach ($catalog as $c) {
-            $l = strtolower(trim((string)($c['label'] ?? '')));
-            if ($l !== '') $labelsSet[$l] = true;
-        }
-        $labels = array_keys($labelsSet);
-
-        $dnsOk = false;
-        $dnsErr = '';
-
-        try {
-            $acc = $this->loadRegistrarAccountForSite($site);
-            if (!$acc) throw new RuntimeException('registrar account not found');
-
-            $nc = $this->makeNamecheapClientFromRegistrarAccount($acc);
-            [$sld, $tld] = $nc->splitSldTld($domain);
-
-            $existingRaw = $nc->getHosts($sld, $tld);
-            $hosts = $this->normalizeNamecheapHosts($existingRaw);
-
-            $this->guardHostsBeforeSet($domain, $hosts, $existingRaw);
-
-            $labelsMap = array_fill_keys($labels, true);
-
-            // обновляем существующие A
-            foreach ($hosts as &$h) {
-                if (($h['type'] ?? '') !== 'A') continue;
-
-                $host = strtolower(trim((string)($h['host'] ?? '')));
-
-                if ($updateRoot && $host === '@') {
-                    $h['address'] = $newIp;
-                    continue;
-                }
-
-                if (isset($labelsMap[$host])) {
-                    $h['address'] = $newIp;
-                }
-            }
-            unset($h);
-
-            // upsert (гарантия одного A на label)
-            $hosts = $this->mergeDnsHostsUpsertSubA($hosts, $labels, $newIp, 300);
-
-            $nc->setHosts($sld, $tld, $hosts);
-            $dnsOk = true;
-
-        } catch (Throwable $e) {
-            $dnsErr = $e->getMessage();
-        }
-
-        if ($dnsOk) {
-            $pdo->prepare("UPDATE site_subdomains SET dns_status='ok', last_error=NULL WHERE site_id=? AND from_catalog=1")
-                ->execute([$siteId]);
-        } else {
-            $pdo->prepare("UPDATE site_subdomains SET dns_status='error', last_error=? WHERE site_id=? AND from_catalog=1")
-                ->execute([$dnsErr, $siteId]);
-            @error_log('[DNS update-ip] site_id=' . $siteId . ' err=' . $dnsErr);
-        }
+        $this->applyDnsForSite($siteId);
 
         $this->redirect('/sites/subdomains?id=' . $siteId);
     }
@@ -753,64 +630,73 @@ class SiteSubdomainsController extends Controller
     public function deleteCatalog(): void
     {
         $this->requireAuth();
-        $this->deleteCatalogInternal(true, true);
+
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
+
+        $site = $this->loadSite($siteId);
+
+        $before = $this->getSiteLabels($siteId);
+
+        DB::pdo()->prepare("DELETE FROM site_subdomains WHERE site_id=? AND label <> '_default'")->execute([$siteId]);
+        DB::pdo()->prepare("DELETE FROM site_subdomain_configs WHERE site_id=? AND label <> '_default'")->execute([$siteId]);
+
+        $after = $this->getSiteLabels($siteId);
+
+        if (($site['template'] ?? '') === 'template-multy') {
+            require_once __DIR__ . '/../Services/SubdomainProvisioner.php';
+            $prov = new SubdomainProvisioner();
+            $removed = array_values(array_diff($before, $after));
+            foreach ($removed as $lb) {
+                if ($lb === '' || $lb === '_default') continue;
+                $prov->deleteFolderForSite($siteId, $lb);
+            }
+        }
+
+        $this->redirect('/sites/subdomains?id=' . $siteId);
     }
 
     public function deleteCatalogDns(): void
     {
         $this->requireAuth();
-        $this->deleteCatalogInternal(true, false);
-    }
 
-    private function deleteCatalogInternal(bool $doDns, bool $doDb): void
-    {
-        require_once __DIR__ . '/../Services/Crypto.php';
         require_once __DIR__ . '/../Services/NamecheapClient.php';
+        require_once __DIR__ . '/../Services/Crypto.php';
 
         $siteId = (int)($_GET['id'] ?? 0);
         if ($siteId <= 0) die('bad id');
 
-        $pdo = DB::pdo();
         $site = $this->loadSite($siteId);
-
         $domain = $this->normalizeDomain((string)($site['domain'] ?? ''));
         if ($domain === '') die('bad domain');
 
-        $catalog = $pdo->query("SELECT label FROM subdomain_catalog WHERE is_active=1")->fetchAll(PDO::FETCH_ASSOC);
-        $labelsSet = [];
-        foreach ($catalog as $c) {
-            $l = strtolower(trim((string)($c['label'] ?? '')));
-            if ($l !== '') $labelsSet[$l] = true;
-        }
-        $labels = array_keys($labelsSet);
+        // Берем сабы именно этого сайта (как и написано на кнопке во вьюхе)
+        $st = DB::pdo()->prepare("SELECT label FROM site_subdomains WHERE site_id=? AND label <> '_default' ORDER BY label");
+        $st->execute([$siteId]);
+        $labels = array_map(fn($r) => (string)$r['label'], $st->fetchAll(PDO::FETCH_ASSOC));
 
-        if ($doDns) {
-            try {
-                $acc = $this->loadRegistrarAccountForSite($site);
-                if ($acc) {
-                    $nc = $this->makeNamecheapClientFromRegistrarAccount($acc);
-                    [$sld, $tld] = $nc->splitSldTld($domain);
-
-                    $existingRaw = $nc->getHosts($sld, $tld);
-                    $existing = $this->normalizeNamecheapHosts($existingRaw);
-
-                    $this->guardHostsBeforeSet($domain, $existing, $existingRaw);
-
-                    $merged = $this->mergeDnsHostsRemoveLabels($existing, $labels);
-
-                    if (!empty($merged)) {
-                        $nc->setHosts($sld, $tld, $merged);
-                    } else {
-                        throw new RuntimeException('Namecheap: merged hosts became empty (skip setHosts)');
-                    }
-                }
-            } catch (Throwable $e) {
-                @error_log('[DNS delete-catalog] site_id=' . $siteId . ' err=' . $e->getMessage());
-            }
+        if (empty($labels)) {
+            $this->redirect('/sites/subdomains?id=' . $siteId);
+            return;
         }
 
-        if ($doDb) {
-            $pdo->prepare("DELETE FROM site_subdomains WHERE site_id=? AND from_catalog=1")->execute([$siteId]);
+        $acc = $this->loadRegistrarAccountForSite($site);
+        if (!$acc) die('registrar account not found');
+
+        $nc = $this->makeNamecheapClientFromRegistrarAccount($acc);
+        [$sld, $tld] = $nc->splitSldTld($domain);
+
+        $existingRaw = $nc->getHosts($sld, $tld);
+        $existing = $this->normalizeNamecheapHosts($existingRaw);
+
+        $this->guardHostsBeforeSet($domain, $existing, $existingRaw);
+
+        $merged = $this->mergeDnsHostsRemoveLabels($existing, $labels);
+
+        if (!empty($merged)) {
+            $nc->setHosts($sld, $tld, $merged);
+        } else {
+            throw new RuntimeException('Namecheap: merged hosts became empty (skip setHosts)');
         }
 
         $this->redirect('/sites/subdomains?id=' . $siteId);
@@ -820,12 +706,22 @@ class SiteSubdomainsController extends Controller
     {
         $this->requireAuth();
 
+        $siteId = (int)($_GET['id'] ?? 0);
+
+        // совместимость: если вдруг осталась старая ссылка по sub_id
         $subId = (int)($_GET['sub_id'] ?? 0);
+        $label = trim((string)($_POST['label'] ?? ''));
+
         if ($subId > 0) {
             DB::pdo()->prepare("UPDATE site_subdomains SET enabled=IF(enabled=1,0,1) WHERE id=?")->execute([$subId]);
+        } elseif ($siteId > 0 && $label !== '') {
+            DB::pdo()->prepare("
+                UPDATE site_subdomains
+                   SET enabled=IF(enabled=1,0,1)
+                 WHERE site_id=? AND label=?
+            ")->execute([$siteId, $label]);
         }
 
-        $siteId = (int)($_GET['id'] ?? 0);
         $this->redirect('/sites/subdomains?id=' . $siteId);
     }
 
@@ -833,12 +729,24 @@ class SiteSubdomainsController extends Controller
     {
         $this->requireAuth();
 
+        $siteId = (int)($_GET['id'] ?? 0);
+
         $subId = (int)($_GET['sub_id'] ?? 0);
+        $label = trim((string)($_POST['label'] ?? ''));
+
         if ($subId > 0) {
             DB::pdo()->prepare("DELETE FROM site_subdomains WHERE id=?")->execute([$subId]);
+        } elseif ($siteId > 0 && $label !== '' && $label !== '_default') {
+            DB::pdo()->prepare("DELETE FROM site_subdomains WHERE site_id=? AND label=?")->execute([$siteId, $label]);
+            DB::pdo()->prepare("DELETE FROM site_subdomain_configs WHERE site_id=? AND label=?")->execute([$siteId, $label]);
+
+            $site = $this->loadSite($siteId);
+            if (($site['template'] ?? '') === 'template-multy') {
+                require_once __DIR__ . '/../Services/SubdomainProvisioner.php';
+                (new SubdomainProvisioner())->deleteFolderForSite($siteId, $label);
+            }
         }
 
-        $siteId = (int)($_GET['id'] ?? 0);
         $this->redirect('/sites/subdomains?id=' . $siteId);
     }
 
@@ -850,8 +758,132 @@ class SiteSubdomainsController extends Controller
         if ($siteId <= 0) die('bad id');
 
         DB::pdo()->prepare("DELETE FROM site_subdomains WHERE site_id=?")->execute([$siteId]);
+        DB::pdo()->prepare("DELETE FROM site_subdomain_configs WHERE site_id=?")->execute([$siteId]);
 
         $this->redirect('/sites/subdomains?id=' . $siteId);
+    }
+
+    /* -------------------- DNS core (used by updateIp and applyBatch/apply_dns) -------------------- */
+
+    private function applyDnsForSite(int $siteId): void
+    {
+        require_once __DIR__ . '/../Services/NamecheapClient.php';
+        require_once __DIR__ . '/../Services/Crypto.php';
+
+        $pdo = DB::pdo();
+
+        $site = $this->loadSite($siteId);
+        $domain = $this->normalizeDomain((string)($site['domain'] ?? ''));
+        if ($domain === '') die('bad domain');
+
+        $updateRoot = (int)($_POST['update_root'] ?? 0) === 1;
+
+        // enabled сабы (кроме _default)
+        $st = $pdo->prepare("SELECT label FROM site_subdomains WHERE site_id=? AND enabled=1 AND label <> '_default' ORDER BY label");
+        $st->execute([$siteId]);
+        $labels = array_map(fn($r) => (string)$r['label'], $st->fetchAll(PDO::FETCH_ASSOC));
+
+        if (empty($labels) && !$updateRoot) {
+            // Нечего делать
+            return;
+        }
+
+        $dnsOk = false;
+        $dnsErr = '';
+
+        try {
+            $acc = $this->loadRegistrarAccountForSite($site);
+            if (!$acc) throw new RuntimeException('registrar account not found');
+
+            $doDns = function (array $accRow) use ($domain, $site, $labels, $updateRoot, $siteId): void {
+                $nc = $this->makeNamecheapClientFromRegistrarAccount($accRow);
+                [$sld, $tld] = $nc->splitSldTld($domain);
+
+                $existingRaw = $nc->getHosts($sld, $tld);
+                $hosts = $this->normalizeNamecheapHosts($existingRaw);
+
+                $this->guardHostsBeforeSet($domain, $hosts, $existingRaw);
+
+                // 1) IP: POST -> sites.vps_ip -> rootA(@) -> dns_get_record -> server fallback
+                $ip = $this->normalizePostedIp();
+
+                if ($ip === '') {
+                    $manual = trim((string)($site['vps_ip'] ?? ''));
+                    if ($manual !== '' && preg_match('~^(?:\d{1,3}\.){3}\d{1,3}$~', $manual)) {
+                        $ip = $manual;
+                    }
+                }
+
+                if ($ip === '') {
+                    $ip = $this->detectRootAFromHosts($hosts);
+                }
+
+                if ($ip === '') {
+                    $dnsA = $this->resolveDnsA($domain);
+                    if (!empty($dnsA)) $ip = (string)$dnsA[0];
+                }
+
+                if ($ip === '') {
+                    $ip = $this->pickServerIpForSite($site);
+                }
+
+                if ($ip === '') {
+                    throw new RuntimeException('cannot determine target ip (no POST ip, no vps_ip, no @ A, no DNS A, no server ip)');
+                }
+
+                // сохраним в sites.vps_ip, чтобы не гадать в следующий раз
+                DB::pdo()->prepare("UPDATE sites SET vps_ip=? WHERE id=?")->execute([$ip, $siteId]);
+
+                // 2) Upsert sub A
+                if (!empty($labels)) {
+                    $hosts = $this->mergeDnsHostsUpsertSubA($hosts, $labels, $ip, 300);
+                }
+
+                // 3) update root @ A если нужно
+                if ($updateRoot) {
+                    $hosts = $this->mergeDnsHostsUpsertSubA($hosts, ['@'], $ip, 300);
+                }
+
+                $nc->setHosts($sld, $tld, $hosts);
+            };
+
+            try {
+                $doDns($acc);
+                $dnsOk = true;
+            } catch (Throwable $e1) {
+                $dnsErr = $e1->getMessage();
+
+                if ($this->isNamecheapAccountMismatchError($dnsErr)) {
+                    $found = $this->detectRegistrarAccountForDomain($domain);
+                    if ($found) {
+                        $rid = (int)($found['id'] ?? 0);
+                        $pdo->prepare("UPDATE sites SET registrar_account_id=? WHERE id=?")->execute([$rid, $siteId]);
+
+                        try {
+                            $doDns($found);
+                            $dnsOk = true;
+                            $dnsErr = '';
+                            @error_log('[DNS] retry OK site_id=' . $siteId . ' registrar_account_id=' . $rid);
+                        } catch (Throwable $e2) {
+                            $dnsOk = false;
+                            $dnsErr = $e2->getMessage();
+                            @error_log('[DNS] retry FAIL site_id=' . $siteId . ' err=' . $dnsErr);
+                        }
+                    }
+                }
+            }
+        } catch (Throwable $e) {
+            $dnsOk = false;
+            $dnsErr = $e->getMessage();
+        }
+
+        // статус в site_subdomains (если колонки существуют — ок; если нет, можно убрать эти UPDATE)
+        if ($dnsOk) {
+            @DB::pdo()->prepare("UPDATE site_subdomains SET dns_status='ok', last_error=NULL WHERE site_id=?")->execute([$siteId]);
+        } else {
+            @DB::pdo()->prepare("UPDATE site_subdomains SET dns_status='error', last_error=? WHERE site_id=?")->execute([$dnsErr, $siteId]);
+            @error_log('[DNS apply] site_id=' . $siteId . ' err=' . $dnsErr);
+        }
     }
 
     /* -------------------- SSL -------------------- */
@@ -859,7 +891,7 @@ class SiteSubdomainsController extends Controller
     private function ensureWildcardSelfSignedIfNeeded(array $site): bool
     {
         // ВСТАВЬ СВОЮ РЕАЛИЗАЦИЮ (у тебя она уже есть).
-        // Этот файл DNS-часть чинит, SSL не трогаем.
+        // Этот контроллер DNS-часть чинит, SSL не трогаем.
         return false;
     }
 }

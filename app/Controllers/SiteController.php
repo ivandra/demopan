@@ -5,16 +5,18 @@ class SiteController extends Controller
     // ----------------------------
     // Auth + paths
     // ----------------------------
-    private function requireAuth(): void
-    {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            @session_start();
-        }
-
-        if (empty($_SESSION['user_id'])) {
-            $this->redirect('/login');
-        }
+  protected function requireAuth(): void
+{
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        @session_start();
     }
+
+    if (empty($_SESSION['user_id'])) {
+        $this->redirect('/login');
+        exit;
+    }
+}
+
     private function log(string $msg, array $ctx = []): void
     {
         if (function_exists('hub_log')) {
@@ -66,111 +68,148 @@ class SiteController extends Controller
     }
 
     public function store(): void
-    {
-        $this->requireAuth();
+	{
+		$this->requireAuth();
 
-        $pdo = DB::pdo();
+		$pdo = DB::pdo();
 
-        $domainInput = (string)($_POST['domain'] ?? '');
-        $template    = trim((string)($_POST['template'] ?? 'default'));
-        $domain      = $this->normalizeDomainInput($domainInput);
+		$domainInput = (string)($_POST['domain'] ?? '');
+		$template    = trim((string)($_POST['template'] ?? 'default'));
+		$domain      = $this->normalizeDomainInput($domainInput);
 
-        if ($domain === '' || !$this->isValidDomain($domain)) {
-            die('bad domain');
-        }
+		if ($domain === '' || !$this->isValidDomain($domain)) {
+			die('bad domain');
+		}
 
-        $registrarAccountId = (int)($_POST['registrar_account_id'] ?? 0);
-        if ($registrarAccountId <= 0) {
-            $registrarAccountId = 0;
-        }
+		$registrarAccountId = (int)($_POST['registrar_account_id'] ?? 0);
+		if ($registrarAccountId <= 0) {
+			$registrarAccountId = 0;
+		}
 
-        $pdo->beginTransaction();
+		// -------- NEW: авто-определение IP по DNS A и подбор fastpanel_server_id --------
+		$dnsA  = $this->resolveDnsA($domain);
+		$vpsIp = $dnsA[0] ?? null;
 
-        try {
-            $configPath = 'configs/site_' . time() . '.json';
+		$fastpanelServerId = null;
+		if ($vpsIp) {
+			$fastpanelServerId = $this->findFastpanelServerIdByIp($vpsIp);
+		}
 
-            if ($registrarAccountId > 0) {
-                $stmt = $pdo->prepare(
-                    "INSERT INTO sites (domain, template, config_path, registrar_account_id)
-                     VALUES (?, ?, ?, ?)"
-                );
-                $stmt->execute([$domain, $template, $configPath, $registrarAccountId]);
-            } else {
-                $stmt = $pdo->prepare(
-                    "INSERT INTO sites (domain, template, config_path)
-                     VALUES (?, ?, ?)"
-                );
-                $stmt->execute([$domain, $template, $configPath]);
-            }
+		$this->log('STORE.autofill_dns', [
+			'domain' => $domain,
+			'dns_a' => $dnsA,
+			'vps_ip' => $vpsIp,
+			'fastpanel_server_id' => $fastpanelServerId,
+		]);
+		// ------------------------------------------------------------------------------
 
-            $siteId = (int)$pdo->lastInsertId();
+		$pdo->beginTransaction();
 
-            $cfg = $this->defaultConfig($domain);
+		try {
+			$configPath = 'configs/site_' . time() . '.json';
 
-            // всегда сохраняем в site_configs для совместимости (и для обычных шаблонов это основной источник)
-            $stmt = $pdo->prepare("INSERT INTO site_configs (site_id, json) VALUES (?, ?)");
-            $stmt->execute([$siteId, json_encode($cfg, JSON_UNESCAPED_UNICODE)]);
+			// ВАЖНО: сохраняем vps_ip и fastpanel_server_id сразу при создании
+			$stmt = $pdo->prepare("
+				INSERT INTO sites (domain, template, config_path, registrar_account_id, vps_ip, fastpanel_server_id)
+				VALUES (?, ?, ?, ?, ?, ?)
+			");
+			$stmt->execute([
+				$domain,
+				$template,
+				$configPath,
+				($registrarAccountId > 0 ? $registrarAccountId : null),
+				$vpsIp,
+				$fastpanelServerId,
+			]);
 
-            require_once Paths::appRoot() . '/app/Services/TemplateService.php';
+			$siteId = (int)$pdo->lastInsertId();
 
-            $buildRel = 'builds/site_' . $siteId;
-            $buildAbs = $this->toBuildAbs($buildRel);
+			$cfg = $this->defaultConfig($domain);
 
-            $this->log('STORE.copyTemplate', [
-                'siteId' => $siteId,
-                'template' => $template,
-                'buildRel' => $buildRel,
-                'buildAbs' => $buildAbs,
-            ]);
+			// всегда сохраняем в site_configs для совместимости (и для обычных шаблонов это основной источник)
+			$stmt = $pdo->prepare("INSERT INTO site_configs (site_id, json) VALUES (?, ?)");
+			$stmt->execute([$siteId, json_encode($cfg, JSON_UNESCAPED_UNICODE)]);
 
-            (new TemplateService())->copyTemplate($template, $buildAbs);
+			require_once Paths::appRoot() . '/app/Services/TemplateService.php';
 
-            $stmt = $pdo->prepare("UPDATE sites SET build_path=? WHERE id=?");
-            $stmt->execute([$buildRel, $siteId]);
+			$buildRel = 'builds/site_' . $siteId;
+			$buildAbs = $this->toBuildAbs($buildRel);
 
-            // template-multy: создаем базовый конфиг и _default оверлей
-            if ($template === 'template-multy') {
-                $this->upsertSiteDefaultConfig($siteId, $cfg);
+			$this->log('STORE.copyTemplate', [
+				'siteId' => $siteId,
+				'template' => $template,
+				'buildRel' => $buildRel,
+				'buildAbs' => $buildAbs,
+			]);
 
-                // создаст запись в site_subdomain_configs для _default, если ее нет
-                $this->ensureSubdomainConfigExists($siteId, '_default', $cfg);
-            }
+			(new TemplateService())->copyTemplate($template, $buildAbs);
 
-            $labelForRegen = ($template === 'template-multy') ? '_default' : null;
-            $this->regenerateConfigPhp($siteId, $cfg, $labelForRegen);
+			$stmt = $pdo->prepare("UPDATE sites SET build_path=? WHERE id=?");
+			$stmt->execute([$buildRel, $siteId]);
 
-            $pdo->commit();
-            $this->redirect('/');
-        } catch (Throwable $e) {
-            $pdo->rollBack();
-            http_response_code(500);
-            echo $e->getMessage();
-        }
-    }
+			// template-multy: создаем базовый конфиг и _default оверлей
+			if ($template === 'template-multy') {
+				$this->upsertSiteDefaultConfig($siteId, $cfg);
+
+				// создаст запись в site_subdomain_configs для _default, если ее нет
+				$this->ensureSubdomainConfigExists($siteId, '_default', $cfg);
+			}
+
+			$labelForRegen = ($template === 'template-multy') ? '_default' : null;
+			$this->regenerateConfigPhp($siteId, $cfg, $labelForRegen);
+
+			$pdo->commit();
+			$this->redirect('/');
+		} catch (Throwable $e) {
+			$pdo->rollBack();
+			http_response_code(500);
+			echo $e->getMessage();
+		}
+	}
+
 
     // ----------------------------
     // Domain check
     // ----------------------------
     public function checkDomain(): void
-    {
-        $this->requireAuth();
+{
+    $this->requireAuth();
 
-        header('Content-Type: application/json; charset=utf-8');
+    header('Content-Type: application/json; charset=utf-8');
 
-        $domainInput = (string)($_POST['domain'] ?? $_GET['domain'] ?? '');
-        $domain = $this->normalizeDomainInput($domainInput);
+    $domainInput = (string)($_POST['domain'] ?? $_GET['domain'] ?? '');
+    $domain = $this->normalizeDomainInput($domainInput);
 
-        if ($domain === '' || !$this->isValidDomain($domain)) {
-            echo json_encode(['ok' => false, 'error' => 'bad_domain', 'domain' => $domain], JSON_UNESCAPED_UNICODE);
-            return;
-        }
-
-        $st = DB::pdo()->prepare("SELECT id FROM sites WHERE domain=? LIMIT 1");
-        $st->execute([$domain]);
-        $exists = (bool)$st->fetchColumn();
-
-        echo json_encode(['ok' => true, 'domain' => $domain, 'exists' => $exists], JSON_UNESCAPED_UNICODE);
+    if ($domain === '' || !$this->isValidDomain($domain)) {
+        echo json_encode(['ok' => false, 'error' => 'bad_domain', 'domain' => $domain], JSON_UNESCAPED_UNICODE);
+        return;
     }
+
+    $st = DB::pdo()->prepare("SELECT id FROM sites WHERE domain=? LIMIT 1");
+    $st->execute([$domain]);
+    $existsId = (int)($st->fetchColumn() ?: 0);
+
+    // DNS A
+    $dnsA = $this->resolveDnsA($domain);
+    $vpsIp = $dnsA[0] ?? null;
+
+    // подбор сервера (опционально)
+    $serverId = null;
+    if ($vpsIp) {
+        $serverId = $this->findServerIdByIp($vpsIp);
+    }
+
+    echo json_encode([
+        'ok' => true,
+        'domain' => $domain,
+        'exists' => ($existsId > 0),
+        'exists_id' => $existsId,
+        'dns_a' => $dnsA,
+        'vps_ip_guess' => $vpsIp,
+        'fastpanel_server_id_guess' => $serverId,
+    ], JSON_UNESCAPED_UNICODE);
+}
+
 
     // ----------------------------
     // Edit + Update (базовый конфиг)
@@ -1353,6 +1392,199 @@ $ts = date('Ymd_His');
     {
         return (bool)preg_match('~^[a-z0-9](?:[a-z0-9\-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9\-]{0,61}[a-z0-9])?)+$~i', $domain);
     }
+	
+	private function resolveDnsA(string $domain): array
+{
+    $domain = strtolower(trim($domain));
+    if ($domain === '') return [];
+
+    $out = [];
+    $recs = @dns_get_record($domain, DNS_A);
+    if (is_array($recs)) {
+        foreach ($recs as $r) {
+            if (!is_array($r)) continue;
+            $ip = trim((string)($r['ip'] ?? ''));
+            if ($ip !== '' && preg_match('~^(?:\d{1,3}\.){3}\d{1,3}$~', $ip)) {
+                $out[] = $ip;
+            }
+        }
+    }
+
+    $out = array_values(array_unique($out));
+    return $out;
+}
+
+private function findServerIdByIp(string $ip): ?int
+{
+    $ip = trim($ip);
+    if ($ip === '') return null;
+
+    $pdo = DB::pdo();
+    $rows = $pdo->query("SELECT id, host, extra_ips FROM fastpanel_servers")->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($rows as $srv) {
+        $ips = [];
+
+        // extra_ips (CSV/пробелы/переносы)
+        $extra = trim((string)($srv['extra_ips'] ?? ''));
+        if ($extra !== '') {
+            if (preg_match_all('~\b(?:\d{1,3}\.){3}\d{1,3}\b~', $extra, $m)) {
+                foreach ($m[0] as $one) {
+                    $one = trim((string)$one);
+                    if ($one !== '') $ips[] = $one;
+                }
+            }
+        }
+
+        // fallback: host может быть IP или https://IP:port
+        $host = trim((string)($srv['host'] ?? ''));
+        if ($host !== '') {
+            $h = preg_replace('~^https?://~i', '', $host);
+            $h = preg_split('~[/?#]~', $h, 2)[0] ?? $h;
+            $h = preg_replace('~:\d+$~', '', $h);
+            $h = trim((string)$h);
+            if (preg_match('~^(?:\d{1,3}\.){3}\d{1,3}$~', $h)) {
+                $ips[] = $h;
+            }
+        }
+
+        $ips = array_values(array_unique($ips));
+        if (in_array($ip, $ips, true)) {
+            return (int)$srv['id'];
+        }
+    }
+
+    return null;
+}
+
+
+private function isIpv4(string $ip): bool
+{
+    return (bool)filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+}
+
+private function findFastpanelServerIdByIp(string $ip): ?int
+{
+    $ip = trim($ip);
+    if (!$this->isIpv4($ip)) return null;
+
+    $rows = DB::pdo()
+        ->query("SELECT id, host, extra_ips FROM fastpanel_servers ORDER BY id ASC")
+        ->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($rows as $srv) {
+        $ips = $this->extractIpsFromServerRow($srv);
+        if (in_array($ip, $ips, true)) {
+            return (int)$srv['id'];
+        }
+    }
+
+    return null;
+}
+
+private function extractIpsFromServerRow(array $srv): array
+{
+    $ips = [];
+
+    // host может быть "95.129.234.20:8888" или "https://95.129.234.20:8888"
+    $host = trim((string)($srv['host'] ?? ''));
+    if ($host !== '') {
+        $hIp = $this->extractIpFromHost($host);
+        if ($hIp) $ips[] = $hIp;
+    }
+
+    // extra_ips может быть CSV/пробелы/JSON/что угодно
+    $extra = $srv['extra_ips'] ?? '';
+    if ($extra !== null && trim((string)$extra) !== '') {
+        $ips = array_merge($ips, $this->extractIpsFromMixed($extra));
+    }
+
+    // уникализация
+    $ips = array_values(array_unique($ips));
+    return $ips;
+}
+
+private function extractIpFromHost(string $host): ?string
+{
+    $h = trim($host);
+
+    // если есть схема — parse_url
+    if (preg_match('~^https?://~i', $h)) {
+        $u = @parse_url($h);
+        $candidate = (string)($u['host'] ?? '');
+        if ($this->isIpv4($candidate)) return $candidate;
+    }
+
+    // без схемы: убираем "https://", путь, порт
+    $h = preg_replace('~^[a-z]+://~i', '', $h);
+    $h = preg_split('~[/:]~', $h, 2)[0] ?? $h;
+    $h = trim((string)$h);
+
+    if ($this->isIpv4($h)) return $h;
+
+    // если вдруг host хранится доменом — попробуем A
+    if ($h !== '' && preg_match('~^[a-z0-9][a-z0-9\.\-]+$~i', $h)) {
+        $a = $this->resolveDnsA($h);
+        return $a[0] ?? null;
+    }
+
+    return null;
+}
+
+private function extractIpsFromMixed($value): array
+{
+    $ips = [];
+
+    // если вдруг уже массив
+    if (is_array($value)) {
+        foreach ($value as $v) {
+            $v = trim((string)$v);
+            if ($this->isIpv4($v)) $ips[] = $v;
+        }
+        return array_values(array_unique($ips));
+    }
+
+    $s = trim((string)$value);
+    if ($s === '') return [];
+
+    // попытка JSON
+    if ($s[0] === '[' || $s[0] === '{') {
+        $decoded = json_decode($s, true);
+        if (is_array($decoded)) {
+            // массив строк
+            if (array_is_list($decoded)) {
+                foreach ($decoded as $v) {
+                    $v = trim((string)$v);
+                    if ($this->isIpv4($v)) $ips[] = $v;
+                }
+                return array_values(array_unique($ips));
+            }
+
+            // объект вида {"ips":[...]} или {"extra_ips":[...]} — поддержим популярные варианты
+            foreach (['ips', 'extra_ips'] as $k) {
+                if (isset($decoded[$k]) && is_array($decoded[$k])) {
+                    foreach ($decoded[$k] as $v) {
+                        $v = trim((string)$v);
+                        if ($this->isIpv4($v)) $ips[] = $v;
+                    }
+                    return array_values(array_unique($ips));
+                }
+            }
+        }
+        // если JSON битый — просто упадем в regex ниже
+    }
+
+    // вытащим все IPv4 регекспом (CSV/пробелы/переносы)
+    if (preg_match_all('~\b(?:\d{1,3}\.){3}\d{1,3}\b~', $s, $m)) {
+        foreach ($m[0] as $ip) {
+            $ip = trim((string)$ip);
+            if ($this->isIpv4($ip)) $ips[] = $ip;
+        }
+    }
+
+    return array_values(array_unique($ips));
+}
+
 
     // ----------------------------
     // template-multy DB helpers (вариант 2)
@@ -1507,5 +1739,70 @@ $ts = date('Ymd_His');
         $label = (string)($_GET['label'] ?? $_POST['label'] ?? $fallback);
         return $this->normalizeSubLabel($label);
     }
+	
+	public function cloneForm(): void
+{
+    $this->requireAuth();
+
+    $siteId = (int)($_GET['id'] ?? 0);
+    if ($siteId <= 0) {
+        echo "no site id";
+        return;
+    }
+
+    $site = $this->loadSite($siteId);
+    if (!$site) {
+        echo "site not found";
+        return;
+    }
+
+    // список label из subcfg (то, что можно перенести)
+    $pdo = DB::pdo();
+    $st = $pdo->prepare("SELECT label FROM site_subdomain_configs WHERE site_id = ? ORDER BY label");
+    $st->execute([$siteId]);
+
+    $labels = ['_default'];
+    while ($r = $st->fetch(PDO::FETCH_ASSOC)) {
+        $labels[] = (string)$r['label'];
+    }
+
+    $this->view('sites/clone', [
+        'site' => $site,
+        'siteId' => $siteId,
+        'labels' => $labels,
+    ]);
+}
+
+public function cloneDo(): void
+{
+    $this->requireAuth();
+
+    $siteId = (int)($_GET['id'] ?? 0);
+    if ($siteId <= 0) {
+        $this->redirect('/sites');
+        exit;
+    }
+
+    $newDomain = (string)($_POST['new_domain'] ?? '');
+    $labels = (array)($_POST['labels'] ?? []);
+
+    // если ничего не выбрали — переносим только _default
+    if (!$labels) $labels = ['_default'];
+
+    $cloner = new SiteCloner();
+    $newSiteId = $cloner->cloneSite($siteId, $newDomain, $labels);
+
+    // на всякий случай создаем/обновляем папки overlay + конфиги
+    $prov = new SubdomainProvisioner();
+    $prov->ensureForSite($newSiteId, '_default');
+    foreach ($labels as $lb) {
+        if ($lb === '_default') continue;
+        $prov->ensureForSite($newSiteId, (string)$lb);
+    }
+
+    $this->redirect('/sites/edit?id=' . $newSiteId);
+    exit;
+}
+
 }
 

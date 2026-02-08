@@ -3,123 +3,70 @@
 class MultiSiteConfigWriter
 {
     /**
-     * Новый API (который ты уже используешь в коде генерации).
-     * Пишет config.default.php в корне build-директории.
+     * Совместимость со старым вызовом из SiteController:
+     * $w->writeConfigDefaultPhp($dir, $domain, $cfg)
      */
+    public function writeConfigDefaultPhp(string $rootDir, string $domain, array $cfg): void
+    {
+        $cfg['domain'] = $domain;
+        $this->writeDefaultConfig($rootDir, $cfg);
+    }
+
+    /**
+     * Совместимость со старым вызовом из SiteController:
+     * $w->writeSubConfigPhp($dir, $label, $subCfg, $cfg)
+     */
+    public function writeSubConfigPhp(string $rootDir, string $label, array $subCfg, array $baseCfg): void
+    {
+        // shallow merge: subCfg поверх baseCfg
+        $cfg = $baseCfg;
+        foreach ($subCfg as $k => $v) {
+            $cfg[$k] = $v;
+        }
+
+        $baseDomain = (string)($baseCfg['domain'] ?? '');
+        if ($label !== '_default' && $baseDomain !== '') {
+            $cfg['domain'] = $label . '.' . $baseDomain;
+        } else {
+            $cfg['domain'] = $baseDomain;
+        }
+
+        $this->writeSubConfig($rootDir, $label, $cfg);
+    }
+
+    // -------------------- New API (то, что реально делает запись) --------------------
+
     public function writeDefaultConfig(string $rootDir, array $cfg): void
     {
-        $path = rtrim($rootDir, "/\\") . '/config.default.php';
-        $php  = $this->renderConfigPhp($cfg);
+        $path = rtrim($rootDir, '/\\') . '/config.default.php';
+        $php  = $this->renderDefaultConfigPhp($cfg);
         $this->safeWrite($path, $php);
     }
 
-    /**
-     * Новый API.
-     * Пишет subs/<label>/config.php в build-директории.
-     */
     public function writeSubConfig(string $rootDir, string $label, array $cfg): void
     {
-        $label = trim($label);
-        if ($label === '') $label = '_default';
+        $subDir = rtrim($rootDir, '/\\') . '/subs/' . $label;
+        if (!is_dir($subDir)) {
+            @mkdir($subDir, 0775, true);
+        }
 
-        $dir = rtrim($rootDir, "/\\") . '/subs/' . $label;
-        Paths::ensureDir($dir);
-
-        $path = rtrim($dir, "/\\") . '/config.php';
-        $php  = $this->renderConfigPhp($cfg);
+        $path = $subDir . '/config.php';
+        $php  = $this->renderSubConfigPhp($cfg);
         $this->safeWrite($path, $php);
     }
 
-    /**
-     * ===== ALIASES ДЛЯ СТАРОГО КОДА =====
-     * SiteController (и другие места) могут звать старые имена методов:
-     *  - writeConfigDefaultPhp($buildDir, $domain, $cfg)
-     *  - writeSubConfigPhp($buildDir, $label, $subCfg, $defaultCfg)
-     *
-     * Мы делаем обертки, чтобы ничего не падало.
-     */
+    // -------------------- Renderers --------------------
 
-    // Старое имя: MultiSiteConfigWriter::writeConfigDefaultPhp
-    public function writeConfigDefaultPhp(string $buildDir, string $domain, array $cfg): void
+    private function renderDefaultConfigPhp(array $cfg): string
     {
-        // $domain тут исторический параметр — в renderConfigPhp домен берется из $cfg, если нужен.
-        $this->writeDefaultConfig($buildDir, $cfg);
-    }
+        $export = var_export($cfg, true);
 
-    // Старое имя: MultiSiteConfigWriter::writeSubConfigPhp
-    public function writeSubConfigPhp(string $buildDir, string $label, array $subCfg, array $defaultCfg = []): void
-    {
-        // В старой версии могли передавать defaultCfg отдельно.
-        // Если надо — можно аккуратно подмешать значения по умолчанию (не перетирая явные значения subCfg).
-        if (is_array($defaultCfg) && $defaultCfg) {
-            foreach ($defaultCfg as $k => $v) {
-                if (!array_key_exists($k, $subCfg)) {
-                    $subCfg[$k] = $v;
-                }
-            }
-        }
-
-        $this->writeSubConfig($buildDir, $label, $subCfg);
-    }
-
-    // ===== internals =====
-
-    private function safeWrite(string $path, string $content): void
-    {
-        $dir = dirname($path);
-
-        // Всегда создаем директорию перед записью
-        Paths::ensureDir($dir);
-
-        // Защита от записи вне builds (внутри storage) (без realpath): проверяем нормализованный префикс.
-        $base = rtrim(str_replace('\\', '/', Paths::storage('builds')), '/');
-        $dirN = rtrim(str_replace('\\', '/', $this->normalizePath($dir)), '/');
-
-        if (strpos($dirN . '/', $base . '/') !== 0) {
-            throw new RuntimeException('Refuse to write outside builds: ' . $path);
-        }
-
-        $tmp = $path . '.tmp_' . bin2hex(random_bytes(6));
-        if (file_put_contents($tmp, $content) === false) {
-            throw new RuntimeException('Cannot write temp file: ' . $tmp);
-        }
-
-        if (!@rename($tmp, $path)) {
-            @unlink($tmp);
-            throw new RuntimeException('Cannot move temp to target: ' . $path);
-        }
-    }
-
-    private function normalizePath(string $path): string
-    {
-        $path = str_replace('\\', '/', $path);
-
-        $isAbs = (substr($path, 0, 1) === '/');
-        $parts = explode('/', $path);
-
-        $out = [];
-        foreach ($parts as $p) {
-            if ($p === '' || $p === '.') continue;
-            if ($p === '..') {
-                array_pop($out);
-                continue;
-            }
-            $out[] = $p;
-        }
-
-        $norm = implode('/', $out);
-        return $isAbs ? '/' . $norm : $norm;
-    }
-
-    private function renderConfigPhp(array $cfg): string
-    {
-        $cfgExport = var_export($cfg, true);
-
-        // ВАЖНО: texts_dir вычисляется от __DIR__ внутри build'а (это не Paths проекта панели)
+        // config.default.php лежит в корне билда, тексты для дефолта в subs/_default/texts
         return <<<PHP
 <?php
 
-\$cfg = {$cfgExport};
+\$cfg = {$export};
+
 \$pages = \$cfg['pages'] ?? [];
 \$textsDir = __DIR__ . '/subs/_default/texts/';
 
@@ -143,8 +90,55 @@ return [
 ];
 PHP;
     }
-}
 
-if (!class_exists('SiteConfigWriter', false)) {
-    class_alias('MultiSiteConfigWriter', 'SiteConfigWriter');
+    private function renderSubConfigPhp(array $cfg): string
+    {
+        $export = var_export($cfg, true);
+
+        // config.php лежит внутри subs/<label>/, поэтому тексты локально: __DIR__/texts
+        return <<<PHP
+<?php
+
+\$cfg = {$export};
+
+\$pages = \$cfg['pages'] ?? [];
+\$textsDir = __DIR__ . '/texts/';
+
+return [
+    'site' => [
+        'title' => (string)(\$cfg['title'] ?? ''),
+        'h1' => (string)(\$cfg['h1'] ?? ''),
+        'description' => (string)(\$cfg['description'] ?? ''),
+        'keywords' => (string)(\$cfg['keywords'] ?? ''),
+        'promolink' => (string)(\$cfg['promolink'] ?? '/reg'),
+        'internal_reg_url' => (string)(\$cfg['internal_reg_url'] ?? ''),
+        'partner_override_url' => (string)(\$cfg['partner_override_url'] ?? ''),
+        'redirect_enabled' => (int)(\$cfg['redirect_enabled'] ?? 0),
+        'base_new_url' => (string)(\$cfg['base_new_url'] ?? ''),
+        'base_second_url' => (string)(\$cfg['base_second_url'] ?? ''),
+        'logo' => (string)(\$cfg['logo'] ?? 'assets/logo.png'),
+        'favicon' => (string)(\$cfg['favicon'] ?? 'assets/favicon.png'),
+    ],
+    'pages' => \$pages,
+    'texts_dir' => \$textsDir,
+];
+PHP;
+    }
+
+    // -------------------- Safe write --------------------
+
+    private function safeWrite(string $path, string $content): void
+    {
+        // Пишем атомарно
+        $dir = dirname($path);
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0775, true);
+        }
+
+        $tmp = $path . '.tmp.' . bin2hex(random_bytes(6));
+        file_put_contents($tmp, $content, LOCK_EX);
+        @chmod($tmp, 0664);
+        rename($tmp, $path);
+        @chmod($path, 0664);
+    }
 }
