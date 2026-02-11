@@ -1,27 +1,361 @@
-[04-Feb-2026 21:55:23 Europe/Moscow] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'title' in 'field list' in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteSubdomainsController.php:83
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteSubdomainsController.php(83): PDO->prepare('\r\n            S...')
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteSubdomainsController.php(470): SiteSubdomainsController->listNamecheapAccounts()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(122): SiteSubdomainsController->form()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#4 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(271): Router->dispatch()
-#5 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteSubdomainsController.php on line 83
-[04-Feb-2026 22:04:08 Europe/Moscow] [availableIps] count=6 siteId=14
-[04-Feb-2026 22:04:28 Europe/Moscow] [NC makeClient] acc_id=2 app_key_len=32 api_key_enc_len=88
-[04-Feb-2026 22:04:28 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=2 norm_count=2 sample=[{"host":"@","type":"A","address":"95.129.234.77","ttl":1799},{"host":"www","type":"CNAME","address":"kazik1.casino.","ttl":1799}]
-[04-Feb-2026 22:04:29 Europe/Moscow] [availableIps] count=6 siteId=14
-[04-Feb-2026 22:05:31 Europe/Moscow] [NC makeClient] acc_id=2 app_key_len=32 api_key_enc_len=88
-[04-Feb-2026 22:05:32 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=4 norm_count=4 sample=[{"host":"@","type":"A","address":"95.129.234.77","ttl":1799},{"host":"1go","type":"A","address":"95.129.234.77","ttl":300},{"host":"1win","type":"A","address":"95.129.234.77","ttl":300}]
-[04-Feb-2026 22:05:33 Europe/Moscow] [availableIps] count=6 siteId=14
-[04-Feb-2026 22:14:41 Europe/Moscow] [availableIps] count=6 siteId=14
-[04-Feb-2026 22:14:58 Europe/Moscow] [availableIps] count=6 siteId=14
-[04-Feb-2026 22:15:03 Europe/Moscow] [availableIps] count=6 siteId=14
-[04-Feb-2026 22:15:06 Europe/Moscow] [availableIps] count=6 siteId=14
-[04-Feb-2026 22:15:09 Europe/Moscow] [availableIps] count=6 siteId=14
-[04-Feb-2026 22:15:16 Europe/Moscow] [availableIps] count=6 siteId=14
-[04-Feb-2026 22:16:10 Europe/Moscow] [availableIps] count=6 siteId=14
-[08-Feb-2026 21:41:11 Europe/Moscow] [availableIps] count=6 siteId=14
-[08-Feb-2026 21:41:23 Europe/Moscow] [NC makeClient] acc_id=2 app_key_len=32 api_key_enc_len=88
-[08-Feb-2026 21:41:24 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=4 norm_count=4 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":300},{"host":"1go","type":"A","address":"95.129.234.93","ttl":300},{"host":"1win","type":"A","address":"95.129.234.93","ttl":300}]
-[08-Feb-2026 21:41:25 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 17:55:08 Europe/Moscow] PHP Warning:  session_start(): open(/tmp/php_sess/sites/539142/sess_49c8bc425c6f48a9eea0cdcbb472545c, O_RDWR) failed: No such file or directory (2) in /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php on line 77
+[11-Feb-2026 17:55:08 Europe/Moscow] PHP Warning:  session_start(): Failed to read session data: files (path: /tmp/php_sess/sites/539142) in /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php on line 77
+[11-Feb-2026 17:55:08 Europe/Moscow] PHP Warning:  session_start(): open(/tmp/php_sess/sites/539142/sess_49c8bc425c6f48a9eea0cdcbb472545c, O_RDWR) failed: No such file or directory (2) in /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php on line 77
+[11-Feb-2026 17:55:08 Europe/Moscow] PHP Warning:  session_start(): Failed to read session data: files (path: /tmp/php_sess/sites/539142) in /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php on line 77
+[11-Feb-2026 17:55:08 Europe/Moscow] PHP Warning:  session_start(): open(/tmp/php_sess/sites/539142/sess_49c8bc425c6f48a9eea0cdcbb472545c, O_RDWR) failed: No such file or directory (2) in /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php on line 77
+[11-Feb-2026 17:55:08 Europe/Moscow] PHP Warning:  session_start(): Failed to read session data: files (path: /tmp/php_sess/sites/539142) in /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php on line 77
+[11-Feb-2026 17:59:54 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 17:59:54 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 17:59:54 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:00:01 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:00:02 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=7 norm_count=7 sample=[{"host":"@","type":"A","address":"95.129.234.77","ttl":300},{"host":"1xslots","type":"A","address":"95.129.234.77","ttl":300},{"host":"admiralx","type":"A","address":"95.129.234.77","ttl":300}]
+[11-Feb-2026 18:00:03 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=arkada dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/arkada
+[11-Feb-2026 18:00:03 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=auf dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/auf
+[11-Feb-2026 18:00:03 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=azino777 dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/azino777
+[11-Feb-2026 18:00:03 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 18:00:03 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 18:00:03 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:02:03 Europe/Moscow] [applyBatch] site_id=14 labels_count=4 labelsDns_count=3 labels_sample=["_default","betera","betrahen","betunlim"] labelsDns_sample=["betera","betrahen","betunlim"]
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/config.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=betera buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betera
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betera
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betera/texts
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betera/assets
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betera/texts/404.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betera/texts/game.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betera/texts/home.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betera/texts/play.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner] OK created label=betera cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betera/config.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=betrahen buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betrahen
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betrahen
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betrahen/texts
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betrahen/assets
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betrahen/texts/404.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betrahen/texts/game.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betrahen/texts/home.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betrahen/texts/play.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner] OK created label=betrahen cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betrahen/config.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=betunlim buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betunlim
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betunlim
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betunlim/texts
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betunlim/assets
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betunlim/texts/404.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betunlim/texts/game.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betunlim/texts/home.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betunlim/texts/play.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [SubdomainProvisioner] OK created label=betunlim cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betunlim/config.php
+[11-Feb-2026 18:02:03 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:02:04 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=2 norm_count=2 sample=[{"host":"@","type":"A","address":"95.129.234.77","ttl":300},{"host":"www","type":"CNAME","address":"kazik1.casino.","ttl":1799}]
+[11-Feb-2026 18:02:04 Europe/Moscow] [DNS] domain=kazik1.casino targetIp=95.129.234.77 labelsDns_count=3 labelsDns_sample=["betera","betrahen","betunlim"]
+[11-Feb-2026 18:02:05 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 18:02:05 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 18:02:05 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:02:23 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:02:24 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=5 norm_count=5 sample=[{"host":"@","type":"A","address":"95.129.234.77","ttl":300},{"host":"betera","type":"A","address":"95.129.234.77","ttl":300},{"host":"betrahen","type":"A","address":"95.129.234.77","ttl":300}]
+[11-Feb-2026 18:02:25 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 18:02:25 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 18:02:25 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:02:56 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:02:57 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=5 norm_count=5 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":300},{"host":"betera","type":"A","address":"95.129.234.93","ttl":300},{"host":"betrahen","type":"A","address":"95.129.234.93","ttl":300}]
+[11-Feb-2026 18:02:58 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 18:02:58 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 18:02:58 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:03:07 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:03:07 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=2 norm_count=2 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":300},{"host":"www","type":"CNAME","address":"kazik1.casino.","ttl":1799}]
+[11-Feb-2026 18:03:08 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=betera dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betera
+[11-Feb-2026 18:03:08 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=betrahen dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betrahen
+[11-Feb-2026 18:03:08 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=betunlim dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/betunlim
+[11-Feb-2026 18:03:08 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 18:03:08 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 18:03:08 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:03:18 Europe/Moscow] [applyBatch] site_id=14 labels_count=4 labelsDns_count=3 labels_sample=["_default","cactus","casinora","casinox"] labelsDns_sample=["cactus","casinora","casinox"]
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/config.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=cactus buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus/texts
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus/assets
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus/texts/404.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus/texts/game.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus/texts/home.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus/texts/play.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner] OK created label=cactus cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus/config.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=casinora buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora/texts
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora/assets
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora/texts/404.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora/texts/game.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora/texts/home.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora/texts/play.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner] OK created label=casinora cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora/config.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=casinox buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox/texts
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox/assets
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox/texts/404.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox/texts/game.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox/texts/home.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox/texts/play.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [SubdomainProvisioner] OK created label=casinox cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox/config.php
+[11-Feb-2026 18:03:18 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:03:18 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=2 norm_count=2 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":300},{"host":"www","type":"CNAME","address":"kazik1.casino.","ttl":1799}]
+[11-Feb-2026 18:03:18 Europe/Moscow] [DNS] domain=kazik1.casino targetIp=95.129.234.93 labelsDns_count=3 labelsDns_sample=["cactus","casinora","casinox"]
+[11-Feb-2026 18:03:20 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 18:03:20 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 18:03:20 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:03:38 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 18:03:38 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default
+[11-Feb-2026 18:03:38 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/config.php
+[11-Feb-2026 18:03:38 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 18:03:38 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default
+[11-Feb-2026 18:03:38 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/config.php
+[11-Feb-2026 18:17:14 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 18:17:14 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 18:17:14 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:20:56 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 18:20:56 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 18:20:56 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:21:01 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 18:21:01 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 18:21:01 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 18:40:10 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 18:40:10 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 18:40:10 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 19:59:22 Europe/Moscow] [applyBatch] site_id=14 labels_count=7 labelsDns_count=6 labels_sample=["1go","1win","1xslots","_default","cactus","casinora","casinox"] labelsDns_sample=["1go","1win","1xslots","cactus","casinora","casinox"]
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/config.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=1go buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1go
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1go
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1go/texts
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1go/assets
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1go/texts/404.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1go/texts/game.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1go/texts/home.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1go/texts/play.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] OK created label=1go cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1go/config.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=1win buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1win
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1win
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1win/texts
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1win/assets
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1win/texts/404.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1win/texts/game.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1win/texts/home.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1win/texts/play.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] OK created label=1win cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1win/config.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=1xslots buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1xslots
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1xslots
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1xslots/texts
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1xslots/assets
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1xslots/texts/404.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1xslots/texts/game.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1xslots/texts/home.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1xslots/texts/play.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] OK created label=1xslots cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1xslots/config.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=cactus buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] OK created label=cactus cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus/config.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=casinora buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] OK created label=casinora cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora/config.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=casinox buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox
+[11-Feb-2026 19:59:22 Europe/Moscow] [SubdomainProvisioner] OK created label=casinox cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox/config.php
+[11-Feb-2026 19:59:22 Europe/Moscow] [FP] site_id=14 aliases_count=6 sample=["1go.kazik1.casino","1win.kazik1.casino","1xslots.kazik1.casino","cactus.kazik1.casino","casinora.kazik1.casino"]
+[11-Feb-2026 19:59:23 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 19:59:24 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=5 norm_count=5 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":300},{"host":"cactus","type":"A","address":"95.129.234.93","ttl":300},{"host":"casinora","type":"A","address":"95.129.234.93","ttl":300}]
+[11-Feb-2026 19:59:24 Europe/Moscow] [DNS] domain=kazik1.casino targetIp=95.129.234.93 labelsDns_count=6 labelsDns_sample=["1go","1win","1xslots","cactus","casinora","casinox"]
+[11-Feb-2026 19:59:25 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 19:59:25 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 19:59:25 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:01:51 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 20:01:51 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 20:01:51 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:02:24 Europe/Moscow] [applyBatch] site_id=14 labels_count=9 labelsDns_count=8 labels_sample=["1go","1win","1xslots","7k","888starz","_default","cactus","casinora","casinox"] labelsDns_sample=["1go","1win","1xslots","7k","888starz","cactus","casinora","casinox"]
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/config.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=1go buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1go
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] OK created label=1go cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1go/config.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=1win buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1win
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] OK created label=1win cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1win/config.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=1xslots buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1xslots
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] OK created label=1xslots cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1xslots/config.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=7k buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/7k
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/7k
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/7k/texts
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/7k/assets
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/7k/texts/404.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/7k/texts/game.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/7k/texts/home.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/7k/texts/play.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] OK created label=7k cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/7k/config.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=888starz buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/888starz
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/888starz
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/888starz/texts
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/888starz/assets
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/888starz/texts/404.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/888starz/texts/game.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/888starz/texts/home.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/888starz/texts/play.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] OK created label=888starz cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/888starz/config.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=cactus buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] OK created label=cactus cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus/config.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=casinora buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] OK created label=casinora cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora/config.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=casinox buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox
+[11-Feb-2026 20:02:24 Europe/Moscow] [SubdomainProvisioner] OK created label=casinox cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox/config.php
+[11-Feb-2026 20:02:24 Europe/Moscow] [FP] site_id=14 aliases_count=8 sample=["1go.kazik1.casino","1win.kazik1.casino","1xslots.kazik1.casino","7k.kazik1.casino","888starz.kazik1.casino"]
+[11-Feb-2026 20:02:25 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:02:26 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=8 norm_count=8 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":300},{"host":"1go","type":"A","address":"95.129.234.93","ttl":300},{"host":"1win","type":"A","address":"95.129.234.93","ttl":300}]
+[11-Feb-2026 20:02:26 Europe/Moscow] [DNS] domain=kazik1.casino targetIp=95.129.234.93 labelsDns_count=8 labelsDns_sample=["1go","1win","1xslots","7k","888starz","cactus","casinora","casinox"]
+[11-Feb-2026 20:02:27 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 20:02:27 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 20:02:27 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:02:37 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 20:02:37 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default
+[11-Feb-2026 20:02:37 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/config.php
+[11-Feb-2026 20:02:37 Europe/Moscow] [SubdomainProvisioner] site_id=14 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14
+[11-Feb-2026 20:02:37 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default
+[11-Feb-2026 20:02:37 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/_default/config.php
+[11-Feb-2026 20:05:24 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 20:05:24 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 20:05:24 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:05:33 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:05:34 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=10 norm_count=10 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":300},{"host":"1go","type":"A","address":"95.129.234.93","ttl":300},{"host":"1win","type":"A","address":"95.129.234.93","ttl":300}]
+[11-Feb-2026 20:05:35 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 20:05:35 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 20:05:35 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:05:40 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:05:41 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=2 norm_count=2 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":300},{"host":"www","type":"CNAME","address":"kazik1.casino.","ttl":1799}]
+[11-Feb-2026 20:05:42 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=1go dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1go
+[11-Feb-2026 20:05:42 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=1win dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1win
+[11-Feb-2026 20:05:42 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=1xslots dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/1xslots
+[11-Feb-2026 20:05:42 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=7k dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/7k
+[11-Feb-2026 20:05:42 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=888starz dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/888starz
+[11-Feb-2026 20:05:42 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=cactus dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/cactus
+[11-Feb-2026 20:05:42 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=casinora dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinora
+[11-Feb-2026 20:05:42 Europe/Moscow] [SubdomainProvisioner delete] site_id=14 label=casinox dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_14/subs/casinox
+[11-Feb-2026 20:05:42 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 20:05:42 Europe/Moscow] [availableIps] count=6 siteId=14
+[11-Feb-2026 20:05:42 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:09:57 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:09:57 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[11-Feb-2026 20:09:57 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[11-Feb-2026 20:10:02 Europe/Moscow] availableIps count=6 siteId=15
+[11-Feb-2026 20:10:08 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:10:08 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[11-Feb-2026 20:10:08 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[11-Feb-2026 20:10:14 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 20:10:14 Europe/Moscow] [availableIps] count=6 siteId=15
+[11-Feb-2026 20:10:14 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:10:34 Europe/Moscow] [applyBatch] site_id=15 labels_count=4 labelsDns_count=3 labels_sample=["_default","banda","beef","betera"] labelsDns_sample=["banda","beef","betera"]
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=banda buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda/texts
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda/assets
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda/texts/404.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda/texts/game.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda/texts/home.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda/texts/play.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner] OK created label=banda cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda/config.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=beef buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/beef
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/beef
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/beef/texts
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/beef/assets
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/beef/texts/404.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/beef/texts/game.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/beef/texts/home.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/beef/texts/play.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner] OK created label=beef cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/beef/config.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=betera buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/betera
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/betera
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/betera/texts
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/betera/assets
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/betera/texts/404.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/betera/texts/game.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/betera/texts/home.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/betera/texts/play.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [SubdomainProvisioner] OK created label=betera cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/betera/config.php
+[11-Feb-2026 20:10:34 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:10:35 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=2 norm_count=2 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":300},{"host":"www","type":"CNAME","address":"kazik1.casino.","ttl":1799}]
+[11-Feb-2026 20:10:35 Europe/Moscow] [DNS] domain=kazik1.casino targetIp=95.129.234.93 labelsDns_count=3 labelsDns_sample=["banda","beef","betera"]
+[11-Feb-2026 20:10:36 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 20:10:36 Europe/Moscow] [availableIps] count=6 siteId=15
+[11-Feb-2026 20:10:36 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:10:46 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:10:46 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[11-Feb-2026 20:10:46 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[11-Feb-2026 20:10:46 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:10:46 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[11-Feb-2026 20:10:46 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[11-Feb-2026 20:15:29 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 20:15:29 Europe/Moscow] [availableIps] count=6 siteId=15
+[11-Feb-2026 20:15:29 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:15:38 Europe/Moscow] [applyBatch] site_id=15 labels_count=6 labelsDns_count=5 labels_sample=["_default","banda","beef","betera","booi","boost"] labelsDns_sample=["banda","beef","betera","booi","boost"]
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=banda buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] OK created label=banda cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda/config.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=beef buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/beef
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] OK created label=beef cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/beef/config.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=betera buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/betera
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] OK created label=betera cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/betera/config.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=booi buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/booi
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/booi
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/booi/texts
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/booi/assets
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/booi/texts/404.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/booi/texts/game.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/booi/texts/home.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/booi/texts/play.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] OK created label=booi cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/booi/config.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=boost buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/boost
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/boost
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/boost/texts
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner mkdir] OK dir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/boost/assets
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/404.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/boost/texts/404.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/game.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/boost/texts/game.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/home.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/boost/texts/home.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner copy] /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/texts/play.php -> /home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/boost/texts/play.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [SubdomainProvisioner] OK created label=boost cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/boost/config.php
+[11-Feb-2026 20:15:38 Europe/Moscow] [FP] site_id=15 aliases_count=5 sample=["banda.kazik1.casino","beef.kazik1.casino","betera.kazik1.casino","booi.kazik1.casino","boost.kazik1.casino"]
+[11-Feb-2026 20:15:39 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[11-Feb-2026 20:15:39 Europe/Moscow] [Namecheap getHosts] domain=kazik1.casino raw_count=5 norm_count=5 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":300},{"host":"banda","type":"A","address":"95.129.234.93","ttl":300},{"host":"beef","type":"A","address":"95.129.234.93","ttl":300}]
+[11-Feb-2026 20:15:39 Europe/Moscow] [DNS] domain=kazik1.casino targetIp=95.129.234.93 labelsDns_count=5 labelsDns_sample=["banda","beef","betera","booi","boost"]
+[11-Feb-2026 20:15:40 Europe/Moscow] [NC listAccounts] rows=2
+[11-Feb-2026 20:15:40 Europe/Moscow] [availableIps] count=6 siteId=15
+[11-Feb-2026 20:15:40 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response

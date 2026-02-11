@@ -265,6 +265,33 @@ private function extractIpsFromServerRow(array $server): array
             }
 
             $fpSiteId = (int)($resp['id'] ?? $existingId);
+			
+			// собрать сабы из БД
+			$rows = DB::pdo()->prepare("SELECT label FROM site_subdomains WHERE site_id=? AND enabled=1");
+			$rows->execute([$siteId]);
+			$labels = $rows->fetchAll(PDO::FETCH_COLUMN);
+
+			$fqdns = [];
+			foreach ($labels as $lb) {
+				$lb = trim((string)$lb);
+				if ($lb === '' || $lb === '_default') continue;
+				$fqdns[] = $lb . '.' . $domain;
+				// если нужно еще и www для сабов:
+				 $fqdns[] = 'www.' . $lb . '.' . $domain;
+			}
+
+			// + можно гарантировать www корня
+			$fqdns[] = 'www.' . $domain;
+
+			$fqdns = array_values(array_unique($fqdns));
+
+			if (!empty($fqdns)) {
+				$client->addSiteAliases($fpSiteId, $fqdns);
+				$steps['fastpanel_aliases_added'] = $fqdns;
+			}
+
+			
+			
             $indexDir = (string)($resp['index_dir'] ?? '');
             if ($fpSiteId <= 0) {
                 throw new RuntimeException('Fastpanel: site id is empty in response');

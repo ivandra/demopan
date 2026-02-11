@@ -74,7 +74,16 @@ hub_log('REQUEST', [
 ]);
 
 // ---------- 4) Session ----------
+// до session_start()
+$sessionDir = __DIR__ . '/../storage/sessions';
+if (!is_dir($sessionDir)) {
+    @mkdir($sessionDir, 0777, true);
+}
+ini_set('session.save_handler', 'files');
+ini_set('session.save_path', $sessionDir);
+
 session_start();
+
 
 // ---------- 5) Config ----------
 $GLOBALS['APP_CONFIG'] = require APP_ROOT . '/config/app.php';

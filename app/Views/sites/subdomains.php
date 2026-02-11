@@ -5,8 +5,8 @@ $catalog = $catalog ?? [];
 $siteSubs = $siteSubs ?? [];
 $registrarAccounts = $registrarAccounts ?? [];
 
-$serverIps = $serverIps ?? []; // array of strings
-$dnsA = $dnsA ?? [];           // array of strings
+$serverIps = $serverIps ?? [];
+$dnsA = $dnsA ?? [];
 
 function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 
@@ -15,7 +15,7 @@ $enabledMap  = [];
 foreach ($siteSubs as $r) {
     $lb = (string)($r['label'] ?? '');
     $attachedMap[$lb] = true;
-    $enVal = $r['enabled'] ?? ($r['is_enabled'] ?? 0); // совместимость
+    $enVal = $r['enabled'] ?? ($r['is_enabled'] ?? 0);
     $enabledMap[$lb] = ((int)$enVal === 1);
 }
 
@@ -58,7 +58,7 @@ $currentVpsIp = (string)($site['vps_ip'] ?? '');
                     <?php
                     $lb = (string)($row['label'] ?? '');
                     $isActive = (int)($row['is_active'] ?? 0) === 1;
-                    $attached = isset($attachedMap[$lb]); // привязан к сайту
+                    $attached = isset($attachedMap[$lb]);
                     $enabled  = $enabledMap[$lb] ?? false;
                     ?>
                     <label style="display:block;margin:4px 0;opacity:<?= $isActive ? '1' : '0.5' ?>">
@@ -109,10 +109,13 @@ document.getElementById('btnNone').addEventListener('click', function(){
 
 <h2>2) Текущие поддомены сайта</h2>
 
-<table border="1" cellpadding="6" cellspacing="0">
+<table border="1" cellpadding="6" cellspacing="0" style="width:100%;">
     <tr>
         <th>label</th>
         <th>enabled</th>
+        <th>folder_status</th>
+        <th>folder_updated_at</th>
+        <th>folder_error</th>
         <th>действия</th>
     </tr>
     <?php foreach ($siteSubs as $r): ?>
@@ -120,10 +123,21 @@ document.getElementById('btnNone').addEventListener('click', function(){
         $lb = (string)($r['label'] ?? '');
         $enVal = $r['enabled'] ?? ($r['is_enabled'] ?? 0);
         $en = (int)$enVal === 1;
+
+        $fs = (string)($r['folder_status'] ?? '');
+        $fe = (string)($r['folder_error'] ?? '');
+        $fu = (string)($r['folder_updated_at'] ?? '');
+
+        if ($fs === '') $fs = '—';
+        if ($fe === '') $fe = '—';
+        if ($fu === '') $fu = '—';
         ?>
         <tr>
             <td><?= h($lb) ?></td>
             <td><?= $en ? '1' : '0' ?></td>
+            <td><?= h($fs) ?></td>
+            <td><?= h($fu) ?></td>
+            <td><?= h($fe) ?></td>
             <td>
                 <form method="post" action="/sites/subdomains/toggle?id=<?= $siteId ?>" style="display:inline;">
                     <input type="hidden" name="label" value="<?= h($lb) ?>">
@@ -158,11 +172,12 @@ document.getElementById('btnNone').addEventListener('click', function(){
         <select name="registrar_account_id">
             <?php foreach ($registrarAccounts as $a): ?>
                 <?php
-                $id = (int)$a['id'];
+                $id = (int)($a['id'] ?? 0);
                 $sel = ((int)($site['registrar_account_id'] ?? 0) === $id) ? 'selected' : '';
+                $title = (string)($a['title'] ?? '');
                 ?>
                 <option value="<?= $id ?>" <?= $sel ?>>
-                    #<?= $id ?> <?= h($a['title'] ?? '') ?><?= ((int)($a['is_default'] ?? 0) === 1 ? ' (default)' : '') ?>
+                    #<?= $id ?> <?= h($title) ?><?= ((int)($a['is_default'] ?? 0) === 1 ? ' (default)' : '') ?>
                 </option>
             <?php endforeach; ?>
         </select>
@@ -188,7 +203,7 @@ document.getElementById('btnNone').addEventListener('click', function(){
         <?php endif; ?>
 
         <input id="ipInput" type="text" name="ip"
-               placeholder="например 1.2.3.4 (можно пусто, тогда попытаемся взять из DNS/сервера)"
+               placeholder="например 1.2.3.4"
                style="width:360px;"
                value="<?= h($currentVpsIp) ?>">
     </div>
