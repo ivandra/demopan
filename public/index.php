@@ -125,6 +125,10 @@ require APP_ROOT . '/app/Controllers/SubdomainsController.php';
 require APP_ROOT . '/app/Controllers/SiteSubdomainsController.php';
 require APP_ROOT . '/app/Controllers/SiteSubCfgController.php';
 
+require APP_ROOT .'/app/Controllers/WebmasterController.php';
+require APP_ROOT .'/app/Services/YandexWebmasterService.php';
+
+
 // ---------- 9) Route wrapper ----------
 function action($obj, string $method): callable {
     return function() use ($obj, $method) {
@@ -148,6 +152,7 @@ $registrarContacts = new RegistrarContactsController();
 $subdomains = new SubdomainsController();
 $siteSubs   = new SiteSubdomainsController();
 $siteSubCfg = new SiteSubCfgController();
+
 
 // Pages
 $router->get('/', action($site, 'index'));
@@ -249,8 +254,19 @@ $router->post('/sites/clone', action($site, 'cloneDo'));      // ?id=1
 // Список сайтов
 $router->get('/sites', action($site, 'index'));
 $router->get('/sites/', action($site, 'index'));
-
 $router->get('/sites/check-domain', action($site, 'checkDomain'));
+
+$wm = new WebmasterController();
+
+$router->get('/webmaster', action($wm, 'index'));
+$router->get('/webmaster/site', action($wm, 'site'));
+
+$router->post('/webmaster/sync', action($wm, 'sync'));
+$router->post('/webmaster/verify', action($wm, 'verify'));
+
+// оставь как есть:
+$router->get('/webmaster/connect', action($wm, 'connect'));
+$router->post('/webmaster/connect', action($wm, 'connectPost'));
 
 
 

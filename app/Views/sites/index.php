@@ -65,6 +65,8 @@
                 ❌
             <?php endif; ?>
         </td>
+		
+
 	<td>
   <?php
     $vpsOk = ((int)($site['fp_site_created'] ?? 0) === 1 && (int)($site['fp_site_id'] ?? 0) > 0);
@@ -110,7 +112,7 @@
     | <a href="/sites/pages?id=<?= (int)($site['id'] ?? 0) ?>">Pages</a>
     | <a href="/sites/texts?id=<?= (int)($site['id'] ?? 0) ?>">Texts</a>
     | <a href="/sites/files?id=<?= (int)($site['id'] ?? 0) ?>">Files</a>
-
+	| <a href="/webmaster/site?id=<?= (int)($site['id'] ?? 0) ?>">Webmaster</a>
     <?php if (!empty($site['build_path'])): ?>
         | <a href="/sites/export?id=<?= (int)($site['id'] ?? 0) ?>">ZIP</a>
     <?php endif; ?>

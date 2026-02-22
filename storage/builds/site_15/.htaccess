@@ -1,6 +1,19 @@
 RewriteEngine On
 RewriteBase /
 
+# --- Universal: map /yandex_*.html on any subdomain to /subs/<sub>/yandex_*.html ---
+# host: sub.example.tld  -> sub=%1, root=%2
+RewriteCond %{HTTP_HOST} ^([a-z0-9-]+)\.(.+)$ [NC]
+RewriteCond %{REQUEST_URI} ^/(yandex_[a-z0-9_]+\.html)$ [NC]
+
+# не трогаем, если файл реально есть в корне сайта
+RewriteCond %{DOCUMENT_ROOT}/%1 [!-f]
+
+# но если файл есть в subs/<sub>/ — отдаем его
+RewriteCond %{DOCUMENT_ROOT}/subs/%1/%1 -f
+
+RewriteRule ^(yandex_[a-z0-9_]+\.html)$ subs/%1/$1 [L,NC]
+
 # index.php -> /
 RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.php[\s?] [NC]
 RewriteRule ^(.*/)?index\.php$ https://%{HTTP_HOST}/%1 [R=301,L]
