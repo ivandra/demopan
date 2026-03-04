@@ -846,56 +846,288 @@ $ts = date('Ymd_His');
     // ----------------------------
     // Delete / export
     // ----------------------------
-    public function delete(): void
-    {
-        $this->requireAuth();
+public function delete(): void
+{
+    $this->requireAuth();
 
-        $siteId = (int)($_GET['id'] ?? 0);
-        if ($siteId <= 0) die('bad id');
+    $id = (int)($_GET['id'] ?? 0);
+    if ($id <= 0) {
+        $this->redirect('/sites');
+    }
 
-        $stmt = DB::pdo()->prepare("SELECT * FROM sites WHERE id=?");
-        $stmt->execute([$siteId]);
-        $site = $stmt->fetch();
-        if (!$site) {
-            $this->redirect('/');
+    $pdo = DB::pdo();
+
+    $st = $pdo->prepare("SELECT * FROM sites WHERE id = ? LIMIT 1");
+    $st->execute([$id]);
+    $site = $st->fetch(PDO::FETCH_ASSOC);
+
+    if (!$site) {
+        $this->redirect('/sites');
+    }
+
+    $domain = trim((string)($site['domain'] ?? ''));
+
+    // --- 1) соберём labels поддоменов (чтобы чистить DNS) ---
+    $stSubs = $pdo->prepare("
+        SELECT label
+        FROM site_subdomains
+        WHERE site_id = ?
+          AND label <> ''
+          AND label <> '_default'
+    ");
+    $stSubs->execute([$id]);
+
+    $subLabels = [];
+    foreach ($stSubs->fetchAll(PDO::FETCH_ASSOC) as $r) {
+        $lb = trim((string)($r['label'] ?? ''));
+        if ($lb !== '') $subLabels[] = $lb;
+    }
+
+// --- 2) DNS cleanup (best-effort) ---
+// --- 2) DNS cleanup (best-effort) ---
+try {
+    $domain = trim((string)($site['domain'] ?? ''));
+    if ($domain === '' || empty($subLabels)) {
+        hub_log('SITE_DELETE_DNS_SKIP', [
+            'site_id' => $id,
+            'domain'  => $domain,
+            'labels'  => count($subLabels),
+            'reason'  => 'no_domain_or_no_labels',
+        ]);
+    } else {
+
+        // account: приоритет — site.registrar_account_id, иначе дефолтный prod, иначе любой
+        $accId = (int)($site['registrar_account_id'] ?? 0);
+        $acc = null;
+
+        if ($accId > 0) {
+            $accSt = $pdo->prepare("SELECT * FROM registrar_accounts WHERE id = ? LIMIT 1");
+            $accSt->execute([$accId]);
+            $acc = $accSt->fetch(PDO::FETCH_ASSOC);
         }
 
-        $buildRel = (string)($site['build_path'] ?? '');
-        $buildAbs = $buildRel !== '' ? $this->toBuildAbs($buildRel) : '';
-        $generatedAbs = Paths::storage('generated/site_' . $siteId);
+        if (!$acc) {
+            $accSt = $pdo->prepare("SELECT * FROM registrar_accounts WHERE provider='namecheap' AND is_default=1 AND is_sandbox=0 ORDER BY id DESC LIMIT 1");
+            $accSt->execute();
+            $acc = $accSt->fetch(PDO::FETCH_ASSOC);
+        }
 
-        DB::pdo()->beginTransaction();
+        if (!$acc) {
+            $accSt = $pdo->prepare("SELECT * FROM registrar_accounts WHERE provider='namecheap' ORDER BY is_default DESC, is_sandbox ASC, id DESC LIMIT 1");
+            $accSt->execute();
+            $acc = $accSt->fetch(PDO::FETCH_ASSOC);
+        }
 
-        try {
-            // variant 2: чистим все таблицы, связанные с template-multy
-            DB::pdo()->prepare("DELETE FROM site_subdomain_configs WHERE site_id=?")->execute([$siteId]);
-            DB::pdo()->prepare("DELETE FROM site_default_configs WHERE site_id=?")->execute([$siteId]);
-            DB::pdo()->prepare("DELETE FROM site_subdomains WHERE site_id=?")->execute([$siteId]);
+        if (!$acc) {
+            hub_log('SITE_DELETE_DNS_NO_ACCOUNT', ['site_id' => $id, 'domain' => $domain]);
+        } else {
 
-            DB::pdo()->prepare("DELETE FROM site_configs WHERE site_id=?")->execute([$siteId]);
-            DB::pdo()->prepare("DELETE FROM sites WHERE id=?")->execute([$siteId]);
+            $sandbox = (int)($acc['is_sandbox'] ?? 1) === 1;
 
-            DB::pdo()->commit();
+            // создаём клиента корректно (endpoint фиксирован)
+            $nc = $this->makeNamecheapClientFromAccount($acc);
 
-            if ($buildAbs !== '' && is_dir($buildAbs)) {
-                $this->rrmdir($buildAbs);
+            // splitSldTld: делаем максимально “живуче” под разные реализации
+            $parts = $nc->splitSldTld($domain);
+
+            $sld = null;
+            $tld = null;
+
+            if (is_array($parts)) {
+                if (isset($parts['sld'], $parts['tld'])) {
+                    $sld = (string)$parts['sld'];
+                    $tld = (string)$parts['tld'];
+                } elseif (count($parts) >= 2) {
+                    $vals = array_values($parts);
+                    $sld = (string)$vals[0];
+                    $tld = (string)$vals[1];
+                }
             }
-            if (is_dir($generatedAbs)) {
-                $this->rrmdir($generatedAbs);
-            }
 
-            $zipPath = Paths::storage('zips/site_' . $siteId . '.zip');
-            if (is_file($zipPath)) {
-                @unlink($zipPath);
-            }
+            if (!$sld || !$tld) {
+                hub_log('SITE_DELETE_DNS_SKIP', [
+                    'site_id' => $id,
+                    'domain'  => $domain,
+                    'labels'  => count($subLabels),
+                    'reason'  => 'splitSldTld_failed',
+                    'parts'   => $parts,
+                ]);
+            } else {
 
-            $this->redirect('/');
-        } catch (Throwable $e) {
-            DB::pdo()->rollBack();
-            http_response_code(500);
-            echo $e->getMessage();
+                $hosts = $nc->getHosts($sld, $tld);
+
+                // удаляем записи: label и www.label
+                $remove = [];
+                foreach ($subLabels as $lb) {
+                    $remove[$lb] = true;
+                    $remove['www.' . $lb] = true;
+                }
+
+                $filtered = [];
+                $removed = [];
+
+                foreach ($hosts as $h) {
+                    $hostName = (string)($h['host'] ?? '');
+                    if ($hostName !== '' && isset($remove[$hostName])) {
+                        $removed[] = $hostName;
+                        continue;
+                    }
+                    $filtered[] = $h;
+                }
+
+                if (!empty($removed)) {
+                    $nc->setHosts($sld, $tld, $filtered);
+
+                    hub_log('SITE_DELETE_DNS_OK', [
+                        'site_id' => $id,
+                        'domain'  => $domain,
+                        'sandbox' => $sandbox ? 1 : 0,
+                        'removed' => $removed,
+                        'count'   => count($removed),
+                    ]);
+                } else {
+                    hub_log('SITE_DELETE_DNS_NOTHING_TO_REMOVE', [
+                        'site_id' => $id,
+                        'domain'  => $domain,
+                        'sandbox' => $sandbox ? 1 : 0,
+                        'labels'  => $subLabels,
+                    ]);
+                }
+            }
         }
     }
+} catch (Throwable $e) {
+    hub_log('SITE_DELETE_DNS_ERROR', [
+        'site_id' => $id,
+        'err'     => $e->getMessage(),
+    ]);
+}
+
+    // --- 3) FastPanel delete site (best-effort) ---
+    try {
+        $fpSiteId = (int)($site['fp_site_id'] ?? 0);
+        $serverId = (int)($site['fastpanel_server_id'] ?? 0);
+
+        if ($fpSiteId > 0 && $serverId > 0) {
+            $srvSt = $pdo->prepare("SELECT * FROM fastpanel_servers WHERE id = ? LIMIT 1");
+            $srvSt->execute([$serverId]);
+            $srv = $srvSt->fetch(PDO::FETCH_ASSOC);
+
+            if ($srv) {
+                $host = (string)($srv['host'] ?? '');
+                $user = (string)($srv['username'] ?? '');
+                $pass = Crypto::decrypt((string)($srv['password_enc'] ?? ''));
+                $verifyTls = (int)($srv['verify_tls'] ?? 0) === 1;
+
+                $fp = new FastpanelClient($host, $verifyTls);
+                $fp->login($user, $pass);
+
+                $res = $fp->deleteSite($fpSiteId);
+
+                hub_log('SITE_DELETE_FASTPANEL_OK', [
+                    'site_id'   => $id,
+                    'fp_site_id'=> $fpSiteId,
+                    'server_id' => $serverId,
+                    'res'       => $res,
+                ]);
+            } else {
+                hub_log('SITE_DELETE_FASTPANEL_SKIP_NO_SERVER', ['site_id' => $id, 'server_id' => $serverId]);
+            }
+        } else {
+            hub_log('SITE_DELETE_FASTPANEL_SKIP', ['site_id' => $id, 'fp_site_id' => $fpSiteId, 'server_id' => $serverId]);
+        }
+    } catch (Throwable $e) {
+        hub_log('SITE_DELETE_FASTPANEL_ERROR', ['site_id' => $id, 'err' => $e->getMessage()]);
+    }
+
+    // --- 4) удалить локальный build (best-effort) ---
+    try {
+        $buildPath = trim((string)($site['build_path'] ?? ''));
+        $abs = $buildPath !== '' ? Paths::storage($buildPath) : Paths::storage('builds/site_' . $id);
+        if (is_dir($abs)) {
+            // в твоём проекте есть rrmdir(), rmDir мог быть удалён/переименован
+            if (method_exists($this, 'rrmdir')) {
+                $this->rrmdir($abs);
+            } elseif (method_exists($this, 'rmDir')) {
+                $this->rmDir($abs);
+            } else {
+                // last resort (очень простой рекурсивный удалятор)
+                $it = new RecursiveDirectoryIterator($abs, FilesystemIterator::SKIP_DOTS);
+                $ri = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+                foreach ($ri as $file) {
+                    $file->isDir() ? @rmdir($file->getPathname()) : @unlink($file->getPathname());
+                }
+                @rmdir($abs);
+            }
+        }
+    } catch (Throwable $e) {
+        hub_log('SITE_DELETE_BUILD_ERROR', ['site_id' => $id, 'err' => $e->getMessage()]);
+    }
+
+    // --- 5) удалить сайт из БД (каскадом уйдут зависимые таблицы) ---
+    $del = $pdo->prepare("DELETE FROM sites WHERE id = ? LIMIT 1");
+    $del->execute([$id]);
+
+    $this->redirect('/sites');
+}
+
+/**
+ * Аккуратно вычисляет абсолютный путь к build-папке,
+ * учитывая, что build_path может быть:
+ * - builds/site_15
+ * - storage/builds/site_9
+ * - storage/builds/site_9/...
+ */
+private function resolveBuildAbsForDelete(array $site): string
+{
+    $id = (int)($site['id'] ?? 0);
+
+    $buildRel = trim((string)($site['build_path'] ?? ''));
+    if ($buildRel === '') {
+        $buildRel = 'builds/site_' . $id;
+    }
+
+    $buildRel = str_replace('\\', '/', $buildRel);
+    $buildRel = ltrim($buildRel, '/');
+
+    // Если в БД лежит "storage/...." — убираем префикс, потому что Paths::storage()
+    // сам уже указывает на storage-root.
+    if (strpos($buildRel, 'storage/') === 0) {
+        $buildRel = substr($buildRel, strlen('storage/'));
+    }
+
+    // минимальная защита от ../
+    if (preg_match('~(^|/)\.\.(?:/|$)~', $buildRel)) {
+        return '';
+    }
+
+    return rtrim(Paths::storage($buildRel), "/\\");
+}
+
+/**
+ * Рекурсивное удаление папки.
+ */
+private function rmDir(string $dir): void
+{
+    if (!is_dir($dir)) return;
+
+    $items = @scandir($dir);
+    if ($items === false) return;
+
+    foreach ($items as $name) {
+        if ($name === '.' || $name === '..') continue;
+
+        $p = rtrim($dir, "/\\") . '/' . $name;
+
+        if (is_dir($p)) {
+            $this->rmDir($p);
+        } else {
+            @unlink($p);
+        }
+    }
+
+    @rmdir($dir);
+}
 
     public function exportZip(): void
     {
@@ -1808,8 +2040,8 @@ public function cloneDo(): void
         $prov->ensureForSite($newSiteId, (string)$lb);
     }
 
-    $this->redirect('/sites/edit?id=' . $newSiteId);
-    exit;
+    $this->redirect('/sites/clone/done?id=' . $newSiteId);
+	return;
 }
 
 // ----------------------------
@@ -1859,6 +2091,105 @@ private function fetchSslMonitorStatusForSites(array $sites): array
     }
 
     return $map;
+}
+
+// GET /sites/clone/done?id=123
+public function cloneDone(): void
+{
+    $this->requireAuth();
+
+    $siteId = (int)($_GET['id'] ?? 0);
+    if ($siteId <= 0) {
+        $this->redirect('/sites');
+        return;
+    }
+
+    $site = DB::withReconnect(function(PDO $pdo) use ($siteId) {
+        $st = $pdo->prepare("SELECT * FROM sites WHERE id=? LIMIT 1");
+        $st->execute([$siteId]);
+        return $st->fetch(PDO::FETCH_ASSOC) ?: null;
+    });
+
+    if (!$site) {
+        $_SESSION['wm_log'][] = "cloneDone: site not found id={$siteId}";
+        $this->redirect('/sites');
+        return;
+    }
+
+    // Для UI полезно понять “есть ли сабы”
+    $subStats = DB::withReconnect(function(PDO $pdo) use ($siteId) {
+        $st = $pdo->prepare("
+            SELECT
+              SUM(CASE WHEN enabled=1 THEN 1 ELSE 0 END) AS enabled_cnt,
+              COUNT(*) AS total_cnt
+            FROM site_subdomains
+            WHERE site_id=?
+        ");
+        $st->execute([$siteId]);
+        $r = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+        return [
+            'enabled' => (int)($r['enabled_cnt'] ?? 0),
+            'total'   => (int)($r['total_cnt'] ?? 0),
+        ];
+    });
+
+    $this->view('sites/clone_done', [
+        'site' => $site,
+        'siteId' => $siteId,
+        'subStats' => $subStats,
+    ]);
+}
+
+private function makeNamecheapClientFromAccount(array $acc): NamecheapClient
+{
+    $apiUser   = (string)($acc['api_user'] ?? '');
+    $apiKeyEnc = (string)($acc['api_key_enc'] ?? '');
+    $username  = (string)($acc['username'] ?? '');
+    $clientIp  = (string)($acc['client_ip'] ?? '');
+    $sandbox   = (int)($acc['is_sandbox'] ?? 1) === 1;
+
+    $apiKey = Crypto::decrypt($apiKeyEnc);
+
+    // ВАЖНО:
+    // В твоей сборке NamecheapClient, судя по ошибке curl, ПЕРВЫЙ аргумент скорее всего baseUrl/host.
+    // Поэтому задаём endpoint явно.
+    $endpoint = $sandbox
+        ? 'https://api.sandbox.namecheap.com/xml.response'
+        : 'https://api.namecheap.com/xml.response';
+
+    // Пробуем несколько наиболее вероятных сигнатур конструктора.
+    // Если первая не подошла — упадёт TypeError, пойдём дальше.
+    $ctors = [
+        // (endpoint, apiUser, apiKey, username, clientIp)
+        fn() => new NamecheapClient($endpoint, $apiUser, $apiKey, $username, $clientIp),
+
+        // (endpoint, username, apiKey, apiUser, clientIp)
+        fn() => new NamecheapClient($endpoint, $username, $apiKey, $apiUser, $clientIp),
+
+        // (apiUser, apiKey, username, clientIp, sandbox) — старый вариант, если он у тебя был
+        fn() => new NamecheapClient($apiUser, $apiKey, $username, $clientIp, $sandbox),
+
+        // (apiUser, apiKey, username, clientIp) — без sandbox
+        fn() => new NamecheapClient($apiUser, $apiKey, $username, $clientIp),
+    ];
+
+    $lastErr = null;
+
+    foreach ($ctors as $make) {
+        try {
+            $nc = $make();
+
+            // “Проверка на жизнь”: если метод есть — вызовем лёгкую операцию split
+            // (если внутри он не делает запрос, ок).
+            // Главное — вернуть объект без TypeError.
+            return $nc;
+        } catch (TypeError $e) {
+            $lastErr = $e->getMessage();
+            continue;
+        }
+    }
+
+    throw new RuntimeException('Cannot construct NamecheapClient. Last error: ' . ($lastErr ?? 'unknown'));
 }
 
 }

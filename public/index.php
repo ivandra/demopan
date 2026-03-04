@@ -260,6 +260,7 @@ $router->post('/sites/subcfg/regenAll', action($siteSubCfg, 'regenAll'));
 
 $router->get('/sites/clone', action($clone, 'cloneForm'));     // ?id=1
 $router->post('/sites/clone', action($clone, 'cloneDo'));      // ?id=1
+$router->get('/sites/clone/done', action($site, 'cloneDone')); // ?id=<newSiteId>
 
 // Список сайтов
 $router->get('/sites', action($site, 'index'));

@@ -308,18 +308,28 @@ class FastpanelClient
 	 * 1) DELETE /api/sites/{id}/status
 	 * 2) DELETE /api/sites/{id}
 	 */
-	public function deleteSite(int $id): array
-	{
-		try {
-			return $this->request('DELETE', '/api/sites/' . $id . '/status');
-		} catch (RuntimeException $e) {
-			// если конкретно 404 — пробуем другой endpoint
-			if (strpos($e->getMessage(), 'HTTP 404') !== false || strpos($e->getMessage(), '404 page not found') !== false) {
-				return $this->request('DELETE', '/api/sites/' . $id);
-			}
-			throw $e;
-		}
-	}
+public function deleteSite(int $id): array
+{
+    // 1) Сначала пробуем нормальный DELETE /api/sites/{id}
+    try {
+        return $this->request('DELETE', "/api/sites/{$id}", null);
+    } catch (Throwable $e) {
+        // fallback ниже
+    }
+
+    // 2) Fallback для панелей, где удаление сделано через status
+    // (встречается в некоторых сборках)
+    try {
+        return $this->request('DELETE', "/api/sites/{$id}/status", [
+            'status' => 'delete',
+        ]);
+    } catch (Throwable $e) {
+        // 3) Ещё один fallback: некоторые принимают PUT + status
+        return $this->request('PUT', "/api/sites/{$id}/status", [
+            'status' => 'delete',
+        ]);
+    }
+}
 
 	public function addSiteAliases(int $siteId, array $fqdns): array
 {
