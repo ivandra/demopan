@@ -1,18 +1,30 @@
 RewriteEngine On
 RewriteBase /
 
-# --- Universal: map /yandex_*.html on any subdomain to /subs/<sub>/yandex_*.html ---
-# host: sub.example.tld  -> sub=%1, root=%2
-RewriteCond %{HTTP_HOST} ^([a-z0-9-]+)\.(.+)$ [NC]
+# ==============================
+# Yandex verification yandex_*.html
+# ==============================
+
+# 0) Вычисляем поддомен в ENV:SUB (banda.kazik1.casino -> SUB=banda)
+RewriteCond %{HTTP_HOST} ^([a-z0-9-]+)\..+$ [NC]
+RewriteRule ^ - [E=SUB:%1]
+
+# 1) Если файл yandex_*.html реально лежит в текущем DOCUMENT_ROOT (основной домен или если вхост так настроен) — отдаем как есть
 RewriteCond %{REQUEST_URI} ^/(yandex_[a-z0-9_]+\.html)$ [NC]
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
 
-# не трогаем, если файл реально есть в корне сайта
-RewriteCond %{DOCUMENT_ROOT}/%1 [!-f]
+# 2) Если это поддомен и файл лежит в /subs/<sub>/ — отдаем его
+RewriteCond %{REQUEST_URI} ^/(yandex_[a-z0-9_]+\.html)$ [NC]
+RewriteCond %{ENV:SUB} !^$
+RewriteCond %{DOCUMENT_ROOT}/subs/%{ENV:SUB}/$1 -f
+RewriteRule ^(yandex_[a-z0-9_]+\.html)$ subs/%{ENV:SUB}/$1 [L,NC]
 
-# но если файл есть в subs/<sub>/ — отдаем его
-RewriteCond %{DOCUMENT_ROOT}/subs/%1/%1 -f
-
-RewriteRule ^(yandex_[a-z0-9_]+\.html)$ subs/%1/$1 [L,NC]
+# (опционально) если хочешь для основного домена тоже хранить файл в subs/_default/
+RewriteCond %{REQUEST_URI} ^/(yandex_[a-z0-9_]+\.html)$ [NC]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}/subs/_default/$1 -f
+RewriteRule ^(yandex_[a-z0-9_]+\.html)$ subs/_default/$1 [L,NC]
 
 # index.php -> /
 RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.php[\s?] [NC]

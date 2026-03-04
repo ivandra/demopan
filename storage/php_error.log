@@ -1,73 +1,263 @@
-[16-Feb-2026 02:36:42 Europe/Moscow] PHP Fatal error:  Cannot redeclare YandexWebmasterService::getWebmasterHostsRows() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 740
-[16-Feb-2026 02:38:43 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 02:38:43 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 02:38:43 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 02:38:43 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 02:38:43 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 02:38:43 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 02:38:43 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 02:40:25 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method YandexWebmasterService::getDesiredHostsForSite() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/WebmasterController.php:48
+[25-Feb-2026 02:13:23 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
+[25-Feb-2026 02:13:24 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://banda.kazik1.casino/sitemap.xml"}
+[25-Feb-2026 02:14:07 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
+[25-Feb-2026 02:14:07 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/user-added-sitemaps BODY=
+[25-Feb-2026 02:14:08 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3A_default.kazik1.casino%3A443/user-added-sitemaps BODY=
+[25-Feb-2026 02:14:08 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3A_default.kazik1.casino%3A443/sitemaps BODY=
+[25-Feb-2026 02:14:15 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
+[25-Feb-2026 02:14:15 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/user-added-sitemaps BODY=
+[25-Feb-2026 02:14:30 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
+[25-Feb-2026 02:14:30 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://kazik1.casino/sitemap.xml"}
+[25-Feb-2026 02:14:30 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://banda.kazik1.casino/sitemap.xml"}
+[25-Feb-2026 02:14:30 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/sitemaps BODY={"url":"https://banda.kazik1.casino/sitemap.xml"}
+[27-Feb-2026 10:01:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
+[27-Feb-2026 10:01:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/user-added-sitemaps BODY=
+[27-Feb-2026 10:01:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/user-added-sitemaps BODY=
+[27-Feb-2026 10:01:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik1.casino%3A443/user-added-sitemaps BODY=
+[27-Feb-2026 10:01:51 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://beef.kazik1.casino/sitemap.xml"}
+[27-Feb-2026 10:01:51 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik1.casino%3A443/user-added-sitemaps BODY=
+[27-Feb-2026 10:01:51 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://betera.kazik1.casino/sitemap.xml"}
+[27-Feb-2026 10:01:51 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik1.casino%3A443/user-added-sitemaps BODY=
+[27-Feb-2026 10:01:51 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://booi.kazik1.casino/sitemap.xml"}
+[27-Feb-2026 10:01:51 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Aboost.kazik1.casino%3A443/user-added-sitemaps BODY=
+[27-Feb-2026 10:01:52 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Aboost.kazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://boost.kazik1.casino/sitemap.xml"}
+[27-Feb-2026 11:14:56 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
+[27-Feb-2026 11:14:56 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/recrawl/queue BODY={"url":"https://kazik1.casino/"}
+[27-Feb-2026 11:14:56 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/recrawl/queue BODY={"url":"https://kazik1.casino/test"}
+[27-Feb-2026 11:14:56 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://banda.kazik1.casino/"}
+[27-Feb-2026 11:14:57 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://banda.kazik1.casino/demo"}
+[27-Feb-2026 11:14:57 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://beef.kazik1.casino/"}
+[27-Feb-2026 11:14:57 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://betera.kazik1.casino/"}
+[27-Feb-2026 11:14:57 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://betera.kazik1.casino/test"}
+[27-Feb-2026 11:14:57 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://booi.kazik1.casino/"}
+[27-Feb-2026 11:14:57 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://booi.kazik1.casino/test"}
+[27-Feb-2026 11:14:58 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Aboost.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://boost.kazik1.casino/"}
+[27-Feb-2026 11:14:58 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Aboost.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://boost.kazik1.casino/test"}
+[27-Feb-2026 11:18:40 Europe/Moscow] availableIps count=6 siteId=15
+[27-Feb-2026 11:18:46 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[27-Feb-2026 11:18:46 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[27-Feb-2026 11:18:46 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[03-Mar-2026 23:48:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
 Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(135): WebmasterController->site()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(296): Router->dispatch()
-#3 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/WebmasterController.php on line 48
-[16-Feb-2026 02:40:27 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method YandexWebmasterService::getDesiredHostsForSite() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/WebmasterController.php:48
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(135): WebmasterController->site()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(296): Router->dispatch()
-#3 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/WebmasterController.php on line 48
-[16-Feb-2026 02:40:28 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method YandexWebmasterService::getDesiredHostsForSite() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/WebmasterController.php:48
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(135): WebmasterController->site()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(296): Router->dispatch()
-#3 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/WebmasterController.php on line 48
-[16-Feb-2026 02:40:28 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method YandexWebmasterService::getDesiredHostsForSite() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/WebmasterController.php:48
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(135): WebmasterController->site()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(296): Router->dispatch()
-#3 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/WebmasterController.php on line 48
-[16-Feb-2026 02:40:50 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method YandexWebmasterService::getDesiredHostsForSite() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/WebmasterController.php:48
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(135): WebmasterController->site()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(296): Router->dispatch()
-#3 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/WebmasterController.php on line 48
-[16-Feb-2026 02:42:47 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 02:42:47 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to a member function decrypt() on null in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php:107
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/WebmasterController.php(14): YandexWebmasterService->getSettings()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(135): WebmasterController->index()
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
 #2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(296): Router->dispatch()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
 #4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 02:42:52 Europe/Moscow] [NC listAccounts] rows=2
-[16-Feb-2026 02:42:52 Europe/Moscow] [availableIps] count=6 siteId=15
-[16-Feb-2026 02:42:52 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
-[16-Feb-2026 12:40:12 Europe/Moscow] [NC listAccounts] rows=2
-[16-Feb-2026 12:40:12 Europe/Moscow] [availableIps] count=6 siteId=15
-[16-Feb-2026 12:40:12 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
-[16-Feb-2026 16:14:10 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 16:14:10 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 16:14:10 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 16:14:10 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 16:14:10 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 16:14:10 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 16:14:10 Europe/Moscow] PHP Warning:  Undefined property: YandexWebmasterService::$crypto in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 107
-[16-Feb-2026 19:49:03 Europe/Moscow] PHP Fatal error:  Cannot declare class YandexWebmasterService, because the name is already in use in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 4
-[16-Feb-2026 19:49:04 Europe/Moscow] PHP Fatal error:  Cannot declare class YandexWebmasterService, because the name is already in use in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Services/YandexWebmasterService.php on line 4
-[16-Feb-2026 19:55:41 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
-[16-Feb-2026 19:55:41 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
-[16-Feb-2026 19:55:41 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
-[16-Feb-2026 19:55:41 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
-[16-Feb-2026 19:55:41 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
-[16-Feb-2026 19:55:41 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[03-Mar-2026 23:49:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[03-Mar-2026 23:50:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[03-Mar-2026 23:51:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[03-Mar-2026 23:52:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[03-Mar-2026 23:53:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[03-Mar-2026 23:54:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[03-Mar-2026 23:55:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[03-Mar-2026 23:56:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[03-Mar-2026 23:57:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[03-Mar-2026 23:58:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[03-Mar-2026 23:59:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:00:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:01:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:02:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:03:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:04:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:05:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:06:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:07:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:08:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:09:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:10:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:11:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:12:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:13:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:14:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 00:15:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
+#4 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28

@@ -23,10 +23,19 @@ $cfg = array (
     '/404' => 
     array (
       'title' => '404 — Страница не найдена',
+      'h1' => '$inherit',
       'description' => 'Страница не найдена',
-      'keywords' => '',
+      'keywords' => '$inherit',
       'text_file' => '404.php',
       'sitemap' => false,
+    ),
+    '/test' => 
+    array (
+      'title' => '$inherit',
+      'h1' => '$inherit',
+      'description' => '$inherit',
+      'keywords' => '$inherit',
+      'text_file' => 'game.php',
     ),
   ),
   'partner_override_url' => '',

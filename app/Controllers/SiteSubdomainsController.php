@@ -635,6 +635,14 @@ class SiteSubdomainsController extends Controller
 
     $labels = array_keys($labelsMap);
     sort($labels);
+	
+	try {
+		require_once __DIR__ . '/../Services/SslCheckService.php';
+		$sslSvc = new SslCheckService();
+		$sslSvc->syncTargetsFromDb($siteId, true);
+	} catch (Throwable $e) {
+		@error_log('[ssl_checks sync] applyBatch site_id=' . $siteId . ' err=' . $e->getMessage());
+	}
 
     if (empty($labels)) {
         $this->redirect('/sites/subdomains?id=' . $siteId);
@@ -1039,6 +1047,14 @@ class SiteSubdomainsController extends Controller
         if ($doDb) {
             $pdo->prepare("DELETE FROM site_subdomains WHERE site_id=? AND label<>'_default'")->execute([$siteId]);
         }
+		
+		try {
+			require_once __DIR__ . '/../Services/SslCheckService.php';
+			$sslSvc = new SslCheckService();
+			$sslSvc->syncTargetsFromDb($siteId, true);
+		} catch (Throwable $e) {
+			@error_log('[ssl_checks sync] deleteCatalog site_id=' . $siteId . ' err=' . $e->getMessage());
+		}
 
         $this->redirect('/sites/subdomains?id=' . $siteId);
     }
@@ -1051,10 +1067,19 @@ class SiteSubdomainsController extends Controller
         if ($siteId <= 0) die('bad id');
 
         $label = strtolower(trim((string)($_POST['label'] ?? '')));
+
         if ($label !== '') {
             DB::pdo()->prepare("UPDATE site_subdomains SET enabled=IF(enabled=1,0,1) WHERE site_id=? AND label=? LIMIT 1")
                 ->execute([$siteId, $label]);
         }
+		
+		try {
+			require_once __DIR__ . '/../Services/SslCheckService.php';
+			$sslSvc = new SslCheckService();
+			$sslSvc->syncTargetsFromDb($siteId, true);
+		} catch (Throwable $e) {
+			@error_log('[ssl_checks sync] toggleOne site_id=' . $siteId . ' err=' . $e->getMessage());
+		}
 
         $this->redirect('/sites/subdomains?id=' . $siteId);
     }
@@ -1071,6 +1096,16 @@ class SiteSubdomainsController extends Controller
         $label = strtolower(trim((string)($_POST['label'] ?? '')));
         if ($label !== '' && $label !== '_default') {
             DB::pdo()->prepare("DELETE FROM site_subdomains WHERE site_id=? AND label=? LIMIT 1")->execute([$siteId, $label]);
+			
+			try {
+    DB::pdo()->prepare("
+        DELETE FROM ssl_checks
+        WHERE site_id = ? AND label = ?
+        LIMIT 1
+    ")->execute([$siteId, $label]);
+} catch (Throwable $e) {
+    @error_log('[SSL deleteOne cleanup] site_id=' . $siteId . ' label=' . $label . ' err=' . $e->getMessage());
+}
 
             $site = $this->loadSite($siteId);
             if (($site['template'] ?? '') === 'template-multy') {
@@ -1094,6 +1129,16 @@ class SiteSubdomainsController extends Controller
         if ($siteId <= 0) die('bad id');
 
         DB::pdo()->prepare("DELETE FROM site_subdomains WHERE site_id=?")->execute([$siteId]);
+		
+		// E) SSL monitor cleanup: удаляем все проверки поддоменов, root оставляем
+try {
+    DB::pdo()->prepare("
+        DELETE FROM ssl_checks
+        WHERE site_id = ? AND label <> ''
+    ")->execute([$siteId]);
+} catch (Throwable $e) {
+    @error_log('[SSL deleteAll cleanup] site_id=' . $siteId . ' err=' . $e->getMessage());
+}
 
         $this->redirect('/sites/subdomains?id=' . $siteId);
     }

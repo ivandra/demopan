@@ -113,6 +113,11 @@ require APP_ROOT . '/app/Services/SubdomainProvisioner.php';
 require APP_ROOT . '/app/Services/ZipBuilder.php';
 require APP_ROOT . '/app/Services/ZipService.php';
 
+require APP_ROOT .'/app/Services/YandexWebmasterService.php';
+
+require APP_ROOT . '/app/Services/SslCheckService.php';
+require APP_ROOT . '/app/Services/TelegramService.php'; 
+
 // ---------- 8) Controllers ----------
 require APP_ROOT . '/app/Controllers/AuthController.php';
 require APP_ROOT . '/app/Controllers/SiteController.php';
@@ -124,9 +129,10 @@ require APP_ROOT . '/app/Controllers/RegistrarContactsController.php';
 require APP_ROOT . '/app/Controllers/SubdomainsController.php';
 require APP_ROOT . '/app/Controllers/SiteSubdomainsController.php';
 require APP_ROOT . '/app/Controllers/SiteSubCfgController.php';
+require APP_ROOT . '/app/Controllers/SslController.php';
 
 require APP_ROOT .'/app/Controllers/WebmasterController.php';
-require APP_ROOT .'/app/Services/YandexWebmasterService.php';
+
 
 
 // ---------- 9) Route wrapper ----------
@@ -144,6 +150,8 @@ $deploy = new DeployController();
 
 $auth = new AuthController();
 $site = new SiteController();
+
+
 
 $domains           = new DomainsController();
 $registrarAccounts = new RegistrarAccountsController();
@@ -266,8 +274,41 @@ $router->post('/webmaster/verify', action($wm, 'verify'));
 
 // оставь как есть:
 $router->get('/webmaster/connect', action($wm, 'connect'));
-$router->post('/webmaster/connect', action($wm, 'connectPost'));
+$router->post('/webmaster/connect', action($wm, 'connect'));  
 
+$router->post('/webmaster/recrawl', action($wm, 'recrawl'));
+
+$router->post('/webmaster/sitemap/add', action($wm, 'sitemapAdd'));
+$router->post('/webmaster/sitemap/get', action($wm, 'sitemapGet'));
+$router->post('/webmaster/robots/confirm', action($wm, 'robotsConfirm'));
+$router->post('/webmaster/robots/get', action($wm, 'robotsGet')); 
+
+$router->get('/webmaster/pages-urls', action($wm, 'pagesUrls'));
+
+$router->post('/webmaster/recrawl', action($wm, 'recrawl'));
+$router->post('/webmaster/recrawl-from-pages', action($wm, 'recrawlFromPages'));
+
+// SSL monitor
+$ssl = new SslController();
+
+$router->get('/ssl', action($ssl, 'index'));
+
+$router->post('/ssl/add', action($ssl, 'add'));
+$router->post('/ssl/delete', action($ssl, 'delete'));
+$router->post('/ssl/delete-selected', action($ssl, 'deleteSelected'));
+
+$router->post('/ssl/toggle', action($ssl, 'toggle'));
+$router->post('/ssl/notify', action($ssl, 'notify'));
+
+// per-site page + force check
+$router->get('/ssl/site', action($ssl, 'site'));
+$router->post('/ssl/site/check-now', action($ssl, 'siteCheckNow'));
+
+// cron endpoint
+$router->get('/ssl/cron', action($ssl, 'cron'));
+$router->post('/ssl/check-now', action($ssl, 'checkNow'));
+$router->get('/ssl/settings', action($ssl, 'settings'));
+$router->post('/ssl/settings', action($ssl, 'settingsSave'));
 
 
 // Debug

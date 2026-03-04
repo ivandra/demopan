@@ -33,10 +33,18 @@ class SiteController extends Controller
 
         $sites = DB::pdo()->query('SELECT * FROM sites ORDER BY id DESC')->fetchAll();
         $sslMap = $this->fetchSslStatusForSites($sites);
+		$sslMonMap = $this->fetchSslMonitorStatusForSites($sites);
 
         foreach ($sites as &$s) {
             $id = (int)($s['id'] ?? 0);
             $st = $sslMap[$id] ?? [];
+			
+			$mon = $sslMonMap[$id] ?? [];
+
+			$s['ssl_mon_total'] = (int)($mon['total'] ?? 0);
+			$s['ssl_mon_ok']    = (int)($mon['ok'] ?? 0);
+			$s['ssl_mon_all_ok']= (int)($mon['all_ok'] ?? 0);
+			$s['ssl_mon_last']  = (string)($mon['last'] ?? '');
 
             $s['ssl_ready']    = (int)($st['ready'] ?? 0);
             $s['ssl_has_cert'] = (int)($st['has_cert'] ?? 0);
@@ -969,11 +977,11 @@ $ts = date('Ymd_His');
         $domain   = (string)($siteRow['domain'] ?? ($cfg['domain'] ?? ''));
 
         if ($siteRow && !empty($siteRow['build_path'])) {
-            $dir = Paths::appRoot() . '/' . ltrim((string)$siteRow['build_path'], '/');
-        } else {
-            $dir = Paths::storage('generated/site_' . $siteId);
-            Paths::ensureDir($dir);
-        }
+			$dir = $this->toBuildAbs((string)$siteRow['build_path']);
+		} else {
+			$dir = Paths::storage('generated/site_' . $siteId);
+			Paths::ensureDir($dir);
+		}
 
         $this->log('REGEN.start', [
             'siteId' => $siteId,
@@ -1802,6 +1810,55 @@ public function cloneDo(): void
 
     $this->redirect('/sites/edit?id=' . $newSiteId);
     exit;
+}
+
+// ----------------------------
+// SSL monitor status (ssl_checks)
+// ----------------------------
+private function fetchSslMonitorStatusForSites(array $sites): array
+{
+    $siteIds = [];
+    foreach ($sites as $s) {
+        $id = (int)($s['id'] ?? 0);
+        if ($id > 0) $siteIds[] = $id;
+    }
+    $siteIds = array_values(array_unique($siteIds));
+    if (empty($siteIds)) return [];
+
+    $in = implode(',', array_fill(0, count($siteIds), '?'));
+
+    $sql = "
+        SELECT
+            site_id,
+            SUM(CASE WHEN enabled=1 THEN 1 ELSE 0 END) AS total_enabled,
+            SUM(CASE WHEN enabled=1 AND https_ok=1 THEN 1 ELSE 0 END) AS ok_enabled,
+            MAX(updated_at) AS last_check
+        FROM ssl_checks
+        WHERE site_id IN ($in)
+        GROUP BY site_id
+    ";
+
+    $st = DB::pdo()->prepare($sql);
+    $st->execute($siteIds);
+    $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+    $map = [];
+    foreach ($rows as $r) {
+        $sid = (int)($r['site_id'] ?? 0);
+        if ($sid <= 0) continue;
+
+        $total = (int)($r['total_enabled'] ?? 0);
+        $ok    = (int)($r['ok_enabled'] ?? 0);
+
+        $map[$sid] = [
+            'total' => $total,
+            'ok'    => $ok,
+            'all_ok' => ($total > 0 && $ok === $total) ? 1 : 0,
+            'last'  => (string)($r['last_check'] ?? ''),
+        ];
+    }
+
+    return $map;
 }
 
 }

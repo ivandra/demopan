@@ -1,0 +1,12 @@
+{
+    "ok": true,
+    "errors": [],
+    "warnings": [
+        "Есть неиспользуемые texts-файлы: game.php, play.php"
+    ],
+    "created_texts": [],
+    "unused_texts": [
+        "game.php",
+        "play.php"
+    ]
+}

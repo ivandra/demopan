@@ -23,6 +23,10 @@ return [
       'max_price_usd'    => 7.0,
       'timeout'          => 30,
   ],
+  
+  'cron' => [
+        'token' => 'FpRU06X1S4MYkqcL',
+    ],
 
 ];
 

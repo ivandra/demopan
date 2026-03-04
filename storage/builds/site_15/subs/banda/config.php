@@ -23,10 +23,19 @@ $cfg = array (
     '/404' => 
     array (
       'title' => '404 — Страница не найдена',
+      'h1' => '$inherit',
       'description' => 'Страница не найдена',
-      'keywords' => '',
+      'keywords' => '$inherit',
       'text_file' => '404.php',
       'sitemap' => false,
+    ),
+    '/demo' => 
+    array (
+      'title' => '$inherit',
+      'h1' => '$inherit',
+      'description' => '$inherit',
+      'keywords' => '$inherit',
+      'text_file' => 'game.php',
     ),
   ),
   'partner_override_url' => '',
@@ -34,6 +43,9 @@ $cfg = array (
   'redirect_enabled' => 0,
   'base_new_url' => '',
   'base_second_url' => '',
+  'label' => 'banda',
+  'logo' => 'assets/logo.webp',
+  'favicon' => 'assets/favicon.png',
 );
 
 $pages = $cfg['pages'] ?? [];
