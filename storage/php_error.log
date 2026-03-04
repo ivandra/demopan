@@ -1,263 +1,108 @@
-[25-Feb-2026 02:13:23 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
-[25-Feb-2026 02:13:24 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://banda.kazik1.casino/sitemap.xml"}
-[25-Feb-2026 02:14:07 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
-[25-Feb-2026 02:14:07 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/user-added-sitemaps BODY=
-[25-Feb-2026 02:14:08 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3A_default.kazik1.casino%3A443/user-added-sitemaps BODY=
-[25-Feb-2026 02:14:08 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3A_default.kazik1.casino%3A443/sitemaps BODY=
-[25-Feb-2026 02:14:15 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
-[25-Feb-2026 02:14:15 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/user-added-sitemaps BODY=
-[25-Feb-2026 02:14:30 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
-[25-Feb-2026 02:14:30 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://kazik1.casino/sitemap.xml"}
-[25-Feb-2026 02:14:30 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://banda.kazik1.casino/sitemap.xml"}
-[25-Feb-2026 02:14:30 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/sitemaps BODY={"url":"https://banda.kazik1.casino/sitemap.xml"}
-[27-Feb-2026 10:01:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
-[27-Feb-2026 10:01:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/user-added-sitemaps BODY=
-[27-Feb-2026 10:01:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/user-added-sitemaps BODY=
-[27-Feb-2026 10:01:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik1.casino%3A443/user-added-sitemaps BODY=
-[27-Feb-2026 10:01:51 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://beef.kazik1.casino/sitemap.xml"}
-[27-Feb-2026 10:01:51 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik1.casino%3A443/user-added-sitemaps BODY=
-[27-Feb-2026 10:01:51 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://betera.kazik1.casino/sitemap.xml"}
-[27-Feb-2026 10:01:51 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik1.casino%3A443/user-added-sitemaps BODY=
-[27-Feb-2026 10:01:51 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://booi.kazik1.casino/sitemap.xml"}
-[27-Feb-2026 10:01:51 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Aboost.kazik1.casino%3A443/user-added-sitemaps BODY=
-[27-Feb-2026 10:01:52 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Aboost.kazik1.casino%3A443/user-added-sitemaps BODY={"url":"https://boost.kazik1.casino/sitemap.xml"}
-[27-Feb-2026 11:14:56 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
-[27-Feb-2026 11:14:56 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/recrawl/queue BODY={"url":"https://kazik1.casino/"}
-[27-Feb-2026 11:14:56 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/recrawl/queue BODY={"url":"https://kazik1.casino/test"}
-[27-Feb-2026 11:14:56 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://banda.kazik1.casino/"}
-[27-Feb-2026 11:14:57 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://banda.kazik1.casino/demo"}
-[27-Feb-2026 11:14:57 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://beef.kazik1.casino/"}
-[27-Feb-2026 11:14:57 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://betera.kazik1.casino/"}
-[27-Feb-2026 11:14:57 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://betera.kazik1.casino/test"}
-[27-Feb-2026 11:14:57 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://booi.kazik1.casino/"}
-[27-Feb-2026 11:14:57 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://booi.kazik1.casino/test"}
-[27-Feb-2026 11:14:58 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Aboost.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://boost.kazik1.casino/"}
-[27-Feb-2026 11:14:58 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Aboost.kazik1.casino%3A443/recrawl/queue BODY={"url":"https://boost.kazik1.casino/test"}
-[27-Feb-2026 11:18:40 Europe/Moscow] availableIps count=6 siteId=15
-[27-Feb-2026 11:18:46 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
-[27-Feb-2026 11:18:46 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
-[27-Feb-2026 11:18:46 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
-[03-Mar-2026 23:48:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[03-Mar-2026 23:49:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[03-Mar-2026 23:50:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[03-Mar-2026 23:51:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[03-Mar-2026 23:52:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[03-Mar-2026 23:53:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[03-Mar-2026 23:54:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[03-Mar-2026 23:55:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[03-Mar-2026 23:56:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[03-Mar-2026 23:57:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[03-Mar-2026 23:58:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[03-Mar-2026 23:59:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:00:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:01:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:02:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:03:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:04:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:05:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:06:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:07:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:08:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:09:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:10:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:11:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:12:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:13:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:14:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
-[04-Mar-2026 00:15:00 Europe/Moscow] PHP Fatal error:  Uncaught Error: Call to undefined method TelegramService::isConfigured() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php:28
-Stack trace:
-#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php(19): SslController->sendTelegramIfAllOk()
-#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(141): SslController->cron()
-#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
-#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(325): Router->dispatch()
-#4 {main}
-  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SslController.php on line 28
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default/config.php
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=banda buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/banda
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] OK created label=banda cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/banda/config.php
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=beef buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/beef
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] OK created label=beef cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/beef/config.php
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=betera buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/betera
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] OK created label=betera cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/betera/config.php
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=booi buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/booi
+[04-Mar-2026 15:52:23 Europe/Moscow] [SubdomainProvisioner] OK created label=booi cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/booi/config.php
+[04-Mar-2026 15:53:10 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:53:10 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default
+[04-Mar-2026 15:53:10 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default/config.php
+[04-Mar-2026 15:53:24 Europe/Moscow] [NC listAccounts] rows=2
+[04-Mar-2026 15:53:24 Europe/Moscow] [availableIps] count=6 siteId=16
+[04-Mar-2026 15:53:24 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[04-Mar-2026 15:53:32 Europe/Moscow] [NC listAccounts] rows=2
+[04-Mar-2026 15:53:32 Europe/Moscow] [availableIps] count=6 siteId=15
+[04-Mar-2026 15:53:32 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[04-Mar-2026 15:53:38 Europe/Moscow] [NC listAccounts] rows=2
+[04-Mar-2026 15:53:38 Europe/Moscow] [availableIps] count=6 siteId=16
+[04-Mar-2026 15:53:38 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[04-Mar-2026 15:54:44 Europe/Moscow] [NC listAccounts] rows=2
+[04-Mar-2026 15:54:44 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[04-Mar-2026 15:54:44 Europe/Moscow] [DetectRegistrar] OK site_id=16 domain=kazik2.casino registrar_account_id=2
+[04-Mar-2026 15:54:45 Europe/Moscow] [NC listAccounts] rows=2
+[04-Mar-2026 15:54:45 Europe/Moscow] [availableIps] count=6 siteId=16
+[04-Mar-2026 15:54:45 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[04-Mar-2026 15:54:52 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[04-Mar-2026 15:54:52 Europe/Moscow] [Namecheap getHosts] domain=kazik2.casino raw_count=2 norm_count=2 sample=[{"host":"@","type":"A","address":"95.129.234.93","ttl":1799},{"host":"www","type":"CNAME","address":"kazik2.casino.","ttl":1799}]
+[04-Mar-2026 15:54:53 Europe/Moscow] [NC listAccounts] rows=2
+[04-Mar-2026 15:54:53 Europe/Moscow] [availableIps] count=6 siteId=16
+[04-Mar-2026 15:54:53 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[04-Mar-2026 15:55:12 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:55:12 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default
+[04-Mar-2026 15:55:12 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default/config.php
+[04-Mar-2026 15:55:19 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:55:19 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default
+[04-Mar-2026 15:55:19 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default/config.php
+[04-Mar-2026 15:55:19 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:55:19 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default
+[04-Mar-2026 15:55:19 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default/config.php
+[04-Mar-2026 15:55:30 Europe/Moscow] availableIps count=6 siteId=16
+[04-Mar-2026 15:55:36 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:55:36 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default
+[04-Mar-2026 15:55:36 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default/config.php
+[04-Mar-2026 15:55:41 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:55:41 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default
+[04-Mar-2026 15:55:41 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default/config.php
+[04-Mar-2026 15:55:51 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:55:51 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default
+[04-Mar-2026 15:55:51 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default/config.php
+[04-Mar-2026 15:55:51 Europe/Moscow] [SubdomainProvisioner] site_id=16 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16
+[04-Mar-2026 15:55:51 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default
+[04-Mar-2026 15:55:51 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_16/subs/_default/config.php
+[04-Mar-2026 15:59:46 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
+[04-Mar-2026 15:59:47 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts BODY=
+[04-Mar-2026 15:59:47 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts BODY={"host_url":"https://kazik2.casino"}
+[04-Mar-2026 15:59:47 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik2.casino%3A443/verification BODY=
+[04-Mar-2026 15:59:47 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts BODY=
+[04-Mar-2026 15:59:47 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts BODY={"host_url":"https://banda.kazik2.casino"}
+[04-Mar-2026 15:59:47 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik2.casino%3A443/verification BODY=
+[04-Mar-2026 15:59:48 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts BODY=
+[04-Mar-2026 15:59:48 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts BODY={"host_url":"https://beef.kazik2.casino"}
+[04-Mar-2026 15:59:48 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik2.casino%3A443/verification BODY=
+[04-Mar-2026 15:59:48 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts BODY=
+[04-Mar-2026 15:59:48 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts BODY={"host_url":"https://betera.kazik2.casino"}
+[04-Mar-2026 15:59:48 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik2.casino%3A443/verification BODY=
+[04-Mar-2026 15:59:48 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts BODY=
+[04-Mar-2026 15:59:48 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts BODY={"host_url":"https://booi.kazik2.casino"}
+[04-Mar-2026 15:59:49 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik2.casino%3A443/verification BODY=
+[04-Mar-2026 16:02:49 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
+[04-Mar-2026 16:02:49 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik2.casino%3A443/verification/HTML_FILE BODY=
+[04-Mar-2026 16:02:49 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik2.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[04-Mar-2026 16:02:49 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik2.casino%3A443/verification BODY=
+[04-Mar-2026 16:02:49 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik2.casino%3A443/verification/HTML_FILE BODY=
+[04-Mar-2026 16:02:49 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik2.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[04-Mar-2026 16:02:49 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik2.casino%3A443/verification BODY=
+[04-Mar-2026 16:02:50 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik2.casino%3A443/verification/HTML_FILE BODY=
+[04-Mar-2026 16:02:50 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik2.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[04-Mar-2026 16:02:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik2.casino%3A443/verification BODY=
+[04-Mar-2026 16:02:50 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik2.casino%3A443/verification/HTML_FILE BODY=
+[04-Mar-2026 16:02:50 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik2.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[04-Mar-2026 16:02:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik2.casino%3A443/verification BODY=
+[04-Mar-2026 16:02:50 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik2.casino%3A443/verification/HTML_FILE BODY=
+[04-Mar-2026 16:02:51 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik2.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[04-Mar-2026 16:02:51 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik2.casino%3A443/verification BODY=
+[04-Mar-2026 16:17:48 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
+[04-Mar-2026 16:17:49 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik2.casino%3A443/verification/HTML_FILE BODY=
+[04-Mar-2026 16:17:49 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik2.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[04-Mar-2026 16:17:49 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik2.casino%3A443/verification BODY=
+[04-Mar-2026 16:17:49 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik2.casino%3A443/verification/HTML_FILE BODY=
+[04-Mar-2026 16:17:49 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik2.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[04-Mar-2026 16:17:49 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik2.casino%3A443/verification BODY=
+[04-Mar-2026 16:17:49 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik2.casino%3A443/verification/HTML_FILE BODY=
+[04-Mar-2026 16:17:49 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik2.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[04-Mar-2026 16:17:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik2.casino%3A443/verification BODY=
+[04-Mar-2026 16:17:50 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik2.casino%3A443/verification/HTML_FILE BODY=
+[04-Mar-2026 16:17:50 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik2.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[04-Mar-2026 16:17:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik2.casino%3A443/verification BODY=
+[04-Mar-2026 16:17:50 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik2.casino%3A443/verification/HTML_FILE BODY=
+[04-Mar-2026 16:17:50 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik2.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[04-Mar-2026 16:17:50 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik2.casino%3A443/verification BODY=

@@ -215,7 +215,7 @@ function badge(string $text, string $bg, string $fg, string $border = ''): strin
             <a href="/domains?id=<?= $siteId ?>">Domains</a>
             <a href="/sites/subdomains?id=<?= $siteId ?>">Subs</a>
             <a href="/sites/subcfg?id=<?= $siteId ?>">SubCfg</a>
-
+			<a href="/sites/clone?id=<?= (int)($site['id'] ?? 0) ?>">Клонировать</a>
             <a href="/sites/resetFastpanelState?id=<?= $siteId ?>"
                onclick="return confirm('Сбросить статусы VPS/FTP/Files?')">Reset</a>
 

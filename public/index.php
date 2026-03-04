@@ -132,6 +132,8 @@ require APP_ROOT . '/app/Controllers/SiteSubCfgController.php';
 require APP_ROOT . '/app/Controllers/SslController.php';
 
 require APP_ROOT .'/app/Controllers/WebmasterController.php';
+require APP_ROOT .'/app/Controllers/SiteCloneController.php';
+
 
 
 
@@ -160,7 +162,7 @@ $registrarContacts = new RegistrarContactsController();
 $subdomains = new SubdomainsController();
 $siteSubs   = new SiteSubdomainsController();
 $siteSubCfg = new SiteSubCfgController();
-
+$clone = new SiteCloneController();
 
 // Pages
 $router->get('/', action($site, 'index'));
@@ -256,8 +258,8 @@ $router->post('/sites/subcfg/create', action($siteSubCfg, 'create'));
 $router->post('/sites/subcfg/delete', action($siteSubCfg, 'delete'));
 $router->post('/sites/subcfg/regenAll', action($siteSubCfg, 'regenAll'));
 
-$router->get('/sites/clone', action($site, 'cloneForm'));     // ?id=1
-$router->post('/sites/clone', action($site, 'cloneDo'));      // ?id=1
+$router->get('/sites/clone', action($clone, 'cloneForm'));     // ?id=1
+$router->post('/sites/clone', action($clone, 'cloneDo'));      // ?id=1
 
 // Список сайтов
 $router->get('/sites', action($site, 'index'));
