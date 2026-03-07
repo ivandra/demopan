@@ -157,6 +157,26 @@ function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
                     Для текущего саба AI может автоматически заполнить:
                     <b>title</b>, <b>h1</b>, <b>description</b>, <b>keywords</b>.
                 </div>
+				
+				 <div class="subcfg-actions" style="margin:14px 0;">
+				<a
+					class="btn btn-ai"
+					href="/ai/generate-sub-text?id=<?= $siteId ?>&label=<?= urlencode($label) ?>"
+					onclick="return confirm('Сгенерировать AI-текст для саба <?= e($label) ?>? Будет перезаписан файл текста главной страницы.');"
+				>
+					AI: сгенерировать текст
+				</a>
+				
+				<?php if ($label === '_default'): ?>
+					<a
+						class="btn btn-ai"
+						href="/ai/generate-root-text?id=<?= $siteId ?>"
+						onclick="return confirm('Сгенерировать AI-текст для основного домена? Будет перезаписан файл главной страницы.');"
+					>
+						AI: текст root
+					</a>
+				<?php endif; ?>
+				 </div>
 
                 <div class="row" style="margin-top:12px;">
                     <label>title</label>

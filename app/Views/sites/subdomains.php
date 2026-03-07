@@ -165,6 +165,14 @@ document.getElementById('btnNone').addEventListener('click', function(){
 
 <hr>
 
+<a
+    href="/ai/generate-all-sub-texts?id=<?= (int)$siteId ?>"
+    onclick="return confirm('Сгенерировать AI-тексты для всех enabled поддоменов?');"
+    style="display:inline-block;padding:8px 12px;border-radius:8px;background:#6f42c1;color:#fff;text-decoration:none;"
+>
+    AI: тексты для всех сабов
+</a>
+<hr>
 <h2>3) Registrar + DNS (Namecheap)</h2>
 
 <form method="post" action="/sites/subdomains/set-registrar?id=<?= $siteId ?>" style="margin-bottom:10px;">

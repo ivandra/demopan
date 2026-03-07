@@ -5,10 +5,10 @@ $cfg = array (
   'yandex_verification' => '',
   'yandex_metrika' => '',
   'promolink' => '/reg',
-  'title' => 'Новый сайт',
-  'description' => '',
-  'keywords' => '',
-  'h1' => 'Добро пожаловать',
+  'title' => 'Kazik1 Casino – Игровые автоматы и слоты онлайн на деньги',
+  'description' => 'Kazik1 Casino – лучшие игровые автоматы, слоты и live-казино с быстрыми выплатами. Регистрация за минуту, бонусы новичкам.',
+  'keywords' => 'Kazik1 Casino, онлайн казино, игровые автоматы, слоты, live-казино, бонусы, выплаты, регистрация',
+  'h1' => 'Добро пожаловать в Kazik1 Casino',
   'pages' => 
   array (
     '/' => 

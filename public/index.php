@@ -321,6 +321,12 @@ $router->get('/sites/ai', action($ai, 'site'));
 $router->post('/ai/generate-meta', action($ai, 'generateMeta'));
 $router->post('/ai/generate-subdomains', action($ai, 'generateSubdomains'));
 $router->get('/ai/generate-sub-meta', action($ai, 'generateSubMeta'));
+$router->get('/ai/generate-root-text', action($ai, 'generateRootText'));
+$router->get('/ai/generate-sub-text', action($ai, 'generateSubText'));
+$router->get('/ai/generate-all-sub-texts', action($ai, 'generateAllSubTexts'));
+$router->get('/ai/generate-page-meta', action($ai, 'generatePageMeta'));
+$router->get('/ai/generate-page-text', action($ai, 'generatePageText'));
+$router->get('/ai/generate-all-pages', action($ai, 'generateAllPages'));
 
 // Debug
 $router->get('/debug/log', function () {
