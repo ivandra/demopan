@@ -1212,76 +1212,24 @@ private function getFqdnForLabel(array $site, string $label): string
     return $label . '.' . $domain;
 }
 
-public function generatePageMeta(): void
+
+
+
+private function aiClient(): DeepseekClient
 {
-    $this->requireAuth();
-
-    $siteId = (int)($_GET['id'] ?? 0);
-    $label  = trim((string)($_GET['label'] ?? '_default'));
-    $path   = trim((string)($_GET['path'] ?? '/'));
-
-    if ($siteId <= 0 || $path === '') {
-        $this->redirect('/sites');
-        return;
-    }
-
-    $pdo = DB::pdo();
-
-    $st = $pdo->prepare("SELECT * FROM sites WHERE id = ? LIMIT 1");
-    $st->execute([$siteId]);
-    $site = $st->fetch(PDO::FETCH_ASSOC);
-
-    if (!$site) {
-        $this->redirect('/sites');
-        return;
-    }
-
-    $pageCfg = $this->loadSinglePageConfig($siteId, $label, $path);
-    if (!$pageCfg) {
-        $_SESSION['wm_log'][] = 'AI: page config not found';
-        $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
-        return;
-    }
-
     $row = $this->loadRow();
+
     $apiKeyEnc = (string)($row['api_key_enc'] ?? '');
     if ($apiKeyEnc === '') {
-        die('AI API key пустой');
+        throw new RuntimeException('AI API key пустой');
     }
 
     $apiKey = Crypto::decrypt($apiKeyEnc);
+    return new DeepseekClient($apiKey);
+}
 
-    $prompt = trim((string)($row['page_meta_prompt'] ?? ''));
-    if ($prompt === '') {
-        $prompt = 'Ты SEO-редактор. Верни строго JSON без markdown: {"title":"","h1":"","description":"","keywords":""}';
-    }
-
-    $fqdn = $this->getFqdnForLabel($site, $label);
-    $currentTitle = (string)($pageCfg['title'] ?? '');
-    $currentH1 = (string)($pageCfg['h1'] ?? '');
-    $currentDescription = (string)($pageCfg['description'] ?? '');
-    $currentKeywords = (string)($pageCfg['keywords'] ?? '');
-    $textFile = (string)($pageCfg['text_file'] ?? '');
-
-    $userPrompt = "Хост: {$fqdn}\n"
-        . "Страница: {$path}\n"
-        . "Текущий title: {$currentTitle}\n"
-        . "Текущий h1: {$currentH1}\n"
-        . "Текущий description: {$currentDescription}\n"
-        . "Текущие keywords: {$currentKeywords}\n"
-        . "Файл текста: {$textFile}\n"
-        . "Сгенерируй SEO-мета для этой страницы. Верни JSON с полями: title, h1, description, keywords.";
-
-    $client = new DeepseekClient($apiKey);
-
-    $result = $client->simpleText(
-        $prompt,
-        $userPrompt,
-        (string)($row['model'] ?? 'deepseek-chat'),
-        (float)($row['temperature'] ?? 0.7),
-        (int)($row['max_tokens'] ?? 1200)
-    );
-
+private function cleanAiJson(string $result): array
+{
     $result = trim($result);
 
     if (strpos($result, '```') !== false) {
@@ -1299,245 +1247,430 @@ public function generatePageMeta(): void
     $json = json_decode($result, true);
 
     if (!is_array($json)) {
-        die('AI вернул не JSON: ' . htmlspecialchars($result, ENT_QUOTES));
+        throw new RuntimeException('AI вернул не JSON: ' . $result);
     }
 
-    $pageCfg['title'] = (string)($json['title'] ?? '');
-    $pageCfg['h1'] = (string)($json['h1'] ?? '');
-    $pageCfg['description'] = (string)($json['description'] ?? '');
-    $pageCfg['keywords'] = (string)($json['keywords'] ?? '');
+    return $json;
+}
 
-    $this->saveSinglePageConfig($siteId, $label, $path, $pageCfg);
+private function loadSiteOrFail(int $siteId): array
+{
+    $st = DB::pdo()->prepare("SELECT * FROM sites WHERE id = ? LIMIT 1");
+    $st->execute([$siteId]);
+    $site = $st->fetch(PDO::FETCH_ASSOC);
 
-    $_SESSION['wm_log'][] = 'AI page meta generated: ' . $fqdn . ' ' . $path;
-    $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
+    if (!$site) {
+        throw new RuntimeException('Сайт не найден');
+    }
+
+    return $site;
+}
+
+private function loadSubCfgOrCreate(int $siteId, string $label, string $domain): array
+{
+    $pdo = DB::pdo();
+
+    $st = $pdo->prepare("
+        SELECT *
+        FROM site_subdomain_configs
+        WHERE site_id = ? AND label = ?
+        LIMIT 1
+    ");
+    $st->execute([$siteId, $label]);
+    $row = $st->fetch(PDO::FETCH_ASSOC);
+
+    if ($row && !empty($row['config_json'])) {
+        $cfg = json_decode((string)$row['config_json'], true);
+        if (is_array($cfg)) {
+            return $cfg;
+        }
+    }
+
+    return [
+        'domain' => $domain,
+        'label' => $label,
+        'pages' => [],
+    ];
+}
+
+private function saveSubCfg(int $siteId, string $label, array $cfg): void
+{
+    $pdo = DB::pdo();
+
+    $json = json_encode($cfg, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    $st = $pdo->prepare("
+        SELECT id
+        FROM site_subdomain_configs
+        WHERE site_id = ? AND label = ?
+        LIMIT 1
+    ");
+    $st->execute([$siteId, $label]);
+    $row = $st->fetch(PDO::FETCH_ASSOC);
+
+    if ($row) {
+        $pdo->prepare("
+            UPDATE site_subdomain_configs
+            SET config_json = ?
+            WHERE site_id = ? AND label = ?
+            LIMIT 1
+        ")->execute([$json, $siteId, $label]);
+    } else {
+        $pdo->prepare("
+            INSERT INTO site_subdomain_configs (site_id, label, config_json)
+            VALUES (?, ?, ?)
+        ")->execute([$siteId, $label, $json]);
+    }
+}
+
+private function textsDirForLabel(int $siteId, string $label): string
+{
+    return Paths::storage('builds/site_' . $siteId . '/subs/' . $label . '/texts');
+}
+
+private function normalizePagePath(string $path): string
+{
+    $path = trim($path);
+    if ($path === '') return '/';
+    if ($path[0] !== '/') $path = '/' . $path;
+    if ($path !== '/') $path = rtrim($path, '/');
+    return $path;
+}
+
+private function makePageSlug(string $path): string
+{
+    if ($path === '/') return 'home';
+    $slug = trim($path, '/');
+    $slug = str_replace('/', '-', $slug);
+    $slug = preg_replace('~[^a-z0-9\-_]+~i', '-', $slug);
+    $slug = trim($slug, '-');
+    return $slug !== '' ? strtolower($slug) : 'page';
+}
+
+public function generatePageMeta(): void
+{
+    $this->requireAuth();
+
+    try {
+        $siteId = (int)($_GET['id'] ?? 0);
+        $label  = trim((string)($_GET['label'] ?? '_default'));
+        $path   = $this->normalizePagePath((string)($_GET['path'] ?? '/'));
+
+        if ($siteId <= 0) {
+            throw new RuntimeException('Некорректный site_id');
+        }
+
+        $site = $this->loadSiteOrFail($siteId);
+        $row = $this->loadRow();
+        $client = $this->aiClient();
+
+        $domain = (string)$site['domain'];
+        $fqdn = ($label === '_default') ? $domain : ($label . '.' . $domain);
+
+        $cfg = $this->loadSubCfgOrCreate($siteId, $label, $domain);
+        $pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];
+        $page = is_array($pages[$path] ?? null) ? $pages[$path] : [];
+
+        $prompt = trim((string)($row['page_meta_prompt'] ?? ''));
+        if ($prompt === '') {
+            $prompt = 'Ты SEO-редактор. Верни строго JSON без markdown и пояснений: {"title":"","h1":"","description":"","keywords":""}';
+        }
+
+        $userPrompt = "Домен: {$domain}\n";
+        $userPrompt .= "Текущий хост: {$fqdn}\n";
+        $userPrompt .= "Label: {$label}\n";
+        $userPrompt .= "Страница: {$path}\n";
+        $userPrompt .= "Сгенерируй SEO meta для этой страницы. Верни строго JSON: title, h1, description, keywords";
+
+        $result = $client->simpleText(
+            $prompt,
+            $userPrompt,
+            (string)$row['model'],
+            (float)$row['temperature'],
+            (int)$row['max_tokens']
+        );
+
+        $json = $this->cleanAiJson($result);
+
+        $page['title'] = (string)($json['title'] ?? '$inherit');
+        $page['h1'] = (string)($json['h1'] ?? '$inherit');
+        $page['description'] = (string)($json['description'] ?? '$inherit');
+        $page['keywords'] = (string)($json['keywords'] ?? '$inherit');
+
+        if (empty($page['text_file'])) {
+            $page['text_file'] = ($path === '/') ? 'home.php' : ($this->makePageSlug($path) . '.php');
+        }
+
+        $pages[$path] = $page;
+        $cfg['pages'] = $pages;
+
+        $this->saveSubCfg($siteId, $label, $cfg);
+
+        $_SESSION['wm_log'][] = "AI meta страницы сгенерированы: {$fqdn} {$path}";
+        $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
+    } catch (Throwable $e) {
+        die($this->h($e->getMessage()));
+    }
 }
 
 public function generatePageText(): void
 {
     $this->requireAuth();
 
-    $siteId = (int)($_GET['id'] ?? 0);
-    $label  = trim((string)($_GET['label'] ?? '_default'));
-    $path   = trim((string)($_GET['path'] ?? '/'));
+    try {
+        $siteId = (int)($_GET['id'] ?? 0);
+        $label  = trim((string)($_GET['label'] ?? '_default'));
+        $path   = $this->normalizePagePath((string)($_GET['path'] ?? '/'));
 
-    if ($siteId <= 0 || $path === '') {
-        $this->redirect('/sites');
-        return;
+        if ($siteId <= 0) {
+            throw new RuntimeException('Некорректный site_id');
+        }
+
+        $site = $this->loadSiteOrFail($siteId);
+        $row = $this->loadRow();
+        $client = $this->aiClient();
+
+        $domain = (string)$site['domain'];
+        $fqdn = ($label === '_default') ? $domain : ($label . '.' . $domain);
+
+        $cfg = $this->loadSubCfgOrCreate($siteId, $label, $domain);
+        $pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];
+        $page = is_array($pages[$path] ?? null) ? $pages[$path] : [];
+
+        $textFile = (string)($page['text_file'] ?? '');
+        if ($textFile === '') {
+            $textFile = ($path === '/') ? 'home.php' : ($this->makePageSlug($path) . '.php');
+            $page['text_file'] = $textFile;
+        }
+
+        $prompt = trim((string)($row['page_prompt'] ?? ''));
+        if ($prompt === '') {
+            $prompt = 'Ты веб-копирайтер. Верни только готовый HTML-фрагмент для body без markdown, без пояснений, без ```.';
+        }
+
+        $userPrompt = "Домен: {$domain}\n";
+        $userPrompt .= "Текущий хост: {$fqdn}\n";
+        $userPrompt .= "Label: {$label}\n";
+        $userPrompt .= "Страница: {$path}\n";
+        $userPrompt .= "Файл: {$textFile}\n";
+        $userPrompt .= "Сгенерируй HTML-текст для этой страницы. Нужны абзацы, списки при необходимости, без <html>, <head>, <body>.";
+
+        $html = $client->simpleText(
+            $prompt,
+            $userPrompt,
+            (string)$row['model'],
+            (float)$row['temperature'],
+            (int)$row['max_tokens']
+        );
+
+        $html = trim($html);
+
+        if (strpos($html, '```') !== false) {
+            $html = preg_replace('/```html/i', '', $html);
+            $html = str_replace('```', '', $html);
+            $html = trim($html);
+        }
+
+        $dir = $this->textsDirForLabel($siteId, $label);
+        Paths::ensureDir($dir);
+
+        $fullPath = rtrim($dir, '/\\') . '/' . basename($textFile);
+
+        file_put_contents($fullPath, $html);
+
+        $pages[$path] = $page;
+        $cfg['pages'] = $pages;
+        $this->saveSubCfg($siteId, $label, $cfg);
+
+        $_SESSION['wm_log'][] = "AI текст страницы сгенерирован: {$fqdn} {$path}";
+        $this->redirect('/sites/texts/edit?id=' . $siteId . '&label=' . urlencode($label) . '&file=' . rawurlencode(basename($textFile)));
+    } catch (Throwable $e) {
+        die($this->h($e->getMessage()));
     }
-
-    $pdo = DB::pdo();
-
-    $st = $pdo->prepare("SELECT * FROM sites WHERE id = ? LIMIT 1");
-    $st->execute([$siteId]);
-    $site = $st->fetch(PDO::FETCH_ASSOC);
-
-    if (!$site) {
-        $this->redirect('/sites');
-        return;
-    }
-
-    $pageCfg = $this->loadSinglePageConfig($siteId, $label, $path);
-    if (!$pageCfg) {
-        $_SESSION['wm_log'][] = 'AI: page config not found';
-        $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
-        return;
-    }
-
-    $textFile = basename(trim((string)($pageCfg['text_file'] ?? '')));
-    if ($textFile === '') {
-        $_SESSION['wm_log'][] = 'AI: page text_file пустой';
-        $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
-        return;
-    }
-
-    $row = $this->loadRow();
-    $apiKeyEnc = (string)($row['api_key_enc'] ?? '');
-    if ($apiKeyEnc === '') {
-        die('AI API key пустой');
-    }
-
-    $apiKey = Crypto::decrypt($apiKeyEnc);
-
-    $prompt = trim((string)($row['page_prompt'] ?? ''));
-    if ($prompt === '') {
-        $prompt = 'Ты SEO-копирайтер. Верни только HTML-фрагмент для вставки в body. Без markdown, без пояснений, без тройных кавычек.';
-    }
-
-    $fqdn = $this->getFqdnForLabel($site, $label);
-
-    $userPrompt = "Хост: {$fqdn}\n"
-        . "Страница: {$path}\n"
-        . "Title: " . (string)($pageCfg['title'] ?? '') . "\n"
-        . "H1: " . (string)($pageCfg['h1'] ?? '') . "\n"
-        . "Description: " . (string)($pageCfg['description'] ?? '') . "\n"
-        . "Keywords: " . (string)($pageCfg['keywords'] ?? '') . "\n"
-        . "Файл текста: {$textFile}\n"
-        . "Сгенерируй SEO-текст для этой страницы и верни только HTML-фрагмент.";
-
-    $client = new DeepseekClient($apiKey);
-
-    $result = $client->simpleText(
-        $prompt,
-        $userPrompt,
-        (string)($row['model'] ?? 'deepseek-chat'),
-        (float)($row['temperature'] ?? 0.7),
-        (int)($row['max_tokens'] ?? 1200)
-    );
-
-    $html = $this->cleanupAiText($result);
-
-    if ($html === '') {
-        die('AI вернул пустой текст');
-    }
-
-    $this->writeSubTextFile($site, $label, $textFile, $html);
-
-    $_SESSION['wm_log'][] = 'AI page text generated: ' . $fqdn . ' ' . $path;
-    $this->redirect('/sites/texts?id=' . $siteId . '&label=' . urlencode($label));
 }
 
 public function generateAllPages(): void
 {
     $this->requireAuth();
 
-    $siteId = (int)($_GET['id'] ?? 0);
-    $label  = trim((string)($_GET['label'] ?? '_default'));
+    try {
+        $siteId = (int)($_GET['id'] ?? 0);
+        $label  = trim((string)($_GET['label'] ?? '_default'));
 
-    if ($siteId <= 0) {
-        $this->redirect('/sites');
-        return;
-    }
+        if ($siteId <= 0) {
+            throw new RuntimeException('Некорректный site_id');
+        }
 
-    $pdo = DB::pdo();
+        $site = $this->loadSiteOrFail($siteId);
+        $row = $this->loadRow();
+        $client = $this->aiClient();
 
-    $st = $pdo->prepare("SELECT * FROM sites WHERE id = ? LIMIT 1");
-    $st->execute([$siteId]);
-    $site = $st->fetch(PDO::FETCH_ASSOC);
+        $domain = (string)$site['domain'];
+        $fqdn = ($label === '_default') ? $domain : ($label . '.' . $domain);
 
-    if (!$site) {
-        $this->redirect('/sites');
-        return;
-    }
+        $cfg = $this->loadSubCfgOrCreate($siteId, $label, $domain);
+        $pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];
 
-    $pages = $this->loadPagesConfig($siteId, $label);
-    if (empty($pages)) {
-        $_SESSION['wm_log'][] = 'AI: pages пустые';
-        $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
-        return;
-    }
+        if (!$pages) {
+            throw new RuntimeException('В pages нет страниц для генерации');
+        }
 
-    $row = $this->loadRow();
-    $apiKeyEnc = (string)($row['api_key_enc'] ?? '');
-    if ($apiKeyEnc === '') {
-        die('AI API key пустой');
-    }
+        $pageMetaPrompt = trim((string)($row['page_meta_prompt'] ?? ''));
+        if ($pageMetaPrompt === '') {
+            $pageMetaPrompt = 'Ты SEO-редактор. Верни строго JSON без markdown и пояснений: {"title":"","h1":"","description":"","keywords":""}';
+        }
 
-    $apiKey = Crypto::decrypt($apiKeyEnc);
+        $pageTextPrompt = trim((string)($row['page_prompt'] ?? ''));
+        if ($pageTextPrompt === '') {
+            $pageTextPrompt = 'Ты веб-копирайтер. Верни только готовый HTML-фрагмент для body без markdown, без пояснений, без ```.';
+        }
 
-    $pagePrompt = trim((string)($row['page_prompt'] ?? ''));
-    if ($pagePrompt === '') {
-        $pagePrompt = 'Ты SEO-копирайтер. Верни только HTML-фрагмент для вставки в body. Без markdown, без пояснений, без тройных кавычек.';
-    }
+        $dir = $this->textsDirForLabel($siteId, $label);
+        Paths::ensureDir($dir);
 
-    $pageMetaPrompt = trim((string)($row['page_meta_prompt'] ?? ''));
-    if ($pageMetaPrompt === '') {
-        $pageMetaPrompt = 'Ты SEO-редактор. Верни строго JSON без markdown: {"title":"","h1":"","description":"","keywords":""}';
-    }
+        $total = count($pages);
+        $done = 0;
 
-    $client = new DeepseekClient($apiKey);
-    $fqdn = $this->getFqdnForLabel($site, $label);
-
-    $done = 0;
-    $errors = 0;
-
-    foreach ($pages as $path => $pageCfg) {
-        try {
-            if (!is_array($pageCfg)) {
-                $pageCfg = [];
+        foreach ($pages as $path => &$page) {
+            if (!is_array($page)) {
+                $page = [];
             }
 
-            $textFile = basename(trim((string)($pageCfg['text_file'] ?? '')));
-            if ($textFile === '') {
-                continue;
+            $path = $this->normalizePagePath((string)$path);
+
+            if (empty($page['text_file'])) {
+                $page['text_file'] = ($path === '/') ? 'home.php' : ($this->makePageSlug($path) . '.php');
             }
 
-            // META
-            $metaPromptUser = "Хост: {$fqdn}\n"
-                . "Страница: {$path}\n"
-                . "Файл текста: {$textFile}\n"
-                . "Сгенерируй SEO-мета для этой страницы. Верни JSON с полями: title, h1, description, keywords.";
+            // ----- 1. META -----
+            $metaPrompt = "Домен: {$domain}\n";
+            $metaPrompt .= "Текущий хост: {$fqdn}\n";
+            $metaPrompt .= "Label: {$label}\n";
+            $metaPrompt .= "Страница: {$path}\n";
+            $metaPrompt .= "Сгенерируй SEO meta для этой страницы. Верни строго JSON: title, h1, description, keywords";
 
             $metaResult = $client->simpleText(
                 $pageMetaPrompt,
-                $metaPromptUser,
-                (string)($row['model'] ?? 'deepseek-chat'),
-                (float)($row['temperature'] ?? 0.7),
-                (int)($row['max_tokens'] ?? 1200)
+                $metaPrompt,
+                (string)$row['model'],
+                (float)$row['temperature'],
+                (int)$row['max_tokens']
             );
 
-            $metaResult = trim($metaResult);
+            $metaJson = $this->cleanAiJson($metaResult);
 
-            if (strpos($metaResult, '```') !== false) {
-                $metaResult = preg_replace('/```json/i', '', $metaResult);
-                $metaResult = str_replace('```', '', $metaResult);
-            }
+            $page['title'] = (string)($metaJson['title'] ?? '$inherit');
+            $page['h1'] = (string)($metaJson['h1'] ?? '$inherit');
+            $page['description'] = (string)($metaJson['description'] ?? '$inherit');
+            $page['keywords'] = (string)($metaJson['keywords'] ?? '$inherit');
 
-            $start = strpos($metaResult, '{');
-            $end   = strrpos($metaResult, '}');
+            // ----- 2. TEXT -----
+            $textPrompt = "Домен: {$domain}\n";
+            $textPrompt .= "Текущий хост: {$fqdn}\n";
+            $textPrompt .= "Label: {$label}\n";
+            $textPrompt .= "Страница: {$path}\n";
+            $textPrompt .= "Файл: {$page['text_file']}\n";
+            $textPrompt .= "Сгенерируй HTML-текст для этой страницы. Нужны абзацы, списки при необходимости, без <html>, <head>, <body>.";
 
-            if ($start !== false && $end !== false && $end > $start) {
-                $metaResult = substr($metaResult, $start, $end - $start + 1);
-            }
-
-            $metaJson = json_decode($metaResult, true);
-            if (is_array($metaJson)) {
-                $pageCfg['title'] = (string)($metaJson['title'] ?? '');
-                $pageCfg['h1'] = (string)($metaJson['h1'] ?? '');
-                $pageCfg['description'] = (string)($metaJson['description'] ?? '');
-                $pageCfg['keywords'] = (string)($metaJson['keywords'] ?? '');
-            }
-
-            // TEXT
-            $textPromptUser = "Хост: {$fqdn}\n"
-                . "Страница: {$path}\n"
-                . "Title: " . (string)($pageCfg['title'] ?? '') . "\n"
-                . "H1: " . (string)($pageCfg['h1'] ?? '') . "\n"
-                . "Description: " . (string)($pageCfg['description'] ?? '') . "\n"
-                . "Keywords: " . (string)($pageCfg['keywords'] ?? '') . "\n"
-                . "Файл текста: {$textFile}\n"
-                . "Сгенерируй SEO-текст для этой страницы и верни только HTML-фрагмент.";
-
-            $textResult = $client->simpleText(
-                $pagePrompt,
-                $textPromptUser,
-                (string)($row['model'] ?? 'deepseek-chat'),
-                (float)($row['temperature'] ?? 0.7),
-                (int)($row['max_tokens'] ?? 1200)
+            $html = $client->simpleText(
+                $pageTextPrompt,
+                $textPrompt,
+                (string)$row['model'],
+                (float)$row['temperature'],
+                (int)$row['max_tokens']
             );
 
-            $html = $this->cleanupAiText($textResult);
-            if ($html === '') {
-                throw new RuntimeException('empty html');
+            $html = trim($html);
+
+            if (strpos($html, '```') !== false) {
+                $html = preg_replace('/```html/i', '', $html);
+                $html = str_replace('```', '', $html);
+                $html = trim($html);
             }
 
-            $this->writeSubTextFile($site, $label, $textFile, $html);
-            $this->saveSinglePageConfig($siteId, $label, (string)$path, $pageCfg);
+            file_put_contents(
+                rtrim($dir, '/\\') . '/' . basename((string)$page['text_file']),
+                $html
+            );
 
             $done++;
-        } catch (Throwable $e) {
-            $errors++;
-            hub_log('AI_PAGE_GEN_ERROR', [
+
+            hub_log('AI_GENERATE_PAGE_DONE', [
                 'site_id' => $siteId,
-                'label' => $label,
-                'path' => (string)$path,
-                'err' => $e->getMessage(),
+                'label'   => $label,
+                'path'    => $path,
+                'done'    => $done,
+                'total'   => $total,
             ]);
         }
-    }
+        unset($page);
 
-    $_SESSION['wm_log'][] = "AI pages generated: done={$done}, errors={$errors}";
-    $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
+        // сохраняем config_json только один раз в конце
+        $cfg['pages'] = $pages;
+        $this->saveSubCfgSafe($siteId, $label, $cfg);
+
+        $_SESSION['wm_log'][] = "AI pages generated: {$fqdn}";
+        $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
+    } catch (Throwable $e) {
+        hub_log('AI_GENERATE_ALL_PAGES_ERROR', [
+            'site_id' => (int)($_GET['id'] ?? 0),
+            'label'   => (string)($_GET['label'] ?? '_default'),
+            'err'     => $e->getMessage(),
+        ]);
+        die($this->h($e->getMessage()));
+    }
+}
+
+private function saveSubCfgSafe(int $siteId, string $label, array $cfg): void
+{
+    $json = json_encode($cfg, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    try {
+        $this->saveSubCfg($siteId, $label, $cfg);
+    } catch (Throwable $e) {
+        $msg = $e->getMessage();
+
+        if (
+            stripos($msg, 'server has gone away') !== false ||
+            stripos($msg, 'packets out of order') !== false ||
+            stripos($msg, 'lost connection') !== false
+        ) {
+            hub_log('AI_DB_RECONNECT', [
+                'site_id' => $siteId,
+                'label' => $label,
+                'err' => $msg,
+            ]);
+
+            $pdo = DB::reconnect();
+
+            $st = $pdo->prepare("
+                SELECT id
+                FROM site_subdomain_configs
+                WHERE site_id = ? AND label = ?
+                LIMIT 1
+            ");
+            $st->execute([$siteId, $label]);
+            $row = $st->fetch(PDO::FETCH_ASSOC);
+
+            if ($row) {
+                $pdo->prepare("
+                    UPDATE site_subdomain_configs
+                    SET config_json = ?
+                    WHERE site_id = ? AND label = ?
+                    LIMIT 1
+                ")->execute([$json, $siteId, $label]);
+            } else {
+                $pdo->prepare("
+                    INSERT INTO site_subdomain_configs (site_id, label, config_json)
+                    VALUES (?, ?, ?)
+                ")->execute([$siteId, $label, $json]);
+            }
+
+            return;
+        }
+
+        throw $e;
+    }
 }
 
 }

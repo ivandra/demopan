@@ -9,6 +9,7 @@
 $label = isset($label) ? (string)$label : '_default';
 $labelEnc = urlencode($label);
 $labelEsc = htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
+$siteId   = (int)($site['id'] ?? 0);
 
 // В Files у тебя редактируются только корневые файлы build.
 // Для template-multy корневой файл — config.default.php, а не config.php.
@@ -19,24 +20,38 @@ $configFileForFiles = (($site['template'] ?? '') === 'template-multy') ? 'config
 <p style="font-size:13px;opacity:.85;">
     label: <code><?= $labelEsc ?></code>
     | config.php генерируется в: <code><?= htmlspecialchars($configTargetPath) ?></code>
-    | <a href="/sites/files/edit?id=<?= (int)$site['id'] ?>&label=<?= $labelEnc ?>&file=<?= rawurlencode($configFileForFiles) ?>">открыть в Files</a>
+    | <a href="/sites/files/edit?id=<?= $siteId ?>&label=<?= $labelEnc ?>&file=<?= rawurlencode($configFileForFiles) ?>">открыть в Files</a>
 </p>
 
 <p>
-    <a href="/sites/edit?id=<?= (int)$site['id'] ?>&label=<?= $labelEnc ?>">← назад к SEO</a> |
-    <a href="/sites/texts?id=<?= (int)$site['id'] ?>&label=<?= $labelEnc ?>">Texts</a>
+    <a href="/sites/edit?id=<?= $siteId ?>&label=<?= $labelEnc ?>">← назад к SEO</a> |
+    <a href="/sites/texts?id=<?= $siteId ?>&label=<?= $labelEnc ?>">Texts</a> |
+    <a href="/sites/ai?id=<?= $siteId ?>">AI-фабрика</a>
 </p>
+
+<div style="margin:14px 0 18px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+    <a href="/ai/generate-all-pages?id=<?= $siteId ?>&label=<?= $labelEnc ?>"
+       onclick="return confirm('Сгенерировать meta и тексты для всех страниц label=<?= $labelEsc ?> ?');"
+       style="display:inline-block;padding:10px 14px;border-radius:8px;background:#27ae60;border:1px solid #27ae60;color:#fff;text-decoration:none;">
+        AI: сгенерировать всё для этого label
+    </a>
+
+    <a href="/sites/subcfg?id=<?= $siteId ?>&label=<?= $labelEnc ?>"
+       style="display:inline-block;padding:10px 14px;border-radius:8px;background:#f3f4f6;border:1px solid #d7dbe2;color:#222;text-decoration:none;">
+        Открыть SubCfg
+    </a>
+</div>
 
 <hr>
 
-<form method="post" action="/sites/pages/text-new?id=<?= (int)$site['id'] ?>&label=<?= $labelEnc ?>" style="margin-bottom:12px;">
+<form method="post" action="/sites/pages/text-new?id=<?= $siteId ?>&label=<?= $labelEnc ?>" style="margin-bottom:12px;">
     <input type="hidden" name="label" value="<?= $labelEsc ?>">
     <label>Быстро создать файл в texts</label>
     <input name="new_file" placeholder="new.php">
     <button type="submit">Создать и открыть</button>
 </form>
 
-<form method="post" action="/sites/pages?id=<?= (int)$site['id'] ?>&label=<?= $labelEnc ?>">
+<form method="post" action="/sites/pages?id=<?= $siteId ?>&label=<?= $labelEnc ?>">
     <input type="hidden" name="label" value="<?= $labelEsc ?>">
 
     <table>
@@ -47,6 +62,7 @@ $configFileForFiles = (($site['template'] ?? '') === 'template-multy') ? 'config
             <th>Description</th>
             <th>Keywords</th>
             <th>Text file</th>
+            <th>AI</th>
             <th>Priority</th>
             <th>In sitemap</th>
         </tr>
@@ -74,9 +90,25 @@ $configFileForFiles = (($site['template'] ?? '') === 'template-multy') ? 'config
                 </select>
                 <?php if ($currentFile): ?>
                     <div style="font-size:12px;margin-top:4px;">
-                        <a href="/sites/texts/edit?id=<?= (int)$site['id'] ?>&label=<?= $labelEnc ?>&file=<?= rawurlencode($currentFile) ?>">редактировать</a>
+                        <a href="/sites/texts/edit?id=<?= $siteId ?>&label=<?= $labelEnc ?>&file=<?= rawurlencode($currentFile) ?>">редактировать</a>
                     </div>
                 <?php endif; ?>
+            </td>
+
+            <td style="white-space:nowrap;">
+                <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start;">
+                    <a href="/ai/generate-page-meta?id=<?= $siteId ?>&label=<?= $labelEnc ?>&path=<?= urlencode($url) ?>"
+                       onclick="return confirm('Сгенерировать AI meta для страницы <?= htmlspecialchars($url, ENT_QUOTES) ?> ?');"
+                       style="display:inline-block;padding:6px 10px;border-radius:7px;background:#2f80ed;color:#fff;text-decoration:none;font-size:12px;">
+                        AI meta
+                    </a>
+
+                    <a href="/ai/generate-page-text?id=<?= $siteId ?>&label=<?= $labelEnc ?>&path=<?= urlencode($url) ?>"
+                       onclick="return confirm('Сгенерировать AI текст для страницы <?= htmlspecialchars($url, ENT_QUOTES) ?> ?');"
+                       style="display:inline-block;padding:6px 10px;border-radius:7px;background:#6f42c1;color:#fff;text-decoration:none;font-size:12px;">
+                        AI text
+                    </a>
+                </div>
             </td>
 
             <td><input name="priority[<?= $i ?>]" value="<?= htmlspecialchars($p['priority'] ?? '') ?>" style="width:60px"></td>
@@ -100,6 +132,9 @@ $configFileForFiles = (($site['template'] ?? '') === 'template-multy') ? 'config
                         <option value="<?= htmlspecialchars($tf) ?>"><?= htmlspecialchars($tf) ?></option>
                     <?php endforeach; ?>
                 </select>
+            </td>
+            <td style="white-space:nowrap;">
+                <span style="font-size:12px;opacity:.7;">после сохранения</span>
             </td>
             <td><input name="priority[<?= $i ?>]" placeholder="0.5" style="width:60px"></td>
             <td style="text-align:center"><input type="checkbox" name="sitemap[<?= $i ?>]" checked></td>

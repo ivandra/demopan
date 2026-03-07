@@ -9,6 +9,7 @@ class DB
         if (self::$pdo instanceof PDO) {
             return self::$pdo;
         }
+
         self::$pdo = self::connect();
         return self::$pdo;
     }
@@ -18,36 +19,11 @@ class DB
         self::$pdo = null;
     }
 
-    private static function connect(): PDO
+    public static function reconnect(): PDO
     {
-        // ВАЖНО: как было у вас — читаем реальный файл конфига
-        $cfg = require __DIR__ . '/../../config/db.php';
-
-        $host = $cfg['host'] ?? 'localhost';
-        $port = (int)($cfg['port'] ?? 3306);
-
-        // у вас раньше ключ был db, а не name
-        $name = $cfg['db'] ?? ($cfg['name'] ?? '');
-
-        $user = $cfg['user'] ?? '';
-        $pass = $cfg['pass'] ?? '';
-
-        if ($name === '' || $user === '') {
-            throw new RuntimeException('DB config is missing: check config/db.php keys host/port/db/user/pass');
-        }
-
-        $dsn = "mysql:host={$host};port={$port};dbname={$name};charset=utf8mb4";
-
-        $pdo = new PDO($dsn, $user, $pass, [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES   => false,
-            PDO::ATTR_PERSISTENT         => false,
-        ]);
-
-        $pdo->exec("SET NAMES utf8mb4");
-
-        return $pdo;
+        self::$pdo = null;
+        self::$pdo = self::connect();
+        return self::$pdo;
     }
 
     public static function withReconnect(callable $fn)
@@ -70,5 +46,37 @@ class DB
             self::reset();
             return $fn(self::pdo());
         }
+    }
+
+    private static function connect(): PDO
+    {
+        // Оставляем ваш реальный формат конфига
+        $cfg = require __DIR__ . '/../../config/db.php';
+
+        $host = (string)($cfg['host'] ?? 'localhost');
+        $port = (int)($cfg['port'] ?? 3306);
+
+        // У вас ключ обычно db, но на всякий случай поддержим и name
+        $name = (string)($cfg['db'] ?? ($cfg['name'] ?? ''));
+
+        $user = (string)($cfg['user'] ?? '');
+        $pass = (string)($cfg['pass'] ?? '');
+
+        if ($name === '' || $user === '') {
+            throw new RuntimeException('DB config is missing: check config/db.php keys host/port/db/user/pass');
+        }
+
+        $dsn = "mysql:host={$host};port={$port};dbname={$name};charset=utf8mb4";
+
+        $pdo = new PDO($dsn, $user, $pass, [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::ATTR_PERSISTENT         => false,
+        ]);
+
+        $pdo->exec("SET NAMES utf8mb4");
+
+        return $pdo;
     }
 }

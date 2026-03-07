@@ -15,18 +15,49 @@ if (!$page || !is_array($page)) {
     exit;
 }
 
-$title = $page['title'] ?? $title;
-$description = $page['description'] ?? $description;
-$keywords = $page['keywords'] ?? $keywords;
-$h1 = $page['h1'] ?? $h1;
+$resolveInherited = function(array $page, string $key, string $fallback): string {
+    if (!array_key_exists($key, $page)) {
+        return $fallback;
+    }
+
+    $v = $page[$key];
+
+    if ($v === '$inherit' || $v === null || $v === '') {
+        return $fallback;
+    }
+
+    return (string)$v;
+};
+
+$title = $resolveInherited($page, 'title', (string)$title);
+$description = $resolveInherited($page, 'description', (string)$description);
+$keywords = $resolveInherited($page, 'keywords', (string)$keywords);
+$h1 = $resolveInherited($page, 'h1', (string)$h1);
 
 $pathForUrl = ($reqPath === '/') ? '/' : ($reqPath . '/');
 $currentUrl = rtrim($domain, '/') . $pathForUrl;
 
-$textFile = $page['text_file'] ?? '';
-if (!$textFile || !is_file($textFile)) {
+$textFile = (string)($page['text_file'] ?? '');
+
+if ($textFile !== '' && !preg_match('~^([a-zA-Z]:[\\\\/]|/)~', $textFile)) {
+    $textsBase = rtrim((string)($textsDir ?? ''), '/\\');
+    if ($textsBase !== '') {
+        $textFile = $textsBase . '/' . ltrim($textFile, '/\\');
+    }
+}
+
+if ($textFile === '' || !is_file($textFile)) {
     http_response_code(404);
-    $textFile = $pages['/404']['text_file'] ?? '';
+
+    $fallbackFile = (string)($pages['/404']['text_file'] ?? '');
+    if ($fallbackFile !== '' && !preg_match('~^([a-zA-Z]:[\\\\/]|/)~', $fallbackFile)) {
+        $textsBase = rtrim((string)($textsDir ?? ''), '/\\');
+        if ($textsBase !== '') {
+            $fallbackFile = $textsBase . '/' . ltrim($fallbackFile, '/\\');
+        }
+    }
+
+    $textFile = $fallbackFile;
 }
 
 require_once __DIR__ . '/header.php';

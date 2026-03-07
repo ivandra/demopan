@@ -539,3 +539,112 @@ Stack trace:
 [07-Mar-2026 19:14:11 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
 [07-Mar-2026 19:14:11 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
 [07-Mar-2026 19:14:11 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 20:52:58 Europe/Moscow] [NC listAccounts] rows=2
+[07-Mar-2026 20:52:58 Europe/Moscow] [availableIps] count=6 siteId=15
+[07-Mar-2026 20:52:58 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[07-Mar-2026 20:53:10 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 20:53:10 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 20:53:10 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 20:53:18 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 20:53:18 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 20:53:18 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 20:53:37 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 20:53:37 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 20:53:37 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 20:53:42 Europe/Moscow] [NC listAccounts] rows=2
+[07-Mar-2026 20:53:42 Europe/Moscow] [availableIps] count=6 siteId=15
+[07-Mar-2026 20:53:42 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[07-Mar-2026 20:53:45 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 20:53:45 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 20:53:45 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 20:53:48 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 20:53:48 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 20:53:48 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 20:54:31 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 20:54:31 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 20:54:31 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 20:54:32 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 20:54:32 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 20:54:32 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 20:54:35 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=banda buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 20:54:35 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda
+[07-Mar-2026 20:54:35 Europe/Moscow] [SubdomainProvisioner] OK created label=banda cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda/config.php
+[07-Mar-2026 20:54:37 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=banda buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 20:54:37 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda
+[07-Mar-2026 20:54:37 Europe/Moscow] [SubdomainProvisioner] OK created label=banda cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda/config.php
+[07-Mar-2026 20:57:41 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 20:57:41 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 20:57:41 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 21:31:19 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 21:31:19 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 21:31:19 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 21:31:48 Europe/Moscow] [NC listAccounts] rows=2
+[07-Mar-2026 21:31:48 Europe/Moscow] [availableIps] count=6 siteId=15
+[07-Mar-2026 21:31:48 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[07-Mar-2026 21:31:52 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 21:31:52 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 21:31:52 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 21:32:01 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 21:32:01 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 21:32:01 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 21:33:06 Europe/Moscow] PHP Warning:  Packets out of order. Expected 1 received 0. Packet size=145 in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/AiController.php on line 1302
+[07-Mar-2026 21:34:17 Europe/Moscow] PHP Warning:  Packets out of order. Expected 1 received 0. Packet size=145 in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/AiController.php on line 1302
+[07-Mar-2026 21:34:17 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 21:34:17 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 21:34:17 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 21:34:20 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 21:34:20 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 21:34:20 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 21:34:50 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 21:34:50 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 21:34:50 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 22:07:56 Europe/Moscow] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO) in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/DB.php:38
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/DB.php(38): PDO->__construct('mysql:host=127....', '', '', Array)
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/DB.php(13): DB::makePdo()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteController.php(1180): DB::pdo()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteController.php(232): SiteController->loadSiteAndConfig(15)
+#4 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(144): SiteController->editForm()
+#5 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#6 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(354): Router->dispatch()
+#7 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/DB.php on line 38
+[07-Mar-2026 22:08:03 Europe/Moscow] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO) in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/DB.php:38
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/DB.php(38): PDO->__construct('mysql:host=127....', '', '', Array)
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/DB.php(13): DB::makePdo()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteController.php(34): DB::pdo()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(144): SiteController->index()
+#4 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#5 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(354): Router->dispatch()
+#6 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/DB.php on line 38
+[07-Mar-2026 22:08:03 Europe/Moscow] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [1045] Access denied for user ''@'localhost' (using password: NO) in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/DB.php:38
+Stack trace:
+#0 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/DB.php(38): PDO->__construct('mysql:host=127....', '', '', Array)
+#1 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/DB.php(13): DB::makePdo()
+#2 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteController.php(34): DB::pdo()
+#3 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(144): SiteController->index()
+#4 /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/Router.php(30): {closure}()
+#5 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(354): Router->dispatch()
+#6 {main}
+  thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Core/DB.php on line 38
+[07-Mar-2026 22:27:05 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 22:27:05 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 22:27:05 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 22:27:57 Europe/Moscow] PHP Warning:  Packets out of order. Expected 1 received 0. Packet size=145 in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/AiController.php on line 1302
+[07-Mar-2026 22:27:57 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 22:27:57 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 22:27:57 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 22:29:02 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 22:29:02 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 22:29:02 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 22:29:05 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 22:29:05 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 22:29:05 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 22:29:08 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 22:29:08 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 22:29:08 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[07-Mar-2026 22:29:14 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[07-Mar-2026 22:29:14 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[07-Mar-2026 22:29:14 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php

@@ -13,28 +13,28 @@ $cfg = array (
   array (
     '/' => 
     array (
-      'title' => '$inherit',
-      'h1' => '$inherit',
-      'description' => '$inherit',
-      'keywords' => '$inherit',
+      'title' => 'Kazik1 Casino - Игровые автоматы и бонусы онлайн',
+      'h1' => 'Добро пожаловать в Kazik1 Casino',
+      'description' => 'Играйте в лучшие слоты и настольные игры в Kazik1 Casino. Регистрация за минуту, щедрые бонусы и быстрые выплаты.',
+      'keywords' => 'онлайн казино, игровые автоматы, слоты, бонусы казино, азартные игры, регистрация, выплаты',
       'text_file' => 'home.php',
       'priority' => '1.0',
     ),
     '/404' => 
     array (
-      'title' => '404 — Страница не найдена',
-      'h1' => '$inherit',
-      'description' => 'Страница не найдена',
-      'keywords' => '$inherit',
+      'title' => 'Страница не найдена - 404 ошибка | Kazik1 Casino',
+      'h1' => 'Страница не найдена',
+      'description' => 'Запрошенная страница не существует. Вернитесь на главную Kazik1 Casino или воспользуйтесь навигацией.',
+      'keywords' => 'ошибка 404, страница не найдена, Kazik1 Casino, главная страница',
       'text_file' => '404.php',
       'sitemap' => false,
     ),
     '/test' => 
     array (
-      'title' => '$inherit',
-      'h1' => '$inherit',
-      'description' => '$inherit',
-      'keywords' => '$inherit',
+      'title' => 'Тестовая страница казино Kazik1 | Проверка функционала',
+      'h1' => 'Тестовая страница',
+      'description' => 'Тестовая страница казино Kazik1. Проверка работы сайта, функционала и доступности игровых автоматов.',
+      'keywords' => 'тест, казино Kazik1, проверка, игровые автоматы, функционал',
       'text_file' => 'game.php',
     ),
   ),
