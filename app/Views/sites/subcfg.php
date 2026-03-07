@@ -17,10 +17,29 @@ function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 .subcfg-top .box { padding:12px; border:1px solid #ddd; border-radius:8px; background:#fff; }
 .subcfg-top label { display:block; font-size:12px; opacity:.8; margin-bottom:6px; }
 .subcfg-top input[type="text"], .subcfg-top select { width: 320px; max-width: 100%; padding:8px 10px; border:1px solid #ccc; border-radius:6px; }
-.subcfg-actions { display:flex; gap:8px; flex-wrap:wrap; }
+.subcfg-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
 .subcfg-actions button { padding:8px 12px; border:1px solid #ccc; background:#f7f7f7; border-radius:6px; cursor:pointer; }
 .subcfg-actions button.primary { background:#0b63f6; color:#fff; border-color:#0b63f6; }
 .subcfg-actions button.danger { background:#fff0f0; border-color:#ffb7b7; }
+.subcfg-actions a.btn {
+    display:inline-block;
+    padding:8px 12px;
+    border:1px solid #ccc;
+    background:#f7f7f7;
+    border-radius:6px;
+    text-decoration:none;
+    color:#222;
+}
+.subcfg-actions a.btn-primary {
+    background:#0b63f6;
+    color:#fff;
+    border-color:#0b63f6;
+}
+.subcfg-actions a.btn-ai {
+    background:#6f42c1;
+    color:#fff;
+    border-color:#6f42c1;
+}
 .subcfg-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
 .subcfg-grid .box { padding:12px; border:1px solid #ddd; border-radius:8px; background:#fff; }
 .subcfg-grid input[type="text"] { width:100%; padding:8px 10px; border:1px solid #ccc; border-radius:6px; }
@@ -30,6 +49,14 @@ function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 .unused { margin:0; padding-left:18px; }
 .unused li { margin:4px 0; }
 .note { padding:10px 12px; background:#f6f8ff; border:1px solid #dbe3ff; border-radius:8px; }
+.ai-note {
+    margin-top:10px;
+    padding:10px 12px;
+    background:#faf5ff;
+    border:1px solid #e7d7ff;
+    border-radius:8px;
+    color:#4b2b7f;
+}
 </style>
 
 <div class="subcfg-wrap">
@@ -106,7 +133,32 @@ function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
             <div class="box">
                 <h3>SEO defaults (для <?= e($label) ?>)</h3>
 
-                <div class="row">
+                <div class="subcfg-actions" style="margin-bottom:14px;">
+                    <a
+                        class="btn btn-ai"
+                        href="/ai/generate-sub-meta?id=<?= $siteId ?>&label=<?= urlencode($label) ?>"
+                        onclick="return confirm('Сгенерировать AI meta для саба <?= e($label) ?>? Текущие title/h1/description/keywords будут перезаписаны.');"
+                    >
+                        AI: сгенерировать meta
+                    </a>
+
+                    <?php if ($label === '_default'): ?>
+                        <a
+                            class="btn"
+                            href="/ai/generate-meta?id=<?= $siteId ?>"
+                            onclick="return confirm('Сгенерировать AI meta для основного домена?');"
+                        >
+                            AI: meta root
+                        </a>
+                    <?php endif; ?>
+                </div>
+
+                <div class="ai-note small">
+                    Для текущего саба AI может автоматически заполнить:
+                    <b>title</b>, <b>h1</b>, <b>description</b>, <b>keywords</b>.
+                </div>
+
+                <div class="row" style="margin-top:12px;">
                     <label>title</label>
                     <input type="text" name="title" value="<?= e($cfg['title'] ?? '') ?>">
                 </div>

@@ -5,10 +5,10 @@ $cfg = array (
   'yandex_verification' => '',
   'yandex_metrika' => '',
   'promolink' => '/reg',
-  'title' => 'Новый сайт',
-  'description' => '',
-  'keywords' => '',
-  'h1' => 'Добро пожаловать',
+  'title' => 'Beef - Казино Kazik1 | Игры и бонусы',
+  'description' => 'Играйте в лучшие азартные игры в разделе Beef казино Kazik1. Уникальные бонусы и высокие выплаты.',
+  'keywords' => 'beef, казино, kazik1, игры, бонусы, азартные игры, выплаты',
+  'h1' => 'Добро пожаловать в раздел Beef казино Kazik1',
   'pages' => 
   array (
     '/' => 
@@ -34,6 +34,9 @@ $cfg = array (
   'redirect_enabled' => 0,
   'base_new_url' => '',
   'base_second_url' => '',
+  'label' => 'beef',
+  'logo' => 'assets/logo.webp',
+  'favicon' => 'assets/favicon.png',
 );
 
 $pages = $cfg['pages'] ?? [];

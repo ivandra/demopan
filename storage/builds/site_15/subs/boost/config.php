@@ -5,10 +5,10 @@ $cfg = array (
   'yandex_verification' => '',
   'yandex_metrika' => '',
   'promolink' => '/reg',
-  'title' => 'Новый сайт',
-  'description' => '',
-  'keywords' => '',
-  'h1' => 'Добро пожаловать',
+  'title' => 'Boost Kazik1 Casino - Ускоренный доступ к азартным играм',
+  'description' => 'Получите моментальный доступ к играм Kazik1 Casino через поддомен Boost. Регистрация, бонусы и тысячи слотов в один клик.',
+  'keywords' => 'Kazik1 Casino, Boost Kazik1, быстрый доступ к казино, ускоренный вход, азартные игры онлайн, слоты, регистрация в казино',
+  'h1' => 'Boost Kazik1 Casino: быстрый вход и игра',
   'pages' => 
   array (
     '/' => 
@@ -23,10 +23,19 @@ $cfg = array (
     '/404' => 
     array (
       'title' => '404 — Страница не найдена',
+      'h1' => '$inherit',
       'description' => 'Страница не найдена',
-      'keywords' => '',
+      'keywords' => '$inherit',
       'text_file' => '404.php',
       'sitemap' => false,
+    ),
+    '/test' => 
+    array (
+      'title' => '$inherit',
+      'h1' => '$inherit',
+      'description' => '$inherit',
+      'keywords' => '$inherit',
+      'text_file' => 'game.php',
     ),
   ),
   'partner_override_url' => '',

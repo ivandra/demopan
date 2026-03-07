@@ -22,6 +22,7 @@ function badge(string $text, string $bg, string $fg, string $border = ''): strin
   | <a href="/subdomains">Поддомены (каталог)</a>
   | <a href="/ssl">SSL monitor (общий)</a>
   | <a href="/ssl/settings">TG settings</a>
+  | <a href="/ai/settings">AI settings</a>
 </p>
 
 <style>
@@ -220,6 +221,7 @@ function badge(string $text, string $bg, string $fg, string $border = ''): strin
                onclick="return confirm('Сбросить статусы VPS/FTP/Files?')">Reset</a>
 
             <a href="/sites/edit?id=<?= $siteId ?>">Редактировать</a>
+			<a href="/sites/ai?id=<?=$siteId?>">AI</a>
             <a href="/sites/pages?id=<?= $siteId ?>">Pages</a>
             <a href="/sites/texts?id=<?= $siteId ?>">Texts</a>
             <a href="/sites/files?id=<?= $siteId ?>">Files</a>

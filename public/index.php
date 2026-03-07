@@ -117,6 +117,7 @@ require APP_ROOT .'/app/Services/YandexWebmasterService.php';
 
 require APP_ROOT . '/app/Services/SslCheckService.php';
 require APP_ROOT . '/app/Services/TelegramService.php'; 
+require APP_ROOT . '/app/Services/DeepseekClient.php';
 
 // ---------- 8) Controllers ----------
 require APP_ROOT . '/app/Controllers/AuthController.php';
@@ -133,7 +134,7 @@ require APP_ROOT . '/app/Controllers/SslController.php';
 
 require APP_ROOT .'/app/Controllers/WebmasterController.php';
 require APP_ROOT .'/app/Controllers/SiteCloneController.php';
-
+require APP_ROOT . '/app/Controllers/AiController.php';
 
 
 
@@ -152,7 +153,7 @@ $deploy = new DeployController();
 
 $auth = new AuthController();
 $site = new SiteController();
-
+$ai = new AiController();
 
 
 $domains           = new DomainsController();
@@ -313,6 +314,13 @@ $router->post('/ssl/check-now', action($ssl, 'checkNow'));
 $router->get('/ssl/settings', action($ssl, 'settings'));
 $router->post('/ssl/settings', action($ssl, 'settingsSave'));
 
+$router->get('/ai/settings', action($ai, 'settings'));
+$router->post('/ai/settings', action($ai, 'settingsSave'));
+$router->get('/ai/test', action($ai, 'test'));
+$router->get('/sites/ai', action($ai, 'site'));
+$router->post('/ai/generate-meta', action($ai, 'generateMeta'));
+$router->post('/ai/generate-subdomains', action($ai, 'generateSubdomains'));
+$router->get('/ai/generate-sub-meta', action($ai, 'generateSubMeta'));
 
 // Debug
 $router->get('/debug/log', function () {
