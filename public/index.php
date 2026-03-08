@@ -324,9 +324,16 @@ $router->get('/ai/generate-sub-meta', action($ai, 'generateSubMeta'));
 $router->get('/ai/generate-root-text', action($ai, 'generateRootText'));
 $router->get('/ai/generate-sub-text', action($ai, 'generateSubText'));
 $router->get('/ai/generate-all-sub-texts', action($ai, 'generateAllSubTexts'));
+
+$router->post('/ai/options/save', action($ai, 'saveRunOptions'));
+$router->post('/ai/options/reset', action($ai, 'resetRunOptions'));
 $router->get('/ai/generate-page-meta', action($ai, 'generatePageMeta'));
 $router->get('/ai/generate-page-text', action($ai, 'generatePageText'));
 $router->get('/ai/generate-all-pages', action($ai, 'generateAllPages'));
+
+$router->post('/ai/generate-selected-meta', action($ai, 'generateSelectedMeta'));
+$router->post('/ai/generate-selected-texts', action($ai, 'generateSelectedTexts'));
+$router->post('/ai/generate-selected-pages', action($ai, 'generateSelectedLabelsPages'));
 
 // Debug
 $router->get('/debug/log', function () {
