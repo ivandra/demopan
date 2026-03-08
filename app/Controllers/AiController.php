@@ -14,12 +14,6 @@ class AiController extends Controller
         return htmlspecialchars($v, ENT_QUOTES, 'UTF-8');
     }
 
-              max_tokens,
-              prompt_v1,
-              prompt_v2,
-              meta_prompt_root,
-              meta_prompt_sub,
-              text_prompt_root,
     private function loadRow(): array
     {
         $st = DB::pdo()->prepare("SELECT * FROM ai_settings WHERE id = 1 LIMIT 1");
