@@ -1,41 +1,76 @@
-<h2>FASTPANEL серверы</h2>
+<?php
+function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
+$servers = is_array($servers ?? null) ? $servers : [];
+?>
 
-<p>
-    <a href="/">← к сайтам</a> |
-    <a href="/servers/create">Добавить сервер</a>
-</p>
+<div class="page-head">
+    <h1 class="page-title">Серверы FastPanel</h1>
+    <div class="page-actions">
+        <a class="btn btn-primary" href="/servers/create">Добавить сервер</a>
+        <a class="btn btn-secondary" href="/sites">К сайтам</a>
+    </div>
+    <div class="page-subtitle">
+        Подключения к FastPanel, которые используются для создания сайтов, FTP и деплоя.
+    </div>
+</div>
 
-<table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse;width:100%">
-    <tr>
-        <th>ID</th>
-        <th>Название</th>
-        <th>Host</th>
-        <th>User</th>
-        <th>TLS verify</th>
-        <th>Действия</th>
-    </tr>
+<?php if (empty($servers)): ?>
+    <div class="panel-card empty-state mt-16">
+        <h2 class="section-title">Серверов пока нет</h2>
+        <div class="small muted">Добавьте первое подключение к FastPanel.</div>
+        <div class="page-actions mt-16">
+            <a class="btn btn-primary" href="/servers/create">Добавить сервер</a>
+        </div>
+    </div>
+<?php else: ?>
+    <div class="panel-card mt-16">
+        <div class="page-head page-head--compact">
+            <h2 class="section-title">Список серверов</h2>
+            <div class="small muted">Всего: <b><?= count($servers) ?></b></div>
+        </div>
 
-    <?php foreach (($servers ?? []) as $s): ?>
-        <tr>
-            <td><?= (int)$s['id'] ?></td>
-            <td><?= htmlspecialchars($s['title']) ?></td>
-            <td><?= htmlspecialchars($s['host']) ?></td>
-            <td><?= htmlspecialchars($s['username']) ?></td>
-            <td><?= (int)$s['verify_tls'] ?></td>
-            <td>
-                <a href="/servers/edit?id=<?= (int)$s['id'] ?>">Редактировать</a>
-                |
-                <a href="/servers/test?id=<?= (int)$s['id'] ?>" target="_blank">Test</a>
-                |
-                <form method="post" action="/servers/delete?id=<?= (int)$s['id'] ?>" style="display:inline"
-                      onsubmit="return confirm('Удалить сервер?');">
-                    <button type="submit">Удалить</button>
-                </form>
-            </td>
-        </tr>
-    <?php endforeach; ?>
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Название</th>
+                    <th>Host</th>
+                    <th>User</th>
+                    <th>TLS verify</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($servers as $s): ?>
+                    <tr>
+                        <td><?= (int)$s['id'] ?></td>
+                        <td class="system-table-domain"><?= h($s['title']) ?></td>
+                        <td><code><?= h($s['host']) ?></code></td>
+                        <td><?= h($s['username']) ?></td>
+                        <td>
+                            <?php if ((int)($s['verify_tls'] ?? 0) === 1): ?>
+                                <span class="badge badge-success">Проверять</span>
+                            <?php else: ?>
+                                <span class="badge badge-warning">Не проверять</span>
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                            <div class="system-actions">
+                                <a class="btn btn-sm btn-secondary" href="/servers/edit?id=<?= (int)$s['id'] ?>">Редактировать</a>
+                                <a class="btn btn-sm btn-secondary" href="/servers/test?id=<?= (int)$s['id'] ?>" target="_blank" rel="noopener">Проверить</a>
 
-    <?php if (empty($servers)): ?>
-        <tr><td colspan="6">Пока нет серверов</td></tr>
-    <?php endif; ?>
-</table>
+                                <form method="post"
+                                      action="/servers/delete?id=<?= (int)$s['id'] ?>"
+                                      data-confirm="Удалить сервер <?= h($s['title']) ?>?">
+                                    <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+<?php endif; ?>

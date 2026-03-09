@@ -10,143 +10,110 @@ $unused = is_array($unused ?? null) ? $unused : [];
 
 function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 
+$entityTitle = ($label === '_default') ? 'Основной домен (_default)' : ('Поддомен: ' . $label);
+$entityHost  = ($label === '_default')
+    ? (string)($site['domain'] ?? '')
+    : ($label . '.' . (string)($site['domain'] ?? ''));
 ?>
-<style>
-.subcfg-wrap { max-width: 1100px; }
-.subcfg-top { display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; margin-bottom:16px; }
-.subcfg-top .box { padding:12px; border:1px solid #ddd; border-radius:8px; background:#fff; }
-.subcfg-top label { display:block; font-size:12px; opacity:.8; margin-bottom:6px; }
-.subcfg-top input[type="text"], .subcfg-top select { width: 320px; max-width: 100%; padding:8px 10px; border:1px solid #ccc; border-radius:6px; }
-.subcfg-actions { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
-.subcfg-actions button { padding:8px 12px; border:1px solid #ccc; background:#f7f7f7; border-radius:6px; cursor:pointer; }
-.subcfg-actions button.primary { background:#0b63f6; color:#fff; border-color:#0b63f6; }
-.subcfg-actions button.danger { background:#fff0f0; border-color:#ffb7b7; }
-.subcfg-actions a.btn {
-    display:inline-block;
-    padding:8px 12px;
-    border:1px solid #ccc;
-    background:#f7f7f7;
-    border-radius:6px;
-    text-decoration:none;
-    color:#222;
-}
-.subcfg-actions a.btn-primary {
-    background:#0b63f6;
-    color:#fff;
-    border-color:#0b63f6;
-}
-.subcfg-actions a.btn-ai {
-    background:#6f42c1;
-    color:#fff;
-    border-color:#6f42c1;
-}
-.subcfg-grid { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
-.subcfg-grid .box { padding:12px; border:1px solid #ddd; border-radius:8px; background:#fff; }
-.subcfg-grid input[type="text"] { width:100%; padding:8px 10px; border:1px solid #ccc; border-radius:6px; }
-.subcfg-grid .row { margin-bottom:10px; }
-.small { font-size:12px; opacity:.8; }
-.hr { height:1px; background:#eee; margin:12px 0; }
-.unused { margin:0; padding-left:18px; }
-.unused li { margin:4px 0; }
-.note { padding:10px 12px; background:#f6f8ff; border:1px solid #dbe3ff; border-radius:8px; }
-.ai-note {
-    margin-top:10px;
-    padding:10px 12px;
-    background:#faf5ff;
-    border:1px solid #e7d7ff;
-    border-radius:8px;
-    color:#4b2b7f;
-}
-</style>
 
 <div class="subcfg-wrap">
-    <h2>Subdomain configs: <?= e($site['domain'] ?? '') ?></h2>
+    <div class="page-head">
+        <h1 class="page-title">Контент и SEO: <?= e($site['domain'] ?? '') ?></h1>
+        <div class="page-actions">
+            <a class="btn btn-secondary" href="/sites">К списку сайтов</a>
+            <a class="btn btn-secondary" href="/sites/edit?id=<?= $siteId ?>">Настройки сайта</a>
+        </div>
+    </div>
 
-    <p class="small">
-        <a href="/sites/edit?id=<?= $siteId ?>">Редактировать</a> |
-        <a href="/sites/pages?id=<?= $siteId ?>">Pages</a> |
-        <a href="/sites/texts?id=<?= $siteId ?>">Texts</a> |
-        <a href="/sites/files?id=<?= $siteId ?>">Files</a> |
-        <a href="/sites">Назад</a>
-    </p>
+    <div class="site-context panel-card">
+        <div class="site-context__eyebrow">Сейчас редактируется</div>
+        <div class="site-context__title"><?= e($entityTitle) ?></div>
+        <div class="site-context__meta">Хост: <code><?= e($entityHost) ?></code></div>
 
-    <div class="subcfg-top">
-        <div class="box">
-            <label>Поиск саба</label>
-            <input id="subSearch" type="text" placeholder="например: 1win, pinup, _default">
-            <div class="small">Фильтрует список. Enter не нужен.</div>
+        <div class="subcfg-actions mt-12">
+            <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Страницы</a>
+            <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Тексты</a>
+            <a class="btn btn-secondary" href="/sites/files?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Файлы</a>
+            <a class="btn btn-ai" href="/sites/ai?id=<?= $siteId ?>">AI для сайта</a>
+            <a class="btn btn-secondary" href="/sites/subdomains?id=<?= $siteId ?>">Поддомены</a>
+        </div>
+    </div>
+
+    <div class="subcfg-top mt-16">
+        <div class="panel-card">
+            <label>Поиск сущности</label>
+            <input id="subSearch" type="text" placeholder="например: 1win, pinup, _default" data-filter-options="#subSelect">
+            <div class="small muted">Фильтрует список. Enter не нужен.</div>
         </div>
 
-        <div class="box">
-            <label>Выбор саба</label>
-            <select id="subSelect">
+        <div class="panel-card">
+            <label>Выбор root / поддомена</label>
+            <select id="subSelect" data-set-query-param="label">
                 <?php foreach ($labels as $lb): ?>
                     <option value="<?= e($lb) ?>" <?= $lb === $label ? 'selected' : '' ?>>
-                        <?= e($lb) ?>
+                        <?= e($lb === '_default' ? 'Основной домен (_default)' : $lb) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
-            <div class="small">Открывает один экран редактирования для выбранного саба.</div>
+            <div class="small muted">Открывает экран редактирования для выбранной сущности.</div>
         </div>
 
-        <div class="box" style="flex:1; min-width:280px;">
+        <div class="panel-card subcfg-top__wide">
             <label>Быстрые действия</label>
             <div class="subcfg-actions">
-                <form method="post" action="/sites/subcfg/regenAll" onsubmit="return confirm('Перегенерировать config.php для всех сабов?');">
+                <form method="post" action="/sites/subcfg/regenAll" data-confirm="Перегенерировать config.php для всех сабов?">
                     <input type="hidden" name="site_id" value="<?= $siteId ?>">
-                    <button type="submit">Regen all</button>
+                    <button type="submit" class="btn btn-secondary">Пересобрать config.php для всех</button>
                 </form>
 
-                <form method="post" action="/sites/subcfg/create" onsubmit="return confirm('Создать саб + папки + config.php?');" style="display:flex; gap:8px; align-items:center;">
+                <form method="post" action="/sites/subcfg/create" data-confirm="Создать саб + папки + config.php?">
                     <input type="hidden" name="site_id" value="<?= $siteId ?>">
-                    <input type="text" name="new_label" placeholder="new-sub" style="width:180px;">
-                    <button type="submit">Create sub</button>
+                    <input type="text" name="new_label" placeholder="new-sub" class="input-sm">
+                    <button type="submit" class="btn btn-primary">Создать поддомен</button>
                 </form>
 
                 <?php if ($label !== '_default'): ?>
-                <form method="post" action="/sites/subcfg/delete" onsubmit="return confirm('Удалить конфиг саба <?= e($label) ?> из БД?');">
-                    <input type="hidden" name="site_id" value="<?= $siteId ?>">
-                    <input type="hidden" name="label" value="<?= e($label) ?>">
-                    <label class="small" style="display:inline-flex; gap:6px; align-items:center; margin-right:8px;">
-                        <input type="checkbox" name="delete_folder" value="1"> удалить папку subs/<?= e($label) ?>
-                    </label>
-                    <button type="submit" class="danger">Delete sub</button>
-                </form>
+                    <form method="post" action="/sites/subcfg/delete" data-confirm="Удалить конфиг саба <?= e($label) ?> из БД?">
+                        <input type="hidden" name="site_id" value="<?= $siteId ?>">
+                        <input type="hidden" name="label" value="<?= e($label) ?>">
+                        <label class="checkbox-inline small">
+                            <input type="checkbox" name="delete_folder" value="1"> удалить папку subs/<?= e($label) ?>
+                        </label>
+                        <button type="submit" class="btn btn-danger">Удалить конфиг</button>
+                    </form>
                 <?php endif; ?>
             </div>
         </div>
     </div>
 
-    <div class="note">
+    <div class="alert alert-info mt-16">
         <b>Важно:</b> при открытии экрана панель вызывает provisioner и гарантирует наличие
         <code>subs/&lt;label&gt;/</code> (texts + assets + config.php).
         Для основного домена используется <code>subs/_default</code>.
     </div>
 
-    <div class="hr"></div>
-
-    <form method="post" action="/sites/subcfg/save">
+    <form method="post" action="/sites/subcfg/save" class="mt-16 stack-gap-lg">
         <input type="hidden" name="site_id" value="<?= $siteId ?>">
         <input type="hidden" name="label" value="<?= e($label) ?>">
 
         <div class="subcfg-grid">
-            <div class="box">
-                <h3>SEO defaults (для <?= e($label) ?>)</h3>
+            <div class="panel-card">
+                <h3 class="section-title">SEO-поля и мета (для <?= e($label) ?>)</h3>
 
-                <div class="subcfg-actions" style="margin-bottom:14px;">
+                <div class="subcfg-actions mb-14">
                     <a
                         class="btn btn-ai"
                         href="/ai/generate-sub-meta?id=<?= $siteId ?>&label=<?= urlencode($label) ?>"
-                        onclick="return confirm('Сгенерировать AI meta для саба <?= e($label) ?>? Текущие title/h1/description/keywords будут перезаписаны.');"
+                        data-confirm="Сгенерировать AI meta для саба <?= e($label) ?>? Текущие title/h1/description/keywords будут перезаписаны."
                     >
                         AI: сгенерировать meta
                     </a>
 
                     <?php if ($label === '_default'): ?>
                         <a
-                            class="btn"
+                            class="btn btn-secondary"
                             href="/ai/generate-meta?id=<?= $siteId ?>"
-                            onclick="return confirm('Сгенерировать AI meta для основного домена?');"
+                            data-confirm="Сгенерировать AI meta для основного домена?"
                         >
                             AI: meta root
                         </a>
@@ -157,28 +124,28 @@ function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
                     Для текущего саба AI может автоматически заполнить:
                     <b>title</b>, <b>h1</b>, <b>description</b>, <b>keywords</b>.
                 </div>
-				
-				 <div class="subcfg-actions" style="margin:14px 0;">
-				<a
-					class="btn btn-ai"
-					href="/ai/generate-sub-text?id=<?= $siteId ?>&label=<?= urlencode($label) ?>"
-					onclick="return confirm('Сгенерировать AI-текст для саба <?= e($label) ?>? Будет перезаписан файл текста главной страницы.');"
-				>
-					AI: сгенерировать текст
-				</a>
-				
-				<?php if ($label === '_default'): ?>
-					<a
-						class="btn btn-ai"
-						href="/ai/generate-root-text?id=<?= $siteId ?>"
-						onclick="return confirm('Сгенерировать AI-текст для основного домена? Будет перезаписан файл главной страницы.');"
-					>
-						AI: текст root
-					</a>
-				<?php endif; ?>
-				 </div>
 
-                <div class="row" style="margin-top:12px;">
+                <div class="subcfg-actions mt-14 mb-14">
+                    <a
+                        class="btn btn-ai"
+                        href="/ai/generate-sub-text?id=<?= $siteId ?>&label=<?= urlencode($label) ?>"
+                        data-confirm="Сгенерировать AI-текст для саба <?= e($label) ?>? Будет перезаписан файл текста главной страницы."
+                    >
+                        AI: сгенерировать текст
+                    </a>
+
+                    <?php if ($label === '_default'): ?>
+                        <a
+                            class="btn btn-ai"
+                            href="/ai/generate-root-text?id=<?= $siteId ?>"
+                            data-confirm="Сгенерировать AI-текст для основного домена? Будет перезаписан файл главной страницы."
+                        >
+                            AI: текст root
+                        </a>
+                    <?php endif; ?>
+                </div>
+
+                <div class="row mt-12">
                     <label>title</label>
                     <input type="text" name="title" value="<?= e($cfg['title'] ?? '') ?>">
                 </div>
@@ -199,8 +166,8 @@ function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
                 </div>
             </div>
 
-            <div class="box">
-                <h3>Redirect / partner / assets</h3>
+            <div class="panel-card">
+                <h3 class="section-title">Редиректы, партнёрские ссылки и assets</h3>
 
                 <div class="row">
                     <label>promolink</label>
@@ -218,7 +185,7 @@ function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
                 </div>
 
                 <div class="row">
-                    <label style="display:inline-flex; gap:8px; align-items:center;">
+                    <label class="checkbox-inline">
                         <input type="checkbox" name="redirect_enabled" value="1" <?= !empty($cfg['redirect_enabled']) ? 'checked' : '' ?>>
                         redirect_enabled
                     </label>
@@ -237,61 +204,33 @@ function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
                 <div class="row">
                     <label>logo (path)</label>
                     <input type="text" name="logo" value="<?= e($cfg['logo'] ?? 'assets/logo.png') ?>">
-                    <div class="small">Обычно: <code>assets/logo.png</code></div>
+                    <div class="small muted">Обычно: <code>assets/logo.png</code></div>
                 </div>
 
                 <div class="row">
                     <label>favicon (path)</label>
                     <input type="text" name="favicon" value="<?= e($cfg['favicon'] ?? 'assets/favicon.png') ?>">
-                    <div class="small">Обычно: <code>assets/favicon.png</code></div>
+                    <div class="small muted">Обычно: <code>assets/favicon.png</code></div>
                 </div>
             </div>
         </div>
 
-        <div class="hr"></div>
-
         <div class="subcfg-actions">
-            <button type="submit" class="primary">Save</button>
-            <a class="small" href="/sites/pages?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Перейти к Pages (если подключишь label)</a>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Открыть страницы</a>
+            <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Открыть тексты</a>
         </div>
     </form>
 
     <?php if (!empty($unused)): ?>
-        <div class="hr"></div>
-        <div class="box">
-            <h3>Неиспользуемые texts (<?= e($label) ?>)</h3>
+        <div class="panel-card mt-16">
+            <h3 class="section-title">Неиспользуемые texts (<?= e($label) ?>)</h3>
             <ul class="unused">
                 <?php foreach ($unused as $f): ?>
                     <li><code><?= e($f) ?></code></li>
                 <?php endforeach; ?>
             </ul>
-            <div class="small">Это просто список. Удаление можно добавить отдельным action, если надо.</div>
+            <div class="small muted">Это просто список. Удаление можно добавить отдельным action, если надо.</div>
         </div>
     <?php endif; ?>
 </div>
-
-<script>
-(function(){
-  const search = document.getElementById('subSearch');
-  const sel = document.getElementById('subSelect');
-
-  function applyFilter(){
-    const q = (search.value || '').toLowerCase().trim();
-    for (const opt of sel.options) {
-      const v = (opt.value || '').toLowerCase();
-      opt.hidden = q && v.indexOf(q) === -1;
-    }
-  }
-
-  search.addEventListener('input', applyFilter);
-
-  sel.addEventListener('change', function(){
-    const lb = sel.value;
-    const url = new URL(window.location.href);
-    url.searchParams.set('label', lb);
-    window.location.href = url.toString();
-  });
-
-  applyFilter();
-})();
-</script>

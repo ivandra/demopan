@@ -2093,6 +2093,220 @@ private function fetchSslMonitorStatusForSites(array $sites): array
     return $map;
 }
 
+private function loadOverviewData(int $siteId): array
+{
+    $site = DB::withReconnect(function(PDO $pdo) use ($siteId) {
+        $st = $pdo->prepare("SELECT * FROM sites WHERE id=? LIMIT 1");
+        $st->execute([$siteId]);
+        return $st->fetch(PDO::FETCH_ASSOC) ?: null;
+    });
+
+    if (!$site) {
+        return ['site' => null];
+    }
+
+    $subStats = DB::withReconnect(function(PDO $pdo) use ($siteId) {
+        $st = $pdo->prepare("
+            SELECT
+              COUNT(*) AS total_all,
+              SUM(CASE WHEN enabled=1 THEN 1 ELSE 0 END) AS enabled_all,
+              SUM(CASE WHEN label <> '_default' THEN 1 ELSE 0 END) AS total_subs,
+              SUM(CASE WHEN label <> '_default' AND enabled=1 THEN 1 ELSE 0 END) AS enabled_subs,
+              SUM(CASE WHEN dns_status='ok' THEN 1 ELSE 0 END) AS dns_ok_all
+            FROM site_subdomains
+            WHERE site_id=?
+        ");
+        $st->execute([$siteId]);
+        $r = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+
+        return [
+            'total_all'    => (int)($r['total_all'] ?? 0),
+            'enabled_all'  => (int)($r['enabled_all'] ?? 0),
+            'total_subs'   => (int)($r['total_subs'] ?? 0),
+            'enabled_subs' => (int)($r['enabled_subs'] ?? 0),
+            'dns_ok_all'   => (int)($r['dns_ok_all'] ?? 0),
+        ];
+    });
+
+    $contentStats = DB::withReconnect(function(PDO $pdo) use ($siteId) {
+        $defaultExists = false;
+        $rootPages = 0;
+
+        $st = $pdo->prepare("SELECT config_json FROM site_default_configs WHERE site_id=? LIMIT 1");
+        $st->execute([$siteId]);
+        $defaultJson = $st->fetchColumn();
+
+        if ($defaultJson !== false && $defaultJson !== null && $defaultJson !== '') {
+            $defaultExists = true;
+            $arr = json_decode((string)$defaultJson, true);
+            if (is_array($arr) && !empty($arr['pages']) && is_array($arr['pages'])) {
+                $rootPages = count($arr['pages']);
+            }
+        }
+
+        $st = $pdo->prepare("
+            SELECT label, config_json
+            FROM site_subdomain_configs
+            WHERE site_id=?
+            ORDER BY label ASC
+        ");
+        $st->execute([$siteId]);
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+        $subCfgCount = 0;
+        $labelsWithPages = 0;
+        $pagesTotal = $rootPages;
+
+        foreach ($rows as $row) {
+            $label = (string)($row['label'] ?? '');
+            $json  = (string)($row['config_json'] ?? '');
+            if ($json === '') continue;
+
+            if ($label !== '_default') {
+                $subCfgCount++;
+            }
+
+            $cfg = json_decode($json, true);
+            if (!is_array($cfg)) continue;
+
+            $pages = $cfg['pages'] ?? null;
+            if (is_array($pages) && !empty($pages)) {
+                if ($label !== '_default') {
+                    $labelsWithPages++;
+                    $pagesTotal += count($pages);
+                }
+            }
+        }
+
+        return [
+            'default_exists'    => $defaultExists ? 1 : 0,
+            'root_pages'        => $rootPages,
+            'sub_cfg_count'     => $subCfgCount,
+            'labels_with_pages' => $labelsWithPages,
+            'pages_total'       => $pagesTotal,
+        ];
+    });
+
+    $buildStats = (function(array $site, int $siteId): array {
+        $buildRel = (string)($site['build_path'] ?? '');
+        $buildAbs = '';
+
+        if ($buildRel !== '') {
+            if (strpos($buildRel, 'builds/') === 0) {
+                $buildAbs = Paths::storage($buildRel);
+            } else {
+                $buildAbs = Paths::appRoot() . '/' . ltrim($buildRel, '/\\');
+            }
+        }
+
+        $zipAbs = Paths::storage('zips/site_' . $siteId . '.zip');
+
+        return [
+            'build_rel'    => $buildRel,
+            'build_exists' => ($buildAbs !== '' && is_dir($buildAbs)) ? 1 : 0,
+            'build_mtime'  => ($buildAbs !== '' && is_dir($buildAbs)) ? @date('Y-m-d H:i', filemtime($buildAbs)) : '',
+            'zip_exists'   => is_file($zipAbs) ? 1 : 0,
+            'zip_size'     => is_file($zipAbs) ? (int)filesize($zipAbs) : 0,
+            'zip_mtime'    => is_file($zipAbs) ? @date('Y-m-d H:i', filemtime($zipAbs)) : '',
+        ];
+    })($site, $siteId);
+
+    $deployStats = DB::withReconnect(function(PDO $pdo) use ($siteId, $site) {
+        $st = $pdo->prepare("
+            SELECT status, updated_at
+            FROM deployments
+            WHERE site_id=?
+            ORDER BY id DESC
+            LIMIT 1
+        ");
+        $st->execute([$siteId]);
+        $last = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+
+        return [
+            'fp_site_created' => ((int)($site['fp_site_created'] ?? 0) === 1 && (int)($site['fp_site_id'] ?? 0) > 0) ? 1 : 0,
+            'ftp_ready'       => (int)($site['fp_ftp_ready'] ?? 0) === 1 ? 1 : 0,
+            'files_ready'     => (int)($site['fp_files_ready'] ?? 0) === 1 ? 1 : 0,
+            'fp_site_id'      => (int)($site['fp_site_id'] ?? 0),
+            'last_status'     => (string)($last['status'] ?? ''),
+            'last_updated_at' => (string)($last['updated_at'] ?? ''),
+        ];
+    });
+
+    $sslStats = DB::withReconnect(function(PDO $pdo) use ($siteId) {
+        $st = $pdo->prepare("
+            SELECT
+              SUM(CASE WHEN enabled=1 THEN 1 ELSE 0 END) AS total_enabled,
+              SUM(CASE WHEN enabled=1 AND https_ok=1 THEN 1 ELSE 0 END) AS ok_enabled,
+              MAX(updated_at) AS last_check
+            FROM ssl_checks
+            WHERE site_id=? AND label <> '_default'
+        ");
+        $st->execute([$siteId]);
+        $r = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+
+        return [
+            'total' => (int)($r['total_enabled'] ?? 0),
+            'ok'    => (int)($r['ok_enabled'] ?? 0),
+            'last'  => (string)($r['last_check'] ?? ''),
+        ];
+    });
+
+    $wmStats = DB::withReconnect(function(PDO $pdo) use ($siteId) {
+        $st = $pdo->prepare("
+            SELECT
+              COUNT(*) AS total_hosts,
+              SUM(CASE WHEN verified_at IS NOT NULL THEN 1 ELSE 0 END) AS verified_cnt,
+              SUM(CASE WHEN sitemap_added_at IS NOT NULL THEN 1 ELSE 0 END) AS sitemap_cnt,
+              SUM(CASE WHEN robots_confirmed_at IS NOT NULL THEN 1 ELSE 0 END) AS robots_cnt,
+              MAX(updated_at) AS last_sync
+            FROM webmaster_hosts
+            WHERE site_id=? AND label <> '_default'
+        ");
+        $st->execute([$siteId]);
+        $r = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+
+        return [
+            'total'     => (int)($r['total_hosts'] ?? 0),
+            'verified'  => (int)($r['verified_cnt'] ?? 0),
+            'sitemaps'  => (int)($r['sitemap_cnt'] ?? 0),
+            'robots'    => (int)($r['robots_cnt'] ?? 0),
+            'last_sync' => (string)($r['last_sync'] ?? ''),
+        ];
+    });
+
+    return [
+        'site'         => $site,
+        'siteId'       => $siteId,
+        'subStats'     => $subStats,
+        'contentStats' => $contentStats,
+        'buildStats'   => $buildStats,
+        'deployStats'  => $deployStats,
+        'sslStats'     => $sslStats,
+        'wmStats'      => $wmStats,
+    ];
+}
+
+// GET /sites/overview?id=123
+public function overview(): void
+{
+    $this->requireAuth();
+
+    $siteId = (int)($_GET['id'] ?? 0);
+    if ($siteId <= 0) {
+        $this->redirect('/sites');
+        return;
+    }
+
+    $data = $this->loadOverviewData($siteId);
+    if (empty($data['site'])) {
+        $this->redirect('/sites');
+        return;
+    }
+
+    $data['freshClone'] = false;
+    $this->view('sites/overview', $data);
+}
+
 // GET /sites/clone/done?id=123
 public function cloneDone(): void
 {
@@ -2104,40 +2318,15 @@ public function cloneDone(): void
         return;
     }
 
-    $site = DB::withReconnect(function(PDO $pdo) use ($siteId) {
-        $st = $pdo->prepare("SELECT * FROM sites WHERE id=? LIMIT 1");
-        $st->execute([$siteId]);
-        return $st->fetch(PDO::FETCH_ASSOC) ?: null;
-    });
-
-    if (!$site) {
+    $data = $this->loadOverviewData($siteId);
+    if (empty($data['site'])) {
         $_SESSION['wm_log'][] = "cloneDone: site not found id={$siteId}";
         $this->redirect('/sites');
         return;
     }
 
-    // Для UI полезно понять “есть ли сабы”
-    $subStats = DB::withReconnect(function(PDO $pdo) use ($siteId) {
-        $st = $pdo->prepare("
-            SELECT
-              SUM(CASE WHEN enabled=1 THEN 1 ELSE 0 END) AS enabled_cnt,
-              COUNT(*) AS total_cnt
-            FROM site_subdomains
-            WHERE site_id=?
-        ");
-        $st->execute([$siteId]);
-        $r = $st->fetch(PDO::FETCH_ASSOC) ?: [];
-        return [
-            'enabled' => (int)($r['enabled_cnt'] ?? 0),
-            'total'   => (int)($r['total_cnt'] ?? 0),
-        ];
-    });
-
-    $this->view('sites/clone_done', [
-        'site' => $site,
-        'siteId' => $siteId,
-        'subStats' => $subStats,
-    ]);
+    $data['freshClone'] = true;
+    $this->view('sites/overview', $data);
 }
 
 private function makeNamecheapClientFromAccount(array $acc): NamecheapClient

@@ -1,50 +1,91 @@
-<h1>Edit registrar contact #<?= (int)$row['id'] ?></h1>
+<?php
+function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
+$row = is_array($row ?? null) ? $row : [];
+$error = (string)($error ?? '');
+?>
 
-<?php if (!empty($error)): ?>
-  <div style="color:#b00; font-weight:bold; margin:8px 0;"><?= htmlspecialchars($error) ?></div>
+<div class="page-head">
+    <h1 class="page-title">Редактировать контакт регистратора</h1>
+    <div class="page-actions">
+        <a class="btn btn-secondary" href="/registrar/contacts">Назад к контактам</a>
+    </div>
+    <div class="page-subtitle">
+        Контакт #<?= (int)$row['id'] ?>
+    </div>
+</div>
+
+<?php if ($error !== ''): ?>
+    <div class="alert alert-danger"><?= h($error) ?></div>
 <?php endif; ?>
 
-<form method="post" action="/registrar/contacts/edit?id=<?= (int)$row['id'] ?>">
-  <div>
-    Label:
-    <input name="label" value="<?= htmlspecialchars((string)$row['label']) ?>">
-  </div>
+<form method="post" action="/registrar/contacts/edit?id=<?= (int)$row['id'] ?>" class="panel-card system-form stack-gap-md">
+    <div class="field-row">
+        <label>Label</label>
+        <input name="label" value="<?= h((string)$row['label']) ?>">
+    </div>
 
-  <hr>
+    <div class="system-sep"></div>
 
-  <div>First name*: <input name="first_name" value="<?= htmlspecialchars((string)$row['first_name']) ?>"></div>
-  <div>Last name*: <input name="last_name" value="<?= htmlspecialchars((string)$row['last_name']) ?>"></div>
-  <div>Organization: <input name="organization" value="<?= htmlspecialchars((string)$row['organization']) ?>"></div>
+    <div class="panel-grid panel-grid--2">
+        <div class="field-row">
+            <label>First name*</label>
+            <input name="first_name" value="<?= h((string)$row['first_name']) ?>">
+        </div>
 
-  <div>Address1*: <input name="address1" value="<?= htmlspecialchars((string)$row['address1']) ?>"></div>
-  <div>Address2: <input name="address2" value="<?= htmlspecialchars((string)$row['address2']) ?>"></div>
+        <div class="field-row">
+            <label>Last name*</label>
+            <input name="last_name" value="<?= h((string)$row['last_name']) ?>">
+        </div>
 
-  <div>City*: <input name="city" value="<?= htmlspecialchars((string)$row['city']) ?>"></div>
+        <div class="field-row">
+            <label>Organization</label>
+            <input name="organization" value="<?= h((string)$row['organization']) ?>">
+        </div>
 
-  <div>
-    State/Province:
-    <input name="state_province" value="<?= htmlspecialchars((string)$row['state_province']) ?>">
-  </div>
+        <div class="field-row">
+            <label>Email*</label>
+            <input name="email" value="<?= h((string)$row['email']) ?>">
+        </div>
 
-  <div>
-    Postal code*:
-    <input name="postal_code" value="<?= htmlspecialchars((string)$row['postal_code']) ?>">
-  </div>
+        <div class="field-row">
+            <label>Address1*</label>
+            <input name="address1" value="<?= h((string)$row['address1']) ?>">
+        </div>
 
-  <div>
-    Country* (2 letters):
-    <input name="country" value="<?= htmlspecialchars((string)$row['country']) ?>">
-  </div>
+        <div class="field-row">
+            <label>Address2</label>
+            <input name="address2" value="<?= h((string)$row['address2']) ?>">
+        </div>
 
-  <div>
-    Phone* (пример +7 999 123-45-67):
-    <input name="phone" value="<?= htmlspecialchars((string)$row['phone']) ?>">
-  </div>
+        <div class="field-row">
+            <label>City*</label>
+            <input name="city" value="<?= h((string)$row['city']) ?>">
+        </div>
 
-  <div>Email*: <input name="email" value="<?= htmlspecialchars((string)$row['email']) ?>"></div>
+        <div class="field-row">
+            <label>State/Province</label>
+            <input name="state_province" value="<?= h((string)$row['state_province']) ?>">
+        </div>
 
-  <div style="margin-top:10px;">
-    <button type="submit">Save</button>
-    <a href="/registrar/contacts">Cancel</a>
-  </div>
+        <div class="field-row">
+            <label>Postal code*</label>
+            <input name="postal_code" value="<?= h((string)$row['postal_code']) ?>">
+        </div>
+
+        <div class="field-row">
+            <label>Country* (2 letters)</label>
+            <input name="country" value="<?= h((string)$row['country']) ?>">
+        </div>
+
+        <div class="field-row">
+            <label>Phone*</label>
+            <input name="phone" value="<?= h((string)$row['phone']) ?>">
+            <div class="small muted">Пример: <code>+7 999 123-45-67</code></div>
+        </div>
+    </div>
+
+    <div class="page-actions">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a class="btn btn-secondary" href="/registrar/contacts">Отмена</a>
+    </div>
 </form>

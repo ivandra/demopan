@@ -1,30 +1,53 @@
-<h2>Редактирование: <code><?= htmlspecialchars($safeFile) ?></code></h2>
+<?php
+function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
+$siteId = (int)($site['id'] ?? 0);
+?>
 
-<p>
-    <a href="/sites/files?id=<?= (int)$site['id'] ?>">← к списку файлов</a>
-</p>
+<div class="page-head">
+    <h1 class="page-title">Редактирование файла build</h1>
+    <div class="page-actions">
+        <a class="btn btn-secondary" href="/sites/files?id=<?= $siteId ?>">К списку файлов</a>
+    </div>
+</div>
 
-<form method="post" action="/sites/files/save?id=<?= (int)$site['id'] ?>">
-    <input type="hidden" name="file" value="<?= htmlspecialchars($safeFile) ?>">
+<div class="site-context panel-card">
+    <div class="site-context__eyebrow">Текущий файл</div>
+    <div class="site-context__title"><code><?= h($safeFile) ?></code></div>
+    <div class="site-context__meta">
+        Сайт: <?= h($site['domain'] ?? '') ?>
+    </div>
+</div>
 
-    <textarea name="content" style="width:100%;height:70vh;font-family:monospace;"><?= htmlspecialchars($content) ?></textarea>
+<div class="panel-card mt-16">
+    <form method="post" action="/sites/files/save?id=<?= $siteId ?>" class="stack-gap-md">
+        <input type="hidden" name="file" value="<?= h($safeFile) ?>">
 
-    <p>
-        <button type="submit">Сохранить (с бэкапом)</button>
-    </p>
-</form>
+        <textarea name="content" class="editor-textarea"><?= h($content) ?></textarea>
+
+        <div class="page-actions">
+            <button type="submit" class="btn btn-primary">Сохранить (с бэкапом)</button>
+            <a class="btn btn-secondary" href="/sites/files?id=<?= $siteId ?>">Назад к списку</a>
+        </div>
+    </form>
+</div>
 
 <?php if (!empty($backups)): ?>
-    <hr>
-    <h3>Бэкапы</h3>
+    <div class="panel-card mt-16">
+        <h2 class="section-title">Бэкапы</h2>
 
-    <form method="post" action="/sites/files/restore?id=<?= (int)$site['id'] ?>" onsubmit="return confirm('Восстановить выбранный бэкап? Текущий файл будет сохранен как бэкап.');">
-        <input type="hidden" name="file" value="<?= htmlspecialchars($safeFile) ?>">
-        <select name="backup">
-            <?php foreach ($backups as $b): ?>
-                <option value="<?= htmlspecialchars($b) ?>"><?= htmlspecialchars($b) ?></option>
-            <?php endforeach; ?>
-        </select>
-        <button type="submit">Восстановить</button>
-    </form>
+        <form method="post"
+              action="/sites/files/restore?id=<?= $siteId ?>"
+              data-confirm="Восстановить выбранный бэкап? Текущий файл будет сохранён как новый бэкап."
+              class="inline-form">
+            <input type="hidden" name="file" value="<?= h($safeFile) ?>">
+
+            <select name="backup">
+                <?php foreach ($backups as $b): ?>
+                    <option value="<?= h($b) ?>"><?= h($b) ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <button type="submit" class="btn btn-danger">Восстановить</button>
+        </form>
+    </div>
 <?php endif; ?>

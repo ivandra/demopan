@@ -1,12 +1,9 @@
 <?php
+function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 
-
-
-function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES); }
-
+$siteId = (int)($site['id'] ?? 0);
 $ipValue = trim((string)($site['vps_ip'] ?? ''));
 
-// если ip не сохранен в sites, пробуем взять из fastpanel_servers по fastpanel_server_id
 if ($ipValue === '' && !empty($servers)) {
     $sid = (int)($site['fastpanel_server_id'] ?? 0);
     foreach ($servers as $srv) {
@@ -21,169 +18,210 @@ if ($ipValue === '' && !empty($servers)) {
     }
 }
 
-$cardStyle = "border:1px solid #e5e5e5;border-radius:8px;padding:12px;margin:12px 0;background:#fff;";
-$muted = "color:#666;";
+$domainPurchaseStatus = (string)($site['domain_purchase_status'] ?? '');
+$dnsStatus = (string)($site['dns_status'] ?? '');
+
+$fmt = function($v) {
+    return is_numeric($v) ? number_format((float)$v, 2, '.', '') : '—';
+};
+
+$decisionRu = function(string $d) {
+    return match ($d) {
+        'checked' => 'Домен доступен',
+        'unavailable' => 'Домен занят',
+        'too_expensive' => 'Домен доступен, но дороже лимита',
+        'purchased_dns_configured' => 'Куплен и DNS применён',
+        default => ($d !== '' ? $d : '—'),
+    };
+};
 ?>
 
-<h2>Domains: <?= h($site['domain']) ?></h2>
+<div class="page-head">
+    <h1 class="page-title">Домен и DNS</h1>
+    <div class="page-actions">
+        <a class="btn btn-secondary" href="/sites/overview?id=<?= $siteId ?>">Обзор</a>
+        <a class="btn btn-secondary" href="/sites/edit?id=<?= $siteId ?>">Настройки сайта</a>
+        <a class="btn btn-secondary" href="/sites/subdomains?id=<?= $siteId ?>">Поддомены</a>
+    </div>
+    <div class="page-subtitle">
+        Сайт: <code><?= h($site['domain'] ?? '') ?></code>
+    </div>
+</div>
+
+<div class="site-context panel-card">
+    <div class="site-context__eyebrow">Текущее состояние</div>
+    <div class="site-context__title"><?= h($site['domain'] ?? '') ?></div>
+    <div class="site-context__meta">
+        registrar_account_id:
+        <?= !empty($site['registrar_account_id']) ? '<code>' . (int)$site['registrar_account_id'] . '</code>' : '—' ?>
+        <br>
+        registrar_contact_id:
+        <?= !empty($site['registrar_contact_id']) ? '<code>' . (int)$site['registrar_contact_id'] . '</code>' : '—' ?>
+        <br>
+        vps_ip: <?= $ipValue !== '' ? '<code>' . h($ipValue) . '</code>' : '—' ?>
+    </div>
+</div>
+
+<?php if (($domainPurchaseStatus === 'processing') || ($dnsStatus === 'processing')): ?>
+    <div class="alert alert-info mt-16">
+        Выполняется покупка домена или применение DNS. Страница обновится через 4 секунды.
+    </div>
+    <script>setTimeout(function(){ location.reload(); }, 4000);</script>
+<?php endif; ?>
 
 <?php if (!empty($pricingError)): ?>
-    <div style="<?= $cardStyle ?>">
-        <b>Проверка домена</b><br>
-        <div style="margin-top:6px;color:#b00;">
-            Ошибка: <?= h($pricingError) ?>
-        </div>
-
+    <div class="alert alert-danger mt-16">
+        <b>Ошибка проверки домена:</b><br>
+        <?= nl2br(h($pricingError)) ?>
         <?php if (!empty($lastDeployReportId)): ?>
-            <div style="margin-top:8px;">
+            <div class="mt-12">
                 <a href="/deploy/report?id=<?= (int)$lastDeployReportId ?>">Открыть deploy report</a>
             </div>
         <?php endif; ?>
     </div>
 <?php elseif (is_array($pricing)): ?>
     <?php
-        $domain    = (string)($pricing['domain'] ?? '');
-        $available = (bool)($pricing['available'] ?? false);
-        $premium   = (bool)($pricing['premium'] ?? false);
-        $decision  = (string)($pricing['decision'] ?? '');
+    $domain    = (string)($pricing['domain'] ?? '');
+    $available = (bool)($pricing['available'] ?? false);
+    $premium   = (bool)($pricing['premium'] ?? false);
+    $decision  = (string)($pricing['decision'] ?? '');
 
-        $regular = $pricing['regular_price'] ?? null;
-        $your    = $pricing['your_price'] ?? null;
-        $coupon  = $pricing['coupon_price'] ?? null;
-        $promo   = trim((string)($pricing['promo_code'] ?? ''));
-
-        $min = $pricing['min_price'] ?? null;
-
-        $max = $pricing['max_price_usd'] ?? null;
-
-        $fmt = function($v) {
-            return is_numeric($v) ? number_format((float)$v, 2, '.', '') : '—';
-        };
-
-        $decisionRu = function(string $d) {
-            return match ($d) {
-                'checked' => 'Домен доступен',
-                'unavailable' => 'Домен занят',
-                'too_expensive' => 'Домен доступен, но дороже лимита',
-                'purchased_dns_configured' => 'Куплен и DNS применен',
-                default => ($d !== '' ? $d : '—'),
-            };
-        };
+    $regular = $pricing['regular_price'] ?? null;
+    $your    = $pricing['your_price'] ?? null;
+    $coupon  = $pricing['coupon_price'] ?? null;
+    $promo   = trim((string)($pricing['promo_code'] ?? ''));
+    $min     = $pricing['min_price'] ?? null;
+    $max     = $pricing['max_price_usd'] ?? null;
     ?>
-    <div style="<?= $cardStyle ?>">
-        <b>Проверка домена</b><br>
 
-        <div style="margin-top:8px;">
-            <div><b>Домен:</b> <?= h($domain) ?></div>
-            <div><b>Доступен:</b> <?= $available ? 'да' : 'нет' ?></div>
-            <div><b>Премиум:</b> <?= $premium ? 'да' : 'нет' ?></div>
-        </div>
+    <div class="panel-card mt-16 stack-gap-md">
+        <h2 class="section-title">Результат проверки домена</h2>
 
-        <div style="margin-top:10px;">
-            <b>Цены (USD, 1 год)</b><br>
-            <span style="<?= $muted ?>">Regular:</span> <?= h($fmt($regular)) ?><br>
-            <span style="<?= $muted ?>">Your:</span> <?= h($fmt($your)) ?><br>
-            <span style="<?= $muted ?>">Coupon:</span> <?= h($fmt($coupon)) ?><br>
-            <span style="<?= $muted ?>">Promo:</span> <?= $promo !== '' ? h($promo) : '—' ?><br>
+        <div class="panel-grid panel-grid--2">
+            <div class="stack-gap-sm">
+                <div><b>Домен:</b> <code><?= h($domain) ?></code></div>
+                <div><b>Доступен:</b> <?= $available ? '<span class="badge badge-success">да</span>' : '<span class="badge badge-danger">нет</span>' ?></div>
+                <div><b>Премиум:</b> <?= $premium ? '<span class="badge badge-warning">да</span>' : '<span class="badge badge-muted">нет</span>' ?></div>
+                <div><b>Результат:</b> <?= h($decisionRu($decision)) ?></div>
+            </div>
 
-            <div style="margin-top:8px;">
-                <b>Минимальная:</b> <?= h($fmt($min)) ?>
-                <?php if (is_numeric($max)): ?>
-                    <span style="<?= $muted ?>">&nbsp;(лимит: <?= h($fmt($max)) ?>)</span>
-                <?php endif; ?>
+            <div class="stack-gap-sm">
+                <div><b>Regular:</b> <?= h($fmt($regular)) ?> USD</div>
+                <div><b>Your:</b> <?= h($fmt($your)) ?> USD</div>
+                <div><b>Coupon:</b> <?= h($fmt($coupon)) ?> USD</div>
+                <div><b>Promo:</b> <?= $promo !== '' ? h($promo) : '—' ?></div>
+                <div><b>Минимальная:</b> <?= h($fmt($min)) ?> USD<?= is_numeric($max) ? ' <span class="small muted">(лимит: ' . h($fmt($max)) . ')</span>' : '' ?></div>
             </div>
         </div>
 
-        <div style="margin-top:10px;">
-            <b>Результат:</b> <?= h($decisionRu($decision)) ?>
-        </div>
-
         <?php if (!empty($lastDeployReportId)): ?>
-            <div style="margin-top:10px;">
+            <div>
                 <a href="/deploy/report?id=<?= (int)$lastDeployReportId ?>">Открыть deploy report</a>
             </div>
         <?php endif; ?>
     </div>
 <?php endif; ?>
 
-<form method="post" action="/domains/check?id=<?= (int)$site['id'] ?>">
-    <label>Registrar account:</label>
-    <select name="registrar_account_id" required>
-        <?php foreach ($accounts as $a): ?>
-            <option value="<?= (int)$a['id'] ?>" <?= ((int)($site['registrar_account_id'] ?? 0) === (int)$a['id'] ? 'selected' : '') ?>>
-                #<?= (int)$a['id'] ?> namecheap <?= ((int)$a['is_sandbox']===1 ? 'sandbox' : 'prod') ?> (<?= h($a['api_user']) ?>)
-            </option>
-        <?php endforeach; ?>
-    </select>
+<div class="panel-grid panel-grid--2 mt-16">
+    <div class="panel-card stack-gap-md">
+        <h2 class="section-title">1) Проверить доступность и цену</h2>
 
-    <!-- чтобы vps_ip сохранялся и после Check -->
-    <input type="hidden" name="vps_ip" value="<?= h($ipValue) ?>">
+        <form method="post" action="/domains/check?id=<?= $siteId ?>" class="stack-gap-md">
+            <div class="field-row">
+                <label>Аккаунт регистратора</label>
+                <select name="registrar_account_id" required>
+                    <?php foreach ($accounts as $a): ?>
+                        <option value="<?= (int)$a['id'] ?>" <?= ((int)($site['registrar_account_id'] ?? 0) === (int)$a['id'] ? 'selected' : '') ?>>
+                            #<?= (int)$a['id'] ?> namecheap <?= ((int)$a['is_sandbox'] === 1 ? 'sandbox' : 'prod') ?> (<?= h($a['api_user']) ?>)
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-    <button type="submit">Check availability + price</button>
-</form>
+            <input type="hidden" name="vps_ip" value="<?= h($ipValue) ?>">
 
-<hr>
+            <div class="page-actions">
+                <button type="submit" class="btn btn-primary">Проверить домен и цену</button>
+            </div>
+        </form>
+    </div>
 
-<form method="post" action="/domains/purchase-dns?id=<?= (int)$site['id'] ?>">
-    <label>Registrar account:</label>
-    <select name="registrar_account_id" required>
-        <?php foreach ($accounts as $a): ?>
-            <option value="<?= (int)$a['id'] ?>" <?= ((int)($site['registrar_account_id'] ?? 0) === (int)$a['id'] ? 'selected' : '') ?>>
-                #<?= (int)$a['id'] ?> namecheap <?= ((int)$a['is_sandbox']===1 ? 'sandbox' : 'prod') ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
+    <div class="panel-card stack-gap-md">
+        <h2 class="section-title">2) Купить домен и применить DNS</h2>
 
-    <label>Contact profile:</label>
-    <select name="registrar_contact_id" required>
-        <?php foreach ($contacts as $c): ?>
-            <option value="<?= (int)$c['id'] ?>" <?= ((int)($site['registrar_contact_id'] ?? 0) === (int)$c['id'] ? 'selected' : '') ?>>
-                #<?= (int)$c['id'] ?> <?= h($c['label']) ?> (<?= h($c['email']) ?>)
-            </option>
-        <?php endforeach; ?>
-    </select>
+        <form method="post" action="/domains/purchase-dns?id=<?= $siteId ?>" class="stack-gap-md">
+            <div class="field-row">
+                <label>Аккаунт регистратора</label>
+                <select name="registrar_account_id" required>
+                    <?php foreach ($accounts as $a): ?>
+                        <option value="<?= (int)$a['id'] ?>" <?= ((int)($site['registrar_account_id'] ?? 0) === (int)$a['id'] ? 'selected' : '') ?>>
+                            #<?= (int)$a['id'] ?> namecheap <?= ((int)$a['is_sandbox'] === 1 ? 'sandbox' : 'prod') ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-   <label>VPS IP:</label>
+            <div class="field-row">
+                <label>Контактный профиль</label>
+                <select name="registrar_contact_id" required>
+                    <?php foreach ($contacts as $c): ?>
+                        <option value="<?= (int)$c['id'] ?>" <?= ((int)($site['registrar_contact_id'] ?? 0) === (int)$c['id'] ? 'selected' : '') ?>>
+                            #<?= (int)$c['id'] ?> <?= h($c['label']) ?> (<?= h($c['email']) ?>)
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
 
-<?php if (!empty($availableIps)): ?>
-    <select name="vps_ip" required>
-        <?php
-            // если текущий ipValue не в списке — добавим его первой опцией
-            $cur = trim((string)$ipValue);
-            $inList = in_array($cur, $availableIps, true);
-            if ($cur !== '' && filter_var($cur, FILTER_VALIDATE_IP) && !$inList) {
-                echo '<option value="' . h($cur) . '" selected>' . h($cur) . ' (current)</option>';
-            }
-        ?>
-        <?php foreach ($availableIps as $ip): ?>
-            <option value="<?= h($ip) ?>" <?= ($ip === $cur ? 'selected' : '') ?>>
-                <?= h($ip) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-<?php else: ?>
-    <input name="vps_ip"
-           value="<?= h($ipValue) ?>"
-           placeholder="95.129.234.77"
-           required>
-<?php endif; ?>
+            <div class="field-row">
+                <label>VPS IP</label>
 
+                <?php if (!empty($availableIps)): ?>
+                    <select name="vps_ip" required>
+                        <?php
+                        $cur = trim((string)$ipValue);
+                        $inList = in_array($cur, $availableIps, true);
+                        if ($cur !== '' && filter_var($cur, FILTER_VALIDATE_IP) && !$inList) {
+                            echo '<option value="' . h($cur) . '" selected>' . h($cur) . ' (current)</option>';
+                        }
+                        ?>
+                        <?php foreach ($availableIps as $ip): ?>
+                            <option value="<?= h($ip) ?>" <?= ($ip === $cur ? 'selected' : '') ?>>
+                                <?= h($ip) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php else: ?>
+                    <input name="vps_ip" value="<?= h($ipValue) ?>" placeholder="95.129.234.77" required>
+                <?php endif; ?>
+            </div>
 
-    <button type="submit">Purchase domain + apply DNS</button>
-</form>
+            <div class="page-actions">
+                <button type="submit" class="btn btn-primary">Купить домен и применить DNS</button>
+            </div>
+        </form>
+    </div>
+</div>
 
-<hr>
-<?php if (($site['domain_purchase_status'] ?? '') === 'processing' || ($site['dns_status'] ?? '') === 'processing'): ?>
-  <div style="margin-top:10px;color:#666;">
-    Выполняется покупка/применение DNS... обновлю страницу через 4 секунды.
-  </div>
-  <script>setTimeout(() => location.reload(), 4000);</script>
-<?php endif; ?>
+<div class="panel-card mt-16 stack-gap-md">
+    <h2 class="section-title">Текущие статусы</h2>
 
-<div style="<?= $muted ?>">
-    <b>Domain status:</b> <?= h((string)($site['domain_purchase_status'] ?? '')) ?><br>
-    <b>Price USD:</b> <?= h((string)($site['domain_price_usd'] ?? '')) ?><br>
-    <b>DNS status:</b> <?= h((string)($site['dns_status'] ?? '')) ?><br>
-    <b>Last domain error:</b> <?= nl2br(h((string)($site['domain_purchase_error'] ?? ''))) ?><br>
-    <b>Last dns error:</b> <?= nl2br(h((string)($site['dns_error'] ?? ''))) ?><br>
+    <ul class="status-list small">
+        <li><b>Domain status:</b> <?= h($domainPurchaseStatus !== '' ? $domainPurchaseStatus : '—') ?></li>
+        <li><b>Price USD:</b> <?= h((string)($site['domain_price_usd'] ?? '')) ?></li>
+        <li><b>DNS status:</b> <?= h($dnsStatus !== '' ? $dnsStatus : '—') ?></li>
+    </ul>
+
+    <?php if (!empty($site['domain_purchase_error'])): ?>
+        <div class="alert alert-danger">
+            <b>Last domain error:</b><br>
+            <?= nl2br(h((string)$site['domain_purchase_error'])) ?>
+        </div>
+    <?php endif; ?>
+
+    <?php if (!empty($site['dns_error'])): ?>
+        <div class="alert alert-danger">
+            <b>Last DNS error:</b><br>
+            <?= nl2br(h((string)$site['dns_error'])) ?>
+        </div>
+    <?php endif; ?>
 </div>

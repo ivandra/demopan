@@ -1,58 +1,91 @@
-<h2>Build: <?= htmlspecialchars($site['domain'] ?? '') ?></h2>
+<?php
+function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 
-<p style="font-size:13px;opacity:.85;">
-    config.php генерируется в: <code><?= htmlspecialchars($configTargetPath) ?></code>
-    | <a href="/sites/files/edit?id=<?= (int)($site['id'] ?? 0) ?>&file=config.php">открыть в Files</a>
-</p>
+$site = $site ?? [];
+$report = $report ?? [];
 
-<p>
-    <a href="/">← назад</a> |
-    <a href="/sites/edit?id=<?= (int)($site['id'] ?? 0) ?>">Редактировать</a> |
-    <a href="/sites/pages?id=<?= (int)($site['id'] ?? 0) ?>">Pages</a> |
-    <a href="/sites/texts?id=<?= (int)($site['id'] ?? 0) ?>">Texts</a> |
-    <a href="/sites/files?id=<?= (int)($site['id'] ?? 0) ?>">Files</a>
-</p>
+$siteId = (int)($site['id'] ?? 0);
+$domain = (string)($site['domain'] ?? '');
+$isMulty = (($site['template'] ?? '') === 'template-multy');
+$configFileForFiles = $isMulty ? 'config.default.php' : 'config.php';
+?>
 
-<hr>
+<div class="page-head">
+    <h1 class="page-title">Результат build</h1>
+    <div class="page-actions">
+        <a class="btn btn-secondary" href="/sites/overview?id=<?= $siteId ?>">Обзор</a>
+        <a class="btn btn-secondary" href="/sites/files?id=<?= $siteId ?>">Файлы build</a>
+        <a class="btn btn-secondary" href="/sites/subcfg?id=<?= $siteId ?>&label=_default">Контент и SEO</a>
+    </div>
+    <div class="page-subtitle">
+        Сайт: <code><?= h($domain) ?></code>
+    </div>
+</div>
 
-<?php if (!empty($report['ok'])): ?>
-    <h3 style="color:green;">OK</h3>
-<?php else: ?>
-    <h3 style="color:red;">FAILED</h3>
-<?php endif; ?>
+<div class="site-context panel-card">
+    <div class="site-context__eyebrow">Конфиг</div>
+    <div class="site-context__title"><code><?= h($configTargetPath ?? '') ?></code></div>
+    <div class="site-context__meta">
+        <a href="/sites/files/edit?id=<?= $siteId ?>&file=<?= rawurlencode($configFileForFiles) ?>">Открыть config в Files</a>
+    </div>
+</div>
 
-<?php if (!empty($report['errors'])): ?>
-    <h4>Ошибки</h4>
-    <ul>
-        <?php foreach ($report['errors'] as $e): ?>
-            <li><?= htmlspecialchars($e) ?></li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+<div class="panel-card mt-16">
+    <?php if (!empty($report['ok'])): ?>
+        <span class="badge badge-success">BUILD OK</span>
+    <?php else: ?>
+        <span class="badge badge-danger">BUILD FAILED</span>
+    <?php endif; ?>
+</div>
 
-<?php if (!empty($report['warnings'])): ?>
-    <h4>Предупреждения</h4>
-    <ul>
-        <?php foreach ($report['warnings'] as $w): ?>
-            <li><?= htmlspecialchars($w) ?></li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+<div class="report-grid mt-16">
+    <?php if (!empty($report['errors'])): ?>
+        <div class="panel-card">
+            <h2 class="section-title">Ошибки</h2>
+            <ul class="list-clean">
+                <?php foreach ($report['errors'] as $e): ?>
+                    <li><?= h($e) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 
-<?php if (!empty($report['created_texts'])): ?>
-    <h4>Созданные тексты</h4>
-    <ul>
-        <?php foreach ($report['created_texts'] as $f): ?>
-            <li><code><?= htmlspecialchars($f) ?></code></li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+    <?php if (!empty($report['warnings'])): ?>
+        <div class="panel-card">
+            <h2 class="section-title">Предупреждения</h2>
+            <ul class="list-clean">
+                <?php foreach ($report['warnings'] as $w): ?>
+                    <li><?= h($w) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 
-<?php if (!empty($report['unused_texts'])): ?>
-    <h4>Неиспользуемые texts</h4>
-    <ul>
-        <?php foreach ($report['unused_texts'] as $f): ?>
-            <li><code><?= htmlspecialchars($f) ?></code></li>
-        <?php endforeach; ?>
-    </ul>
-<?php endif; ?>
+    <?php if (!empty($report['created_texts'])): ?>
+        <div class="panel-card">
+            <h2 class="section-title">Созданные texts</h2>
+            <ul class="list-clean">
+                <?php foreach ($report['created_texts'] as $f): ?>
+                    <li><code><?= h($f) ?></code></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+
+    <?php if (!empty($report['unused_texts'])): ?>
+        <div class="panel-card">
+            <h2 class="section-title">Неиспользуемые texts</h2>
+            <ul class="list-clean">
+                <?php foreach ($report['unused_texts'] as $f): ?>
+                    <li><code><?= h($f) ?></code></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
+
+    <?php if (empty($report['errors']) && empty($report['warnings']) && empty($report['created_texts']) && empty($report['unused_texts'])): ?>
+        <div class="panel-card">
+            <div class="small muted">Подробностей по build нет.</div>
+        </div>
+    <?php endif; ?>
+</div>

@@ -259,6 +259,8 @@ $router->post('/sites/subcfg/create', action($siteSubCfg, 'create'));
 $router->post('/sites/subcfg/delete', action($siteSubCfg, 'delete'));
 $router->post('/sites/subcfg/regenAll', action($siteSubCfg, 'regenAll'));
 
+$router->get('/sites/overview', action($site, 'overview'));    // ?id=<siteId>
+
 $router->get('/sites/clone', action($clone, 'cloneForm'));     // ?id=1
 $router->post('/sites/clone', action($clone, 'cloneDo'));      // ?id=1
 $router->get('/sites/clone/done', action($site, 'cloneDone')); // ?id=<newSiteId>

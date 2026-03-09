@@ -1,73 +1,135 @@
-<h2>Deploy: <?= htmlspecialchars($site['domain']) ?></h2>
-<p><a href="/">← к сайтам</a></p>
+<?php
+function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
+
+$siteId = (int)($site['id'] ?? 0);
+$domain = (string)($site['domain'] ?? '');
+?>
+
+<div class="page-head">
+    <h1 class="page-title">Публикация на VPS</h1>
+    <div class="page-actions">
+        <a class="btn btn-secondary" href="/sites/overview?id=<?= $siteId ?>">Обзор</a>
+        <a class="btn btn-secondary" href="/sites/files?id=<?= $siteId ?>">Файлы build</a>
+        <a class="btn btn-secondary" href="/ssl/site?id=<?= $siteId ?>">SSL</a>
+    </div>
+    <div class="page-subtitle">
+        Сайт: <code><?= h($domain) ?></code>
+    </div>
+</div>
+
+<div class="site-context panel-card">
+    <div class="site-context__eyebrow">Что делается на этом экране</div>
+    <div class="site-context__title">FastPanel / FTP / загрузка файлов / self-signed SSL</div>
+    <div class="site-context__meta">
+        Сначала выбирается сервер и IP, потом создаётся сайт в FastPanel, затем заливаются файлы и при необходимости выпускается self-signed SSL.
+    </div>
+</div>
 
 <?php if (!empty($ips_error)): ?>
-    <p style="color:#b00;"><b>Ошибка получения IP:</b> <?= htmlspecialchars($ips_error) ?></p>
+    <div class="alert alert-danger mt-16">
+        <b>Ошибка получения IP:</b><br>
+        <?= h($ips_error) ?>
+    </div>
 <?php endif; ?>
 
-<!-- 1) Общий блок выбора сервера + IP -->
-<div style="padding:12px; border:1px solid #ddd; margin-bottom:12px;">
-    <p>
-        <label>Сервер FASTPANEL</label><br>
-        <select id="server_id" name="server_id"
-                onchange="location.href='/deploy?id=<?= (int)$site['id'] ?>&server_id='+this.value;">
+<div class="panel-card mt-16 stack-gap-md">
+    <h2 class="section-title">Сервер и IP</h2>
+
+    <div class="field-row">
+        <label>Сервер FastPanel</label>
+        <select id="server_id"
+                name="server_id"
+                class="mono-input"
+                onchange="location.href='/deploy?id=<?= (int)$siteId ?>&server_id='+this.value;">
             <?php foreach ($servers as $srv): ?>
                 <option value="<?= (int)$srv['id'] ?>" <?= ((int)$srv['id'] === (int)$serverId ? 'selected' : '') ?>>
-                    <?= htmlspecialchars($srv['host']) ?> (<?= htmlspecialchars($srv['username']) ?>)
+                    <?= h($srv['host']) ?> (<?= h($srv['username']) ?>)
                 </option>
             <?php endforeach; ?>
         </select>
-    </p>
+    </div>
 
-    <label>IP для сайта</label><br>
+    <div class="field-row">
+        <label>IP для сайта</label>
 
-    <?php if (!empty($ips)): ?>
-        <select id="ip" name="ip" required>
-            <?php foreach ($ips as $oneIp): ?>
-				<option value="<?= htmlspecialchars($oneIp, ENT_QUOTES, 'UTF-8') ?>"
-					<?= ($selectedIp !== '' && $oneIp === $selectedIp) ? 'selected' : '' ?>>
-					<?= htmlspecialchars($oneIp, ENT_QUOTES, 'UTF-8') ?>
-				</option>
-			<?php endforeach; ?>
-        </select>
-    <?php else: ?>
-        <input id="ip" type="text" name="ip"
-       placeholder="Например: 95.129.234.93"
-       value="<?= htmlspecialchars($selectedIp ?? '', ENT_QUOTES, 'UTF-8') ?>"
-       required>
-        <div style="color:#777; font-size:12px; margin-top:6px;">
-            Список IP не получен — введи IP вручную.
-        </div>
-    <?php endif; ?>
+        <?php if (!empty($ips)): ?>
+            <select id="ip" name="ip" class="mono-input" required>
+                <?php foreach ($ips as $oneIp): ?>
+                    <option value="<?= h($oneIp) ?>" <?= ($selectedIp !== '' && $oneIp === $selectedIp) ? 'selected' : '' ?>>
+                        <?= h($oneIp) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        <?php else: ?>
+            <input id="ip"
+                   type="text"
+                   name="ip"
+                   class="mono-input"
+                   placeholder="Например: 95.129.234.93"
+                   value="<?= h($selectedIp ?? '') ?>"
+                   required>
+            <div class="small muted">
+                Список IP не получен — введите IP вручную.
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
 
-<!-- 2) Кнопка Create site (GET) -->
-<form method="get" action="/deploy/create-site" style="margin-bottom:12px;">
-    <input type="hidden" name="id" value="<?= (int)$site['id'] ?>">
-    <input type="hidden" name="server_id" id="server_id_create" value="<?= (int)$serverId ?>">
-    <input type="hidden" name="ip" id="ip_create" value="">
-    <button type="submit" onclick="return fillCreateHidden();">
-        1) Create site (Fastpanel)
-    </button>
-</form>
+<div class="deploy-steps mt-16">
+    <div class="deploy-step">
+        <div class="deploy-step__num">Шаг 1</div>
+        <div class="deploy-step__title">Создать сайт в FastPanel</div>
+        <div class="small muted mb-14">
+            Создаёт сайт, привязывает выбранный IP и подготавливает инфраструктуру для дальнейшего деплоя.
+        </div>
 
-<!-- 3) Кнопка Update files (POST) -->
-<form method="post" action="/deploy/update-files?id=<?= (int)$site['id'] ?>">
-    <input type="hidden" name="server_id" id="server_id_update" value="<?= (int)$serverId ?>">
-    <button type="submit">
-        2) Update files (upload + unpack)
-    </button>
-</form>
-<form method="post" action="/deploy/issue-ssl?id=<?= (int)$site['id'] ?>">
-  <button type="submit">Выпустить SSL (self-signed)</button>
-</form>
+        <form method="get" action="/deploy/create-site">
+            <input type="hidden" name="id" value="<?= $siteId ?>">
+            <input type="hidden" name="server_id" id="server_id_create" value="<?= (int)$serverId ?>">
+            <input type="hidden" name="ip" id="ip_create" value="">
+            <button type="submit" class="btn btn-primary" onclick="return fillCreateHidden();">
+                Создать сайт в FastPanel
+            </button>
+        </form>
+    </div>
 
-<!-- 4) Reset (опционально) -->
-<form method="post" action="/deploy/reset?id=<?= (int)$site['id'] ?>" style="margin-top:16px;">
-    <button type="submit" onclick="return confirm('Сбросить привязку Fastpanel/FTP для сайта?');" style="background:#fff; border:1px solid #b00; color:#b00;">
-        Reset deploy state
-    </button>
-</form>
+    <div class="deploy-step">
+        <div class="deploy-step__num">Шаг 2</div>
+        <div class="deploy-step__title">Загрузить файлы и распаковать build</div>
+        <div class="small muted mb-14">
+            Загружает ZIP на сервер, отправляет распаковщик и раскладывает build в рабочую директорию сайта.
+        </div>
+
+        <form method="post" action="/deploy/update-files?id=<?= $siteId ?>">
+            <input type="hidden" name="server_id" id="server_id_update" value="<?= (int)$serverId ?>">
+            <button type="submit" class="btn btn-primary">Upload + unpack</button>
+        </form>
+    </div>
+
+    <div class="deploy-step">
+        <div class="deploy-step__num">Шаг 3</div>
+        <div class="deploy-step__title">Выпустить self-signed SSL</div>
+        <div class="small muted mb-14">
+            Нужен для первичного запуска и технической проверки, пока не применён боевой SSL.
+        </div>
+
+        <form method="post" action="/deploy/issue-ssl?id=<?= $siteId ?>" data-confirm="Выпустить self-signed SSL для сайта <?= h($domain) ?>?">
+            <button type="submit" class="btn btn-secondary">Выпустить self-signed SSL</button>
+        </form>
+    </div>
+
+    <div class="deploy-step">
+        <div class="deploy-step__num">Сервисный шаг</div>
+        <div class="deploy-step__title">Сбросить состояние deploy</div>
+        <div class="small muted mb-14">
+            Сбрасывает FastPanel / FTP / Files статусы для повторной привязки и повторного деплоя.
+        </div>
+
+        <form method="post" action="/deploy/reset?id=<?= $siteId ?>" data-confirm="Сбросить привязку FastPanel/FTP для сайта?">
+            <button type="submit" class="btn btn-danger">Сбросить deploy state</button>
+        </form>
+    </div>
+</div>
 
 <script>
 function fillCreateHidden() {
@@ -78,11 +140,10 @@ function fillCreateHidden() {
 
     document.getElementById('server_id_create').value = srv.value;
     document.getElementById('server_id_update').value = srv.value;
-
     document.getElementById('ip_create').value = ip.value;
 
     if (!ip.value) {
-        alert('IP обязателен для Create site');
+        alert('IP обязателен для создания сайта');
         return false;
     }
     return true;

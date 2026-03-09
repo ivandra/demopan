@@ -1,18 +1,10 @@
 <?php
 // app/Views/sites/create.php
-// Ожидаемые переменные из контроллера:
-// - $templates (array)
-// - $accounts (array)  // registrar accounts
-//
-// Может приходить одно из двух (поддерживаем оба варианта):
-// A) Новый вариант: $domain (string), $template (string), $checkResult (array)
-// B) Старый вариант: $form (array) или $_POST, $domainCheck (array), $domainCheckError (string)
 
 function h($v): string {
     return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8');
 }
 
-// -------------------- unify check payload (optional server-side check result) --------------------
 $check = null;
 
 if (isset($checkResult) && is_array($checkResult)) {
@@ -20,113 +12,139 @@ if (isset($checkResult) && is_array($checkResult)) {
 } else {
     $domainCheck = $domainCheck ?? null;
     $domainCheckError = (string)($domainCheckError ?? '');
-    if ($domainCheckError !== '') $check = ['ok' => false, 'error' => $domainCheckError];
-    elseif (is_array($domainCheck)) $check = $domainCheck;
+    if ($domainCheckError !== '') {
+        $check = ['ok' => false, 'error' => $domainCheckError];
+    } elseif (is_array($domainCheck)) {
+        $check = $domainCheck;
+    }
 }
 
-// -------------------- form values --------------------
 $formDomain = '';
 $formTemplate = '';
 
-if (isset($domain)) $formDomain = (string)$domain;
-elseif (isset($form) && is_array($form)) $formDomain = (string)($form['domain'] ?? '');
-else $formDomain = (string)($_POST['domain'] ?? '');
+if (isset($domain)) {
+    $formDomain = (string)$domain;
+} elseif (isset($form) && is_array($form)) {
+    $formDomain = (string)($form['domain'] ?? '');
+} else {
+    $formDomain = (string)($_POST['domain'] ?? '');
+}
 
-if (isset($template)) $formTemplate = (string)$template;
-elseif (isset($form) && is_array($form)) $formTemplate = (string)($form['template'] ?? '');
-else $formTemplate = (string)($_POST['template'] ?? '');
+if (isset($template)) {
+    $formTemplate = (string)$template;
+} elseif (isset($form) && is_array($form)) {
+    $formTemplate = (string)($form['template'] ?? '');
+} else {
+    $formTemplate = (string)($_POST['template'] ?? '');
+}
 
-if ($formTemplate === '' && !empty($templates[0])) $formTemplate = (string)$templates[0];
+if ($formTemplate === '' && !empty($templates[0])) {
+    $formTemplate = (string)$templates[0];
+}
 
-// registrar account selected
 $selectedAccId = (int)($registrar_account_id ?? ($_POST['registrar_account_id'] ?? 0));
 
-// начальный JSON для статуса (если сервер уже что-то проверял)
 $initialJson = '';
 if (is_array($check)) {
-    // иногда check может быть не в формате {ok:true,...} — это не страшно, JS сам дорисует как "сырой ответ"
     $initialJson = json_encode($check, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 ?>
 
-<h2>Создать сайт</h2>
+<div class="page-head">
+    <h1 class="page-title">Создать сайт</h1>
+    <div class="page-actions">
+        <a class="btn btn-secondary" href="/sites">К списку сайтов</a>
+    </div>
+    <div class="page-subtitle">
+        Сначала выберите домен, аккаунт регистратора и шаблон. Домен можно проверить до создания сайта.
+    </div>
+</div>
 
-<style>
-    .domain-status {
-        border: 1px solid #e5e5e5;
-        background: #fafafa;
-        padding: 10px;
-        margin: 10px 0;
-        font-size: 13px;
-        line-height: 1.4;
-    }
-    .domain-status .muted { color:#777; }
-    .domain-status .ok { color:#0a0; font-weight:600; }
-    .domain-status .bad { color:#b00; font-weight:600; }
-    .domain-status .row { margin: 2px 0; }
-    .domain-status code { background:#fff; padding:1px 4px; border:1px solid #eee; }
-</style>
+<div class="panel-grid panel-grid--2">
+    <div class="panel-card stack-gap-lg">
+        <h2 class="section-title">Новый сайт</h2>
 
-<form method="post" action="/sites/create" id="createSiteForm">
-    <p>
-        <label>Домен</label><br>
-        <input
-            type="text"
-            name="domain"
-            id="domainInput"
-            placeholder="example.com"
-            required
-            style="width:100%"
-            value="<?= h($formDomain) ?>"
-            autocomplete="off"
-        >
-        <small style="color:#666;">
-            Можно вводить без https:// (например: testovoe.casino). Путь /... будет отброшен.
-        </small>
-    </p>
+        <form method="post" action="/sites/create" id="createSiteForm" class="stack-gap-md">
+            <div class="field-row">
+                <label>Домен</label>
+                <input
+                    type="text"
+                    name="domain"
+                    id="domainInput"
+                    placeholder="example.com"
+                    required
+                    value="<?= h($formDomain) ?>"
+                    autocomplete="off"
+                >
+                <div class="small muted">
+                    Можно вводить без <code>https://</code>, например: <code>testovoe.casino</code>.
+                    Путь <code>/...</code> будет отброшен.
+                </div>
+            </div>
 
-    <div class="domain-status" id="domainStatusBox">
-        <div><b>Проверка домена</b></div>
-        <div class="muted" id="domainStatusText">Введите домен и нажмите “Проверить домен” (или просто начните ввод — проверка запустится автоматически).</div>
+            <div class="panel-card" id="domainStatusBox">
+                <div><b>Проверка домена</b></div>
+                <div class="small muted mt-8" id="domainStatusText">
+                    Введите домен и нажмите «Проверить домен» или просто начните ввод —
+                    проверка запустится автоматически.
+                </div>
+            </div>
+
+            <div class="page-actions">
+                <button type="button" class="btn btn-secondary" id="btnCheckDomain">Проверить домен</button>
+            </div>
+
+            <div class="field-row">
+                <label>Аккаунт регистратора</label>
+                <select name="registrar_account_id" required>
+                    <?php foreach (($accounts ?? []) as $a): ?>
+                        <?php
+                        $id = (int)$a['id'];
+                        $isSandbox = (int)($a['is_sandbox'] ?? 1) === 1;
+                        $label = '#'.$id.' namecheap '.($isSandbox ? 'sandbox' : 'prod').' ('.($a['api_user'] ?? '').')';
+                        ?>
+                        <option value="<?= h($id) ?>" <?= ($selectedAccId === $id ? 'selected' : '') ?>>
+                            <?= h($label) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="field-row">
+                <label>Шаблон</label>
+                <select name="template" required>
+                    <?php foreach (($templates ?? []) as $t): ?>
+                        <?php $t = (string)$t; ?>
+                        <option value="<?= h($t) ?>" <?= ($formTemplate === $t ? 'selected' : '') ?>>
+                            <?= h($t) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="page-actions">
+                <button type="submit" formaction="/sites/create" class="btn btn-primary">Создать сайт</button>
+                <button type="submit" formaction="/sites/check-domain" class="btn btn-secondary">Проверить домен и цену</button>
+            </div>
+        </form>
     </div>
 
-    <p>
-        <button type="button" id="btnCheckDomain">Проверить домен</button>
-    </p>
+    <div class="panel-card stack-gap-md">
+        <h2 class="section-title">Что будет дальше</h2>
 
-    <p>
-        <label>Registrar account</label><br>
-        <select name="registrar_account_id" required>
-            <?php foreach (($accounts ?? []) as $a): ?>
-                <?php
-                    $id = (int)$a['id'];
-                    $isSandbox = (int)($a['is_sandbox'] ?? 1) === 1;
-                    $label = '#'.$id.' namecheap '.($isSandbox ? 'sandbox' : 'prod').' ('.($a['api_user'] ?? '').')';
-                ?>
-                <option value="<?= h($id) ?>" <?= ($selectedAccId === $id ? 'selected' : '') ?>>
-                    <?= h($label) ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-    </p>
+        <ul class="status-list small">
+            <li>создаётся карточка сайта;</li>
+            <li>сохраняется основной конфиг;</li>
+            <li>далее вы переходите в обзор сайта;</li>
+            <li>там уже идёте по шагам: домен → поддомены → контент → AI → build → deploy → SSL → webmaster.</li>
+        </ul>
 
-    <p>
-        <label>Шаблон</label><br>
-        <select name="template" required>
-            <?php foreach (($templates ?? []) as $t): ?>
-                <?php $t = (string)$t; ?>
-                <option value="<?= h($t) ?>" <?= ($formTemplate === $t ? 'selected' : '') ?>>
-                    <?= h($t) ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-    </p>
-
-    <div style="margin-top:10px;">
-        <button type="submit" formaction="/sites/create">Создать</button>
-        <button type="submit" formaction="/sites/check-domain">Проверить домен и цену</button>
+        <div class="note">
+            Если домен уже куплен, всё равно удобно сначала проверить его на этом экране:
+            панель покажет DNS A, guess по IP и наличие домена в системе.
+        </div>
     </div>
-</form>
+</div>
 
 <script>
 (function(){
@@ -145,39 +163,47 @@ if (is_array($check)) {
         }[m]));
     }
 
+    function badge(cls, txt){
+        return '<span class="badge ' + cls + '">' + esc(txt) + '</span>';
+    }
+
     function render(obj){
-        // ожидаемый ответ: {ok:true, domain, exists, exists_id, dns_a, vps_ip_guess, fastpanel_server_id_guess}
         if (!obj) {
-            text.innerHTML = '<span class="muted">—</span>';
+            text.innerHTML = '<span class="small muted">—</span>';
             return;
         }
 
         if (obj.ok !== true) {
             const err = obj.error ? esc(obj.error) : 'unknown';
-            text.innerHTML = '<div class="row"><span class="bad">Ошибка проверки:</span> ' + err + '</div>'
-                + '<div class="row muted">RAW: <code>' + esc(JSON.stringify(obj)) + '</code></div>';
+            text.innerHTML =
+                '<div class="stack-gap-sm">' +
+                    '<div>' + badge('badge-danger', 'Ошибка проверки') + '</div>' +
+                    '<div class="small">' + err + '</div>' +
+                '</div>';
             return;
         }
 
         const exists = obj.exists
-            ? '<span class="bad">уже добавлен</span> (id ' + esc(obj.exists_id) + ')'
-            : '<span class="ok">в системе не найден</span>';
+            ? badge('badge-warning', 'Уже добавлен в систему') + ' <span class="small muted">id ' + esc(obj.exists_id) + '</span>'
+            : badge('badge-success', 'В системе не найден');
 
         const dnsA = (obj.dns_a && obj.dns_a.length)
             ? esc(obj.dns_a.join(', '))
-            : '<span class="muted">A-запись не найдена</span>';
+            : '<span class="small muted">A-запись не найдена</span>';
 
-        const ipGuess = obj.vps_ip_guess ? esc(obj.vps_ip_guess) : '<span class="muted">нет</span>';
+        const ipGuess = obj.vps_ip_guess ? esc(obj.vps_ip_guess) : '<span class="small muted">нет</span>';
         const sidGuess = (obj.fastpanel_server_id_guess !== null && obj.fastpanel_server_id_guess !== undefined)
             ? esc(obj.fastpanel_server_id_guess)
-            : '<span class="muted">нет</span>';
+            : '<span class="small muted">нет</span>';
 
         text.innerHTML =
-            '<div class="row"><b>Домен:</b> ' + esc(obj.domain || '') + '</div>' +
-            '<div class="row"><b>Статус:</b> ' + exists + '</div>' +
-            '<div class="row"><b>DNS A сейчас:</b> ' + dnsA + '</div>' +
-            '<div class="row"><b>vps_ip (guess):</b> ' + ipGuess + '</div>' +
-            '<div class="row"><b>fastpanel_server_id (guess):</b> ' + sidGuess + '</div>';
+            '<div class="stack-gap-sm">' +
+                '<div><b>Домен:</b> <code>' + esc(obj.domain || '') + '</code></div>' +
+                '<div><b>Статус:</b> ' + exists + '</div>' +
+                '<div><b>DNS A сейчас:</b> ' + dnsA + '</div>' +
+                '<div><b>vps_ip (guess):</b> ' + ipGuess + '</div>' +
+                '<div><b>fastpanel_server_id (guess):</b> ' + sidGuess + '</div>' +
+            '</div>';
     }
 
     async function requestJson(url, opts){
@@ -188,7 +214,6 @@ if (is_array($check)) {
         if (ct.includes('application/json')) {
             j = await r.json();
         } else {
-            // на случай если сервер вернул HTML/текст
             const t = await r.text();
             try { j = JSON.parse(t); } catch(e) {
                 return {ok:false, error:'Non-JSON response (' + r.status + ')', raw:t};
@@ -201,15 +226,13 @@ if (is_array($check)) {
         const v = (input.value || '').trim();
         if (!v) { render(null); return; }
 
-        text.innerHTML = '<span class="muted">Проверяю...</span>';
+        text.innerHTML = '<span class="small muted">Проверяю...</span>';
 
-        // 1) пробуем GET /sites/check-domain?domain=...
         try {
             const j1 = await requestJson('/sites/check-domain?domain=' + encodeURIComponent(v), {method:'GET'});
             if (j1 && (j1.ok === true || j1.error)) { render(j1); return; }
-        } catch(e) { /* ignore */ }
+        } catch(e) {}
 
-        // 2) fallback POST /sites/check-domain
         try {
             const body = 'domain=' + encodeURIComponent(v);
             const j2 = await requestJson('/sites/check-domain', {
@@ -234,11 +257,9 @@ if (is_array($check)) {
         check();
     });
 
-    // если сервер уже прислал результат проверки — покажем
     if (initial) {
         render(initial);
     } else {
-        // или проверим поле, если оно заполнено
         setTimeout(check, 50);
     }
 })();

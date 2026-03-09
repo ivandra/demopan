@@ -10,3 +10,73 @@
 [08-Mar-2026 22:25:00 Europe/Moscow] PHP Fatal error:  Cannot redeclare AiController::generateAllPages() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/AiController.php on line 2591
 [08-Mar-2026 22:26:00 Europe/Moscow] PHP Fatal error:  Cannot redeclare AiController::generateAllPages() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/AiController.php on line 2591
 [08-Mar-2026 22:27:00 Europe/Moscow] PHP Fatal error:  Cannot redeclare AiController::generateAllPages() in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/AiController.php on line 2591
+[08-Mar-2026 23:29:43 Europe/Moscow] [NC listAccounts] rows=2
+[08-Mar-2026 23:29:43 Europe/Moscow] [availableIps] count=6 siteId=15
+[08-Mar-2026 23:29:43 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[08-Mar-2026 23:29:51 Europe/Moscow] availableIps count=6 siteId=15
+[08-Mar-2026 23:29:54 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[08-Mar-2026 23:29:54 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[08-Mar-2026 23:29:54 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[08-Mar-2026 23:30:36 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=banda buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[08-Mar-2026 23:30:36 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda
+[08-Mar-2026 23:30:36 Europe/Moscow] [SubdomainProvisioner] OK created label=banda cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/banda/config.php
+[08-Mar-2026 23:31:31 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[08-Mar-2026 23:31:31 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[08-Mar-2026 23:31:31 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[08-Mar-2026 23:33:46 Europe/Moscow] [NC listAccounts] rows=2
+[08-Mar-2026 23:33:46 Europe/Moscow] [availableIps] count=6 siteId=15
+[08-Mar-2026 23:33:46 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[08-Mar-2026 23:37:07 Europe/Moscow] availableIps count=6 siteId=15
+[08-Mar-2026 23:37:51 Europe/Moscow] availableIps count=6 siteId=15
+[08-Mar-2026 23:38:27 Europe/Moscow] [NC listAccounts] rows=2
+[08-Mar-2026 23:38:27 Europe/Moscow] [availableIps] count=6 siteId=15
+[08-Mar-2026 23:38:27 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[08-Mar-2026 23:38:31 Europe/Moscow] availableIps count=6 siteId=15
+[08-Mar-2026 23:38:35 Europe/Moscow] [NC listAccounts] rows=2
+[08-Mar-2026 23:38:35 Europe/Moscow] [availableIps] count=6 siteId=15
+[08-Mar-2026 23:38:35 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[08-Mar-2026 23:39:56 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[08-Mar-2026 23:39:56 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[08-Mar-2026 23:39:56 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[08-Mar-2026 23:40:17 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[08-Mar-2026 23:40:17 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[08-Mar-2026 23:40:17 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[08-Mar-2026 23:40:31 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[08-Mar-2026 23:40:31 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[08-Mar-2026 23:40:31 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[08-Mar-2026 23:40:42 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[08-Mar-2026 23:40:42 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[08-Mar-2026 23:40:42 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[08-Mar-2026 23:40:46 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[08-Mar-2026 23:40:46 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[08-Mar-2026 23:40:46 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[08-Mar-2026 23:41:04 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[08-Mar-2026 23:41:04 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[08-Mar-2026 23:41:04 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[08-Mar-2026 23:41:35 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[08-Mar-2026 23:41:35 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[08-Mar-2026 23:41:35 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[08-Mar-2026 23:41:46 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[08-Mar-2026 23:41:46 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[08-Mar-2026 23:41:46 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[08-Mar-2026 23:47:46 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[08-Mar-2026 23:47:46 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[08-Mar-2026 23:47:46 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[08-Mar-2026 23:58:25 Europe/Moscow] availableIps count=6 siteId=15
+[08-Mar-2026 23:58:32 Europe/Moscow] [NC listAccounts] rows=2
+[08-Mar-2026 23:58:32 Europe/Moscow] [availableIps] count=6 siteId=15
+[08-Mar-2026 23:58:32 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[09-Mar-2026 01:19:47 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[09-Mar-2026 01:19:47 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[09-Mar-2026 01:19:47 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[09-Mar-2026 01:27:22 Europe/Moscow] availableIps count=6 siteId=15
+[09-Mar-2026 01:27:37 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[09-Mar-2026 01:27:37 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[09-Mar-2026 01:27:37 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[09-Mar-2026 01:27:48 Europe/Moscow] [SubdomainProvisioner] site_id=15 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15
+[09-Mar-2026 01:27:48 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default
+[09-Mar-2026 01:27:48 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_15/subs/_default/config.php
+[09-Mar-2026 01:54:35 Europe/Moscow] availableIps count=6 siteId=15
+[09-Mar-2026 01:55:06 Europe/Moscow] [NC listAccounts] rows=2
+[09-Mar-2026 01:55:06 Europe/Moscow] [availableIps] count=6 siteId=15
+[09-Mar-2026 01:55:06 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response

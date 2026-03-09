@@ -1,29 +1,56 @@
-<h2>Редактирование файла: <code><?= htmlspecialchars($safeFile, ENT_QUOTES, 'UTF-8') ?></code></h2>
-
 <?php
+function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
+
 $isMulty = (($site['template'] ?? '') === 'template-multy');
+$siteId  = (int)($site['id'] ?? 0);
+$label   = isset($label) ? (string)$label : '_default';
+
 $configFileForLink = $isMulty ? 'config.default.php' : 'config.php';
-$configLabelSuffix = $isMulty ? (' (label: ' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . ')') : '';
+$entityTitle = ($label === '_default') ? 'Основной домен (_default)' : ('Поддомен: ' . $label);
+$entityHost  = ($label === '_default')
+    ? (string)($site['domain'] ?? '')
+    : ($label . '.' . (string)($site['domain'] ?? ''));
 ?>
 
-<p style="font-size:13px;opacity:.85;">
-    Конфиг генерируется в: <code><?= htmlspecialchars($configTargetPath, ENT_QUOTES, 'UTF-8') ?></code><?= $configLabelSuffix ?>
-    | <a href="/sites/files/edit?id=<?= (int)$site['id'] ?>&file=<?= rawurlencode($configFileForLink) ?>">открыть в Files</a>
-</p>
+<div class="page-head">
+    <h1 class="page-title">Редактирование текста</h1>
+    <div class="page-actions">
+        <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?><?= $isMulty ? '&label=' . urlencode($label) : '' ?>">К списку текстов</a>
+        <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Страницы</a>
+    </div>
+</div>
 
-<p>
-    <a href="/sites/texts?id=<?= (int)$site['id'] ?><?= $isMulty ? '&label=' . urlencode($label) : '' ?>">← к списку</a>
-</p>
+<div class="site-context panel-card">
+    <div class="site-context__eyebrow">Текущий файл</div>
+    <div class="site-context__title"><code><?= h($safeFile) ?></code></div>
+    <div class="site-context__meta">
+        Сущность: <?= h($entityTitle) ?>
+        <br>
+        Хост: <code><?= h($entityHost) ?></code>
+        <br>
+        Конфиг генерируется в: <code><?= h($configTargetPath) ?></code>
+        |
+        <a href="/sites/files/edit?id=<?= $siteId ?>&file=<?= rawurlencode($configFileForLink) ?>">Открыть config в Files</a>
+    </div>
+</div>
 
-<form method="post" action="/sites/texts/save?id=<?= (int)$site['id'] ?><?= $isMulty ? '&label=' . urlencode($label) : '' ?>">
-    <input type="hidden" name="file" value="<?= htmlspecialchars($safeFile, ENT_QUOTES, 'UTF-8') ?>">
-    <?php if ($isMulty): ?>
-        <input type="hidden" name="label" value="<?= htmlspecialchars($label, ENT_QUOTES, 'UTF-8') ?>">
-    <?php endif; ?>
+<div class="panel-card mt-16">
+    <div class="ai-note mb-14">
+        В этот файл AI может записывать HTML-фрагменты для страницы:
+        <code>home.php</code>, <code>game.php</code>, <code>demo.php</code> и другие.
+    </div>
 
-    <textarea name="content" style="width:100%;height:70vh;font-family:monospace;"><?= htmlspecialchars($content, ENT_QUOTES, 'UTF-8') ?></textarea>
+    <form method="post" action="/sites/texts/save?id=<?= $siteId ?><?= $isMulty ? '&label=' . urlencode($label) : '' ?>" class="stack-gap-md">
+        <input type="hidden" name="file" value="<?= h($safeFile) ?>">
+        <?php if ($isMulty): ?>
+            <input type="hidden" name="label" value="<?= h($label) ?>">
+        <?php endif; ?>
 
-    <p>
-        <button type="submit">Сохранить</button>
-    </p>
-</form>
+        <textarea name="content" class="editor-textarea"><?= h($content) ?></textarea>
+
+        <div class="page-actions">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?><?= $isMulty ? '&label=' . urlencode($label) : '' ?>">Назад к списку</a>
+        </div>
+    </form>
+</div>

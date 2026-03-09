@@ -50,14 +50,24 @@ class SiteSubCfgController extends Controller
         $prov = new SubdomainProvisioner();
         $prov->ensureForSite($siteId, $label);
 
-        // ВАЖНО:
-        // _default редактируем через site_default_configs
+       $defaultCfg = $this->loadDefaultCfg($pdo, $siteId);
+
+        // Для UI всегда даём итоговый merged-config:
+        // _default = root config
+        // label != _default = merge(default, sub)
         if ($label === '_default') {
-            $cfg = $this->loadDefaultCfg($pdo, $siteId);
+            $cfg = $defaultCfg;
         } else {
-            $cfg = $this->loadSubCfg($pdo, $siteId, $label);
+            $subCfg = $this->loadSubCfg($pdo, $siteId, $label);
+            if (!is_array($subCfg)) {
+                $subCfg = [];
+            }
+            $cfg = array_replace_recursive($defaultCfg, $subCfg);
         }
-        if ($cfg === null) $cfg = [];
+
+        if (!is_array($cfg)) {
+            $cfg = [];
+        }
 
         $unused = $this->findUnusedTexts($site, $label, $cfg);
 
