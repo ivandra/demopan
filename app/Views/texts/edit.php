@@ -15,6 +15,7 @@ $entityHost  = ($label === '_default')
 <div class="page-head">
     <h1 class="page-title">Редактирование текста</h1>
     <div class="page-actions">
+        <a class="btn btn-secondary" href="/sites/overview?id=<?= $siteId ?>">Обзор</a>
         <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?><?= $isMulty ? '&label=' . urlencode($label) : '' ?>">К списку текстов</a>
         <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Страницы</a>
     </div>
@@ -30,7 +31,7 @@ $entityHost  = ($label === '_default')
         <br>
         Конфиг генерируется в: <code><?= h($configTargetPath) ?></code>
         |
-        <a href="/sites/files/edit?id=<?= $siteId ?>&file=<?= rawurlencode($configFileForLink) ?>">Открыть config в Files</a>
+        <a href="/sites/files/edit?id=<?= $siteId ?>&file=<?= rawurlencode($configFileForLink) ?>">Открыть config в файлах</a>
     </div>
 </div>
 

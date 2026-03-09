@@ -7,7 +7,7 @@ unset($_SESSION['wm_log']);
 $siteId = (int)($site['id'] ?? 0);
 
 // unique labels from $desired
-$labels = ['' => '(root)'];
+$labels = ['' => '(основной домен)'];
 $seen = [];
 foreach (($desired ?? []) as $hrow) {
     $lbl = (string)($hrow['label'] ?? '');
@@ -19,7 +19,7 @@ foreach (($desired ?? []) as $hrow) {
 ?>
 
 <div class="page-head">
-    <h1 class="page-title">Webmaster</h1>
+    <h1 class="page-title">Вебмастер</h1>
     <div class="page-actions">
         <a class="btn btn-secondary" href="/sites/overview?id=<?= $siteId ?>">Обзор</a>
         <a class="btn btn-secondary" href="/webmaster">К общему списку</a>
@@ -32,7 +32,7 @@ foreach (($desired ?? []) as $hrow) {
 
 <?php if (!empty($log)): ?>
     <div class="panel-card">
-        <h2 class="section-title">Лог Webmaster</h2>
+        <h2 class="section-title">Лог Вебмастера</h2>
         <pre class="log-console"><?= h(implode("\n", $log)) ?></pre>
     </div>
 <?php endif; ?>
@@ -55,25 +55,25 @@ foreach (($desired ?? []) as $hrow) {
             Проверить верификацию в Яндексе. Перед этим verify-файлы должны быть уже задеплоены на домены.
         </div>
 
-        <form method="post" action="/webmaster/verify?id=<?= $siteId ?>" data-confirm="Проверить верификацию в Яндексе (verifyHost)?">
-            <button type="submit" class="btn btn-primary">Проверить verifyHost</button>
+        <form method="post" action="/webmaster/verify?id=<?= $siteId ?>" data-confirm="Проверить верификацию в Яндексе?">
+            <button type="submit" class="btn btn-primary">Проверить верификацию</button>
         </form>
     </div>
 </div>
 
 <div class="alert alert-info mt-16">
     После шага 1 verify-файлы записываются только в build сайта.
-    Чтобы Яндекс увидел их по URL, нужно сделать обычный deploy / update-files.
+    Чтобы Яндекс увидел их по URL, нужно сделать обычную публикацию / update-files.
 </div>
 
 <div class="panel-grid panel-grid--2 mt-16">
     <div class="panel-card stack-gap-md">
-        <h2 class="section-title">Recrawl</h2>
+        <h2 class="section-title">Переобход страниц</h2>
 
         <form method="post" action="/webmaster/recrawl?id=<?= $siteId ?>" id="recrawlForm" class="stack-gap-md">
             <div class="inline-form">
                 <label class="flex-grow">
-                    Host label
+                    Метка хоста
                     <select name="label" id="recrawlLabel">
                         <option value="ALL">ALL (все хосты)</option>
                         <?php foreach ($labels as $val => $title): ?>
@@ -82,9 +82,9 @@ foreach (($desired ?? []) as $hrow) {
                     </select>
                 </label>
 
-                <button type="button" class="btn btn-secondary" onclick="fillFromPages()">Вставить из pages</button>
-                <button type="submit" class="btn btn-primary" data-confirm="Отправить recrawl на выбранный label?">Отправить recrawl</button>
-                <button type="button" class="btn btn-secondary" onclick="submitRecrawlFromPagesAll()">Массово из pages (ALL)</button>
+                <button type="button" class="btn btn-secondary" onclick="fillFromPages()">Вставить из страниц</button>
+                <button type="submit" class="btn btn-primary" data-confirm="Отправить переобход для выбранной метки?">Отправить переобход</button>
+                <button type="button" class="btn btn-secondary" onclick="submitRecrawlFromPagesAll()">Массово из страниц (ALL)</button>
             </div>
 
             <textarea name="urls" id="recrawlUrls" rows="8" class="big-textarea" placeholder="/&#10;/new&#10;/404"></textarea>
@@ -101,7 +101,7 @@ foreach (($desired ?? []) as $hrow) {
         <form method="post" action="/webmaster/sitemap/add?id=<?= $siteId ?>" class="stack-gap-md">
             <div class="inline-form">
                 <label class="flex-grow">
-                    Host label
+                    Метка хоста
                     <select name="label" id="sitemapLabel">
                         <option value="ALL">ALL (все хосты)</option>
                         <?php foreach ($labels as $val => $title): ?>
@@ -110,8 +110,8 @@ foreach (($desired ?? []) as $hrow) {
                     </select>
                 </label>
 
-                <button type="submit" class="btn btn-primary" data-confirm="Добавить sitemap.xml для выбранного label?">Add sitemap.xml</button>
-                <button type="button" class="btn btn-secondary" onclick="submitSitemapGet()">Get sitemaps</button>
+                <button type="submit" class="btn btn-primary" data-confirm="Добавить sitemap.xml для выбранной метки?">Добавить sitemap.xml</button>
+                <button type="button" class="btn btn-secondary" onclick="submitSitemapGet()">Получить sitemap</button>
             </div>
 
             <div class="small muted">
@@ -119,7 +119,7 @@ foreach (($desired ?? []) as $hrow) {
             </div>
 
             <div class="field-row">
-                <label>Override sitemap URL</label>
+                <label>Переопределить sitemap URL</label>
                 <input type="text" name="sitemap_url" id="sitemapUrlInput" class="mono-input" placeholder="https://example.com/sitemap.xml">
                 <div class="small muted">
                     Если поле пустое — используется <code>host_url + /sitemap.xml</code>.
@@ -135,7 +135,7 @@ foreach (($desired ?? []) as $hrow) {
     <form method="post" action="/webmaster/robots/confirm?id=<?= $siteId ?>" class="stack-gap-md">
         <div class="inline-form">
             <label class="flex-grow">
-                Host label
+                Метка хоста
                 <select name="label" id="robotsLabel">
                     <option value="ALL">ALL (все хосты)</option>
                     <?php foreach ($labels as $val => $title): ?>
@@ -144,16 +144,16 @@ foreach (($desired ?? []) as $hrow) {
                 </select>
             </label>
 
-            <button type="submit" class="btn btn-primary" data-confirm="Подтвердить robots.txt для выбранного label?">Confirm robots.txt</button>
-            <button type="button" class="btn btn-secondary" onclick="submitRobotsGet()">Get robots</button>
+            <button type="submit" class="btn btn-primary" data-confirm="Подтвердить robots.txt для выбранной метки?">Подтвердить robots.txt</button>
+            <button type="button" class="btn btn-secondary" onclick="submitRobotsGet()">Получить robots</button>
         </div>
 
         <div class="small muted">
-            Confirm robots — это подтверждение текущего <code>https://HOST/robots.txt</code>.
+            Подтверждение robots — это подтверждение текущего <code>https://HOST/robots.txt</code>.
         </div>
 
         <div class="field-row">
-            <label>Override robots URL</label>
+            <label>Переопределить robots URL</label>
             <input type="text" name="robots_url" id="robotsUrlInput" class="mono-input" placeholder="https://example.com/robots.txt">
             <div class="small muted">
                 Если поле пустое — в БД будет сохранён <code>host_url + /robots.txt</code>.
@@ -165,7 +165,7 @@ foreach (($desired ?? []) as $hrow) {
 <div class="panel-card mt-16">
     <div class="page-head page-head--compact">
         <h2 class="section-title">Хосты и статусы</h2>
-        <div class="small muted">Статусы по root и поддоменам текущего сайта</div>
+        <div class="small muted">Статусы по основному домену и поддоменам текущего сайта</div>
     </div>
 
     <div class="wm-table-wrap">
@@ -174,8 +174,8 @@ foreach (($desired ?? []) as $hrow) {
             <tr>
                 <th>Метка</th>
                 <th>Хост</th>
-                <th>Host ID</th>
-                <th>Verify файл</th>
+                <th>ID хоста</th>
+                <th>Файл верификации</th>
                 <th>Файл записан</th>
                 <th>Верифицирован</th>
                 <th>Robots добавлен</th>
@@ -214,7 +214,7 @@ foreach (($desired ?? []) as $hrow) {
                 };
                 ?>
                 <tr>
-                    <td><?= h($label === '' ? '(root)' : $label) ?></td>
+                    <td><?= h($label === '' ? '(основной домен)' : $label) ?></td>
                     <td><?= h($hostUrl) ?></td>
                     <td><?= $r ? h($r['host_id'] ?? '') : '' ?></td>
                     <td><?= $r ? h($r['verification_file'] ?? '') : '' ?></td>
@@ -283,7 +283,7 @@ async function fillFromPages() {
     if (label === '') label = '_default';
 
     if (label === 'ALL') {
-        alert('Для ALL используйте кнопку "Массово". Для вставки выберите конкретный label.');
+        alert('Для ALL используйте кнопку «Массово». Для вставки выберите конкретную метку.');
         return;
     }
 
@@ -292,7 +292,7 @@ async function fillFromPages() {
     const txt = await r.text();
 
     if (!r.ok) {
-        alert('Ошибка получения pages urls: ' + txt);
+        alert('Ошибка получения URL страниц: ' + txt);
         return;
     }
 
@@ -301,7 +301,7 @@ async function fillFromPages() {
 
 function submitRecrawlFromPagesAll() {
     const siteId = <?= (int)$siteId ?>;
-    if (!confirm('Отправить recrawl по pages сразу для всех хостов этого сайта?')) return;
+    if (!confirm('Отправить переобход по страницам сразу для всех хостов этого сайта?')) return;
 
     const f = document.createElement('form');
     f.method = 'post';

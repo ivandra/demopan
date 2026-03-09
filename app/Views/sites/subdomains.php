@@ -25,11 +25,11 @@ $currentVpsIp = (string)($site['vps_ip'] ?? '');
 <div class="page-head">
     <h1 class="page-title">Поддомены и DNS: <?= h($site['domain'] ?? '') ?></h1>
     <div class="page-actions">
-        <a class="btn btn-secondary" href="/sites">← К списку сайтов</a>
+        <a class="btn btn-secondary" href="/sites/overview?id=<?= $siteId ?>">Обзор</a>
         <a class="btn btn-secondary" href="/sites/subcfg?id=<?= $siteId ?>&label=_default">Открыть root / _default</a>
     </div>
     <div class="page-subtitle">
-        Здесь выбираются поддомены, включаются и выключаются DNS-записи и открывается редактирование контента.
+        Здесь выбираются поддомены сайта, включаются и выключаются записи DNS и открывается редактирование контента.
         <b>_default</b> = основной домен / root-конфиг.
     </div>
 </div>
@@ -81,7 +81,7 @@ $currentVpsIp = (string)($site['vps_ip'] ?? '');
             </label>
 
             <div class="small muted">
-                Если IP не задан, панель попробует взять его из DNS A или с сервера.
+                Если IP не задан, панель попробует взять его из DNS A или из выбранного сервера.
             </div>
 
             <div>
@@ -92,8 +92,9 @@ $currentVpsIp = (string)($site['vps_ip'] ?? '');
 
     <div class="panel-card">
         <h2 class="section-title">2) Быстро добавить вручную</h2>
+
         <form method="post" action="/sites/subdomains/apply?id=<?= $siteId ?>" class="stack-gap-md">
-            <div class="small muted">Можно указать label через запятую или пробел.</div>
+            <div class="small muted">Можно указать label через запятую, пробел или перенос строки.</div>
             <textarea name="labels_text" rows="10" placeholder="например: banda, beef, betera"></textarea>
             <div class="small muted">
                 Панель приведёт список к выбранному: добавит недостающие и удалит лишние (кроме <code>_default</code>).
@@ -113,7 +114,9 @@ $currentVpsIp = (string)($site['vps_ip'] ?? '');
     <div class="page-head page-head--compact">
         <h2 class="section-title">3) Текущие поддомены сайта</h2>
         <div class="page-actions">
-            <a class="btn btn-ai" href="/ai/generate-all-sub-texts?id=<?= (int)$siteId ?>" data-confirm="Сгенерировать AI-тексты для всех enabled поддоменов?">AI: тексты для всех сабов</a>
+            <a class="btn btn-ai" href="/ai/generate-all-sub-texts?id=<?= (int)$siteId ?>" data-confirm="Сгенерировать AI-тексты для всех enabled поддоменов?">
+                AI: тексты для всех сабов
+            </a>
         </div>
     </div>
 
@@ -176,19 +179,25 @@ $currentVpsIp = (string)($site['vps_ip'] ?? '');
                     </td>
                 </tr>
             <?php endforeach; ?>
+
+            <?php if (empty($siteSubs)): ?>
+                <tr>
+                    <td colspan="6" class="muted">Поддомены пока не добавлены.</td>
+                </tr>
+            <?php endif; ?>
             </tbody>
         </table>
     </div>
 
     <div class="page-actions mt-12">
-        <form method="post" action="/sites/subdomains/delete-catalog?id=<?= $siteId ?>" data-confirm="Удалить все сабы (кроме _default) и их папки?">
+        <form method="post" action="/sites/subdomains/delete-catalog?id=<?= $siteId ?>" data-confirm="Удалить все поддомены (кроме _default) и их папки?">
             <button type="submit" class="btn btn-danger">Удалить все сабы (кроме _default)</button>
         </form>
     </div>
 </div>
 
 <div class="panel-card stack-gap-md">
-    <h2 class="section-title">4) Registrar + DNS (Namecheap)</h2>
+    <h2 class="section-title">4) Регистратор + DNS (Namecheap)</h2>
 
     <form method="post" action="/sites/subdomains/set-registrar?id=<?= $siteId ?>" class="inline-form">
         <label>Аккаунт Namecheap</label>
@@ -197,10 +206,18 @@ $currentVpsIp = (string)($site['vps_ip'] ?? '');
                 <?php
                 $id = (int)($a['id'] ?? 0);
                 $sel = ((int)($site['registrar_account_id'] ?? 0) === $id) ? 'selected' : '';
-                $title = (string)($a['title'] ?? '');
+                $isSandbox = ((int)($a['is_sandbox'] ?? 0) === 1);
+                $accText =
+                    '#' . $id . ' ' .
+                    (string)($a['username'] ?? '') .
+                    ' / ' .
+                    (string)($a['api_user'] ?? '') .
+                    ' — ' .
+                    ($isSandbox ? 'sandbox' : 'prod') .
+                    (((int)($a['is_default'] ?? 0) === 1) ? ' (default)' : '');
                 ?>
                 <option value="<?= $id ?>" <?= $sel ?>>
-                    #<?= $id ?> <?= h($title) ?><?= ((int)($a['is_default'] ?? 0) === 1 ? ' (default)' : '') ?>
+                    <?= h($accText) ?>
                 </option>
             <?php endforeach; ?>
         </select>
@@ -238,7 +255,7 @@ $currentVpsIp = (string)($site['vps_ip'] ?? '');
         </div>
     </form>
 
-    <form method="post" action="/sites/subdomains/delete-catalog-dns?id=<?= $siteId ?>" data-confirm="Удалить DNS записи для всех сабов этого сайта?">
+    <form method="post" action="/sites/subdomains/delete-catalog-dns?id=<?= $siteId ?>" data-confirm="Удалить DNS-записи для всех поддоменов этого сайта?">
         <button type="submit" class="btn btn-danger">Удалить DNS для сабов (без удаления папок)</button>
     </form>
 </div>

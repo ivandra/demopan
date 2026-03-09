@@ -1,5 +1,5 @@
 <?php
-function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES); }
+function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 
 $row = is_array($row ?? null) ? $row : [];
 $apiKey = (string)($apiKey ?? '');
@@ -10,92 +10,135 @@ $temperature = (string)($row['temperature'] ?? '0.7');
 $maxTokens = (string)($row['max_tokens'] ?? '1200');
 $promptV1 = (string)($row['prompt_v1'] ?? '');
 $promptV2 = (string)($row['prompt_v2'] ?? '');
+
+$metaPromptRoot = (string)($row['meta_prompt_root'] ?? '');
+$metaPromptSub  = (string)($row['meta_prompt_sub'] ?? '');
+$textPromptRoot = (string)($row['text_prompt_root'] ?? '');
+$textPromptSub  = (string)($row['text_prompt_sub'] ?? '');
+$pagePrompt     = (string)($row['page_prompt'] ?? '');
+$pageMetaPrompt = (string)($row['page_meta_prompt'] ?? '');
 ?>
 
-<h2>AI настройки</h2>
-
-<p>
-  <a href="/sites">← К сайтам</a>
-</p>
-
-<form method="post" action="/ai/settings" style="max-width:980px;background:#fff;border:1px solid #ddd;border-radius:10px;padding:16px;">
-  <div style="margin-bottom:12px;">
-    <label><b>Провайдер</b></label><br>
-    <input name="provider" value="<?= h($provider) ?>" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
-  </div>
-
-  <div style="margin-bottom:12px;">
-    <label><b>API key</b></label><br>
-    <input name="api_key" value="<?= h($apiKey) ?>" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;font-family:monospace;">
-  </div>
-
-  <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;">
-    <div style="flex:1;">
-      <label><b>Модель</b></label><br>
-      <input name="model" value="<?= h($model) ?>" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+<div class="page-head">
+    <h1 class="page-title">AI-настройки</h1>
+    <div class="page-actions">
+        <a class="btn btn-secondary" href="/sites">К сайтам</a>
+        <a class="btn btn-secondary" href="/ai/test">Проверить API</a>
     </div>
-    <div style="width:180px;">
-      <label><b>Temperature</b></label><br>
-      <input name="temperature" value="<?= h($temperature) ?>" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
+    <div class="page-subtitle">
+        Глобальные настройки подключения к AI и шаблоны промптов для root, поддоменов и внутренних страниц.
     </div>
-    <div style="width:180px;">
-      <label><b>Max tokens</b></label><br>
-      <input name="max_tokens" value="<?= h($maxTokens) ?>" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;">
-    </div>
-  </div>
-
-  <div style="margin-bottom:12px;">
-    <label><b>Промпт вариант 1</b></label><br>
-    <textarea name="prompt_v1" style="width:100%;height:220px;border:1px solid #ddd;border-radius:8px;padding:10px;font-family:monospace;"><?= h($promptV1) ?></textarea>
-  </div>
-
-  <div style="margin-bottom:12px;">
-    <label><b>Промпт вариант 2</b></label><br>
-    <textarea name="prompt_v2" style="width:100%;height:220px;border:1px solid #ddd;border-radius:8px;padding:10px;font-family:monospace;"><?= h($promptV2) ?></textarea>
-  </div>
-  
-  <div style="margin-top:20px;">
-		<label><b>Prompt: meta root</b></label><br>
-		<textarea name="meta_prompt_root" rows="8" style="width:100%;"><?= htmlspecialchars((string)($row['meta_prompt_root'] ?? ''), ENT_QUOTES) ?></textarea>
-	</div>
-
-	<div style="margin-top:20px;">
-		<label><b>Prompt: meta subdomains</b></label><br>
-		<textarea name="meta_prompt_sub" rows="8" style="width:100%;"><?= htmlspecialchars((string)($row['meta_prompt_sub'] ?? ''), ENT_QUOTES) ?></textarea>
-	</div>
-
-	<div style="margin-top:20px;">
-		<label><b>Prompt: text root</b></label><br>
-		<textarea name="text_prompt_root" rows="8" style="width:100%;"><?= htmlspecialchars((string)($row['text_prompt_root'] ?? ''), ENT_QUOTES) ?></textarea>
-	</div>
-
-	<div style="margin-top:20px;">
-		<label><b>Prompt: text subdomains</b></label><br>
-		<textarea name="text_prompt_sub" rows="8" style="width:100%;"><?= htmlspecialchars((string)($row['text_prompt_sub'] ?? ''), ENT_QUOTES) ?></textarea>
-	</div>
-
-	<div style="margin-top:20px;">
-		<label><b>Prompt: page text</b></label><br>
-		<textarea name="page_prompt" rows="8" style="width:100%;"><?= htmlspecialchars((string)($row['page_prompt'] ?? ''), ENT_QUOTES) ?></textarea>
-	</div>
-
-	<div style="margin-top:20px;">
-		<label><b>Prompt: page meta</b></label><br>
-		<textarea name="page_meta_prompt" rows="8" style="width:100%;"><?= htmlspecialchars((string)($row['page_meta_prompt'] ?? ''), ENT_QUOTES) ?></textarea>
-	</div>
-
-  <div style="display:flex;gap:10px;">
-    <button type="submit" style="padding:10px 14px;border-radius:8px;border:0;background:#2f80ed;color:#fff;font-weight:600;">
-      Сохранить
-    </button>
-
-    <a href="/ai/test" style="display:inline-block;padding:10px 14px;border-radius:8px;border:1px solid #ddd;background:#fff;color:#222;text-decoration:none;">
-      Проверить API
-    </a>
-  </div>
-</form>
-
-<div style="margin-top:14px;color:#666;font-size:12px;max-width:980px;">
-  Сейчас мы настраиваем только подключение и шаблоны промптов.  
-  Следующим этапом добавим страницу генерации для конкретного сайта и поддоменов.
 </div>
+
+<form method="post" action="/ai/settings" class="panel-card system-form stack-gap-lg">
+    <div class="panel-grid panel-grid--2">
+        <div class="panel-card stack-gap-md">
+            <h2 class="section-title">Подключение</h2>
+
+            <div class="field-row">
+                <label>Провайдер</label>
+                <input name="provider" value="<?= h($provider) ?>">
+            </div>
+
+            <div class="field-row">
+                <label>API key</label>
+                <input name="api_key" value="<?= h($apiKey) ?>" class="system-code">
+            </div>
+
+            <div class="field-row">
+                <label>Модель</label>
+                <input name="model" value="<?= h($model) ?>">
+            </div>
+
+            <div class="panel-grid panel-grid--2">
+                <div class="field-row">
+                    <label>Temperature</label>
+                    <input name="temperature" value="<?= h($temperature) ?>">
+                </div>
+
+                <div class="field-row">
+                    <label>Max tokens</label>
+                    <input name="max_tokens" value="<?= h($maxTokens) ?>">
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-card stack-gap-md">
+            <h2 class="section-title">Назначение</h2>
+
+            <ul class="status-list small">
+                <li><b>prompt_v1</b> и <b>prompt_v2</b> — старые общие шаблоны;</li>
+                <li><b>meta_prompt_root</b> — SEO-мета для основного домена;</li>
+                <li><b>meta_prompt_sub</b> — SEO-мета для поддоменов;</li>
+                <li><b>text_prompt_root</b> — текст главной root;</li>
+                <li><b>text_prompt_sub</b> — текст главной поддомена;</li>
+                <li><b>page_prompt</b> — текст внутренней страницы;</li>
+                <li><b>page_meta_prompt</b> — meta внутренней страницы.</li>
+            </ul>
+
+            <div class="note">
+                Runtime-параметры конкретного сайта задаются не здесь, а на экране
+                <b>AI для сайта</b>.
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-card stack-gap-md">
+        <h2 class="section-title">Старые общие промпты</h2>
+
+        <div class="field-row">
+            <label>Промпт вариант 1</label>
+            <textarea name="prompt_v1" class="big-textarea"><?= h($promptV1) ?></textarea>
+        </div>
+
+        <div class="field-row">
+            <label>Промпт вариант 2</label>
+            <textarea name="prompt_v2" class="big-textarea"><?= h($promptV2) ?></textarea>
+        </div>
+    </div>
+
+    <div class="panel-grid panel-grid--2">
+        <div class="panel-card stack-gap-md">
+            <h2 class="section-title">SEO-мета</h2>
+
+            <div class="field-row">
+                <label>Промпт: meta root</label>
+                <textarea name="meta_prompt_root" class="big-textarea"><?= h($metaPromptRoot) ?></textarea>
+            </div>
+
+            <div class="field-row">
+                <label>Промпт: meta subdomains</label>
+                <textarea name="meta_prompt_sub" class="big-textarea"><?= h($metaPromptSub) ?></textarea>
+            </div>
+
+            <div class="field-row">
+                <label>Промпт: page meta</label>
+                <textarea name="page_meta_prompt" class="big-textarea"><?= h($pageMetaPrompt) ?></textarea>
+            </div>
+        </div>
+
+        <div class="panel-card stack-gap-md">
+            <h2 class="section-title">Тексты</h2>
+
+            <div class="field-row">
+                <label>Промпт: text root</label>
+                <textarea name="text_prompt_root" class="big-textarea"><?= h($textPromptRoot) ?></textarea>
+            </div>
+
+            <div class="field-row">
+                <label>Промпт: text subdomains</label>
+                <textarea name="text_prompt_sub" class="big-textarea"><?= h($textPromptSub) ?></textarea>
+            </div>
+
+            <div class="field-row">
+                <label>Промпт: page text</label>
+                <textarea name="page_prompt" class="big-textarea"><?= h($pagePrompt) ?></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-actions">
+        <button type="submit" class="btn btn-primary">Сохранить настройки</button>
+        <a class="btn btn-secondary" href="/ai/test">Проверить API</a>
+    </div>
+</form>

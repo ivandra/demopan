@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hub panel</title>
-    <link rel="stylesheet" href="/assets/admin.css?v=20260309a">
-    <script defer src="/assets/admin.js?v=20260309a"></script>
+    <title>Hub панель</title>
+    <link rel="stylesheet" href="/assets/admin.css?v=20260309c">
+    <script defer src="/assets/admin.js?v=20260309c"></script>
 </head>
 <body>
 <?php
@@ -66,7 +66,7 @@ $globalNav = [
     ['title' => 'Контакты регистратора', 'href' => '/registrar/contacts', 'match' => ['/registrar/contacts']],
     ['title' => 'Каталог сабов',         'href' => '/subdomains',         'match' => ['/subdomains']],
     ['title' => 'SSL',                   'href' => '/ssl',                'match' => ['/ssl']],
-    ['title' => 'Webmaster',             'href' => '/webmaster',          'match' => ['/webmaster']],
+    ['title' => 'Вебмастер',             'href' => '/webmaster',          'match' => ['/webmaster']],
     ['title' => 'AI-настройки',          'href' => '/ai/settings',        'match' => ['/ai/settings']],
 ];
 
@@ -81,7 +81,7 @@ if ($layoutSiteId > 0) {
         ['title' => 'AI',               'href' => '/sites/ai?id=' . $layoutSiteId,         'match' => ['/sites/ai']],
         ['title' => 'Публикация',       'href' => '/deploy?id=' . $layoutSiteId,           'match' => ['/deploy']],
         ['title' => 'SSL',              'href' => '/ssl/site?id=' . $layoutSiteId,         'match' => ['/ssl/site']],
-        ['title' => 'Webmaster',        'href' => '/webmaster/site?id=' . $layoutSiteId,   'match' => ['/webmaster/site']],
+        ['title' => 'Вебмастер',        'href' => '/webmaster/site?id=' . $layoutSiteId,   'match' => ['/webmaster/site']],
         ['title' => 'Клонировать',      'href' => '/sites/clone?id=' . $layoutSiteId,      'match' => ['/sites/clone$']],
     ];
 }
@@ -92,9 +92,9 @@ if ($layoutSiteId > 0) {
     <div class="hub-brand">
         <div>
             <div class="hub-brand__title">Hub.seotop-one.ru</div>
-            <div class="hub-brand__sub">Панель управления сайтами, сабдоменами, деплоем, AI и Webmaster</div>
+            <div class="hub-brand__sub">Внутренняя панель управления сайтами, поддоменами, публикацией, AI и Вебмастером</div>
         </div>
-        <div class="hub-chip">PHP panel</div>
+        <div class="hub-chip">внутренняя панель</div>
     </div>
 
     <nav class="hub-nav">

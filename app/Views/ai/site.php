@@ -52,7 +52,7 @@ function labelTitle(string $lb): string {
 <div class="panel-card">
     <h2 class="section-title">Разовые параметры генерации</h2>
     <div class="small muted mb-14">
-        Эти параметры применяются только к текущему сайту и живут как runtime-настройки.
+        Эти параметры применяются только к текущему сайту и живут как разовые настройки генерации.
         Они не заменяют глобальные промпты, а дополняют их.
     </div>
 
@@ -71,7 +71,7 @@ function labelTitle(string $lb): string {
                 <div class="field-row">
                     <label>Режим перезаписи</label>
                     <select name="overwrite_mode">
-                        <option value="fill_empty" <?= (($runOptions['overwrite_mode'] ?? 'fill_empty') === 'fill_empty') ? 'selected' : '' ?>>Только пустые / inherit</option>
+                        <option value="fill_empty" <?= (($runOptions['overwrite_mode'] ?? 'fill_empty') === 'fill_empty') ? 'selected' : '' ?>>Только пустые / наследуемые</option>
                         <option value="overwrite_all" <?= (($runOptions['overwrite_mode'] ?? '') === 'overwrite_all') ? 'selected' : '' ?>>Перезаписывать всё</option>
                     </select>
                 </div>
@@ -87,7 +87,7 @@ function labelTitle(string $lb): string {
                 </div>
 
                 <div class="field-row">
-                    <label>CTA</label>
+                    <label>Призыв к действию</label>
                     <input type="text" name="cta_text" value="<?= h($runOptions['cta_text'] ?? '') ?>" placeholder="Зарегистрируйтесь и начните игру">
                 </div>
 
@@ -135,17 +135,17 @@ function labelTitle(string $lb): string {
         <h2 class="section-title">Основной домен</h2>
 
         <div class="page-actions">
-            <form method="post" action="/ai/generate-meta?id=<?= $siteId ?>" data-confirm="Сгенерировать meta для основного домена?">
-                <button class="btn btn-primary" type="submit">Сгенерировать meta root</button>
+            <form method="post" action="/ai/generate-meta?id=<?= $siteId ?>" data-confirm="Сгенерировать мета для основного домена?">
+                <button class="btn btn-primary" type="submit">Сгенерировать мета для root</button>
             </form>
 
             <a class="btn btn-ai"
                href="/ai/generate-root-text?id=<?= $siteId ?>"
-               data-confirm="Сгенерировать текст главной страницы для root?">
-                Сгенерировать текст root
+               data-confirm="Сгенерировать текст главной страницы для основного домена?">
+                Сгенерировать текст для root
             </a>
 
-            <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=_default">Открыть pages root</a>
+            <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=_default">Открыть страницы root</a>
         </div>
 
         <div class="small muted">
@@ -158,13 +158,13 @@ function labelTitle(string $lb): string {
         <h2 class="section-title">Поддомены</h2>
 
         <div class="page-actions">
-            <form method="post" action="/ai/generate-subdomains?id=<?= $siteId ?>" data-confirm="Сгенерировать meta для всех поддоменов?">
-                <button class="btn btn-primary" type="submit">Сгенерировать meta для всех сабов</button>
+            <form method="post" action="/ai/generate-subdomains?id=<?= $siteId ?>" data-confirm="Сгенерировать мета для всех поддоменов?">
+                <button class="btn btn-primary" type="submit">Сгенерировать мета для всех сабов</button>
             </form>
 
             <a class="btn btn-ai"
                href="/ai/generate-all-sub-texts?id=<?= $siteId ?>"
-               data-confirm="Сгенерировать тексты для всех enabled поддоменов?">
+               data-confirm="Сгенерировать тексты для всех включённых поддоменов?">
                 Сгенерировать тексты для всех сабов
             </a>
 
@@ -179,9 +179,9 @@ function labelTitle(string $lb): string {
 
 <div class="panel-card mt-16">
     <div class="page-head page-head--compact">
-        <h2 class="section-title">Пакетно по выбранным label</h2>
+        <h2 class="section-title">Пакетно по выбранным меткам</h2>
         <div class="small muted">
-            Отметьте нужные label и запустите только нужный тип генерации.
+            Отметьте нужные метки и запустите только нужный тип генерации.
         </div>
     </div>
 
@@ -209,9 +209,9 @@ function labelTitle(string $lb): string {
                     type="submit"
                     form="ai-selected-meta-form"
                     data-require-checked=".label-batch-check"
-                    data-require-checked-message="Сначала выберите хотя бы один label."
-                    data-confirm="Сгенерировать meta для выбранных label?">
-                Сгенерировать meta
+                    data-require-checked-message="Сначала выберите хотя бы одну метку."
+                    data-confirm="Сгенерировать мета для выбранных меток?">
+                Сгенерировать мета
             </button>
 
             <button class="btn btn-ai"
@@ -220,8 +220,8 @@ function labelTitle(string $lb): string {
                     formmethod="post"
                     form="ai-selected-meta-form"
                     data-require-checked=".label-batch-check"
-                    data-require-checked-message="Сначала выберите хотя бы один label."
-                    data-confirm="Сгенерировать тексты главной для выбранных label?">
+                    data-require-checked-message="Сначала выберите хотя бы одну метку."
+                    data-confirm="Сгенерировать тексты главной для выбранных меток?">
                 Сгенерировать тексты
             </button>
 
@@ -231,9 +231,9 @@ function labelTitle(string $lb): string {
                     formmethod="post"
                     form="ai-selected-meta-form"
                     data-require-checked=".label-batch-check"
-                    data-require-checked-message="Сначала выберите хотя бы один label."
-                    data-confirm="Сгенерировать все pages для выбранных label?">
-                Сгенерировать все pages
+                    data-require-checked-message="Сначала выберите хотя бы одну метку."
+                    data-confirm="Сгенерировать все страницы для выбранных меток?">
+                Сгенерировать все страницы
             </button>
         </div>
     </div>
@@ -241,9 +241,9 @@ function labelTitle(string $lb): string {
 
 <div class="panel-card mt-16">
     <div class="page-head page-head--compact">
-        <h2 class="section-title">Внутренние страницы по label</h2>
+        <h2 class="section-title">Внутренние страницы по меткам</h2>
         <div class="small muted">
-            Для каждой сущности можно быстро открыть pages / texts / subcfg или массово сгенерировать все pages.
+            Для каждой сущности можно быстро открыть страницы, тексты, контент и SEO или массово сгенерировать все страницы.
         </div>
     </div>
 
@@ -264,8 +264,8 @@ function labelTitle(string $lb): string {
                     <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?>&label=<?= urlencode($lb) ?>">Тексты</a>
                     <a class="btn btn-ai"
                        href="/ai/generate-all-pages?id=<?= $siteId ?>&label=<?= urlencode($lb) ?>"
-                       data-confirm="Сгенерировать meta и тексты для всех страниц: <?= h(labelTitle($lb)) ?>?">
-                        Генерировать все pages
+                       data-confirm="Сгенерировать мета и тексты для всех страниц: <?= h(labelTitle($lb)) ?>?">
+                        Генерировать все страницы
                     </a>
                 </div>
             </div>

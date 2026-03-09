@@ -1,27 +1,30 @@
 <?php
-// app/Views/sites/subcfg.php
-// Ожидает: $site, $siteId, $label, $labels, $cfg, $unused
-
 $siteId = (int)($siteId ?? 0);
 $label  = (string)($label ?? '_default');
 $labels = is_array($labels ?? null) ? $labels : ['_default'];
 $cfg    = is_array($cfg ?? null) ? $cfg : [];
 $unused = is_array($unused ?? null) ? $unused : [];
 
-function e($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
+function e($s): string { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 
 $entityTitle = ($label === '_default') ? 'Основной домен (_default)' : ('Поддомен: ' . $label);
 $entityHost  = ($label === '_default')
     ? (string)($site['domain'] ?? '')
     : ($label . '.' . (string)($site['domain'] ?? ''));
+
+$isRoot = ($label === '_default');
 ?>
 
 <div class="subcfg-wrap">
     <div class="page-head">
         <h1 class="page-title">Контент и SEO: <?= e($site['domain'] ?? '') ?></h1>
         <div class="page-actions">
-            <a class="btn btn-secondary" href="/sites">К списку сайтов</a>
+            <a class="btn btn-secondary" href="/sites/overview?id=<?= $siteId ?>">Обзор</a>
             <a class="btn btn-secondary" href="/sites/edit?id=<?= $siteId ?>">Настройки сайта</a>
+            <a class="btn btn-secondary" href="/sites/subdomains?id=<?= $siteId ?>">Поддомены</a>
+        </div>
+        <div class="page-subtitle">
+            Здесь редактируются SEO-поля, ссылки, redirect-настройки и assets для root или выбранного поддомена.
         </div>
     </div>
 
@@ -33,17 +36,16 @@ $entityHost  = ($label === '_default')
         <div class="subcfg-actions mt-12">
             <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Страницы</a>
             <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Тексты</a>
-            <a class="btn btn-secondary" href="/sites/files?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Файлы</a>
+            <a class="btn btn-secondary" href="/sites/files?id=<?= $siteId ?>">Файлы build</a>
             <a class="btn btn-ai" href="/sites/ai?id=<?= $siteId ?>">AI для сайта</a>
-            <a class="btn btn-secondary" href="/sites/subdomains?id=<?= $siteId ?>">Поддомены</a>
         </div>
     </div>
 
     <div class="subcfg-top mt-16">
         <div class="panel-card">
             <label>Поиск сущности</label>
-            <input id="subSearch" type="text" placeholder="например: 1win, pinup, _default" data-filter-options="#subSelect">
-            <div class="small muted">Фильтрует список. Enter не нужен.</div>
+            <input id="subSearch" type="text" placeholder="например: banda, pinup, _default" data-filter-options="#subSelect">
+            <div class="small muted">Фильтрует список root / поддоменов.</div>
         </div>
 
         <div class="panel-card">
@@ -55,25 +57,26 @@ $entityHost  = ($label === '_default')
                     </option>
                 <?php endforeach; ?>
             </select>
-            <div class="small muted">Открывает экран редактирования для выбранной сущности.</div>
+            <div class="small muted">Переключает экран редактирования на выбранную сущность.</div>
         </div>
 
         <div class="panel-card subcfg-top__wide">
             <label>Быстрые действия</label>
+
             <div class="subcfg-actions">
-                <form method="post" action="/sites/subcfg/regenAll" data-confirm="Перегенерировать config.php для всех сабов?">
+                <form method="post" action="/sites/subcfg/regenAll" data-confirm="Перегенерировать config.php для всех поддоменов сайта?">
                     <input type="hidden" name="site_id" value="<?= $siteId ?>">
                     <button type="submit" class="btn btn-secondary">Пересобрать config.php для всех</button>
                 </form>
 
-                <form method="post" action="/sites/subcfg/create" data-confirm="Создать саб + папки + config.php?">
+                <form method="post" action="/sites/subcfg/create" data-confirm="Создать поддомен, папки и config.php?">
                     <input type="hidden" name="site_id" value="<?= $siteId ?>">
                     <input type="text" name="new_label" placeholder="new-sub" class="input-sm">
                     <button type="submit" class="btn btn-primary">Создать поддомен</button>
                 </form>
 
-                <?php if ($label !== '_default'): ?>
-                    <form method="post" action="/sites/subcfg/delete" data-confirm="Удалить конфиг саба <?= e($label) ?> из БД?">
+                <?php if (!$isRoot): ?>
+                    <form method="post" action="/sites/subcfg/delete" data-confirm="Удалить конфиг поддомена <?= e($label) ?> из БД?">
                         <input type="hidden" name="site_id" value="<?= $siteId ?>">
                         <input type="hidden" name="label" value="<?= e($label) ?>">
                         <label class="checkbox-inline small">
@@ -87,8 +90,8 @@ $entityHost  = ($label === '_default')
     </div>
 
     <div class="alert alert-info mt-16">
-        <b>Важно:</b> при открытии экрана панель вызывает provisioner и гарантирует наличие
-        <code>subs/&lt;label&gt;/</code> (texts + assets + config.php).
+        <b>Важно:</b> при открытии экрана сервис гарантирует наличие
+        <code>subs/&lt;label&gt;/</code> с папками <code>texts</code>, <code>assets</code> и файлом <code>config.php</code>.
         Для основного домена используется <code>subs/_default</code>.
     </div>
 
@@ -98,79 +101,79 @@ $entityHost  = ($label === '_default')
 
         <div class="subcfg-grid">
             <div class="panel-card">
-                <h3 class="section-title">SEO-поля и мета (для <?= e($label) ?>)</h3>
+                <h3 class="section-title">SEO-поля и мета</h3>
 
                 <div class="subcfg-actions mb-14">
-                    <a
-                        class="btn btn-ai"
-                        href="/ai/generate-sub-meta?id=<?= $siteId ?>&label=<?= urlencode($label) ?>"
-                        data-confirm="Сгенерировать AI meta для саба <?= e($label) ?>? Текущие title/h1/description/keywords будут перезаписаны."
-                    >
-                        AI: сгенерировать meta
-                    </a>
-
-                    <?php if ($label === '_default'): ?>
+                    <?php if ($isRoot): ?>
                         <a
-                            class="btn btn-secondary"
+                            class="btn btn-ai"
                             href="/ai/generate-meta?id=<?= $siteId ?>"
-                            data-confirm="Сгенерировать AI meta для основного домена?"
+                            data-confirm="Сгенерировать AI meta для основного домена? Текущие title/h1/description/keywords будут перезаписаны."
                         >
-                            AI: meta root
+                            AI: сгенерировать meta root
+                        </a>
+                    <?php else: ?>
+                        <a
+                            class="btn btn-ai"
+                            href="/ai/generate-sub-meta?id=<?= $siteId ?>&label=<?= urlencode($label) ?>"
+                            data-confirm="Сгенерировать AI meta для поддомена <?= e($label) ?>? Текущие title/h1/description/keywords будут перезаписаны."
+                        >
+                            AI: сгенерировать meta
                         </a>
                     <?php endif; ?>
                 </div>
 
                 <div class="ai-note small">
-                    Для текущего саба AI может автоматически заполнить:
+                    AI может автоматически заполнить:
                     <b>title</b>, <b>h1</b>, <b>description</b>, <b>keywords</b>.
                 </div>
 
                 <div class="subcfg-actions mt-14 mb-14">
-                    <a
-                        class="btn btn-ai"
-                        href="/ai/generate-sub-text?id=<?= $siteId ?>&label=<?= urlencode($label) ?>"
-                        data-confirm="Сгенерировать AI-текст для саба <?= e($label) ?>? Будет перезаписан файл текста главной страницы."
-                    >
-                        AI: сгенерировать текст
-                    </a>
-
-                    <?php if ($label === '_default'): ?>
+                    <?php if ($isRoot): ?>
                         <a
                             class="btn btn-ai"
                             href="/ai/generate-root-text?id=<?= $siteId ?>"
                             data-confirm="Сгенерировать AI-текст для основного домена? Будет перезаписан файл главной страницы."
                         >
-                            AI: текст root
+                            AI: сгенерировать текст root
+                        </a>
+                    <?php else: ?>
+                        <a
+                            class="btn btn-ai"
+                            href="/ai/generate-sub-text?id=<?= $siteId ?>&label=<?= urlencode($label) ?>"
+                            data-confirm="Сгенерировать AI-текст для поддомена <?= e($label) ?>? Будет перезаписан файл текста главной страницы."
+                        >
+                            AI: сгенерировать текст
                         </a>
                     <?php endif; ?>
                 </div>
 
                 <div class="row mt-12">
-                    <label>title</label>
+                    <label>Title</label>
                     <input type="text" name="title" value="<?= e($cfg['title'] ?? '') ?>">
                 </div>
 
                 <div class="row">
-                    <label>h1</label>
+                    <label>H1</label>
                     <input type="text" name="h1" value="<?= e($cfg['h1'] ?? '') ?>">
                 </div>
 
                 <div class="row">
-                    <label>description</label>
+                    <label>Description</label>
                     <input type="text" name="description" value="<?= e($cfg['description'] ?? '') ?>">
                 </div>
 
                 <div class="row">
-                    <label>keywords</label>
+                    <label>Keywords</label>
                     <input type="text" name="keywords" value="<?= e($cfg['keywords'] ?? '') ?>">
                 </div>
             </div>
 
             <div class="panel-card">
-                <h3 class="section-title">Редиректы, партнёрские ссылки и assets</h3>
+                <h3 class="section-title">Ссылки, redirect и assets</h3>
 
                 <div class="row">
-                    <label>promolink</label>
+                    <label>Promolink</label>
                     <input type="text" name="promolink" value="<?= e($cfg['promolink'] ?? '/reg') ?>">
                 </div>
 
@@ -187,7 +190,7 @@ $entityHost  = ($label === '_default')
                 <div class="row">
                     <label class="checkbox-inline">
                         <input type="checkbox" name="redirect_enabled" value="1" <?= !empty($cfg['redirect_enabled']) ? 'checked' : '' ?>>
-                        redirect_enabled
+                        Включить redirect_enabled
                     </label>
                 </div>
 
@@ -204,7 +207,7 @@ $entityHost  = ($label === '_default')
                 <div class="row">
                     <label>logo (path)</label>
                     <input type="text" name="logo" value="<?= e($cfg['logo'] ?? 'assets/logo.png') ?>">
-                    <div class="small muted">Обычно: <code>assets/logo.png</code></div>
+                    <div class="small muted">Обычно: <code>assets/logo.png</code> или <code>assets/logo.webp</code></div>
                 </div>
 
                 <div class="row">
@@ -224,13 +227,15 @@ $entityHost  = ($label === '_default')
 
     <?php if (!empty($unused)): ?>
         <div class="panel-card mt-16">
-            <h3 class="section-title">Неиспользуемые texts (<?= e($label) ?>)</h3>
+            <h3 class="section-title">Неиспользуемые texts</h3>
             <ul class="unused">
                 <?php foreach ($unused as $f): ?>
                     <li><code><?= e($f) ?></code></li>
                 <?php endforeach; ?>
             </ul>
-            <div class="small muted">Это просто список. Удаление можно добавить отдельным action, если надо.</div>
+            <div class="small muted">
+                Это просто список для контроля. Удаление можно добавить отдельным действием позже.
+            </div>
         </div>
     <?php endif; ?>
 </div>

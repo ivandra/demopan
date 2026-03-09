@@ -26,11 +26,11 @@ $rows = is_array($rows ?? null) ? $rows : [];
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Provider</th>
+                    <th>Провайдер</th>
                     <th>Окружение</th>
                     <th>Client IP</th>
                     <th>ApiUser</th>
-                    <th>Username</th>
+                    <th>Логин</th>
                     <th>Created</th>
                     <th>Действия</th>
                 </tr>

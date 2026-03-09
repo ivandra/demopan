@@ -4,7 +4,7 @@ $deploy = is_array($deploy ?? null) ? $deploy : [];
 ?>
 
 <div class="page-head">
-    <h1 class="page-title">Deploy report #<?= (int)($deploy['id'] ?? 0) ?></h1>
+    <h1 class="page-title">Отчёт deploy #<?= (int)($deploy['id'] ?? 0) ?></h1>
     <div class="page-actions">
         <a class="btn btn-secondary" href="/sites">К сайтам</a>
         <?php if (!empty($deploy['site_id'])): ?>
@@ -16,17 +16,17 @@ $deploy = is_array($deploy ?? null) ? $deploy : [];
 
 <div class="panel-grid panel-grid--3">
     <div class="panel-card">
-        <div class="small muted">Status</div>
+        <div class="small muted">Статус</div>
         <div class="kpi"><?= h((string)($deploy['status'] ?? '—')) ?></div>
     </div>
 
     <div class="panel-card">
-        <div class="small muted">Site ID</div>
+        <div class="small muted">ID сайта</div>
         <div class="kpi"><?= (int)($deploy['site_id'] ?? 0) ?></div>
     </div>
 
     <div class="panel-card">
-        <div class="small muted">Created</div>
+        <div class="small muted">Создан</div>
         <div class="kpi" style="font-size:18px;"><?= h((string)($deploy['created_at'] ?? '—')) ?></div>
     </div>
 </div>
@@ -44,6 +44,6 @@ $deploy = is_array($deploy ?? null) ? $deploy : [];
 </div>
 
 <div class="panel-card mt-16">
-    <h2 class="section-title">Response</h2>
+    <h2 class="section-title">Ответ</h2>
     <pre class="report-code"><?= h((string)($deploy['response'] ?? '')) ?></pre>
 </div>

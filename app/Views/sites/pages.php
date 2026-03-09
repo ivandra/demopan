@@ -58,8 +58,8 @@ if (!$baseTextFiles) {
         <div class="page-actions">
             <a class="btn btn-ai"
                href="/ai/generate-all-pages?id=<?= $siteId ?>&label=<?= $labelEnc ?>"
-               data-confirm="Сгенерировать meta и тексты для всех страниц этого label?">
-                AI: сгенерировать всё для этого label
+               data-confirm="Сгенерировать мета и тексты для всех страниц этой метки?">
+                AI: сгенерировать всё для этой метки
             </a>
 
             <a class="btn btn-secondary"
@@ -69,7 +69,7 @@ if (!$baseTextFiles) {
         </div>
 
         <div class="note">
-            Пустые поля в meta-полях сохраняются как <code>$inherit</code>.
+            Пустые поля в мета-полях сохраняются как <code>$inherit</code>.
         </div>
     </div>
 
@@ -105,8 +105,8 @@ if (!$baseTextFiles) {
                     class="btn btn-primary"
                     data-require-checked=".page-batch-check"
                     data-require-checked-message="Сначала выберите хотя бы одну страницу."
-                    data-confirm="Сгенерировать AI meta для выбранных страниц?">
-                AI meta для выбранных
+                    data-confirm="Сгенерировать AI-мета для выбранных страниц?">
+                AI-мета для выбранных
             </button>
 
             <button type="submit"
@@ -117,7 +117,7 @@ if (!$baseTextFiles) {
                     data-require-checked=".page-batch-check"
                     data-require-checked-message="Сначала выберите хотя бы одну страницу."
                     data-confirm="Сгенерировать AI текст для выбранных страниц?">
-                AI text для выбранных
+                AI-текст для выбранных
             </button>
 
             <button type="submit"
@@ -127,7 +127,7 @@ if (!$baseTextFiles) {
                     class="btn btn-secondary"
                     data-require-checked=".page-batch-check"
                     data-require-checked-message="Сначала выберите хотя бы одну страницу."
-                    data-confirm="Сгенерировать AI meta и тексты для выбранных страниц?">
+                    data-confirm="Сгенерировать AI-мета и тексты для выбранных страниц?">
                 AI всё для выбранных
             </button>
         </div>
@@ -154,7 +154,7 @@ if (!$baseTextFiles) {
                 <th>Description</th>
                 <th>Keywords</th>
                 <th>Text file</th>
-                <th>AI</th>
+                <th>AI-действия</th>
                 <th>Priority</th>
                 <th>В sitemap</th>
             </tr>
@@ -203,13 +203,13 @@ if (!$baseTextFiles) {
                         <div class="inline-actions">
                             <a class="btn btn-sm btn-primary"
                                href="/ai/generate-page-meta?id=<?= $siteId ?>&label=<?= $labelEnc ?>&path=<?= urlencode($url) ?>"
-                               data-confirm="Сгенерировать AI meta для страницы <?= h($url) ?>?">
+                               data-confirm="Сгенерировать AI-мета для страницы <?= h($url) ?>?">
                                 AI meta
                             </a>
 
                             <a class="btn btn-sm btn-ai"
                                href="/ai/generate-page-text?id=<?= $siteId ?>&label=<?= $labelEnc ?>&path=<?= urlencode($url) ?>"
-                               data-confirm="Сгенерировать AI текст для страницы <?= h($url) ?>?">
+                               data-confirm="Сгенерировать AI-текст для страницы <?= h($url) ?>?">
                                 AI text
                             </a>
                         </div>
@@ -226,10 +226,10 @@ if (!$baseTextFiles) {
             <tr>
                 <td class="muted" style="text-align:center;">—</td>
                 <td><input type="text" name="url[<?= $i ?>]" placeholder="/new-page"></td>
-                <td><input type="text" name="title[<?= $i ?>]" placeholder="пусто = inherit"></td>
-                <td><input type="text" name="h1[<?= $i ?>]" placeholder="пусто = inherit"></td>
-                <td><input type="text" name="description[<?= $i ?>]" placeholder="пусто = inherit"></td>
-                <td><input type="text" name="keywords[<?= $i ?>]" placeholder="пусто = inherit"></td>
+                <td><input type="text" name="title[<?= $i ?>]" placeholder="пусто = наследовать"></td>
+                <td><input type="text" name="h1[<?= $i ?>]" placeholder="пусто = наследовать"></td>
+                <td><input type="text" name="description[<?= $i ?>]" placeholder="пусто = наследовать"></td>
+                <td><input type="text" name="keywords[<?= $i ?>]" placeholder="пусто = наследовать"></td>
                 <td>
                     <select name="text_file[<?= $i ?>]">
                         <?php foreach ($baseTextFiles as $tf): ?>
@@ -246,7 +246,7 @@ if (!$baseTextFiles) {
     </div>
 
     <div class="note mt-12">
-        Если поля Title / H1 / Description / Keywords пустые, на фронте будет работать логика inherit.
+        Если поля Title / H1 / Description / Keywords пустые, на фронте будет работать логика наследования.
     </div>
 
     <div class="page-actions mt-12">

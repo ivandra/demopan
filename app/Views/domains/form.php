@@ -75,7 +75,7 @@ $decisionRu = function(string $d) {
         <?= nl2br(h($pricingError)) ?>
         <?php if (!empty($lastDeployReportId)): ?>
             <div class="mt-12">
-                <a href="/deploy/report?id=<?= (int)$lastDeployReportId ?>">Открыть deploy report</a>
+                <a href="/deploy/report?id=<?= (int)$lastDeployReportId ?>">Открыть отчёт deploy</a>
             </div>
         <?php endif; ?>
     </div>
@@ -106,17 +106,17 @@ $decisionRu = function(string $d) {
             </div>
 
             <div class="stack-gap-sm">
-                <div><b>Regular:</b> <?= h($fmt($regular)) ?> USD</div>
-                <div><b>Your:</b> <?= h($fmt($your)) ?> USD</div>
-                <div><b>Coupon:</b> <?= h($fmt($coupon)) ?> USD</div>
-                <div><b>Promo:</b> <?= $promo !== '' ? h($promo) : '—' ?></div>
+                <div><b>Базовая цена:</b> <?= h($fmt($regular)) ?> USD</div>
+                <div><b>Цена аккаунта:</b> <?= h($fmt($your)) ?> USD</div>
+                <div><b>Цена по купону:</b> <?= h($fmt($coupon)) ?> USD</div>
+                <div><b>Промокод:</b> <?= $promo !== '' ? h($promo) : '—' ?></div>
                 <div><b>Минимальная:</b> <?= h($fmt($min)) ?> USD<?= is_numeric($max) ? ' <span class="small muted">(лимит: ' . h($fmt($max)) . ')</span>' : '' ?></div>
             </div>
         </div>
 
         <?php if (!empty($lastDeployReportId)): ?>
             <div>
-                <a href="/deploy/report?id=<?= (int)$lastDeployReportId ?>">Открыть deploy report</a>
+                <a href="/deploy/report?id=<?= (int)$lastDeployReportId ?>">Открыть отчёт deploy</a>
             </div>
         <?php endif; ?>
     </div>
@@ -132,7 +132,7 @@ $decisionRu = function(string $d) {
                 <select name="registrar_account_id" required>
                     <?php foreach ($accounts as $a): ?>
                         <option value="<?= (int)$a['id'] ?>" <?= ((int)($site['registrar_account_id'] ?? 0) === (int)$a['id'] ? 'selected' : '') ?>>
-                            #<?= (int)$a['id'] ?> namecheap <?= ((int)$a['is_sandbox'] === 1 ? 'sandbox' : 'prod') ?> (<?= h($a['api_user']) ?>)
+                            #<?= (int)$a['id'] ?> namecheap <?= ((int)$a['is_sandbox'] === 1 ? 'sandbox' : 'prod') ?> — <?= h($a['api_user']) ?> — <?= h($a['api_user']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -155,7 +155,7 @@ $decisionRu = function(string $d) {
                 <select name="registrar_account_id" required>
                     <?php foreach ($accounts as $a): ?>
                         <option value="<?= (int)$a['id'] ?>" <?= ((int)($site['registrar_account_id'] ?? 0) === (int)$a['id'] ? 'selected' : '') ?>>
-                            #<?= (int)$a['id'] ?> namecheap <?= ((int)$a['is_sandbox'] === 1 ? 'sandbox' : 'prod') ?>
+                            #<?= (int)$a['id'] ?> namecheap <?= ((int)$a['is_sandbox'] === 1 ? 'sandbox' : 'prod') ?> — <?= h($a['api_user']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -173,7 +173,7 @@ $decisionRu = function(string $d) {
             </div>
 
             <div class="field-row">
-                <label>VPS IP</label>
+                <label>IP для VPS</label>
 
                 <?php if (!empty($availableIps)): ?>
                     <select name="vps_ip" required>
@@ -206,21 +206,21 @@ $decisionRu = function(string $d) {
     <h2 class="section-title">Текущие статусы</h2>
 
     <ul class="status-list small">
-        <li><b>Domain status:</b> <?= h($domainPurchaseStatus !== '' ? $domainPurchaseStatus : '—') ?></li>
-        <li><b>Price USD:</b> <?= h((string)($site['domain_price_usd'] ?? '')) ?></li>
-        <li><b>DNS status:</b> <?= h($dnsStatus !== '' ? $dnsStatus : '—') ?></li>
+        <li><b>Статус домена:</b> <?= h($domainPurchaseStatus !== '' ? $domainPurchaseStatus : '—') ?></li>
+        <li><b>Цена, USD:</b> <?= h((string)($site['domain_price_usd'] ?? '')) ?></li>
+        <li><b>Статус DNS:</b> <?= h($dnsStatus !== '' ? $dnsStatus : '—') ?></li>
     </ul>
 
     <?php if (!empty($site['domain_purchase_error'])): ?>
         <div class="alert alert-danger">
-            <b>Last domain error:</b><br>
+            <b>Последняя ошибка домена:</b><br>
             <?= nl2br(h((string)$site['domain_purchase_error'])) ?>
         </div>
     <?php endif; ?>
 
     <?php if (!empty($site['dns_error'])): ?>
         <div class="alert alert-danger">
-            <b>Last DNS error:</b><br>
+            <b>Последняя ошибка DNS:</b><br>
             <?= nl2br(h((string)$site['dns_error'])) ?>
         </div>
     <?php endif; ?>

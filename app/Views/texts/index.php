@@ -15,6 +15,7 @@ $entityHost  = ($label === '_default')
 <div class="page-head">
     <h1 class="page-title">Тексты: <?= h($site['domain'] ?? '') ?></h1>
     <div class="page-actions">
+        <a class="btn btn-secondary" href="/sites/overview?id=<?= $siteId ?>">Обзор</a>
         <a class="btn btn-secondary" href="/sites/subcfg?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Контент и SEO</a>
         <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Страницы</a>
         <a class="btn btn-ai" href="/sites/ai?id=<?= $siteId ?>">AI для сайта</a>
@@ -29,7 +30,7 @@ $entityHost  = ($label === '_default')
         <br>
         Конфиг генерируется в: <code><?= h($configTargetPath) ?></code>
         |
-        <a href="/sites/files/edit?id=<?= $siteId ?>&file=<?= rawurlencode($configFileForLink) ?>">Открыть config в Files</a>
+        <a href="/sites/files/edit?id=<?= $siteId ?>&file=<?= rawurlencode($configFileForLink) ?>">Открыть config в файлах</a>
     </div>
 </div>
 
@@ -54,7 +55,7 @@ $entityHost  = ($label === '_default')
     <div class="panel-card">
         <h2 class="section-title">Подсказка</h2>
         <div class="note">
-            На этом экране редактируются именно файлы в <code>texts/</code> для выбранного label.
+            На этом экране редактируются именно файлы в <code>texts/</code> для выбранной сущности.
             Привязка файла к странице задаётся на экране <b>Страницы</b>.
         </div>
     </div>

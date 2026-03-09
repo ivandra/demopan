@@ -4,8 +4,9 @@ $siteId = (int)($site['id'] ?? 0);
 ?>
 
 <div class="page-head">
-    <h1 class="page-title">Файлы build: <?= h($site['domain'] ?? '') ?></h1>
+    <h1 class="page-title">Файлы сборки: <?= h($site['domain'] ?? '') ?></h1>
     <div class="page-actions">
+        <a class="btn btn-secondary" href="/sites/overview?id=<?= $siteId ?>">Обзор</a>
         <a class="btn btn-secondary" href="/sites/subcfg?id=<?= $siteId ?>&label=_default">Контент и SEO</a>
         <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=_default">Страницы root</a>
         <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?>&label=_default">Тексты root</a>
@@ -14,7 +15,7 @@ $siteId = (int)($site['id'] ?? 0);
 
 <div class="alert alert-info">
     Здесь редактируются только корневые файлы сборки сайта.
-    Для multy-шаблона это не экран отдельных label, а общий build-root.
+    Для multy-шаблона это общий корень build, а не экран отдельных поддоменов.
 </div>
 
 <div class="panel-card">
@@ -44,7 +45,7 @@ $siteId = (int)($site['id'] ?? 0);
                             <span class="badge badge-muted">Нет</span>
                         <?php endif; ?>
                     </td>
-                    <td><?= (int)$f['size'] ?> bytes</td>
+                    <td><?= (int)$f['size'] ?> байт</td>
                     <td>
                         <a class="btn btn-sm btn-secondary"
                            href="/sites/files/edit?id=<?= $siteId ?>&file=<?= rawurlencode($f['name']) ?>">
