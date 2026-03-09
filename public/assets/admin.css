@@ -953,3 +953,37 @@ form{
 .list-clean li{
     margin:4px 0;
 }
+
+.overview-dns-alert {
+    margin-top: 14px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 1px solid #f0c2c2;
+    background: #fff6f6;
+    color: #8f1f1f;
+}
+
+.overview-dns-alert--ok {
+    border-color: #bfe3c7;
+    background: #f4fff6;
+    color: #1f6b34;
+}
+
+.overview-dns-alert__title {
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.overview-dns-alert__text,
+.overview-dns-alert__row {
+    margin-top: 6px;
+    line-height: 1.45;
+}
+
+.overview-dns-alert code {
+    padding: 2px 6px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.06);
+    font-family: Consolas, Monaco, monospace;
+    font-size: 13px;
+}

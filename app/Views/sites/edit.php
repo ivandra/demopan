@@ -11,7 +11,7 @@ $siteId = (int)($site['id'] ?? 0);
 $registrarAccounts = is_array($registrarAccounts ?? null) ? $registrarAccounts : [];
 $currentAccId = (int)($site['registrar_account_id'] ?? 0);
 
-$configFileForFiles = (($site['template'] ?? '') === 'template-multy') ? 'config.default.php' : 'config.php';
+$configFileForFiles = 'config.default.php';
 ?>
 
 <div class="page-head">

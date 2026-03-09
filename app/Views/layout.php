@@ -48,6 +48,10 @@ if (isset($site['id'])) {
     $layoutSiteId = (int)$site['id'];
 } elseif (isset($siteId)) {
     $layoutSiteId = (int)$siteId;
+} elseif (isset($deploy['site_id'])) {
+    $layoutSiteId = (int)$deploy['site_id'];
+} elseif (isset($_GET['site_id'])) {
+    $layoutSiteId = (int)$_GET['site_id'];
 } elseif (isset($_GET['id'])) {
     $layoutSiteId = (int)$_GET['id'];
 }

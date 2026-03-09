@@ -6,8 +6,7 @@ $report = $report ?? [];
 
 $siteId = (int)($site['id'] ?? 0);
 $domain = (string)($site['domain'] ?? '');
-$isMulty = (($site['template'] ?? '') === 'template-multy');
-$configFileForFiles = $isMulty ? 'config.default.php' : 'config.php';
+$configFileForFiles = 'config.default.php';
 ?>
 
 <div class="page-head">

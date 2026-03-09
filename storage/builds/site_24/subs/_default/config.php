@@ -1,0 +1,75 @@
+<?php
+
+$cfg = array (
+  'domain' => 'kazik2.casino',
+  'yandex_verification' => '',
+  'yandex_metrika' => '',
+  'promolink' => '/reg',
+  'title' => 'Kazik1 Casino – Игровые автоматы и слоты онлайн на деньги',
+  'description' => 'Kazik1 Casino – лучшие игровые автоматы, слоты и live-казино с быстрыми выплатами. Регистрация за минуту, бонусы новичкам.',
+  'keywords' => 'Kazik1 Casino, онлайн казино, игровые автоматы, слоты, live-казино, бонусы, выплаты, регистрация',
+  'h1' => 'Добро пожаловать в Kazik1 Casino',
+  'pages' => 
+  array (
+    '/' => 
+    array (
+      'title' => 'Kazik1 Casino - Игровые автоматы и бонусы онлайн',
+      'h1' => 'Добро пожаловать в Kazik1 Casino',
+      'description' => 'Играйте в лучшие слоты и настольные игры в Kazik1 Casino. Регистрация за минуту, щедрые бонусы и быстрые выплаты.',
+      'keywords' => 'онлайн казино, игровые автоматы, слоты, бонусы казино, азартные игры, регистрация, выплаты',
+      'text_file' => 'home.php',
+      'priority' => '1.0',
+    ),
+    '/404' => 
+    array (
+      'title' => 'Страница не найдена - 404 ошибка | Kazik1 Casino',
+      'h1' => 'Страница не найдена',
+      'description' => 'Запрошенная страница не существует. Вернитесь на главную Kazik1 Casino или воспользуйтесь навигацией.',
+      'keywords' => 'ошибка 404, страница не найдена, Kazik1 Casino, главная страница',
+      'text_file' => '404.php',
+      'sitemap' => false,
+    ),
+    '/test' => 
+    array (
+      'title' => 'Тестовая страница казино Kazik1 | Проверка функционала',
+      'h1' => 'Тестовая страница',
+      'description' => 'Тестовая страница казино Kazik1. Проверка работы сайта, функционала и доступности игровых автоматов.',
+      'keywords' => 'тест, казино Kazik1, проверка, игровые автоматы, функционал',
+      'text_file' => 'game.php',
+    ),
+  ),
+  'partner_override_url' => '',
+  'internal_reg_url' => '',
+  'redirect_enabled' => 0,
+  'base_new_url' => '',
+  'base_second_url' => '',
+  'label' => '_default',
+  'logo' => 'assets/logo.webp',
+  'favicon' => 'assets/favicon.png',
+);
+
+$pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];
+$textsDir = __DIR__ . '/texts/';
+
+return [
+    'site' => [
+        'domain' => (string)($cfg['domain'] ?? ''),
+        'label' => (string)($cfg['label'] ?? ''),
+        'title' => (string)($cfg['title'] ?? ''),
+        'h1' => (string)($cfg['h1'] ?? ''),
+        'description' => (string)($cfg['description'] ?? ''),
+        'keywords' => (string)($cfg['keywords'] ?? ''),
+        'yandex_verification' => (string)($cfg['yandex_verification'] ?? ''),
+        'yandex_metrika' => (string)($cfg['yandex_metrika'] ?? ''),
+        'promolink' => (string)($cfg['promolink'] ?? '/reg'),
+        'internal_reg_url' => (string)($cfg['internal_reg_url'] ?? ''),
+        'partner_override_url' => (string)($cfg['partner_override_url'] ?? ''),
+        'redirect_enabled' => (int)($cfg['redirect_enabled'] ?? 0),
+        'base_new_url' => (string)($cfg['base_new_url'] ?? ''),
+        'base_second_url' => (string)($cfg['base_second_url'] ?? ''),
+        'logo' => (string)($cfg['logo'] ?? 'assets/logo.png'),
+        'favicon' => (string)($cfg['favicon'] ?? 'assets/favicon.png'),
+    ],
+    'pages' => $pages,
+    'texts_dir' => $textsDir,
+];

@@ -707,40 +707,34 @@ class SiteSubdomainsController extends Controller
     $stmt->execute([$siteId]);
     $rowsAfter = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
-    // ---- 2.1) ПАПКИ subs/<label>/... (только template-multy) ----
-    if (($site['template'] ?? '') === 'template-multy') {
-        $prov = new SubdomainProvisioner();
+    // ---- 2.1) ПАПКИ subs/<label>/... ----
+    $prov = new SubdomainProvisioner();
 
-        foreach ($rowsAfter as $r) {
-            $lb = (string)($r['label'] ?? '');
-            $lb = trim($lb);
-            if ($lb === '') continue;
+    foreach ($rowsAfter as $r) {
+        $lb = (string)($r['label'] ?? '');
+        $lb = trim($lb);
+        if ($lb === '') continue;
 
-            try {
-                // если у тебя есть метод setFolderStatusByLabel — используем его
-                $this->setFolderStatusByLabel($siteId, $lb, 'processing', null);
+        try {
+            $this->setFolderStatusByLabel($siteId, $lb, 'processing', null);
 
-                $res = $prov->ensureForSite($siteId, $lb);
+            $res = $prov->ensureForSite($siteId, $lb);
 
-                if (!is_array($res)) {
-                    $this->setFolderStatusByLabel($siteId, $lb, 'error', 'Provisioner returned invalid response');
-                    continue;
-                }
-
-                if ((int)($res['ok'] ?? 0) === 1) {
-                    $this->setFolderStatusByLabel($siteId, $lb, 'ok', null);
-                } else {
-                    $err = (string)($res['error'] ?? 'unknown error');
-                    $this->setFolderStatusByLabel($siteId, $lb, 'error', $err);
-                }
-            } catch (Throwable $e) {
-                $this->setFolderStatusByLabel($siteId, $lb, 'error', $e->getMessage());
-                @error_log('[folders] site_id=' . $siteId . ' label=' . $lb . ' err=' . $e->getMessage());
+            if (!is_array($res)) {
+                $this->setFolderStatusByLabel($siteId, $lb, 'error', 'Provisioner returned invalid response');
+                continue;
             }
+
+            if ((int)($res['ok'] ?? 0) === 1) {
+                $this->setFolderStatusByLabel($siteId, $lb, 'ok', null);
+            } else {
+                $err = (string)($res['error'] ?? 'unknown error');
+                $this->setFolderStatusByLabel($siteId, $lb, 'error', $err);
+            }
+        } catch (Throwable $e) {
+            $this->setFolderStatusByLabel($siteId, $lb, 'error', $e->getMessage());
+            @error_log('[folders] site_id=' . $siteId . ' label=' . $lb . ' err=' . $e->getMessage());
         }
-    } else {
-        // не template-multy => папки не трогаем, и "ok" не ставим автоматически
-        @error_log('[folders] site_id=' . $siteId . ' skip (not template-multy)');
     }
 
     // ---- 3) FastPanel aliases (БЕЗ _default) ----
@@ -1033,7 +1027,7 @@ class SiteSubdomainsController extends Controller
             }
         }
 
-        if ($doFolders && ($site['template'] ?? '') === 'template-multy') {
+        if ($doFolders) {
             $prov = new SubdomainProvisioner();
             foreach ($labels as $lb) {
                 try {
@@ -1107,14 +1101,11 @@ class SiteSubdomainsController extends Controller
     @error_log('[SSL deleteOne cleanup] site_id=' . $siteId . ' label=' . $label . ' err=' . $e->getMessage());
 }
 
-            $site = $this->loadSite($siteId);
-            if (($site['template'] ?? '') === 'template-multy') {
-                $prov = new SubdomainProvisioner();
-                try {
-                    $prov->deleteFolderForSite($siteId, $label);
-                } catch (Throwable $e) {
-                    @error_log('[deleteOne folder] site_id=' . $siteId . ' label=' . $label . ' err=' . $e->getMessage());
-                }
+                      $prov = new SubdomainProvisioner();
+            try {
+                $prov->deleteFolderForSite($siteId, $label);
+            } catch (Throwable $e) {
+                @error_log('[deleteOne folder] site_id=' . $siteId . ' label=' . $label . ' err=' . $e->getMessage());
             }
         }
 
@@ -1125,20 +1116,45 @@ class SiteSubdomainsController extends Controller
     {
         $this->requireAuth();
 
+        require_once __DIR__ . '/../Services/SubdomainProvisioner.php';
+
         $siteId = (int)($_GET['id'] ?? 0);
         if ($siteId <= 0) die('bad id');
 
+        $pdo = DB::pdo();
+
+        $st = $pdo->prepare("SELECT label FROM site_subdomains WHERE site_id=?");
+        $st->execute([$siteId]);
+        $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+        $labels = [];
+        foreach ($rows as $r) {
+            $lb = strtolower(trim((string)($r['label'] ?? '')));
+            if ($lb !== '' && $lb !== '_default') {
+                $labels[] = $lb;
+            }
+        }
+        $labels = array_values(array_unique($labels));
+
+        $prov = new SubdomainProvisioner();
+        foreach ($labels as $lb) {
+            try {
+                $prov->deleteFolderForSite($siteId, $lb);
+            } catch (Throwable $e) {
+                @error_log('[deleteAll folder] site_id=' . $siteId . ' label=' . $lb . ' err=' . $e->getMessage());
+            }
+        }
+
         DB::pdo()->prepare("DELETE FROM site_subdomains WHERE site_id=?")->execute([$siteId]);
-		
-		// E) SSL monitor cleanup: удаляем все проверки поддоменов, root оставляем
-try {
-    DB::pdo()->prepare("
-        DELETE FROM ssl_checks
-        WHERE site_id = ? AND label <> ''
-    ")->execute([$siteId]);
-} catch (Throwable $e) {
-    @error_log('[SSL deleteAll cleanup] site_id=' . $siteId . ' err=' . $e->getMessage());
-}
+
+        try {
+            DB::pdo()->prepare("
+                DELETE FROM ssl_checks
+                WHERE site_id = ? AND label <> ''
+            ")->execute([$siteId]);
+        } catch (Throwable $e) {
+            @error_log('[SSL deleteAll cleanup] site_id=' . $siteId . ' err=' . $e->getMessage());
+        }
 
         $this->redirect('/sites/subdomains?id=' . $siteId);
     }

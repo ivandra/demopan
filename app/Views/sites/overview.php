@@ -89,6 +89,60 @@ $template = (string)($site['template'] ?? '');
             <li>Включено: <b><?= (int)($subStats['enabled_subs'] ?? 0) ?></b></li>
             <li>DNS ok по всем сущностям: <b><?= (int)($subStats['dns_ok_all'] ?? 0) ?></b></li>
         </ul>
+		
+		<?php if (!empty($dnsAudit)): ?>
+			<div class="overview-dns-alert <?= !empty($dnsAudit['ok_all']) ? 'overview-dns-alert--ok' : 'overview-dns-alert--warn' ?>">
+				<?php if (!empty($dnsAudit['checked'])): ?>
+
+					<?php if (!empty($dnsAudit['ok_all'])): ?>
+						<div class="overview-dns-alert__title">A-записи применены корректно</div>
+						<div class="overview-dns-alert__text">
+							Корневая запись @ и все enabled-поддомены указывают на
+							<code><?= htmlspecialchars((string)($dnsAudit['expected_ip'] ?: $dnsAudit['root_ip']), ENT_QUOTES, 'UTF-8') ?></code>.
+						</div>
+					<?php else: ?>
+						<div class="overview-dns-alert__title">Важно: проверь и примени A-записи</div>
+						<div class="overview-dns-alert__text">
+							После создания или изменения поддоменов нужно применить DNS в разделе
+							<a href="/sites/subdomains?id=<?= (int)$siteId ?>">«Поддомены»</a>,
+							иначе у регистратора не будет нужных A-записей.
+						</div>
+
+						<?php if (!empty($dnsAudit['expected_ip'])): ?>
+							<div class="overview-dns-alert__row">
+								Ожидаемый IP: <code><?= htmlspecialchars((string)$dnsAudit['expected_ip'], ENT_QUOTES, 'UTF-8') ?></code>
+							</div>
+						<?php endif; ?>
+
+						<?php if (empty($dnsAudit['root_ok'])): ?>
+							<div class="overview-dns-alert__row">
+								Корневая запись <code>@</code> отсутствует или указывает не на тот IP.
+							</div>
+						<?php endif; ?>
+
+						<?php if (!empty($dnsAudit['missing_labels'])): ?>
+							<div class="overview-dns-alert__row">
+								Нет A-записей для:
+								<strong><?= htmlspecialchars(implode(', ', $dnsAudit['missing_labels']), ENT_QUOTES, 'UTF-8') ?></strong>
+							</div>
+						<?php endif; ?>
+
+						<?php if (!empty($dnsAudit['wrong_ip_labels'])): ?>
+							<div class="overview-dns-alert__row">
+								На другом IP:
+								<strong><?= htmlspecialchars(implode(', ', $dnsAudit['wrong_ip_labels']), ENT_QUOTES, 'UTF-8') ?></strong>
+							</div>
+						<?php endif; ?>
+					<?php endif; ?>
+
+				<?php else: ?>
+					<div class="overview-dns-alert__title">Проверка DNS не выполнена</div>
+					<div class="overview-dns-alert__text">
+						<?= htmlspecialchars((string)($dnsAudit['error'] ?? 'Не удалось получить DNS-записи у регистратора.'), ENT_QUOTES, 'UTF-8') ?>
+					</div>
+				<?php endif; ?>
+			</div>
+		<?php endif; ?>
 
         <div class="page-actions">
             <a class="btn btn-primary" href="/sites/subdomains?id=<?= $siteId ?>">Открыть Поддомены</a>

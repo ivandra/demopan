@@ -5,7 +5,7 @@ $cfg = array (
   'yandex_verification' => '',
   'yandex_metrika' => '',
   'promolink' => '/reg',
-  'title' => 'Banda - официальный сайт казино Kazik1 | Играть онлайн',
+  'title' => 'Banda - официальный сайт казино Kazik1 | Играть онлайн4',
   'description' => 'Banda Kazik1 — официальный поддомен популярного казино. Играйте в слоты, рулетку и живые игры с бонусами и быстрыми выплатами.',
   'keywords' => 'Banda Kazik1, казино Kazik1, онлайн казино, игровые автоматы, слоты, рулетка, live игры, бонусы, выплаты',
   'h1' => 'Banda Kazik1 — ваш путь к большим выигрышам',
@@ -29,6 +29,14 @@ $cfg = array (
       'text_file' => '404.php',
       'sitemap' => false,
     ),
+    '/test' => 
+    array (
+      'title' => '$inherit',
+      'h1' => '$inherit',
+      'description' => '$inherit',
+      'keywords' => '$inherit',
+      'text_file' => 'game.php',
+    ),
     '/demo' => 
     array (
       'title' => '$inherit',
@@ -48,15 +56,19 @@ $cfg = array (
   'favicon' => 'assets/favicon.png',
 );
 
-$pages = $cfg['pages'] ?? [];
+$pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];
 $textsDir = __DIR__ . '/texts/';
 
 return [
     'site' => [
+        'domain' => (string)($cfg['domain'] ?? ''),
+        'label' => (string)($cfg['label'] ?? ''),
         'title' => (string)($cfg['title'] ?? ''),
         'h1' => (string)($cfg['h1'] ?? ''),
         'description' => (string)($cfg['description'] ?? ''),
         'keywords' => (string)($cfg['keywords'] ?? ''),
+        'yandex_verification' => (string)($cfg['yandex_verification'] ?? ''),
+        'yandex_metrika' => (string)($cfg['yandex_metrika'] ?? ''),
         'promolink' => (string)($cfg['promolink'] ?? '/reg'),
         'internal_reg_url' => (string)($cfg['internal_reg_url'] ?? ''),
         'partner_override_url' => (string)($cfg['partner_override_url'] ?? ''),

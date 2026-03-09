@@ -1037,19 +1037,26 @@ PHP;
     }
 
     public function report(): void
-    {
-        $this->requireAuth();
+{
+    $this->requireAuth();
 
-        $id = (int)($_GET['id'] ?? 0);
-        if ($id <= 0) die('bad id');
+    $id = (int)($_GET['id'] ?? 0);
+    if ($id <= 0) die('bad id');
 
-        $stmt = DB::pdo()->prepare("SELECT * FROM deployments WHERE id=?");
-        $stmt->execute([$id]);
-        $deploy = $stmt->fetch();
-        if (!$deploy) die('not found');
+    $stmt = DB::pdo()->prepare("SELECT * FROM deployments WHERE id=?");
+    $stmt->execute([$id]);
+    $deploy = $stmt->fetch(PDO::FETCH_ASSOC);
+    if (!$deploy) die('not found');
 
-        $this->view('deploy/report', compact('deploy'));
+    $siteId = (int)($deploy['site_id'] ?? 0);
+    $site = null;
+
+    if ($siteId > 0) {
+        $site = $this->loadSite($siteId);
     }
+
+    $this->view('deploy/report', compact('deploy', 'site', 'siteId'));
+}
 
     private function loadSite(int $siteId): array
     {

@@ -18,8 +18,7 @@ $entityHost  = ($label === '_default')
     : ($label . '.' . (string)($site['domain'] ?? ''));
 
 // В Files редактируются только корневые файлы build.
-// Для multy-root это config.default.php.
-$configFileForFiles = (($site['template'] ?? '') === 'template-multy') ? 'config.default.php' : 'config.php';
+$configFileForFiles = 'config.default.php';
 
 $baseTextFiles = is_array($textFiles ?? null) ? $textFiles : [];
 if (!$baseTextFiles) {

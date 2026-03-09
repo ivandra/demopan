@@ -1,11 +1,10 @@
 <?php
 function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 
-$isMulty = (($site['template'] ?? '') === 'template-multy');
 $siteId  = (int)($site['id'] ?? 0);
 $label   = isset($label) ? (string)$label : '_default';
 
-$configFileForLink = $isMulty ? 'config.default.php' : 'config.php';
+$configFileForLink = 'config.default.php';
 $entityTitle = ($label === '_default') ? 'Основной домен (_default)' : ('Поддомен: ' . $label);
 $entityHost  = ($label === '_default')
     ? (string)($site['domain'] ?? '')
@@ -38,10 +37,8 @@ $entityHost  = ($label === '_default')
     <div class="panel-card stack-gap-md">
         <h2 class="section-title">Создать новый файл</h2>
 
-        <form method="post" action="/sites/texts/new?id=<?= $siteId ?><?= $isMulty ? '&label=' . urlencode($label) : '' ?>" class="inline-form">
-            <?php if ($isMulty): ?>
-                <input type="hidden" name="label" value="<?= h($label) ?>">
-            <?php endif; ?>
+        <form method="post" action="/sites/texts/new?id=<?= $siteId ?>&label=<?= urlencode($label) ?>" class="inline-form">
+            <input type="hidden" name="label" value="<?= h($label) ?>">
 
             <input type="text" name="new_file" placeholder="new.php">
             <button type="submit" class="btn btn-primary">Создать</button>

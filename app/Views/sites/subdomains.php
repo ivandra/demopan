@@ -34,12 +34,6 @@ $currentVpsIp = (string)($site['vps_ip'] ?? '');
     </div>
 </div>
 
-<?php if (($site['template'] ?? '') !== 'template-multy'): ?>
-    <div class="alert alert-warning">
-        У текущего шаблона не используется multy-структура <code>subs/*</code>.
-        Экран поддоменов актуален в первую очередь для multy-шаблонов.
-    </div>
-<?php endif; ?>
 
 <div class="panel-card stack-gap-sm">
     <div><b>IP в панели:</b> <?= $currentVpsIp !== '' ? h($currentVpsIp) : '—' ?></div>

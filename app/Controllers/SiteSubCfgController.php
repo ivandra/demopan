@@ -31,39 +31,21 @@ class SiteSubCfgController extends Controller
             return;
         }
 
-        if (($site['template'] ?? '') !== 'template-multy') {
-            echo "template is not template-multy";
-            return;
-        }
+        $structure = new SiteStructure();
+		$resolver  = new SiteConfigResolver();
 
-        $pdo = DB::pdo();
+		$labels = $resolver->listLabels($siteId, true);
 
-        $labels = $this->listLabels($pdo, $siteId); // всегда включает _default
-
-        $label = (string)($_GET['label'] ?? '_default');
-        $label = $this->normalizeLabel($label, true);
-        if (!in_array($label, $labels, true)) {
-            $label = '_default';
-        }
+		$label = $structure->normalizeLabel((string)($_GET['label'] ?? '_default'), true);
+		if (!in_array($label, $labels, true)) {
+			$label = $structure->rootLabel();
+		}
 
         // гарантируем fs+config.php для выбранного
         $prov = new SubdomainProvisioner();
         $prov->ensureForSite($siteId, $label);
 
-       $defaultCfg = $this->loadDefaultCfg($pdo, $siteId);
-
-        // Для UI всегда даём итоговый merged-config:
-        // _default = root config
-        // label != _default = merge(default, sub)
-        if ($label === '_default') {
-            $cfg = $defaultCfg;
-        } else {
-            $subCfg = $this->loadSubCfg($pdo, $siteId, $label);
-            if (!is_array($subCfg)) {
-                $subCfg = [];
-            }
-            $cfg = array_replace_recursive($defaultCfg, $subCfg);
-        }
+        $cfg = $resolver->getResolvedConfig($siteId, $label);
 
         if (!is_array($cfg)) {
             $cfg = [];
@@ -95,14 +77,13 @@ class SiteSubCfgController extends Controller
         }
 
         $pdo = DB::pdo();
+		
+		$structure = new SiteStructure();
+		$resolver  = new SiteConfigResolver();
 
-        // Загружаем текущий cfg
-        if ($label === '_default') {
-            $cfg = $this->loadDefaultCfg($pdo, $siteId);
-        } else {
-            $cfg = $this->loadSubCfg($pdo, $siteId, $label);
-        }
-        if ($cfg === null) $cfg = [];
+        $cfg = $resolver->isRootLabel($label)
+			? $resolver->getDefaultConfig($siteId)
+			: $resolver->getSubConfig($siteId, $label);
 
         // обновляем только параметры (pages не трогаем тут)
         $cfg['title']       = (string)($_POST['title'] ?? ($cfg['title'] ?? ''));
@@ -121,12 +102,11 @@ class SiteSubCfgController extends Controller
         $cfg['logo']    = (string)($_POST['logo'] ?? ($cfg['logo'] ?? 'assets/logo.png'));
         $cfg['favicon'] = (string)($_POST['favicon'] ?? ($cfg['favicon'] ?? 'assets/favicon.png'));
 
-        // Пишем в нужную таблицу
-        if ($label === '_default') {
-            $this->upsertDefaultCfg($pdo, $siteId, $cfg);
-        } else {
-            $this->upsertSubCfg($pdo, $siteId, $label, $cfg);
-        }
+        if ($resolver->isRootLabel($label)) {
+			$resolver->upsertDefaultConfig($siteId, $cfg);
+		} else {
+			$resolver->upsertSubConfig($siteId, $label, $cfg);
+		}
 
         // fs + config.php
         $prov = new SubdomainProvisioner();
@@ -150,20 +130,14 @@ class SiteSubCfgController extends Controller
         }
 
         $pdo = DB::pdo();
+		$structure = new SiteStructure();
+		$resolver  = new SiteConfigResolver();
 
-        // если нет — вставляем дефолт
-        $exists = $pdo->prepare("SELECT 1 FROM site_subdomain_configs WHERE site_id = ? AND label = ? LIMIT 1");
-        $exists->execute([$siteId, $label]);
+        $default = $resolver->getDefaultConfig($siteId);
+		if (!isset($default['logo']))    $default['logo'] = 'assets/logo.png';
+		if (!isset($default['favicon'])) $default['favicon'] = 'assets/favicon.png';
 
-        if (!$exists->fetchColumn()) {
-            $default = $this->loadDefaultCfg($pdo, $siteId);
-            if (!isset($default['logo']))    $default['logo'] = 'assets/logo.png';
-            if (!isset($default['favicon'])) $default['favicon'] = 'assets/favicon.png';
-
-            $json = json_encode($default, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-            $ins = $pdo->prepare("INSERT INTO site_subdomain_configs (site_id, label, config_json) VALUES (?, ?, ?)");
-            $ins->execute([$siteId, $label, $json]);
-        }
+		$resolver->ensureSubConfigExists($siteId, $label, $default);
 
         // fs + config.php
         $prov = new SubdomainProvisioner();
@@ -221,13 +195,14 @@ class SiteSubCfgController extends Controller
         }
 
         $site = $this->loadSite($siteId);
-        if (!$site || ($site['template'] ?? '') !== 'template-multy') {
-            $this->redirect('/sites');
-            exit;
-        }
+        if (!$site) {
+			$this->redirect('/sites');
+			exit;
+		}
 
-        $pdo = DB::pdo();
-        $labels = $this->listLabels($pdo, $siteId);
+		$structure = new SiteStructure();
+		$resolver  = new SiteConfigResolver();
+		$labels = $resolver->listLabels($siteId, true);
         $prov = new SubdomainProvisioner();
 
         foreach ($labels as $lb) {

@@ -43,17 +43,22 @@ $cfg = array (
   'redirect_enabled' => 0,
   'base_new_url' => '',
   'base_second_url' => '',
+  'label' => '_default',
 );
 
-$pages = $cfg['pages'] ?? [];
+$pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];
 $textsDir = __DIR__ . '/subs/_default/texts/';
 
 return [
     'site' => [
+        'domain' => (string)($cfg['domain'] ?? ''),
+        'label' => (string)($cfg['label'] ?? ''),
         'title' => (string)($cfg['title'] ?? ''),
         'h1' => (string)($cfg['h1'] ?? ''),
         'description' => (string)($cfg['description'] ?? ''),
         'keywords' => (string)($cfg['keywords'] ?? ''),
+        'yandex_verification' => (string)($cfg['yandex_verification'] ?? ''),
+        'yandex_metrika' => (string)($cfg['yandex_metrika'] ?? ''),
         'promolink' => (string)($cfg['promolink'] ?? '/reg'),
         'internal_reg_url' => (string)($cfg['internal_reg_url'] ?? ''),
         'partner_override_url' => (string)($cfg['partner_override_url'] ?? ''),

@@ -135,7 +135,8 @@ require APP_ROOT . '/app/Controllers/SslController.php';
 require APP_ROOT .'/app/Controllers/WebmasterController.php';
 require APP_ROOT .'/app/Controllers/SiteCloneController.php';
 require APP_ROOT . '/app/Controllers/AiController.php';
-
+require APP_ROOT . '/app/Services/SiteStructure.php';
+require APP_ROOT . '/app/Services/SiteConfigResolver.php';
 
 
 // ---------- 9) Route wrapper ----------

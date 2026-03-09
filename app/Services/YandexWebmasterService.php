@@ -906,20 +906,13 @@ public function getPagesUrlsForSiteLabel(int $siteId, string $label): array
         throw new RuntimeException("Site not found: " . $siteId);
     }
 
-    $template = (string)($site['template'] ?? '');
-    $domain   = (string)($site['domain'] ?? '');
+    $domain = (string)($site['domain'] ?? '');
+	$label  = $this->normalizeSubLabel($label); // '' -> _default
 
-    if ($template === 'template-multy') {
-        $label = $this->normalizeSubLabel($label); // '' -> _default
+	$defaultCfg = $this->loadSiteDefaultConfig($siteId, $domain);
+	$subCfg     = $this->ensureSubdomainConfigExists($siteId, $label, $defaultCfg);
 
-        $defaultCfg = $this->loadSiteDefaultConfig($siteId, $domain);
-        $subCfg     = $this->ensureSubdomainConfigExists($siteId, $label, $defaultCfg);
-
-        $pages = $subCfg['pages'] ?? [];
-    } else {
-        $cfg   = $this->loadSiteConfigFromSiteConfigs($siteId, $domain);
-        $pages = $cfg['pages'] ?? [];
-    }
+	$pages = $subCfg['pages'] ?? [];
 
     if (!is_array($pages)) $pages = [];
 
@@ -1073,18 +1066,10 @@ private function normalizeSubLabel(string $label): string
     });
     if (!$site) throw new RuntimeException("site not found");
 
-    $template = (string)($site['template'] ?? '');
-    $pages = [];
-
-    if ($template === 'template-multy') {
-        // берем sub config для label, если нет — fallback на default
-        $pages = $this->loadPagesFromSubdomainConfig($siteId, $label);
-        if ($pages === null) {
-            $pages = $this->loadPagesFromDefaultConfig($siteId);
-        }
-    } else {
-        $pages = $this->loadPagesFromSiteConfigs($siteId);
-    }
+   $pages = $this->loadPagesFromSubdomainConfig($siteId, $label);
+	if ($pages === null) {
+		$pages = $this->loadPagesFromDefaultConfig($siteId);
+	}
 
     $paths = [];
     foreach (($pages ?: []) as $path => $meta) {
