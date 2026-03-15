@@ -252,12 +252,6 @@ function status_badge(bool $ok, string $okText = 'Да', string $failText = 'Н�
                                 <a class="btn btn-secondary btn-sm" href="/sites/export?id=<?= $siteId ?>">ZIP</a>
                             <?php endif; ?>
 
-                            <a class="btn btn-secondary btn-sm"
-                               href="/sites/resetFastpanelState?id=<?= $siteId ?>"
-                               data-confirm="Сбросить статусы VPS/FTP/Files для сайта <?= h($domain) ?>?">
-                                Сбросить статусы
-                            </a>
-
                             <form method="post"
                                   action="/sites/delete?id=<?= $siteId ?>"
                                   data-confirm="Удалить сайт #<?= $siteId ?> (<?= h($domain) ?>)?">

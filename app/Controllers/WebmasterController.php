@@ -205,10 +205,15 @@ class WebmasterController extends Controller
 
     $log[] = "OK verify: {$hostUrl} :: state={$state} :: " . json_encode($res, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-    // отмечаем verified только если реально подтверждено
-    if ($state === 'VERIFIED' || $state === 'SUCCESS') {
-        $this->wm->markVerified($siteId, $label);
-    }
+    $wasVerified = !empty($r['verified_at']);
+
+	if ($state === 'VERIFIED' || $state === 'SUCCESS') {
+		$this->wm->markVerified($siteId, $label);
+
+		if (!$wasVerified) {
+			$this->sendVerifiedTelegram($siteId, $label, $hostUrl);
+		}
+	}
 
 } catch (Throwable $e) {
     $log[] = "ERR verify: {$hostUrl} :: " . $e->getMessage();
@@ -621,6 +626,173 @@ public function robotsGet()
     $_SESSION['wm_log'] = $log;
     header("Location: /webmaster/site?id=" . $siteId);
     exit;
+}
+
+private function sendVerifiedTelegram(int $siteId, string $label, string $hostUrl): void
+{
+    try {
+        require_once Paths::appRoot() . '/app/Services/TelegramService.php';
+
+        $safeHost = htmlspecialchars($hostUrl, ENT_QUOTES, 'UTF-8');
+        $safeLabel = htmlspecialchars($label === '' ? '_default' : $label, ENT_QUOTES, 'UTF-8');
+
+        $text  = "✅ <b>Яндекс подтвердил хост</b>\n";
+        $text .= "Сайт ID: <b>{$siteId}</b>\n";
+        $text .= "Label: <b>{$safeLabel}</b>\n";
+        $text .= "Host: <b>{$safeHost}</b>\n";
+        $text .= "Панель: https://hub.seotop-one.ru/webmaster/site?id={$siteId}";
+
+        $tg = new TelegramService();
+        $tg->send($text);
+    } catch (Throwable $e) {
+        @error_log('[TG webmaster verify] ' . $e->getMessage());
+    }
+}
+
+public function cron()
+{
+    header('Content-Type: application/json; charset=utf-8');
+
+    $checked = 0;
+    $verified = 0;
+    $notified = 0;
+    $errors = [];
+
+    try {
+        $userId = $this->wm->getUserId();
+        $tg = new TelegramService();
+
+        $rows = DB::withReconnect(function(PDO $pdo) {
+            $st = $pdo->prepare("
+                SELECT
+                    wh.id,
+                    wh.site_id,
+                    wh.label,
+                    wh.host_url,
+                    wh.host_id,
+                    wh.verified_at,
+                    wh.verified_notified_at,
+                    s.domain
+                FROM webmaster_hosts wh
+                INNER JOIN sites s ON s.id = wh.site_id
+                WHERE wh.host_id IS NOT NULL
+                  AND wh.host_id <> ''
+                  AND wh.verified_notified_at IS NULL
+                ORDER BY COALESCE(wh.last_sync_at, '1970-01-01 00:00:00') ASC, wh.id ASC
+                LIMIT 50
+            ");
+            $st->execute();
+            return $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        });
+
+        foreach ($rows as $r) {
+            $checked++;
+
+            $id      = (int)($r['id'] ?? 0);
+            $siteId  = (int)($r['site_id'] ?? 0);
+            $label   = (string)($r['label'] ?? '');
+            $hostUrl = trim((string)($r['host_url'] ?? ''));
+            $hostId  = trim((string)($r['host_id'] ?? ''));
+            $domain  = trim((string)($r['domain'] ?? ''));
+
+            if ($id <= 0 || $siteId <= 0 || $hostId === '') {
+                continue;
+            }
+
+            try {
+                $chk = $this->wm->checkVerification($userId, $hostId);
+
+                $state = '';
+                if (isset($chk['verification_state'])) {
+                    $state = (string)$chk['verification_state'];
+                } elseif (isset($chk['data']['verification_state'])) {
+                    $state = (string)$chk['data']['verification_state'];
+                }
+
+                DB::withReconnect(function(PDO $pdo) use ($id) {
+                    $st = $pdo->prepare("
+                        UPDATE webmaster_hosts
+                        SET last_sync_at = NOW(),
+                            updated_at = CURRENT_TIMESTAMP
+                        WHERE id = ?
+                        LIMIT 1
+                    ");
+                    $st->execute([$id]);
+                });
+
+                if ($state === 'VERIFIED' || $state === 'SUCCESS') {
+                    DB::withReconnect(function(PDO $pdo) use ($id) {
+                        $st = $pdo->prepare("
+                            UPDATE webmaster_hosts
+                            SET verified_at = COALESCE(verified_at, NOW()),
+                                last_sync_at = NOW(),
+                                updated_at = CURRENT_TIMESTAMP
+                            WHERE id = ?
+                            LIMIT 1
+                        ");
+                        $st->execute([$id]);
+                    });
+
+                    $verified++;
+
+                    $safeDomain = htmlspecialchars($domain, ENT_QUOTES, 'UTF-8');
+                    $safeHost   = htmlspecialchars($hostUrl, ENT_QUOTES, 'UTF-8');
+
+                    $labelText = ($label !== '' && $label !== '_default')
+                        ? htmlspecialchars($label, ENT_QUOTES, 'UTF-8')
+                        : 'root';
+
+                    $msg = "✅ <b>Яндекс подтвердил хост</b>\n"
+                         . "Сайт: <code>{$safeDomain}</code>\n"
+                         . "Хост: <code>{$safeHost}</code>\n"
+                         . "Label: <code>{$labelText}</code>";
+
+                    $sent = $tg->send($msg);
+
+                    if ($sent) {
+                        DB::withReconnect(function(PDO $pdo) use ($id) {
+                            $st = $pdo->prepare("
+                                UPDATE webmaster_hosts
+                                SET verified_notified_at = NOW(),
+                                    updated_at = CURRENT_TIMESTAMP
+                                WHERE id = ?
+                                LIMIT 1
+                            ");
+                            $st->execute([$id]);
+                        });
+
+                        $notified++;
+                    }
+                }
+
+            } catch (Throwable $e) {
+                $errors[] = [
+                    'id' => $id,
+                    'host' => $hostUrl,
+                    'error' => $e->getMessage(),
+                ];
+
+                @error_log('[WM cron] host=' . $hostUrl . ' err=' . $e->getMessage());
+            }
+        }
+
+        echo json_encode([
+            'ok' => true,
+            'checked' => $checked,
+            'verified' => $verified,
+            'notified' => $notified,
+            'errors' => $errors,
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        return;
+
+    } catch (Throwable $e) {
+        http_response_code(500);
+        echo json_encode([
+            'ok' => false,
+            'error' => $e->getMessage(),
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        return;
+    }
 }
 	
 }

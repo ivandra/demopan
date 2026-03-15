@@ -1874,28 +1874,31 @@ private function loadOverviewData(int $siteId): array
         return ['site' => null];
     }
 
-    $subStats = DB::withReconnect(function(PDO $pdo) use ($siteId) {
-        $st = $pdo->prepare("
-            SELECT
-              COUNT(*) AS total_all,
-              SUM(CASE WHEN enabled=1 THEN 1 ELSE 0 END) AS enabled_all,
-              SUM(CASE WHEN label <> '_default' THEN 1 ELSE 0 END) AS total_subs,
-              SUM(CASE WHEN label <> '_default' AND enabled=1 THEN 1 ELSE 0 END) AS enabled_subs,
-              SUM(CASE WHEN dns_status='ok' THEN 1 ELSE 0 END) AS dns_ok_all
-            FROM site_subdomains
-            WHERE site_id=?
-        ");
-        $st->execute([$siteId]);
-        $r = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+$subStats = DB::withReconnect(function(PDO $pdo) use ($siteId, $site) {
+    $st = $pdo->prepare("
+        SELECT
+          COUNT(*) AS total_all,
+          SUM(CASE WHEN enabled=1 THEN 1 ELSE 0 END) AS enabled_all,
+          SUM(CASE WHEN label <> '_default' THEN 1 ELSE 0 END) AS total_subs,
+          SUM(CASE WHEN label <> '_default' AND enabled=1 THEN 1 ELSE 0 END) AS enabled_subs,
+          SUM(CASE WHEN dns_status='ok' THEN 1 ELSE 0 END) AS dns_ok_all
+        FROM site_subdomains
+        WHERE site_id=?
+    ");
+    $st->execute([$siteId]);
+    $r = $st->fetch(PDO::FETCH_ASSOC) ?: [];
 
-        return [
-            'total_all'    => (int)($r['total_all'] ?? 0),
-            'enabled_all'  => (int)($r['enabled_all'] ?? 0),
-            'total_subs'   => (int)($r['total_subs'] ?? 0),
-            'enabled_subs' => (int)($r['enabled_subs'] ?? 0),
-            'dns_ok_all'   => (int)($r['dns_ok_all'] ?? 0),
-        ];
-    });
+    $wmDeployState = $this->getWebmasterPublishState($siteId, $site);
+
+    return [
+        'total_all'      => (int)($r['total_all'] ?? 0),
+        'wmDeployState'  => $wmDeployState,
+        'enabled_all'    => (int)($r['enabled_all'] ?? 0),
+        'total_subs'     => (int)($r['total_subs'] ?? 0),
+        'enabled_subs'   => (int)($r['enabled_subs'] ?? 0),
+        'dns_ok_all'     => (int)($r['dns_ok_all'] ?? 0),
+    ];
+});
 	
 	$dnsAudit = $this->fetchOverviewDnsAudit($site);
 
@@ -2373,5 +2376,91 @@ private function fetchOverviewDnsAudit(array $site): array
 
     return $result;
 }
+
+private function detectLastBuildAt(int $siteId): ?string
+{
+    $latestTs = 0;
+
+    $pattern = Paths::storage('build_reports/site_' . $siteId . '_*.json');
+    $files = glob($pattern) ?: [];
+
+    foreach ($files as $file) {
+        $ts = (int)@filemtime($file);
+        if ($ts > $latestTs) {
+            $latestTs = $ts;
+        }
+    }
+
+    // fallback: если build report не найден, пробуем ZIP
+    if ($latestTs <= 0) {
+        $zip = Paths::storage('zips/site_' . $siteId . '.zip');
+        if (is_file($zip)) {
+            $latestTs = (int)@filemtime($zip);
+        }
+    }
+
+    return $latestTs > 0 ? date('Y-m-d H:i:s', $latestTs) : null;
+}
+
+
+private function getWebmasterPublishState(int $siteId, array $site): array
+{
+    $st = DB::pdo()->prepare("
+        SELECT
+            MAX(file_written_at) AS last_file_written_at,
+            SUM(CASE WHEN file_written = 1 THEN 1 ELSE 0 END) AS written_cnt
+        FROM webmaster_hosts
+        WHERE site_id = ?
+    ");
+    $st->execute([$siteId]);
+    $row = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+
+    $writtenAt = (string)($row['last_file_written_at'] ?? '');
+    $writtenCnt = (int)($row['written_cnt'] ?? 0);
+
+    $buildAt  = (string)($this->detectLastBuildAt($siteId) ?? '');
+    $deployAt = (string)($site['fp_files_last_ok'] ?? '');
+
+    $writtenTs = $writtenAt !== '' ? (int)strtotime($writtenAt) : 0;
+    $buildTs   = $buildAt !== '' ? (int)strtotime($buildAt) : 0;
+    $deployTs  = $deployAt !== '' ? (int)strtotime($deployAt) : 0;
+
+    $state = [
+        'written_cnt' => $writtenCnt,
+        'written_at'  => $writtenAt,
+        'build_at'    => $buildAt,
+        'deploy_at'   => $deployAt,
+        'needs_build' => 0,
+        'needs_deploy'=> 0,
+        'ok'          => 0,
+        'title'       => '',
+        'message'     => '',
+    ];
+
+    if ($writtenCnt <= 0 || $writtenTs <= 0) {
+        return $state;
+    }
+
+    if ($buildTs < $writtenTs) {
+        $state['needs_build'] = 1;
+        $state['title'] = 'Verification-файлы записаны, но Build ещё не выполнен';
+        $state['message'] = 'После записи verification-файлов через Webmaster нужно заново сделать Build, иначе файлы не попадут в актуальную build-структуру сайта.';
+        return $state;
+    }
+
+    if ($deployTs < $buildTs) {
+        $state['needs_deploy'] = 1;
+        $state['title'] = 'Build выполнен, но файлы ещё не опубликованы на VPS';
+        $state['message'] = 'Verification-файлы уже попали в build, но ещё не выгружены на боевой сайт. Выполните публикацию на VPS.';
+        return $state;
+    }
+
+    $state['ok'] = 1;
+    $state['title'] = 'Verification-файлы актуальны';
+    $state['message'] = 'Файлы подтверждения уже записаны, собраны и опубликованы на VPS.';
+    return $state;
+}
+
+
 }
 

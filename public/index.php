@@ -132,6 +132,7 @@ require APP_ROOT . '/app/Controllers/SiteSubdomainsController.php';
 require APP_ROOT . '/app/Controllers/SiteSubCfgController.php';
 require APP_ROOT . '/app/Controllers/SslController.php';
 
+
 require APP_ROOT .'/app/Controllers/WebmasterController.php';
 require APP_ROOT .'/app/Controllers/SiteCloneController.php';
 require APP_ROOT . '/app/Controllers/AiController.php';
@@ -338,6 +339,7 @@ $router->post('/ai/generate-selected-meta', action($ai, 'generateSelectedMeta'))
 $router->post('/ai/generate-selected-texts', action($ai, 'generateSelectedTexts'));
 $router->post('/ai/generate-selected-pages', action($ai, 'generateSelectedLabelsPages'));
 
+$router->get('/webmaster/cron', action($wm, 'cron'));
 // Debug
 $router->get('/debug/log', function () {
     header('Content-Type: text/plain; charset=utf-8');
