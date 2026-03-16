@@ -1874,7 +1874,7 @@ private function loadOverviewData(int $siteId): array
         return ['site' => null];
     }
 
-$subStats = DB::withReconnect(function(PDO $pdo) use ($siteId, $site) {
+$subStats = DB::withReconnect(function(PDO $pdo) use ($siteId) {
     $st = $pdo->prepare("
         SELECT
           COUNT(*) AS total_all,
@@ -1888,19 +1888,19 @@ $subStats = DB::withReconnect(function(PDO $pdo) use ($siteId, $site) {
     $st->execute([$siteId]);
     $r = $st->fetch(PDO::FETCH_ASSOC) ?: [];
 
-    $wmDeployState = $this->getWebmasterPublishState($siteId, $site);
-
     return [
-        'total_all'      => (int)($r['total_all'] ?? 0),
-        'wmDeployState'  => $wmDeployState,
-        'enabled_all'    => (int)($r['enabled_all'] ?? 0),
-        'total_subs'     => (int)($r['total_subs'] ?? 0),
-        'enabled_subs'   => (int)($r['enabled_subs'] ?? 0),
-        'dns_ok_all'     => (int)($r['dns_ok_all'] ?? 0),
+        'total_all'    => (int)($r['total_all'] ?? 0),
+        'enabled_all'  => (int)($r['enabled_all'] ?? 0),
+        'total_subs'   => (int)($r['total_subs'] ?? 0),
+        'enabled_subs' => (int)($r['enabled_subs'] ?? 0),
+        'dns_ok_all'   => (int)($r['dns_ok_all'] ?? 0),
     ];
 });
 	
 	$dnsAudit = $this->fetchOverviewDnsAudit($site);
+	
+	require_once Paths::appRoot() . '/app/Services/WebmasterPublishStateService.php';
+	$wmDeployState = (new WebmasterPublishStateService())->getState($siteId);
 
     $contentStats = DB::withReconnect(function(PDO $pdo) use ($siteId) {
         $defaultExists = false;
@@ -2049,16 +2049,17 @@ $subStats = DB::withReconnect(function(PDO $pdo) use ($siteId, $site) {
     });
 
     return [
-        'site'         => $site,
-        'siteId'       => $siteId,
-        'subStats'     => $subStats,
-		'dnsAudit'     => $dnsAudit,
-        'contentStats' => $contentStats,
-        'buildStats'   => $buildStats,
-        'deployStats'  => $deployStats,
-        'sslStats'     => $sslStats,
-        'wmStats'      => $wmStats,
-    ];
+		'site'          => $site,
+		'siteId'        => $siteId,
+		'subStats'      => $subStats,
+		'dnsAudit'      => $dnsAudit,
+		'contentStats'  => $contentStats,
+		'buildStats'    => $buildStats,
+		'deployStats'   => $deployStats,
+		'sslStats'      => $sslStats,
+		'wmStats'       => $wmStats,
+		'wmDeployState' => $wmDeployState,
+	];
 }
 
 // GET /sites/overview?id=123

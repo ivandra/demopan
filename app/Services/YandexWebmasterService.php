@@ -196,49 +196,85 @@ private const PAGES_COL_IN_SITEMAP = 'in_sitemap'; // 0/1, если нет ко�
         });
     }
 
-    public function upsertWebmasterHost(
-        int $siteId,
-        string $label,
-        string $hostUrl,
-        ?string $hostId,
-        ?string $verType,
-        ?string $verUin,
-        ?string $verFile,
-        ?string $verContent,
-        int $fileWritten
-    ): void {
-        DB::withReconnect(function(PDO $pdo) use (
-            $siteId, $label, $hostUrl, $hostId, $verType, $verUin, $verFile, $verContent, $fileWritten
-        ) {
-            $st = $pdo->prepare("
-                INSERT INTO webmaster_hosts
-                (site_id, label, host_url, host_id, verification_type, verification_uin, verification_file, verification_content, file_written, last_sync_at, created_at, updated_at)
-                VALUES
-                (:site_id, :label, :host_url, :host_id, :vtype, :vuin, :vfile, :vcontent, :file_written, NOW(), NOW(), NOW())
-                ON DUPLICATE KEY UPDATE
-                    host_url = VALUES(host_url),
-                    host_id = VALUES(host_id),
-                    verification_type = VALUES(verification_type),
-                    verification_uin = VALUES(verification_uin),
-                    verification_file = VALUES(verification_file),
-                    verification_content = VALUES(verification_content),
-                    file_written = VALUES(file_written),
-                    last_sync_at = NOW(),
-                    updated_at = CURRENT_TIMESTAMP
-            ");
-            $st->execute([
-                ':site_id' => $siteId,
-                ':label' => $label,
-                ':host_url' => $hostUrl,
-                ':host_id' => $hostId,
-                ':vtype' => $verType,
-                ':vuin' => $verUin,
-                ':vfile' => $verFile,
-                ':vcontent' => $verContent,
-                ':file_written' => (int)$fileWritten,
-            ]);
-        });
-    }
+  public function upsertWebmasterHost(
+    int $siteId,
+    string $label,
+    string $hostUrl,
+    ?string $hostId,
+    ?string $verType,
+    ?string $verUin,
+    ?string $verFile,
+    ?string $verContent,
+    int $fileWritten
+): void {
+    DB::withReconnect(function(PDO $pdo) use (
+        $siteId, $label, $hostUrl, $hostId, $verType, $verUin, $verFile, $verContent, $fileWritten
+    ) {
+        $writtenAt = ((int)$fileWritten === 1) ? date('Y-m-d H:i:s') : null;
+
+        $st = $pdo->prepare("
+            INSERT INTO webmaster_hosts
+            (
+                site_id,
+                label,
+                host_url,
+                host_id,
+                verification_type,
+                verification_uin,
+                verification_file,
+                verification_content,
+                file_written,
+                file_written_at,
+                last_sync_at,
+                created_at,
+                updated_at
+            )
+            VALUES
+            (
+                :site_id,
+                :label,
+                :host_url,
+                :host_id,
+                :vtype,
+                :vuin,
+                :vfile,
+                :vcontent,
+                :file_written,
+                :file_written_at,
+                NOW(),
+                NOW(),
+                NOW()
+            )
+            ON DUPLICATE KEY UPDATE
+                host_url = VALUES(host_url),
+                host_id = VALUES(host_id),
+                verification_type = VALUES(verification_type),
+                verification_uin = VALUES(verification_uin),
+                verification_file = VALUES(verification_file),
+                verification_content = VALUES(verification_content),
+                file_written = VALUES(file_written),
+                file_written_at = CASE
+                    WHEN VALUES(file_written) = 1 THEN VALUES(file_written_at)
+                    ELSE file_written_at
+                END,
+                last_sync_at = NOW(),
+                updated_at = CURRENT_TIMESTAMP
+        ");
+
+        $st->execute([
+            ':site_id'        => $siteId,
+            ':label'          => $label,
+            ':host_url'       => $hostUrl,
+            ':host_id'        => $hostId,
+            ':vtype'          => $verType,
+            ':vuin'           => $verUin,
+            ':vfile'          => $verFile,
+            ':vcontent'       => $verContent,
+            ':file_written'   => (int)$fileWritten,
+            ':file_written_at'=> $writtenAt,
+        ]);
+    });
+}
 
     public function markVerified(int $siteId, string $label): void
     {

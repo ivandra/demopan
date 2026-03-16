@@ -54,11 +54,15 @@ class WebmasterController extends Controller
             $rowMap[(string)($r['label'] ?? '')] = $r;
         }
 
-        return $this->view('webmaster/site', [
-            'site' => $site,
-            'desired' => $desired,
-            'rowMap' => $rowMap,
-        ]);
+       require_once Paths::appRoot() . '/app/Services/WebmasterPublishStateService.php';
+		$wmDeployState = (new WebmasterPublishStateService())->getState($siteId);
+
+		return $this->view('webmaster/site', [
+			'site' => $site,
+			'desired' => $desired,
+			'rowMap' => $rowMap,
+			'wmDeployState' => $wmDeployState,
+		]);
     }
 
     public function sync()

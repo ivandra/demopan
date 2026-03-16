@@ -10,3 +10,60 @@ Stack trace:
 #6 /home/s/seotimeb/hub.seotop-one.ru/public_html/public/index.php(366): Router->dispatch()
 #7 {main}
   thrown in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Controllers/SiteController.php on line 2406
+[16-Mar-2026 02:15:19 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user BODY=
+[16-Mar-2026 02:15:19 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/verification/HTML_FILE BODY=
+[16-Mar-2026 02:15:19 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[16-Mar-2026 02:15:20 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Akazik1.casino%3A443/verification BODY=
+[16-Mar-2026 02:15:20 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3A_default.kazik1.casino%3A443/verification/HTML_FILE BODY=
+[16-Mar-2026 02:15:20 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3A_default.kazik1.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[16-Mar-2026 02:15:20 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/verification/HTML_FILE BODY=
+[16-Mar-2026 02:15:20 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[16-Mar-2026 02:15:20 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abanda.kazik1.casino%3A443/verification BODY=
+[16-Mar-2026 02:15:20 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik1.casino%3A443/verification/HTML_FILE BODY=
+[16-Mar-2026 02:15:20 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik1.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[16-Mar-2026 02:15:20 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abeef.kazik1.casino%3A443/verification BODY=
+[16-Mar-2026 02:15:21 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik1.casino%3A443/verification/HTML_FILE BODY=
+[16-Mar-2026 02:15:21 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik1.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[16-Mar-2026 02:15:21 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abetera.kazik1.casino%3A443/verification BODY=
+[16-Mar-2026 02:15:21 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik1.casino%3A443/verification/HTML_FILE BODY=
+[16-Mar-2026 02:15:21 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik1.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[16-Mar-2026 02:15:21 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Abooi.kazik1.casino%3A443/verification BODY=
+[16-Mar-2026 02:15:21 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Aboost.kazik1.casino%3A443/verification/HTML_FILE BODY=
+[16-Mar-2026 02:15:21 Europe/Moscow] WM POST https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Aboost.kazik1.casino%3A443/verification?verification_type=HTML_FILE BODY=
+[16-Mar-2026 02:15:22 Europe/Moscow] WM GET https://api.webmaster.yandex.net/v4/user/2328344034/hosts/https%3Aboost.kazik1.casino%3A443/verification BODY=
+[16-Mar-2026 18:47:43 Europe/Moscow] [NC listAccounts] rows=2
+[16-Mar-2026 18:47:43 Europe/Moscow] [availableIps] count=6 siteId=24
+[16-Mar-2026 18:47:43 Europe/Moscow] [NC makeClient] acc_id=2 api_user=AlexViper1507 username=AlexViper1507 endpoint=https://api.namecheap.com/xml.response
+[16-Mar-2026 18:47:53 Europe/Moscow] [SubdomainProvisioner] site_id=24 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24
+[16-Mar-2026 18:47:53 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/_default
+[16-Mar-2026 18:47:53 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/_default/config.php
+[16-Mar-2026 18:48:03 Europe/Moscow] [SubdomainProvisioner] site_id=24 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24
+[16-Mar-2026 18:48:03 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/_default
+[16-Mar-2026 18:48:03 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/_default/config.php
+[16-Mar-2026 18:48:03 Europe/Moscow] PHP Warning:  Undefined variable $isMulty in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Views/texts/index.php on line 85
+[16-Mar-2026 18:48:03 Europe/Moscow] PHP Warning:  Undefined variable $isMulty in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Views/texts/index.php on line 90
+[16-Mar-2026 18:48:03 Europe/Moscow] PHP Warning:  Undefined variable $isMulty in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Views/texts/index.php on line 93
+[16-Mar-2026 18:48:03 Europe/Moscow] PHP Warning:  Undefined variable $isMulty in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Views/texts/index.php on line 85
+[16-Mar-2026 18:48:03 Europe/Moscow] PHP Warning:  Undefined variable $isMulty in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Views/texts/index.php on line 90
+[16-Mar-2026 18:48:03 Europe/Moscow] PHP Warning:  Undefined variable $isMulty in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Views/texts/index.php on line 93
+[16-Mar-2026 18:48:03 Europe/Moscow] PHP Warning:  Undefined variable $isMulty in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Views/texts/index.php on line 85
+[16-Mar-2026 18:48:03 Europe/Moscow] PHP Warning:  Undefined variable $isMulty in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Views/texts/index.php on line 90
+[16-Mar-2026 18:48:03 Europe/Moscow] PHP Warning:  Undefined variable $isMulty in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Views/texts/index.php on line 93
+[16-Mar-2026 18:48:03 Europe/Moscow] PHP Warning:  Undefined variable $isMulty in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Views/texts/index.php on line 85
+[16-Mar-2026 18:48:03 Europe/Moscow] PHP Warning:  Undefined variable $isMulty in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Views/texts/index.php on line 90
+[16-Mar-2026 18:48:03 Europe/Moscow] PHP Warning:  Undefined variable $isMulty in /home/s/seotimeb/hub.seotop-one.ru/public_html/app/Views/texts/index.php on line 93
+[16-Mar-2026 18:48:06 Europe/Moscow] [SubdomainProvisioner] site_id=24 label=_default buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24
+[16-Mar-2026 18:48:06 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/_default
+[16-Mar-2026 18:48:06 Europe/Moscow] [SubdomainProvisioner] OK created label=_default cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/_default/config.php
+[16-Mar-2026 18:48:08 Europe/Moscow] [SubdomainProvisioner] site_id=24 label=banda buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24
+[16-Mar-2026 18:48:08 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/banda
+[16-Mar-2026 18:48:08 Europe/Moscow] [SubdomainProvisioner] OK created label=banda cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/banda/config.php
+[16-Mar-2026 18:48:22 Europe/Moscow] [SubdomainProvisioner] site_id=24 label=banda buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24
+[16-Mar-2026 18:48:22 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/banda
+[16-Mar-2026 18:48:22 Europe/Moscow] [SubdomainProvisioner] OK created label=banda cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/banda/config.php
+[16-Mar-2026 18:50:20 Europe/Moscow] [SubdomainProvisioner] site_id=24 label=banda buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24
+[16-Mar-2026 18:50:20 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/banda
+[16-Mar-2026 18:50:20 Europe/Moscow] [SubdomainProvisioner] OK created label=banda cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/banda/config.php
+[16-Mar-2026 18:52:40 Europe/Moscow] [SubdomainProvisioner] site_id=24 label=banda buildAbs=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24
+[16-Mar-2026 18:52:40 Europe/Moscow] [SubdomainProvisioner] paths subsRoot=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs subDir=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/banda
+[16-Mar-2026 18:52:40 Europe/Moscow] [SubdomainProvisioner] OK created label=banda cfg=/home/s/seotimeb/hub.seotop-one.ru/public_html/storage/builds/site_24/subs/banda/config.php

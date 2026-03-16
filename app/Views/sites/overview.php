@@ -13,6 +13,9 @@ $freshClone = !empty($freshClone);
 
 $domain = (string)($site['domain'] ?? '');
 $template = (string)($site['template'] ?? '');
+
+$wmDeployState = $wmDeployState ?? [];
+$dnsAudit = $dnsAudit ?? [];
 ?>
 
 <div class="page-head">
@@ -284,6 +287,23 @@ $template = (string)($site['template'] ?? '');
                 <?= !empty($wmStats['last_sync']) ? '<code>' . h($wmStats['last_sync']) . '</code>' : '—' ?>
             </li>
         </ul>
+		
+		<?php if (!empty($wmDeployState['written_cnt'])): ?>
+			<?php if (!empty($wmDeployState['needs_deploy'])): ?>
+				<div class="alert alert-warning mt-12">
+					<b><?= h($wmDeployState['title'] ?? '') ?></b><br>
+					<?= h($wmDeployState['message'] ?? '') ?>
+					<div class="page-actions mt-8">
+						<a class="btn btn-primary" href="/deploy?id=<?= $siteId ?>">Открыть публикацию</a>
+					</div>
+				</div>
+			<?php elseif (!empty($wmDeployState['ok'])): ?>
+				<div class="alert alert-success mt-12">
+					<b><?= h($wmDeployState['title'] ?? '') ?></b><br>
+					<?= h($wmDeployState['message'] ?? '') ?>
+				</div>
+			<?php endif; ?>
+		<?php endif; ?>
 
         <div class="page-actions">
             <a class="btn btn-primary" href="/webmaster/site?id=<?= $siteId ?>">Открыть Webmaster</a>

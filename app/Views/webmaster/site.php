@@ -16,6 +16,8 @@ foreach (($desired ?? []) as $hrow) {
     $seen[$lbl] = true;
     $labels[$lbl] = $lbl;
 }
+
+$wmDeployState = $wmDeployState ?? [];
 ?>
 
 <div class="page-head">
@@ -54,17 +56,46 @@ foreach (($desired ?? []) as $hrow) {
         <div class="small muted">
             Проверить верификацию в Яндексе. Перед этим verify-файлы должны быть уже задеплоены на домены.
         </div>
-
+		
+		<?php $verifyBlocked = !empty($wmDeployState['needs_deploy']); ?>
         <form method="post" action="/webmaster/verify?id=<?= $siteId ?>" data-confirm="Проверить верификацию в Яндексе?">
-            <button type="submit" class="btn btn-primary">Проверить верификацию</button>
+            <button
+    type="submit"
+    class="btn btn-primary"
+    <?= $verifyBlocked ? 'disabled title="Сначала выполните публикацию на VPS"' : '' ?>
+>
+    Проверить верификацию
+</button>
         </form>
     </div>
 </div>
 
-<div class="alert alert-info mt-16">
-    После шага 1 verify-файлы записываются только в build сайта.
-    Чтобы Яндекс увидел их по URL, нужно сделать обычную публикацию / update-files.
-</div>
+<?php if (!empty($wmDeployState['written_cnt'])): ?>
+    <?php if (!empty($wmDeployState['needs_deploy'])): ?>
+        <div class="alert alert-warning mt-16">
+            <b><?= h($wmDeployState['title'] ?? '') ?></b><br>
+            <?= h($wmDeployState['message'] ?? '') ?>
+            <div class="page-actions mt-8">
+                <a class="btn btn-primary" href="/deploy?id=<?= $siteId ?>">Открыть публикацию</a>
+            </div>
+        </div>
+    <?php elseif (!empty($wmDeployState['ok'])): ?>
+        <div class="alert alert-success mt-16">
+            <b><?= h($wmDeployState['title'] ?? '') ?></b><br>
+            <?= h($wmDeployState['message'] ?? '') ?>
+        </div>
+    <?php else: ?>
+        <div class="alert alert-info mt-16">
+            После шага 1 verify-файлы записываются в локальный build сайта.
+            Затем нужно выполнить публикацию на VPS, и только после этого запускать проверку верификации.
+        </div>
+    <?php endif; ?>
+<?php else: ?>
+    <div class="alert alert-info mt-16">
+        После шага 1 verify-файлы записываются в локальный build сайта.
+        Затем нужно выполнить публикацию на VPS, и только после этого запускать проверку верификации.
+    </div>
+<?php endif; ?>
 
 <div class="panel-grid panel-grid--2 mt-16">
     <div class="panel-card stack-gap-md">
