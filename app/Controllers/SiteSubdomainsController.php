@@ -332,13 +332,16 @@ class SiteSubdomainsController extends Controller
         }
     }
 
-    private function mergeDnsHostsUpsertSubA(array $existing, array $labels, string $ip, int $ttl = 300): array
+    private function mergeDnsHostsUpsertSubA(array $existing, array $labels, string $domain, string $ip, int $ttl = 300): array
     {
         $labelsSet = [];
+        $wwwLabelsSet = [];
+
         foreach ($labels as $l) {
             $l = strtolower(trim((string)$l));
-			if ($l === '' || $l === '_default') continue; // <--- защита
-			$labelsSet[$l] = true;
+            if ($l === '' || $l === '_default') continue;
+            $labelsSet[$l] = true;
+            $wwwLabelsSet['www.' . $l] = true;
         }
 
         $out = [];
@@ -352,7 +355,7 @@ class SiteSubdomainsController extends Controller
 
             if ($host === '' || $type === '' || $addr === '') continue;
 
-            if (isset($labelsSet[$host])) {
+            if (isset($labelsSet[$host]) || isset($wwwLabelsSet[$host])) {
                 continue;
             }
 
@@ -366,6 +369,12 @@ class SiteSubdomainsController extends Controller
                 'address' => $ip,
                 'ttl'     => $ttl,
             ];
+            $out[] = [
+                'host'    => 'www.' . $l,
+                'type'    => 'CNAME',
+                'address' => $l . '.' . $domain,
+                'ttl'     => $ttl,
+            ];
         }
 
         return $out;
@@ -374,7 +383,12 @@ class SiteSubdomainsController extends Controller
     private function mergeDnsHostsRemoveLabels(array $existing, array $labels): array
     {
         $labelsSet = [];
-        foreach ($labels as $l) $labelsSet[strtolower(trim($l))] = true;
+        foreach ($labels as $l) {
+            $l = strtolower(trim((string)$l));
+            if ($l === '' || $l === '_default') continue;
+            $labelsSet[$l] = true;
+            $labelsSet['www.' . $l] = true;
+        }
 
         $out = [];
         foreach ($existing as $h) {
@@ -755,7 +769,9 @@ class SiteSubdomainsController extends Controller
             $fqdnsFp = [];
             foreach ($labelsDns as $l) {
                 $fqdnsFp[] = $l . '.' . $domain;
+                $fqdnsFp[] = 'www.' . $l . '.' . $domain;
             }
+            $fqdnsFp = array_values(array_unique($fqdnsFp));
 
             @error_log('[FP] site_id=' . $siteId . ' aliases_count=' . count($fqdnsFp) . ' sample=' . json_encode(array_slice($fqdnsFp, 0, 5), JSON_UNESCAPED_UNICODE));
             if (!empty($fqdnsFp)) {
@@ -803,7 +819,7 @@ class SiteSubdomainsController extends Controller
                     );
 
                     // Upsert sub A, но строго БЕЗ _default
-                    $merged = $this->mergeDnsHostsUpsertSubA($existing, $labelsDns, $targetIp, 300);
+                    $merged = $this->mergeDnsHostsUpsertSubA($existing, $labelsDns, $domain, $targetIp, 300);
 
                     $nc->setHosts($sld, $tld, $merged);
 
@@ -943,7 +959,7 @@ class SiteSubdomainsController extends Controller
             }
             unset($h);
 
-            $hosts = $this->mergeDnsHostsUpsertSubA($hosts, $labels, $newIp, 300);
+            $hosts = $this->mergeDnsHostsUpsertSubA($hosts, $labels, $domain, $newIp, 300);
 
             $nc->setHosts($sld, $tld, $hosts);
             $dnsOk = true;

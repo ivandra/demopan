@@ -1,14 +1,14 @@
 <?php
 
 $cfg = array (
-  'domain' => 'beef.kazik2.casino',
+  'domain' => 'betera.kazik2.casino',
   'yandex_verification' => '',
   'yandex_metrika' => '',
   'promolink' => '/reg',
-  'title' => 'Beef - Казино Kazik1 | Игры и бонусы',
-  'description' => 'Играйте в лучшие азартные игры в разделе Beef казино Kazik1. Уникальные бонусы и высокие выплаты.',
-  'keywords' => 'beef, казино, kazik1, игры, бонусы, азартные игры, выплаты',
-  'h1' => 'Добро пожаловать в раздел Beef казино Kazik1',
+  'title' => 'Betera - официальный сайт казино Kazik1 | Играть онлайн',
+  'description' => 'Betera — официальный поддомен казино Kazik1. Играйте в слоты, рулетку и живые игры с бонусами и быстрыми выплатами.',
+  'keywords' => 'Betera, Kazik1, казино, онлайн казино, азартные игры, слоты, рулетка, live игры, бонусы, выплаты',
+  'h1' => 'Betera — ваш путь к азартным победам в казино Kazik1',
   'pages' => 
   array (
     '/' => 
@@ -23,29 +23,29 @@ $cfg = array (
     '/404' => 
     array (
       'title' => '404 — Страница не найдена',
-      'h1' => 'Страница не найдена',
+      'h1' => '$inherit',
       'description' => 'Страница не найдена',
-      'keywords' => '',
+      'keywords' => '$inherit',
       'text_file' => '404.php',
       'sitemap' => false,
     ),
     '/test' => 
     array (
-      'title' => 'Тестовая страница казино Kazik1 | Проверка функционала',
-      'h1' => 'Тестовая страница',
-      'description' => 'Тестовая страница казино Kazik1. Проверка работы сайта, функционала и доступности игровых автоматов.',
-      'keywords' => 'тест, казино Kazik1, проверка, игровые автоматы, функционал',
+      'title' => '$inherit',
+      'h1' => '$inherit',
+      'description' => '$inherit',
+      'keywords' => '$inherit',
       'text_file' => 'game.php',
     ),
   ),
-  'partner_override_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=beefkazik2',
-  'internal_reg_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=beefkazik2',
-  'redirect_enabled' => 1,
-  'base_new_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=beefkazik2',
-  'base_second_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=beefkazik2',
+  'partner_override_url' => '',
+  'internal_reg_url' => '',
+  'redirect_enabled' => 0,
+  'base_new_url' => '',
+  'base_second_url' => '',
+  'label' => 'betera',
   'logo' => 'assets/logo.webp',
   'favicon' => 'assets/favicon.png',
-  'label' => 'beef',
 );
 
 $pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];
