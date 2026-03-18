@@ -10,6 +10,7 @@ function h($v): string {
 $siteId = (int)($site['id'] ?? 0);
 $registrarAccounts = is_array($registrarAccounts ?? null) ? $registrarAccounts : [];
 $currentAccId = (int)($site['registrar_account_id'] ?? 0);
+$partnerSubId = (string)($partnerSubId ?? '');
 
 $configFileForFiles = 'config.default.php';
 ?>
@@ -19,8 +20,7 @@ $configFileForFiles = 'config.default.php';
     <div class="page-actions">
         <a class="btn btn-secondary" href="/sites/overview?id=<?= $siteId ?>">Обзор</a>
         <a class="btn btn-secondary" href="/domains?id=<?= $siteId ?>">Домен и DNS</a>
-        <a class="btn btn-secondary" href="/sites/subcfg?id=<?= $siteId ?>&label=_default">Контент и SEO</a>
-    </div>
+            </div>
     <div class="page-subtitle">
         Сайт #<?= $siteId ?> — <code><?= h($site['domain'] ?? '') ?></code>
     </div>
@@ -92,30 +92,6 @@ $configFileForFiles = 'config.default.php';
         </div>
 
         <div class="panel-card stack-gap-md">
-            <h2 class="section-title">SEO</h2>
-
-            <div class="field-row">
-                <label>Title</label>
-                <input name="title" value="<?= h($cfg['title'] ?? '') ?>">
-            </div>
-
-            <div class="field-row">
-                <label>Description</label>
-                <textarea name="description"><?= h($cfg['description'] ?? '') ?></textarea>
-            </div>
-
-            <div class="field-row">
-                <label>Keywords</label>
-                <input name="keywords" value="<?= h($cfg['keywords'] ?? '') ?>">
-            </div>
-
-            <div class="field-row">
-                <label>H1</label>
-                <input name="h1" value="<?= h($cfg['h1'] ?? '') ?>">
-            </div>
-        </div>
-
-        <div class="panel-card stack-gap-md">
             <h2 class="section-title">Redirect / партнёрка</h2>
 
             <div class="field-row">
@@ -124,11 +100,19 @@ $configFileForFiles = 'config.default.php';
                     <option value="0" <?= ((int)($cfg['redirect_enabled'] ?? 0) === 0) ? 'selected' : '' ?>>0 — выключен</option>
                     <option value="1" <?= ((int)($cfg['redirect_enabled'] ?? 0) === 1) ? 'selected' : '' ?>>1 — включён</option>
                 </select>
+                <div class="small muted">Для основного домена переключается вручную здесь. Авто-включение по индексу отображается и запускается только в разделе «Вебмастер».</div>
+            </div>
+
+            <div class="field-row">
+                <label>Сгенерированный sub_id</label>
+                <input value="<?= h($partnerSubId) ?>" readonly>
+                <div class="small muted">Для root используется корень домена до точки. При сохранении этот sub_id будет автоматически подставлен в partner_override_url, internal_reg_url, base_new_url и base_second_url, а затем разнесён по конфигам всех поддоменов сайта с их собственными значениями.</div>
             </div>
 
             <div class="field-row">
                 <label>partner_override_url</label>
                 <input name="partner_override_url" value="<?= h($cfg['partner_override_url'] ?? '') ?>">
+                <div class="small muted">Если ссылка внешняя, панель добавит или заменит параметр <code>sub_id=<?= h($partnerSubId) ?></code>.</div>
             </div>
 
             <div class="field-row">

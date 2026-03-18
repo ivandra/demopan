@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hub панель</title>
-    <link rel="stylesheet" href="/assets/admin.css?v=20260309c">
-    <script defer src="/assets/admin.js?v=20260309c"></script>
+    <link rel="stylesheet" href="/assets/admin.css?v=20260317a">
+    <script defer src="/assets/admin.js?v=20260317a"></script>
 </head>
 <body>
 <?php
@@ -62,6 +62,9 @@ if (isset($site['domain'])) {
 }
 
 $hideNav = ($currentPath === '/login');
+
+$flashBag = $_SESSION['flash'] ?? [];
+unset($_SESSION['flash']);
 
 $globalNav = [
     ['title' => 'Сайты',                 'href' => '/sites',              'match' => ['/sites']],
@@ -138,6 +141,16 @@ if ($layoutSiteId > 0) {
 <?php endif; ?>
 
 <main class="hub-main">
+    <?php if (!empty($flashBag['success'])): ?>
+        <?php foreach ($flashBag['success'] as $msg): ?>
+            <div class="alert alert-success mt-16"><?= layout_h($msg) ?></div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <?php if (!empty($flashBag['error'])): ?>
+        <?php foreach ($flashBag['error'] as $msg): ?>
+            <div class="alert alert-danger mt-16"><?= layout_h($msg) ?></div>
+        <?php endforeach; ?>
+    <?php endif; ?>
     <?php require __DIR__ . '/' . $path . '.php'; ?>
 </main>
 </body>

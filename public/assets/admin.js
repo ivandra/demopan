@@ -8,12 +8,19 @@
   }
 
   document.addEventListener('submit', function (e) {
-    var form = e.target.closest('form[data-confirm]');
+    var form = e.target.closest('form');
     if (!form) return;
 
-    var message = form.getAttribute('data-confirm') || 'Подтвердить действие?';
-    if (!window.confirm(message)) {
-      e.preventDefault();
+    if (form.dataset.confirmAccepted === '1') {
+      form.dataset.confirmAccepted = '';
+      return;
+    }
+
+    if (form.hasAttribute('data-confirm')) {
+      var message = form.getAttribute('data-confirm') || 'Подтвердить действие?';
+      if (!window.confirm(message)) {
+        e.preventDefault();
+      }
     }
   });
 
@@ -53,10 +60,19 @@
     }
 
     if (target.hasAttribute('data-confirm')) {
+      var parentForm = target.closest('form');
+      if (parentForm && parentForm.hasAttribute('data-confirm')) {
+        return;
+      }
+
       var message = target.getAttribute('data-confirm') || 'Подтвердить действие?';
       if (!window.confirm(message)) {
         e.preventDefault();
         return;
+      }
+
+      if (parentForm) {
+        parentForm.dataset.confirmAccepted = '1';
       }
     }
   });

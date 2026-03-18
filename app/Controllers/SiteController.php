@@ -257,10 +257,12 @@ if ($vpsIp) {
     $cfg['yandex_metrika']      = trim((string)($_POST['yandex_metrika'] ?? ''));
     $cfg['promolink']           = trim((string)($_POST['promolink'] ?? '/play'));
 
-    $cfg['title']       = trim((string)($_POST['title'] ?? ''));
-    $cfg['description'] = trim((string)($_POST['description'] ?? ''));
-    $cfg['keywords']    = trim((string)($_POST['keywords'] ?? ''));
-    $cfg['h1']          = trim((string)($_POST['h1'] ?? ''));
+    // SEO-поля больше не редактируются на экране /sites/edit.
+    // Берём их из текущего конфига и не затираем пустыми значениями.
+    $cfg['title']       = (string)($cfg['title'] ?? '');
+    $cfg['description'] = (string)($cfg['description'] ?? '');
+    $cfg['keywords']    = (string)($cfg['keywords'] ?? '');
+    $cfg['h1']          = (string)($cfg['h1'] ?? '');
 
     $cfg['partner_override_url'] = trim((string)($_POST['partner_override_url'] ?? ''));
     $cfg['internal_reg_url']     = trim((string)($_POST['internal_reg_url'] ?? ''));
@@ -664,7 +666,6 @@ if (!is_array($pages)) $pages = [];
 
     $this->view('sites/build', compact('site', 'cfg', 'report', 'configTargetPath', 'label'));
 }
-
     // ----------------------------
     // Files editor
     // ----------------------------
@@ -678,11 +679,16 @@ if (!is_array($pages)) $pages = [];
         $site = $this->loadSite($siteId);
         $buildDir = $this->getBuildDir($site);
 
-        $allowed = $this->allowedSiteFiles();
+        $scope = $this->normalizeFilesScope((string)($_GET['scope'] ?? 'root'));
+        $label = $this->normalizeFilesLabel((string)($_GET['label'] ?? '_default'));
+
+        $baseDir = $this->getFilesBaseDir($buildDir, $scope, $label);
+        $allowed = $this->allowedSiteFilesByScope($scope);
+        $labelsForFiles = $this->getFilesLabels($siteId);
 
         $files = [];
         foreach ($allowed as $f) {
-            $path = rtrim($buildDir, '/\\') . '/' . $f;
+            $path = rtrim($baseDir, '/\\') . '/' . $f;
             $files[] = [
                 'name' => $f,
                 'exists' => is_file($path),
@@ -690,7 +696,7 @@ if (!is_array($pages)) $pages = [];
             ];
         }
 
-        $this->view('files/index', compact('site', 'files'));
+        $this->view('files/index', compact('site', 'files', 'scope', 'label', 'labelsForFiles'));
     }
 
     public function filesEdit(): void
@@ -704,23 +710,45 @@ if (!is_array($pages)) $pages = [];
         $site = $this->loadSite($siteId);
         $buildDir = $this->getBuildDir($site);
 
-        $safeFile = $this->sanitizeAllowedFile($file);
-        $path = rtrim($buildDir, '/\\') . '/' . $safeFile;
+        $scope = $this->normalizeFilesScope((string)($_GET['scope'] ?? 'root'));
+        $label = $this->normalizeFilesLabel((string)($_GET['label'] ?? '_default'));
+        $baseDir = $this->getFilesBaseDir($buildDir, $scope, $label);
+
+        $safeFile = $this->sanitizeAllowedFileByScope($file, $scope);
+        $path = rtrim($baseDir, '/\\') . '/' . $safeFile;
+        $isBinary = $this->isBinaryManagedFile($scope, $safeFile);
 
         $content = '';
+        $previewDataUri = '';
         if (is_file($path)) {
-            $c = file_get_contents($path);
-            $content = ($c === false) ? '' : $c;
+            if ($isBinary) {
+                $ext = strtolower(pathinfo($safeFile, PATHINFO_EXTENSION));
+                $mimeMap = [
+                    'png' => 'image/png',
+                    'webp' => 'image/webp',
+                    'svg' => 'image/svg+xml',
+                    'ico' => 'image/x-icon',
+                ];
+                if (isset($mimeMap[$ext])) {
+                    $raw = file_get_contents($path);
+                    if ($raw !== false && strlen($raw) <= 2 * 1024 * 1024) {
+                        $previewDataUri = 'data:' . $mimeMap[$ext] . ';base64,' . base64_encode($raw);
+                    }
+                }
+            } else {
+                $c = file_get_contents($path);
+                $content = ($c === false) ? '' : $c;
+            }
         }
 
         $backups = [];
-        $pattern = rtrim($buildDir, '/\\') . '/' . $safeFile . '.bak_*';
+        $pattern = rtrim($baseDir, '/\\') . '/' . $safeFile . '.bak_*';
         foreach (glob($pattern) ?: [] as $bp) {
             $backups[] = basename($bp);
         }
         rsort($backups);
 
-        $this->view('files/edit', compact('site', 'safeFile', 'content', 'backups'));
+        $this->view('files/edit', compact('site', 'safeFile', 'content', 'backups', 'scope', 'label', 'isBinary', 'previewDataUri'));
     }
 
     public function filesSave(): void
@@ -736,8 +764,12 @@ if (!is_array($pages)) $pages = [];
         $site = $this->loadSite($siteId);
         $buildDir = $this->getBuildDir($site);
 
-        $safeFile = $this->sanitizeAllowedFile($file);
-        $path = rtrim($buildDir, '/\\') . '/' . $safeFile;
+        $scope = $this->normalizeFilesScope((string)($_POST['scope'] ?? ($_GET['scope'] ?? 'root')));
+        $label = $this->normalizeFilesLabel((string)($_POST['label'] ?? ($_GET['label'] ?? '_default')));
+        $baseDir = $this->getFilesBaseDir($buildDir, $scope, $label);
+
+        $safeFile = $this->sanitizeAllowedFileByScope($file, $scope);
+        $path = rtrim($baseDir, '/\\') . '/' . $safeFile;
 
         if (is_file($path)) {
             $ts = date('Ymd_His');
@@ -746,12 +778,27 @@ if (!is_array($pages)) $pages = [];
         }
 
         Paths::ensureDir(dirname($path));
-        Paths::ensureDir(dirname($path));
-        $tmp = $path . '.tmp_' . time();
-        file_put_contents($tmp, $content);
-        rename($tmp, $path);
 
-        $this->redirect('/sites/files/edit?id=' . $siteId . '&file=' . rawurlencode($safeFile));
+        if ($this->isBinaryManagedFile($scope, $safeFile)) {
+            if (empty($_FILES['upload']) || !isset($_FILES['upload']['error']) || (int)$_FILES['upload']['error'] !== UPLOAD_ERR_OK) {
+                die('upload required');
+            }
+            $tmpUpload = (string)($_FILES['upload']['tmp_name'] ?? '');
+            if ($tmpUpload === '' || !is_uploaded_file($tmpUpload)) {
+                die('upload failed');
+            }
+            if (!@move_uploaded_file($tmpUpload, $path)) {
+                if (!@copy($tmpUpload, $path)) {
+                    die('failed to save upload');
+                }
+            }
+        } else {
+            $tmp = $path . '.tmp_' . time();
+            file_put_contents($tmp, $content);
+            rename($tmp, $path);
+        }
+
+        $this->redirect('/sites/files/edit?id=' . $siteId . '&scope=' . rawurlencode($scope) . '&label=' . rawurlencode($label) . '&file=' . rawurlencode($safeFile));
     }
 
     public function filesRestore(): void
@@ -767,7 +814,11 @@ if (!is_array($pages)) $pages = [];
         $site = $this->loadSite($siteId);
         $buildDir = $this->getBuildDir($site);
 
-        $safeFile = $this->sanitizeAllowedFile($file);
+        $scope = $this->normalizeFilesScope((string)($_POST['scope'] ?? ($_GET['scope'] ?? 'root')));
+        $label = $this->normalizeFilesLabel((string)($_POST['label'] ?? ($_GET['label'] ?? '_default')));
+        $baseDir = $this->getFilesBaseDir($buildDir, $scope, $label);
+
+        $safeFile = $this->sanitizeAllowedFileByScope($file, $scope);
 
         if (strpos($backup, $safeFile . '.bak_') !== 0) {
             die('bad backup');
@@ -776,8 +827,8 @@ if (!is_array($pages)) $pages = [];
             die('bad backup');
         }
 
-        $src = rtrim($buildDir, '/\\') . '/' . $backup;
-        $dst = rtrim($buildDir, '/\\') . '/' . $safeFile;
+        $src = rtrim($baseDir, '/\\') . '/' . $backup;
+        $dst = rtrim($baseDir, '/\\') . '/' . $safeFile;
 
         if (!is_file($src)) {
             die('backup not found');
@@ -790,7 +841,7 @@ if (!is_array($pages)) $pages = [];
 
         @copy($src, $dst);
 
-        $this->redirect('/sites/files/edit?id=' . $siteId . '&file=' . rawurlencode($safeFile));
+        $this->redirect('/sites/files/edit?id=' . $siteId . '&scope=' . rawurlencode($scope) . '&label=' . rawurlencode($label) . '&file=' . rawurlencode($safeFile));
     }
 
     // ----------------------------
@@ -1314,6 +1365,68 @@ private function regenerateConfigPhp(int $siteId, array $cfg, ?string $label = n
         ];
     }
 
+    private function allowedAssetFiles(): array
+    {
+        return [
+            'logo.png',
+            'logo.webp',
+            'logo.svg',
+            'favicon.png',
+            'favicon.ico',
+            'favicon.svg',
+        ];
+    }
+
+    private function allowedSiteFilesByScope(string $scope): array
+    {
+        return $scope === 'assets' ? $this->allowedAssetFiles() : $this->allowedSiteFiles();
+    }
+
+    private function normalizeFilesScope(string $scope): string
+    {
+        return strtolower(trim($scope)) === 'assets' ? 'assets' : 'root';
+    }
+
+    private function normalizeFilesLabel(string $label): string
+    {
+        $label = trim(strtolower($label));
+        if ($label === '' || $label === '_default') {
+            return '_default';
+        }
+        $label = preg_replace('~[^a-z0-9_-]+~', '', $label);
+        return $label !== '' ? $label : '_default';
+    }
+
+    private function getFilesBaseDir(string $buildDir, string $scope, string $label): string
+    {
+        if ($scope === 'assets') {
+            return rtrim($buildDir, '/\\') . '/subs/' . $label . '/assets';
+        }
+        return rtrim($buildDir, '/\\');
+    }
+
+    private function getFilesLabels(int $siteId): array
+    {
+        $labels = ['_default'];
+        try {
+            $st = DB::pdo()->prepare("SELECT label FROM site_subdomains WHERE site_id=? ORDER BY CASE WHEN label='_default' THEN 0 ELSE 1 END, label ASC");
+            $st->execute([$siteId]);
+            foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
+                $lb = $this->normalizeFilesLabel((string)($row['label'] ?? ''));
+                if (!in_array($lb, $labels, true)) {
+                    $labels[] = $lb;
+                }
+            }
+        } catch (Throwable $e) {
+        }
+        return $labels;
+    }
+
+    private function isBinaryManagedFile(string $scope, string $file): bool
+    {
+        return $scope === 'assets';
+    }
+
 
     /**
      * build_path в БД хранится как относительный путь внутри storage (например: builds/site_123).
@@ -1366,6 +1479,11 @@ private function regenerateConfigPhp(int $siteId, array $cfg, ?string $label = n
 
     private function sanitizeAllowedFile(string $file): string
     {
+        return $this->sanitizeAllowedFileByScope($file, 'root');
+    }
+
+    private function sanitizeAllowedFileByScope(string $file, string $scope): string
+    {
         $file = trim($file);
 
         if ($file === '' || strpos($file, '/') !== false || strpos($file, '\\') !== false) {
@@ -1375,7 +1493,7 @@ private function regenerateConfigPhp(int $siteId, array $cfg, ?string $label = n
             die('bad file');
         }
 
-        $allowed = $this->allowedSiteFiles();
+        $allowed = $this->allowedSiteFilesByScope($scope);
         if (!in_array($file, $allowed, true)) {
             die('file not allowed');
         }

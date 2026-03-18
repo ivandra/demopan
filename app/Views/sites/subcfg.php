@@ -24,7 +24,7 @@ $isRoot = ($label === '_default');
             <a class="btn btn-secondary" href="/sites/subdomains?id=<?= $siteId ?>">Поддомены</a>
         </div>
         <div class="page-subtitle">
-            Здесь редактируются SEO-поля, ссылки, redirect-настройки и assets для root или выбранного поддомена.
+            Здесь редактируются фактические SEO-поля и технические ссылки текущего root / поддомена.
         </div>
     </div>
 
@@ -37,7 +37,8 @@ $isRoot = ($label === '_default');
             <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Страницы</a>
             <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Тексты</a>
             <a class="btn btn-secondary" href="/sites/files?id=<?= $siteId ?>">Файлы build</a>
-            <a class="btn btn-ai" href="/sites/ai?id=<?= $siteId ?>">AI для сайта</a>
+            <a class="btn btn-secondary" href="/sites/files?id=<?= $siteId ?>&scope=assets&label=<?= urlencode($label) ?>">Assets текущего label</a>
+            <a class="btn btn-ai" href="/sites/ai?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">AI для текущего label</a>
         </div>
     </div>
 
@@ -76,13 +77,13 @@ $isRoot = ($label === '_default');
                 </form>
 
                 <?php if (!$isRoot): ?>
-                    <form method="post" action="/sites/subcfg/delete" data-confirm="Удалить конфиг поддомена <?= e($label) ?> из БД?">
+                    <form method="post" action="/sites/subcfg/delete" data-confirm="Удалить поддомен полностью поддомена <?= e($label) ?> из БД?">
                         <input type="hidden" name="site_id" value="<?= $siteId ?>">
                         <input type="hidden" name="label" value="<?= e($label) ?>">
                         <label class="checkbox-inline small">
                             <input type="checkbox" name="delete_folder" value="1"> удалить папку subs/<?= e($label) ?>
                         </label>
-                        <button type="submit" class="btn btn-danger">Удалить конфиг</button>
+                        <button type="submit" class="btn btn-danger">Удалить поддомен полностью</button>
                     </form>
                 <?php endif; ?>
             </div>
@@ -124,8 +125,8 @@ $isRoot = ($label === '_default');
                 </div>
 
                 <div class="ai-note small">
-                    AI может автоматически заполнить:
-                    <b>title</b>, <b>h1</b>, <b>description</b>, <b>keywords</b>.
+                    Здесь хранятся <b>фактические</b> SEO-поля текущей сущности.
+                    AI-кнопки ниже только помогают заполнить их автоматически.
                 </div>
 
                 <div class="subcfg-actions mt-14 mb-14">
@@ -219,7 +220,7 @@ $isRoot = ($label === '_default');
         </div>
 
         <div class="subcfg-actions">
-            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <button type="submit" class="btn btn-primary">Сохранить и пересобрать config</button>
             <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Открыть страницы</a>
             <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Открыть тексты</a>
         </div>

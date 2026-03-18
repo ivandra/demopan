@@ -187,7 +187,7 @@ function status_badge(bool $ok, string $okText = 'Да', string $failText = 'Н�
                             <div class="sites-ssl-line">
                                 <span class="badge <?= $fpStateClass ?>"><?= h($fpStateText) ?></span>
                                 <?php if ($sslCertId > 0 && $vpsOk): ?>
-                                    <span class="badge badge-muted">cert #<?= $sslCertId ?></span>
+                                    <span class="badge badge-muted" title="Внутренний ID сертификата в FastPanel">FP cert #<?= $sslCertId ?></span>
                                 <?php endif; ?>
                             </div>
 
@@ -240,6 +240,7 @@ function status_badge(bool $ok, string $okText = 'Да', string $failText = 'Н�
                             <a class="btn btn-secondary btn-sm" href="/sites/pages?id=<?= $siteId ?>&label=_default">Страницы</a>
                             <a class="btn btn-secondary btn-sm" href="/sites/texts?id=<?= $siteId ?>&label=_default">Тексты</a>
                             <a class="btn btn-secondary btn-sm" href="/sites/files?id=<?= $siteId ?>">Файлы</a>
+                            <a class="btn btn-ai btn-sm" href="/sites/ai?id=<?= $siteId ?>&label=_default">AI</a>
                             <a class="btn btn-secondary btn-sm" href="/webmaster/site?id=<?= $siteId ?>">Webmaster</a>
 
                             <form method="post"

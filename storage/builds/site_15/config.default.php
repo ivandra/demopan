@@ -40,10 +40,12 @@ $cfg = array (
   ),
   'partner_override_url' => '',
   'internal_reg_url' => '',
-  'redirect_enabled' => 0,
+  'redirect_enabled' => 1,
   'base_new_url' => '',
   'base_second_url' => '',
   'label' => '_default',
+  'logo' => 'assets/logo.webp',
+  'favicon' => 'assets/favicon.png',
 );
 
 $pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];

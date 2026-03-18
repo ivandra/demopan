@@ -27,21 +27,38 @@ class SubdomainsController extends Controller
 
         foreach ($parts as $p) {
             $p = strtolower(trim((string)$p));
-            if ($p === '' || $p === '_default') continue;
+            if ($p === '') continue;
 
-            // label без точек
             if (!preg_match('~^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$~', $p)) continue;
-
             $labels[$p] = true;
         }
 
         if (empty($labels)) $this->redirect('/subdomains');
 
         $pdo = DB::pdo();
-        $stmt = $pdo->prepare("INSERT IGNORE INTO subdomain_catalog(label,is_active) VALUES(?,1)");
+        $stmt = $pdo->prepare("INSERT IGNORE INTO subdomain_catalog(label,brand_name,is_active) VALUES(?, '', 1)");
 
         foreach (array_keys($labels) as $l) {
             $stmt->execute([$l]);
+        }
+
+        $this->redirect('/subdomains');
+    }
+
+    public function save(): void
+    {
+        $this->requireAuth();
+
+        $id = (int)($_POST['id'] ?? $_GET['id'] ?? 0);
+        $brandName = trim((string)($_POST['brand_name'] ?? ''));
+
+        if ($id > 0) {
+            DB::pdo()->prepare("
+                UPDATE subdomain_catalog
+                   SET brand_name = ?
+                 WHERE id = ?
+                 LIMIT 1
+            ")->execute([$brandName, $id]);
         }
 
         $this->redirect('/subdomains');
@@ -51,7 +68,7 @@ class SubdomainsController extends Controller
     {
         $this->requireAuth();
 
-        $id = (int)($_POST['id'] ?? 0);
+        $id = (int)($_POST['id'] ?? $_GET['id'] ?? 0);
         if ($id > 0) {
             DB::pdo()->prepare("DELETE FROM subdomain_catalog WHERE id=?")->execute([$id]);
         }
@@ -62,7 +79,7 @@ class SubdomainsController extends Controller
     {
         $this->requireAuth();
 
-        $id = (int)($_POST['id'] ?? 0);
+        $id = (int)($_POST['id'] ?? $_GET['id'] ?? 0);
         if ($id > 0) {
             DB::pdo()->prepare("UPDATE subdomain_catalog SET is_active = IF(is_active=1,0,1) WHERE id=?")->execute([$id]);
         }

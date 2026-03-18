@@ -744,6 +744,60 @@ public function recrawlUrls(string $userId, string $hostId, array $urls): array
     ];
 }
 
+
+
+public function getInSearchHistory(string $userId, string $hostId, ?string $dateFrom = null, ?string $dateTo = null): array
+{
+    $query = [];
+    if ($dateFrom !== null && trim($dateFrom) !== '') {
+        $query['date_from'] = trim($dateFrom);
+    }
+    if ($dateTo !== null && trim($dateTo) !== '') {
+        $query['date_to'] = trim($dateTo);
+    }
+
+    return $this->apiRequest(
+        'GET',
+        '/v4/user/' . rawurlencode($userId) . '/hosts/' . rawurlencode($hostId) . '/search-urls/in-search/history',
+        $query,
+        null
+    );
+}
+
+public function getInSearchSamples(string $userId, string $hostId, int $offset = 0, int $limit = 100): array
+{
+    if ($offset < 0) $offset = 0;
+    if ($limit < 1) $limit = 1;
+    if ($limit > 100) $limit = 100;
+
+    return $this->apiRequest(
+        'GET',
+        '/v4/user/' . rawurlencode($userId) . '/hosts/' . rawurlencode($hostId) . '/search-urls/in-search/samples',
+        [
+            'offset' => $offset,
+            'limit' => $limit,
+        ],
+        null
+    );
+}
+
+public function getSearchEventSamples(string $userId, string $hostId, int $offset = 0, int $limit = 100): array
+{
+    if ($offset < 0) $offset = 0;
+    if ($limit < 1) $limit = 1;
+    if ($limit > 100) $limit = 100;
+
+    return $this->apiRequest(
+        'GET',
+        '/v4/user/' . rawurlencode($userId) . '/hosts/' . rawurlencode($hostId) . '/search-urls/events/samples',
+        [
+            'offset' => $offset,
+            'limit' => $limit,
+        ],
+        null
+    );
+}
+
 public function addSitemap(string $userId, string $hostId, string $sitemapUrl): array
 {
     // Яндекс ждёт поле "url" (НЕ sitemap_url)
@@ -1279,6 +1333,16 @@ public function fetchUrlHead(string $url): array
     curl_close($ch);
 
     return ['http' => $http, 'final_url' => $final, 'err' => $err];
+}
+
+public function getHostSummary(string $userId, string $hostId): array
+{
+    return $this->apiRequest(
+        'GET',
+        '/v4/user/' . rawurlencode($userId) . '/hosts/' . rawurlencode($hostId) . '/summary',
+        [],
+        null
+    );
 }
 
 }

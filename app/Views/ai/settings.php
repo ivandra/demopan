@@ -8,15 +8,15 @@ $provider = (string)($row['provider'] ?? 'deepseek');
 $model = (string)($row['model'] ?? 'deepseek-chat');
 $temperature = (string)($row['temperature'] ?? '0.7');
 $maxTokens = (string)($row['max_tokens'] ?? '1200');
-$promptV1 = (string)($row['prompt_v1'] ?? '');
-$promptV2 = (string)($row['prompt_v2'] ?? '');
-
 $metaPromptRoot = (string)($row['meta_prompt_root'] ?? '');
 $metaPromptSub  = (string)($row['meta_prompt_sub'] ?? '');
 $textPromptRoot = (string)($row['text_prompt_root'] ?? '');
 $textPromptSub  = (string)($row['text_prompt_sub'] ?? '');
 $pagePrompt     = (string)($row['page_prompt'] ?? '');
 $pageMetaPrompt = (string)($row['page_meta_prompt'] ?? '');
+$globalMetaTitleTemplate = (string)($row['global_meta_title_template'] ?? '');
+$globalMetaH1Template = (string)($row['global_meta_h1_template'] ?? '');
+$globalMetaDescriptionTemplate = (string)($row['global_meta_description_template'] ?? '');
 ?>
 
 <div class="page-head">
@@ -26,7 +26,21 @@ $pageMetaPrompt = (string)($row['page_meta_prompt'] ?? '');
         <a class="btn btn-secondary" href="/ai/test">Проверить API</a>
     </div>
     <div class="page-subtitle">
-        Глобальные настройки подключения к AI и шаблоны промптов для root, поддоменов и внутренних страниц.
+        Глобальные настройки подключения к AI, единые prompts и общие шаблоны метатегов для всей панели.
+    </div>
+</div>
+
+<div class="panel-card stack-gap-md">
+    <h2 class="section-title">Что хранится здесь</h2>
+    <div class="small">
+        На этой странице хранятся только:
+        <br>— API-ключ, модель, temperature, max tokens;
+        <br>— глобальные prompts для root / sub / page;
+        <br>— общие шаблоны метатегов с переменными.
+    </div>
+    <div class="note">
+        Итоговые <b>Title / H1 / Description / Keywords</b> конкретного сайта или label редактируются не здесь, а в разделе <b>Контент и SEO</b>.
+        Параметры генерации для конкретного label задаются в разделе <b>AI для сайта</b>.
     </div>
 </div>
 
@@ -64,36 +78,40 @@ $pageMetaPrompt = (string)($row['page_meta_prompt'] ?? '');
         </div>
 
         <div class="panel-card stack-gap-md">
-            <h2 class="section-title">Назначение</h2>
+            <h2 class="section-title">Переменные, которые можно использовать</h2>
 
             <ul class="status-list small">
-                <li><b>prompt_v1</b> и <b>prompt_v2</b> — старые общие шаблоны;</li>
-                <li><b>meta_prompt_root</b> — SEO-мета для основного домена;</li>
-                <li><b>meta_prompt_sub</b> — SEO-мета для поддоменов;</li>
-                <li><b>text_prompt_root</b> — текст главной root;</li>
-                <li><b>text_prompt_sub</b> — текст главной поддомена;</li>
-                <li><b>page_prompt</b> — текст внутренней страницы;</li>
-                <li><b>page_meta_prompt</b> — meta внутренней страницы.</li>
+                <li><b>{BRAND}</b> — название бренда текущего label;</li>
+                <li><b>{HOST}</b> — текущий хост (например, banda.site.ru);</li>
+                <li><b>{LABEL}</b> — label текущей сущности;</li>
+                <li><b>{LINK_REGISTRATION}</b>, <b>{LINK_SLOTS}</b>, <b>{LINK_BONUSES}</b>, <b>{LINK_MIRROR}</b> — ссылки из настроек label;</li>
+                <li><b>{PAGE_PATH}</b>, <b>{PAGE_URL}</b>, <b>{PAGE_TITLE}</b>, <b>{PAGE_H1}</b> — переменные страниц.</li>
             </ul>
 
             <div class="note">
-                Runtime-параметры конкретного сайта задаются не здесь, а на экране
-                <b>AI для сайта</b>.
+                Переменные подставляются автоматически. На уровне сайта и label меняются только их значения, а не сами глобальные prompts.
             </div>
         </div>
     </div>
 
+
     <div class="panel-card stack-gap-md">
-        <h2 class="section-title">Старые общие промпты</h2>
+        <h2 class="section-title">Глобальные шаблоны метатегов</h2>
+        <div class="small muted">Если поле заполнено, шаблон применяется поверх ответа AI для всех сайтов и label.</div>
 
         <div class="field-row">
-            <label>Промпт вариант 1</label>
-            <textarea name="prompt_v1" class="big-textarea"><?= h($promptV1) ?></textarea>
+            <label>Глобальный шаблон Title</label>
+            <input name="global_meta_title_template" value="<?= h($globalMetaTitleTemplate) ?>" placeholder="{BRAND} - официальный сайт зеркало с игровыми автоматами">
         </div>
 
         <div class="field-row">
-            <label>Промпт вариант 2</label>
-            <textarea name="prompt_v2" class="big-textarea"><?= h($promptV2) ?></textarea>
+            <label>Глобальный шаблон H1</label>
+            <input name="global_meta_h1_template" value="<?= h($globalMetaH1Template) ?>" placeholder="{BRAND} — официальный сайт казино">
+        </div>
+
+        <div class="field-row">
+            <label>Глобальный шаблон Description</label>
+            <textarea name="global_meta_description_template" class="big-textarea"><?= h($globalMetaDescriptionTemplate) ?></textarea>
         </div>
     </div>
 

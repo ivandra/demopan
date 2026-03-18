@@ -13,6 +13,22 @@ abstract class Controller
         require $layout;
     }
 
+    protected function flash(string $type, string $message): void
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            @session_start();
+        }
+
+        if (!isset($_SESSION['flash']) || !is_array($_SESSION['flash'])) {
+            $_SESSION['flash'] = [];
+        }
+        if (!isset($_SESSION['flash'][$type]) || !is_array($_SESSION['flash'][$type])) {
+            $_SESSION['flash'][$type] = [];
+        }
+
+        $_SESSION['flash'][$type][] = $message;
+    }
+
     protected function redirect(string $url): void
     {
         if (!headers_sent()) {

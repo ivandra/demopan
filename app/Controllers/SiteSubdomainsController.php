@@ -1040,6 +1040,25 @@ class SiteSubdomainsController extends Controller
 
         if ($doDb) {
             $pdo->prepare("DELETE FROM site_subdomains WHERE site_id=? AND label<>'_default'")->execute([$siteId]);
+            $pdo->prepare("DELETE FROM site_subdomain_configs WHERE site_id=? AND label<>'_default'")->execute([$siteId]);
+
+            try {
+                $pdo->prepare("DELETE FROM site_ai_label_settings WHERE site_id=? AND label<>'_default'")->execute([$siteId]);
+            } catch (Throwable $e) {
+                @error_log('[deleteCatalog ai cleanup] site_id=' . $siteId . ' err=' . $e->getMessage());
+            }
+
+            try {
+                $pdo->prepare("DELETE FROM ssl_checks WHERE site_id=? AND label<>''")->execute([$siteId]);
+            } catch (Throwable $e) {
+                @error_log('[deleteCatalog ssl cleanup] site_id=' . $siteId . ' err=' . $e->getMessage());
+            }
+
+            try {
+                $pdo->prepare("DELETE FROM webmaster_hosts WHERE site_id=? AND label<>''")->execute([$siteId]);
+            } catch (Throwable $e) {
+                @error_log('[deleteCatalog wm cleanup] site_id=' . $siteId . ' err=' . $e->getMessage());
+            }
         }
 		
 		try {
@@ -1090,18 +1109,36 @@ class SiteSubdomainsController extends Controller
         $label = strtolower(trim((string)($_POST['label'] ?? '')));
         if ($label !== '' && $label !== '_default') {
             DB::pdo()->prepare("DELETE FROM site_subdomains WHERE site_id=? AND label=? LIMIT 1")->execute([$siteId, $label]);
-			
-			try {
-    DB::pdo()->prepare("
-        DELETE FROM ssl_checks
-        WHERE site_id = ? AND label = ?
-        LIMIT 1
-    ")->execute([$siteId, $label]);
-} catch (Throwable $e) {
-    @error_log('[SSL deleteOne cleanup] site_id=' . $siteId . ' label=' . $label . ' err=' . $e->getMessage());
-}
+            DB::pdo()->prepare("DELETE FROM site_subdomain_configs WHERE site_id=? AND label=? LIMIT 1")->execute([$siteId, $label]);
 
-                      $prov = new SubdomainProvisioner();
+            try {
+                DB::pdo()->prepare("DELETE FROM site_ai_label_settings WHERE site_id = ? AND label = ? LIMIT 1")
+                    ->execute([$siteId, $label]);
+            } catch (Throwable $e) {
+                @error_log('[deleteOne ai cleanup] site_id=' . $siteId . ' label=' . $label . ' err=' . $e->getMessage());
+            }
+
+            try {
+                DB::pdo()->prepare("
+                    DELETE FROM ssl_checks
+                    WHERE site_id = ? AND label = ?
+                    LIMIT 1
+                ")->execute([$siteId, $label]);
+            } catch (Throwable $e) {
+                @error_log('[SSL deleteOne cleanup] site_id=' . $siteId . ' label=' . $label . ' err=' . $e->getMessage());
+            }
+
+            try {
+                DB::pdo()->prepare("
+                    DELETE FROM webmaster_hosts
+                    WHERE site_id = ? AND label = ?
+                    LIMIT 1
+                ")->execute([$siteId, $label]);
+            } catch (Throwable $e) {
+                @error_log('[deleteOne wm cleanup] site_id=' . $siteId . ' label=' . $label . ' err=' . $e->getMessage());
+            }
+
+            $prov = new SubdomainProvisioner();
             try {
                 $prov->deleteFolderForSite($siteId, $label);
             } catch (Throwable $e) {

@@ -52,6 +52,7 @@ class SiteSubCfgController extends Controller
         }
 
         $unused = $this->findUnusedTexts($site, $label, $cfg);
+        $partnerSubId = (new PartnerSubIdService())->buildSubId((string)($site['domain'] ?? ''), $label);
 
         $this->view('sites/subcfg', [
             'site'   => $site,
@@ -60,6 +61,7 @@ class SiteSubCfgController extends Controller
             'labels' => $labels,
             'cfg'    => $cfg,
             'unused' => $unused,
+            'partnerSubId' => $partnerSubId,
         ]);
     }
 
@@ -77,6 +79,7 @@ class SiteSubCfgController extends Controller
         }
 
         $pdo = DB::pdo();
+        $site = $this->loadSite($siteId);
 		
 		$structure = new SiteStructure();
 		$resolver  = new SiteConfigResolver();
@@ -91,27 +94,37 @@ class SiteSubCfgController extends Controller
         $cfg['description'] = (string)($_POST['description'] ?? ($cfg['description'] ?? ''));
         $cfg['keywords']    = (string)($_POST['keywords'] ?? ($cfg['keywords'] ?? ''));
 
+        $partnerService = new PartnerSubIdService();
+
         $cfg['promolink']            = (string)($_POST['promolink'] ?? ($cfg['promolink'] ?? '/reg'));
-        $cfg['internal_reg_url']     = (string)($_POST['internal_reg_url'] ?? ($cfg['internal_reg_url'] ?? ''));
-        $cfg['partner_override_url'] = (string)($_POST['partner_override_url'] ?? ($cfg['partner_override_url'] ?? ''));
+        $cfg['internal_reg_url']     = $partnerService->applySubIdToUrl((string)($_POST['internal_reg_url'] ?? ($cfg['internal_reg_url'] ?? '')), (string)($site['domain'] ?? ''), $label);
+        $cfg['partner_override_url'] = $partnerService->applySubIdToUrl((string)($_POST['partner_override_url'] ?? ($cfg['partner_override_url'] ?? '')), (string)($site['domain'] ?? ''), $label);
         $cfg['redirect_enabled']     = (int)(isset($_POST['redirect_enabled']) ? 1 : 0);
 
-        $cfg['base_new_url']    = (string)($_POST['base_new_url'] ?? ($cfg['base_new_url'] ?? ''));
-        $cfg['base_second_url'] = (string)($_POST['base_second_url'] ?? ($cfg['base_second_url'] ?? ''));
+        $cfg['base_new_url']    = $partnerService->applySubIdToUrl((string)($_POST['base_new_url'] ?? ($cfg['base_new_url'] ?? '')), (string)($site['domain'] ?? ''), $label);
+        $cfg['base_second_url'] = $partnerService->applySubIdToUrl((string)($_POST['base_second_url'] ?? ($cfg['base_second_url'] ?? '')), (string)($site['domain'] ?? ''), $label);
 
         $cfg['logo']    = (string)($_POST['logo'] ?? ($cfg['logo'] ?? 'assets/logo.png'));
         $cfg['favicon'] = (string)($_POST['favicon'] ?? ($cfg['favicon'] ?? 'assets/favicon.png'));
 
         if ($resolver->isRootLabel($label)) {
-			$resolver->upsertDefaultConfig($siteId, $cfg);
-		} else {
-			$resolver->upsertSubConfig($siteId, $label, $cfg);
-		}
+            $cfg['label'] = '_default';
+            $cfg['domain'] = (string)($cfg['domain'] ?? ($site['domain'] ?? ''));
+
+            $resolver->upsertDefaultConfig($siteId, $cfg);
+            $resolver->saveLegacySiteConfig($siteId, $cfg);
+            $resolver->upsertSubConfig($siteId, '_default', $cfg);
+        } else {
+            $cfg['label'] = $label;
+            $cfg['domain'] = (string)($cfg['domain'] ?? ($site['domain'] ?? ''));
+            $resolver->upsertSubConfig($siteId, $label, $cfg);
+        }
 
         // fs + config.php
         $prov = new SubdomainProvisioner();
         $prov->ensureForSite($siteId, $label);
 
+        $this->flash('success', 'Контент и SEO сохранены. Для внешних URL автоматически применён sub_id текущего label.');
         $this->redirect('/sites/subcfg?id=' . $siteId . '&label=' . urlencode($label));
         exit;
     }
@@ -132,12 +145,18 @@ class SiteSubCfgController extends Controller
         $pdo = DB::pdo();
 		$structure = new SiteStructure();
 		$resolver  = new SiteConfigResolver();
+        $site = $this->loadSite($siteId);
 
         $default = $resolver->getDefaultConfig($siteId);
 		if (!isset($default['logo']))    $default['logo'] = 'assets/logo.png';
 		if (!isset($default['favicon'])) $default['favicon'] = 'assets/favicon.png';
 
 		$resolver->ensureSubConfigExists($siteId, $label, $default);
+        $subCfg = $resolver->getResolvedConfig($siteId, $label);
+        $subCfg = (new PartnerSubIdService())->applyToConfigUrls($subCfg, (string)($site['domain'] ?? ''), $label);
+        $subCfg['label'] = $label;
+        $subCfg['domain'] = (string)($site['domain'] ?? '');
+        $resolver->saveSubdomainConfig($siteId, $label, $subCfg);
 
         // fs + config.php
         $prov = new SubdomainProvisioner();

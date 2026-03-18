@@ -18,6 +18,7 @@ foreach (($desired ?? []) as $hrow) {
 }
 
 $wmDeployState = $wmDeployState ?? [];
+$indexStatusMap = is_array($indexStatusMap ?? null) ? $indexStatusMap : [];
 ?>
 
 <div class="page-head">
@@ -191,6 +192,89 @@ $wmDeployState = $wmDeployState ?? [];
             </div>
         </div>
     </form>
+</div>
+
+
+<div class="panel-card mt-16 stack-gap-md">
+    <div class="page-head page-head--compact">
+        <h2 class="section-title">Индекс Яндекса и авто-редирект</h2>
+        <div class="small muted">Статусы ведутся отдельно по основному домену и по каждому поддомену текущего сайта.
+Redirect включается автоматически только тогда, когда хост найден в индексе и число
+"Страниц в поиске" равно числу "Страниц добавлено" по данным API Яндекс Вебмастера.
+</div>
+    </div>
+
+   <div class="inline-form">
+    <form method="post" action="/webmaster/check-index?id=<?= $siteId ?>" data-confirm="Проверить индекс Яндекса сейчас для основного домена и всех поддоменов сайта?">
+        <input type="hidden" name="label" value="ALL">
+        <button type="submit" class="btn btn-primary">Проверить индекс сейчас</button>
+    </form>
+
+    <form method="post" action="/webmaster/manual-sync-configs?id=<?= $siteId ?>" data-confirm="Вручную выгрузить root и все config.php текущего сайта на VPS? Проверка индекса и redirect_enabled не изменяются.">
+        <input type="hidden" name="label" value="ALL">
+        <button type="submit" class="btn btn-secondary">Вручную выгрузить config на VPS</button>
+    </form>
+</div>
+
+<div class="small muted mt-8">
+    Ручная выгрузка не проверяет индекс и не меняет redirect_enabled. Она только повторно отправляет уже собранные config-файлы текущего сайта на VPS.
+</div>
+<div class="small muted mt-8">
+    Авто-редирект включается только когда "Страниц в поиске" равно "Страниц добавлено" и хост найден в индексе.
+</div>
+
+
+    <div class="wm-table-wrap">
+        <table class="wm-table">
+            <thead>
+            <tr>
+                <th>Метка</th>
+                <th>Хост</th>
+                <th>Статус индекса</th>
+				<th>Страниц в поиске</th>
+				<th>Страниц добавлено</th>	
+                <th>Последняя проверка</th>
+                <th>Когда найдено</th>
+                <th>Автовключение redirect</th>
+                <th>Выгрузка config</th>
+                <th>Последняя выгрузка</th>
+                <th>Ошибка выгрузки</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($desired as $hrow): ?>
+                <?php
+                $label   = (string)($hrow['label'] ?? '');
+                $hostUrl = (string)($hrow['host_url'] ?? '');
+                $idx     = $indexStatusMap[$label] ?? [];
+                $idxStatus = (string)($idx['yandex_index_status'] ?? 'unknown');
+                $idxLast = (string)($idx['yandex_index_last_checked_at'] ?? '');
+                $idxDetected = (string)($idx['yandex_index_detected_at'] ?? '');
+                $autoAt = (string)($idx['redirect_auto_enabled_at'] ?? '');
+                $syncStatus = (string)($idx['config_sync_status'] ?? 'idle');
+                $syncLast = (string)($idx['config_sync_last_at'] ?? '');
+                $syncErr = (string)($idx['config_sync_error'] ?? '');
+				$pagesInSearch = (int)($idx['yandex_pages_in_search'] ?? 0);
+				$pagesAdded = (int)($idx['yandex_pages_added'] ?? 0);
+                ?>
+               <tr>
+    <td><?= h($label === '' ? '(основной домен)' : $label) ?></td>
+    <td style="word-break:break-word;min-width:190px"><?= h($hostUrl) ?></td>
+    <td><?= h($idxStatus) ?></td>
+    <td><?= h((string)$pagesInSearch) ?></td>
+    <td><?= h((string)$pagesAdded) ?></td>
+    <td><?= h($idxLast) ?></td>
+    <td><?= h($idxDetected) ?></td>
+    <td><?= h($autoAt) ?></td>
+    <td><?= h($syncStatus) ?></td>
+    <td><?= h($syncLast) ?></td>
+    <td><?= h($syncErr) ?></td>
+</tr>
+
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="panel-card mt-16">

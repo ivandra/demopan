@@ -5,10 +5,10 @@ $cfg = array (
   'yandex_verification' => '',
   'yandex_metrika' => '',
   'promolink' => '/reg',
-  'title' => 'Kazik1 Casino – Игровые автоматы и слоты онлайн на деньги',
-  'description' => 'Kazik1 Casino – лучшие игровые автоматы, слоты и live-казино с быстрыми выплатами. Регистрация за минуту, бонусы новичкам.',
-  'keywords' => 'Kazik1 Casino, онлайн казино, игровые автоматы, слоты, live-казино, бонусы, выплаты, регистрация',
-  'h1' => 'Добро пожаловать в Kazik1 Casino',
+  'title' => 'Kazik2 тест title',
+  'description' => 'тест Kazik2 desc',
+  'keywords' => 'Kazik2, Kazik2 Casino, казино Казик2, игровые автоматы, азартные игры, live-казино, онлайн-казино',
+  'h1' => 'Kazik2 тест h1',
   'pages' => 
   array (
     '/' => 
@@ -38,14 +38,14 @@ $cfg = array (
       'text_file' => 'game.php',
     ),
   ),
-  'partner_override_url' => '',
-  'internal_reg_url' => '',
-  'redirect_enabled' => 0,
-  'base_new_url' => '',
-  'base_second_url' => '',
-  'label' => '_default',
+  'partner_override_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=kazik2',
+  'internal_reg_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=kazik2',
+  'redirect_enabled' => 1,
+  'base_new_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=kazik2',
+  'base_second_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=kazik2',
   'logo' => 'assets/logo.webp',
   'favicon' => 'assets/favicon.png',
+  'label' => '_default',
 );
 
 $pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];

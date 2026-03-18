@@ -9,7 +9,8 @@ $rows = is_array($rows ?? null) ? $rows : [];
         <a class="btn btn-secondary" href="/sites">К сайтам</a>
     </div>
     <div class="page-subtitle">
-        Общий каталог label, из которого собираются поддомены для сайтов.
+        Общий каталог label и брендов по умолчанию. Значение из этого каталога используется как fallback,
+        а на уровне конкретного сайта/label может быть переопределено в AI-настройках.
     </div>
 </div>
 
@@ -21,6 +22,7 @@ $rows = is_array($rows ?? null) ? $rows : [];
             <textarea name="labels" rows="8" placeholder="1win&#10;pinup&#10;betera"></textarea>
             <div class="small muted">
                 Можно вставлять через пробел, запятую или перенос строки.
+                Для `_default` отдельная строка уже должна быть в каталоге и редактируется ниже.
             </div>
             <div class="page-actions">
                 <button type="submit" class="btn btn-primary">Добавить</button>
@@ -31,8 +33,10 @@ $rows = is_array($rows ?? null) ? $rows : [];
     <div class="panel-card">
         <h2 class="section-title">Подсказка</h2>
         <div class="note">
-            Это глобальный каталог. Он не привязывает сабы к конкретному сайту автоматически,
-            а только даёт список доступных label для применения на экране “Поддомены”.
+            Здесь задается бренд по умолчанию для label. Например:
+            <br><code>banda → Banda Casino</code>
+            <br><code>gizbo → Gizbo Casino (Гизбо Казино)</code>
+            <br><code>_default → общий root fallback</code>
         </div>
     </div>
 </div>
@@ -49,6 +53,7 @@ $rows = is_array($rows ?? null) ? $rows : [];
             <tr>
                 <th>ID</th>
                 <th>Label</th>
+                <th>Brand</th>
                 <th>Active</th>
                 <th>Действия</th>
             </tr>
@@ -58,6 +63,19 @@ $rows = is_array($rows ?? null) ? $rows : [];
                 <tr>
                     <td><?= (int)$r['id'] ?></td>
                     <td><code><?= h((string)$r['label']) ?></code></td>
+                    <td style="min-width:320px;">
+                        <form method="post" action="/subdomains/save" class="inline-form" style="display:flex;gap:8px;align-items:center;">
+                            <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
+                            <input
+                                type="text"
+                                name="brand_name"
+                                value="<?= h((string)($r['brand_name'] ?? '')) ?>"
+                                placeholder="например: Gizbo Casino"
+                                style="min-width:240px;"
+                            >
+                            <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
+                        </form>
+                    </td>
                     <td>
                         <?php if ((int)$r['is_active'] === 1): ?>
                             <span class="badge badge-success">Да</span>
@@ -67,15 +85,17 @@ $rows = is_array($rows ?? null) ? $rows : [];
                     </td>
                     <td>
                         <div class="system-actions">
-                            <form method="post" action="/subdomains/toggle?id=<?= (int)$r['id'] ?>">
+                            <form method="post" action="/subdomains/toggle">
+                                <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                                 <button type="submit" class="btn btn-sm btn-secondary">
                                     <?= ((int)$r['is_active'] === 1) ? 'Выключить' : 'Включить' ?>
                                 </button>
                             </form>
 
                             <form method="post"
-                                  action="/subdomains/delete?id=<?= (int)$r['id'] ?>"
+                                  action="/subdomains/delete"
                                   data-confirm="Удалить label #<?= (int)$r['id'] ?> — <?= h((string)$r['label']) ?>?">
+                                <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                                 <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
                             </form>
                         </div>
@@ -85,7 +105,7 @@ $rows = is_array($rows ?? null) ? $rows : [];
 
             <?php if (empty($rows)): ?>
                 <tr>
-                    <td colspan="4" class="muted">Каталог пуст.</td>
+                    <td colspan="5" class="muted">Каталог пуст.</td>
                 </tr>
             <?php endif; ?>
             </tbody>

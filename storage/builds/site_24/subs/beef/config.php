@@ -23,7 +23,7 @@ $cfg = array (
     '/404' => 
     array (
       'title' => '404 — Страница не найдена',
-      'h1' => '$inherit',
+      'h1' => 'Страница не найдена',
       'description' => 'Страница не найдена',
       'keywords' => '',
       'text_file' => '404.php',
@@ -31,21 +31,21 @@ $cfg = array (
     ),
     '/test' => 
     array (
-      'title' => '$inherit',
-      'h1' => '$inherit',
-      'description' => '$inherit',
-      'keywords' => '$inherit',
+      'title' => 'Тестовая страница казино Kazik1 | Проверка функционала',
+      'h1' => 'Тестовая страница',
+      'description' => 'Тестовая страница казино Kazik1. Проверка работы сайта, функционала и доступности игровых автоматов.',
+      'keywords' => 'тест, казино Kazik1, проверка, игровые автоматы, функционал',
       'text_file' => 'game.php',
     ),
   ),
-  'partner_override_url' => '',
-  'internal_reg_url' => '',
-  'redirect_enabled' => 0,
-  'base_new_url' => '',
-  'base_second_url' => '',
-  'label' => 'beef',
+  'partner_override_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=beefkazik2',
+  'internal_reg_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=beefkazik2',
+  'redirect_enabled' => 1,
+  'base_new_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=beefkazik2',
+  'base_second_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=beefkazik2',
   'logo' => 'assets/logo.webp',
   'favicon' => 'assets/favicon.png',
+  'label' => 'beef',
 );
 
 $pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];

@@ -56,13 +56,166 @@ class WebmasterController extends Controller
 
        require_once Paths::appRoot() . '/app/Services/WebmasterPublishStateService.php';
 		$wmDeployState = (new WebmasterPublishStateService())->getState($siteId);
+        $indexStatusMap = (new YandexIndexWatchService())->getStatusesForSite($siteId, $desired);
 
 		return $this->view('webmaster/site', [
 			'site' => $site,
 			'desired' => $desired,
 			'rowMap' => $rowMap,
 			'wmDeployState' => $wmDeployState,
+            'indexStatusMap' => $indexStatusMap,
 		]);
+    }
+
+    public function checkIndex()
+    {
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) {
+            http_response_code(400);
+            echo 'Bad site id';
+            return;
+        }
+
+        $targetLabel = (string)($_POST['label'] ?? 'ALL');
+        $log = [];
+        try {
+            $service = new YandexIndexWatchService();
+            $results = $service->checkNow($siteId, $targetLabel !== '' ? $targetLabel : 'ALL');
+            foreach ($results as $item) {
+                $label = (string)($item['label'] ?? '');
+                $host  = (string)($item['host'] ?? '');
+                $check = is_array($item['check'] ?? null) ? $item['check'] : [];
+                $status = !empty($check['indexed']) ? 'indexed' : (!empty($check['ok']) ? 'not_indexed' : 'error');
+                $method = (string)($check['method'] ?? '');
+                $log[] = 'INDEX ' . ($label === '' ? 'root' : $label) . ' :: ' . $host . ' :: ' . $status . ($method !== '' ? (' :: method=' . $method) : '');
+
+                $debugLines = $check['debug'] ?? [];
+                if (is_array($debugLines)) {
+                    foreach ($debugLines as $dbg) {
+                        $dbg = trim((string)$dbg);
+                        if ($dbg !== '') {
+                            $log[] = '  ' . $dbg;
+                        }
+                    }
+                }
+
+                if (!empty($item['redirect_changed'])) {
+                    $syncInfo = '';
+                    if (is_array($item['sync'] ?? null)) {
+                        $syncInfo = !empty($item['sync']['ok'])
+                            ? (' :: sync=' . implode(', ', (array)($item['sync']['uploaded'] ?? [])))
+                            : (' :: sync_error=' . (string)($item['sync']['error'] ?? ''));
+                    }
+                    $log[] = 'AUTO redirect_enabled=1 for ' . ($label === '' ? 'root' : $label) . $syncInfo;
+                }
+            }
+            if (!$log) {
+                $log[] = 'Нет хостов для проверки индекса.';
+            }
+        } catch (Throwable $e) {
+            $log[] = 'FATAL index: ' . $e->getMessage();
+        }
+
+        $_SESSION['wm_log'] = array_merge($_SESSION['wm_log'] ?? [], $log);
+        header('Location: /webmaster/site?id=' . $siteId);
+        exit;
+    }
+
+    public function manualSyncConfigs()
+    {
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) {
+            http_response_code(400);
+            echo 'Bad site id';
+            return;
+        }
+
+        $targetLabel = (string)($_POST['label'] ?? 'ALL');
+        $log = [];
+
+        try {
+            require_once Paths::appRoot() . '/app/Services/ConfigSyncService.php';
+
+            $syncService = new ConfigSyncService();
+            $desired = $this->wm->getDesiredHostsForSite($siteId);
+            $hostMap = [];
+            foreach ($desired as $hrow) {
+                $hostMap[(string)($hrow['label'] ?? '')] = (string)($hrow['host_url'] ?? '');
+            }
+
+            $done = 0;
+            $errors = 0;
+
+            foreach ($desired as $hrow) {
+                $label = (string)($hrow['label'] ?? '');
+                if ($targetLabel !== 'ALL' && $targetLabel !== $label) {
+                    continue;
+                }
+
+                $cfgLabel = ($label === '' ? '_default' : $label);
+                $hostUrl = (string)($hrow['host_url'] ?? '');
+
+                try {
+                    $sync = $syncService->syncLabelConfigFiles($siteId, $cfgLabel);
+                    $uploaded = implode(', ', (array)($sync['uploaded'] ?? []));
+                    $this->saveManualConfigSyncStatus($siteId, $label, $hostUrl, 'done', $uploaded, '');
+                    $log[] = 'MANUAL SYNC ' . ($label === '' ? 'root' : $label) . ' :: ' . $hostUrl . ' :: ' . $uploaded;
+                    $done++;
+                } catch (Throwable $e) {
+                    $this->saveManualConfigSyncStatus($siteId, $label, $hostUrl, 'error', '', $e->getMessage());
+                    $log[] = 'MANUAL SYNC ERR ' . ($label === '' ? 'root' : $label) . ' :: ' . $hostUrl . ' :: ' . $e->getMessage();
+                    $errors++;
+                }
+            }
+
+            if ($done > 0) {
+                $this->sendManualConfigSyncTelegram($siteId, $done, $errors);
+            }
+
+            if ($done === 0 && $errors === 0) {
+                $log[] = 'Нет конфигов для ручной выгрузки.';
+            }
+        } catch (Throwable $e) {
+            $log[] = 'FATAL manual sync: ' . $e->getMessage();
+        }
+
+        $_SESSION['wm_log'] = array_merge($_SESSION['wm_log'] ?? [], $log);
+        header('Location: /webmaster/site?id=' . $siteId);
+        exit;
+    }
+
+    private function saveManualConfigSyncStatus(int $siteId, string $label, string $hostUrl, string $status, string $context, string $error): void
+    {
+        DB::pdo()->prepare("
+            INSERT INTO webmaster_hosts (site_id, label, host_url, config_sync_status, config_sync_context, config_sync_error, config_sync_last_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, NOW(), CURRENT_TIMESTAMP)
+            ON DUPLICATE KEY UPDATE
+                host_url = VALUES(host_url),
+                config_sync_status = VALUES(config_sync_status),
+                config_sync_context = VALUES(config_sync_context),
+                config_sync_error = VALUES(config_sync_error),
+                config_sync_last_at = NOW(),
+                updated_at = CURRENT_TIMESTAMP
+        ")->execute([$siteId, $label, $hostUrl, $status, $context, $error]);
+    }
+
+    private function sendManualConfigSyncTelegram(int $siteId, int $done, int $errors): void
+    {
+        try {
+            $tg = new TelegramService();
+            $text  = "🟦 <b>Ручная выгрузка config на VPS</b>
+";
+            $text .= 'Сайт ID: <b>' . (int)$siteId . "</b>
+";
+            $text .= 'Успешно выгружено: <b>' . (int)$done . "</b>
+";
+            $text .= 'Ошибок: <b>' . (int)$errors . "</b>
+";
+            $text .= 'Панель: https://hub.seotop-one.ru/webmaster/site?id=' . (int)$siteId;
+            $tg->send($text);
+        } catch (Throwable $e) {
+            @error_log('[TG manual config sync] ' . $e->getMessage());
+        }
     }
 
     public function sync()
@@ -780,12 +933,17 @@ public function cron()
             }
         }
 
+        $indexWatch = (new YandexIndexWatchService())->runCron(25);
+
         echo json_encode([
             'ok' => true,
-            'checked' => $checked,
-            'verified' => $verified,
-            'notified' => $notified,
-            'errors' => $errors,
+            'verification' => [
+                'checked' => $checked,
+                'verified' => $verified,
+                'notified' => $notified,
+                'errors' => $errors,
+            ],
+            'index_watch' => $indexWatch,
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         return;
 
@@ -798,5 +956,6 @@ public function cron()
         return;
     }
 }
+
 	
 }

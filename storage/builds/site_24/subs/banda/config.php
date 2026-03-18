@@ -31,10 +31,10 @@ $cfg = array (
     ),
     '/test' => 
     array (
-      'title' => '$inherit',
-      'h1' => '$inherit',
-      'description' => '$inherit',
-      'keywords' => '$inherit',
+      'title' => 'Тестовая страница казино Kazik1 | Проверка функционала',
+      'h1' => 'Тестовая страница',
+      'description' => 'Тестовая страница казино Kazik1. Проверка работы сайта, функционала и доступности игровых автоматов.',
+      'keywords' => 'тест, казино Kazik1, проверка, игровые автоматы, функционал',
       'text_file' => 'game.php',
     ),
     '/demo' => 
@@ -46,14 +46,14 @@ $cfg = array (
       'text_file' => 'game.php',
     ),
   ),
-  'partner_override_url' => '',
-  'internal_reg_url' => '',
+  'partner_override_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=bandakazik2',
+  'internal_reg_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=bandakazik2',
   'redirect_enabled' => 0,
-  'base_new_url' => '',
-  'base_second_url' => '',
-  'label' => 'banda',
+  'base_new_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=bandakazik2',
+  'base_second_url' => 'https://partners7k-promo.com/l/67d9467dce1a6a1a5a0494d7?sub_id=bandakazik2',
   'logo' => 'assets/logo.webp',
   'favicon' => 'assets/favicon.png',
+  'label' => 'banda',
 );
 
 $pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];
