@@ -51,8 +51,18 @@ class SiteSubCfgController extends Controller
             $cfg = [];
         }
 
+        require_once Paths::appRoot() . '/app/Services/PartnerSubIdService.php';
+        $partnerService = new PartnerSubIdService();
+        $partnerSubId = $partnerService->buildSubId((string)($site['domain'] ?? ''), $label);
+
+        $rootCfg = $resolver->getDefaultConfig($siteId);
+        foreach (['partner_override_url', 'internal_reg_url', 'base_new_url', 'base_second_url'] as $field) {
+            if (trim((string)($cfg[$field] ?? '')) === '' && trim((string)($rootCfg[$field] ?? '')) !== '') {
+                $cfg[$field] = $partnerService->applySubIdToUrl((string)$rootCfg[$field], (string)($site['domain'] ?? ''), $label);
+            }
+        }
+
         $unused = $this->findUnusedTexts($site, $label, $cfg);
-        $partnerSubId = (new PartnerSubIdService())->buildSubId((string)($site['domain'] ?? ''), $label);
 
         $this->view('sites/subcfg', [
             'site'   => $site,
@@ -94,15 +104,27 @@ class SiteSubCfgController extends Controller
         $cfg['description'] = (string)($_POST['description'] ?? ($cfg['description'] ?? ''));
         $cfg['keywords']    = (string)($_POST['keywords'] ?? ($cfg['keywords'] ?? ''));
 
+        require_once Paths::appRoot() . '/app/Services/PartnerSubIdService.php';
         $partnerService = new PartnerSubIdService();
+        $rootCfg = $resolver->getDefaultConfig($siteId);
 
-        $cfg['promolink']            = (string)($_POST['promolink'] ?? ($cfg['promolink'] ?? '/reg'));
-        $cfg['internal_reg_url']     = $partnerService->applySubIdToUrl((string)($_POST['internal_reg_url'] ?? ($cfg['internal_reg_url'] ?? '')), (string)($site['domain'] ?? ''), $label);
-        $cfg['partner_override_url'] = $partnerService->applySubIdToUrl((string)($_POST['partner_override_url'] ?? ($cfg['partner_override_url'] ?? '')), (string)($site['domain'] ?? ''), $label);
+        $cfg['promolink'] = (string)($_POST['promolink'] ?? ($cfg['promolink'] ?? '/reg'));
+
+        $postedPartnerUrls = [
+            'partner_override_url' => (string)($_POST['partner_override_url'] ?? ($cfg['partner_override_url'] ?? '')),
+            'internal_reg_url'     => (string)($_POST['internal_reg_url'] ?? ($cfg['internal_reg_url'] ?? '')),
+            'base_new_url'         => (string)($_POST['base_new_url'] ?? ($cfg['base_new_url'] ?? '')),
+            'base_second_url'      => (string)($_POST['base_second_url'] ?? ($cfg['base_second_url'] ?? '')),
+        ];
+
+        foreach ($postedPartnerUrls as $field => $value) {
+            if (trim((string)$value) === '' && trim((string)($rootCfg[$field] ?? '')) !== '') {
+                $value = (string)$rootCfg[$field];
+            }
+            $cfg[$field] = $partnerService->applySubIdToUrl((string)$value, (string)($site['domain'] ?? ''), $label);
+        }
+
         $cfg['redirect_enabled']     = (int)(isset($_POST['redirect_enabled']) ? 1 : 0);
-
-        $cfg['base_new_url']    = $partnerService->applySubIdToUrl((string)($_POST['base_new_url'] ?? ($cfg['base_new_url'] ?? '')), (string)($site['domain'] ?? ''), $label);
-        $cfg['base_second_url'] = $partnerService->applySubIdToUrl((string)($_POST['base_second_url'] ?? ($cfg['base_second_url'] ?? '')), (string)($site['domain'] ?? ''), $label);
 
         $cfg['logo']    = (string)($_POST['logo'] ?? ($cfg['logo'] ?? 'assets/logo.png'));
         $cfg['favicon'] = (string)($_POST['favicon'] ?? ($cfg['favicon'] ?? 'assets/favicon.png'));
@@ -124,7 +146,7 @@ class SiteSubCfgController extends Controller
         $prov = new SubdomainProvisioner();
         $prov->ensureForSite($siteId, $label);
 
-        $this->flash('success', 'Контент и SEO сохранены. Для внешних URL автоматически применён sub_id текущего label.');
+        $this->flash('success', 'Контент и SEO сохранены. Партнерские URL пересчитаны с sub_id для текущего label.');
         $this->redirect('/sites/subcfg?id=' . $siteId . '&label=' . urlencode($label));
         exit;
     }
@@ -145,23 +167,18 @@ class SiteSubCfgController extends Controller
         $pdo = DB::pdo();
 		$structure = new SiteStructure();
 		$resolver  = new SiteConfigResolver();
-        $site = $this->loadSite($siteId);
 
         $default = $resolver->getDefaultConfig($siteId);
 		if (!isset($default['logo']))    $default['logo'] = 'assets/logo.png';
 		if (!isset($default['favicon'])) $default['favicon'] = 'assets/favicon.png';
 
 		$resolver->ensureSubConfigExists($siteId, $label, $default);
-        $subCfg = $resolver->getResolvedConfig($siteId, $label);
-        $subCfg = (new PartnerSubIdService())->applyToConfigUrls($subCfg, (string)($site['domain'] ?? ''), $label);
-        $subCfg['label'] = $label;
-        $subCfg['domain'] = (string)($site['domain'] ?? '');
-        $resolver->saveSubdomainConfig($siteId, $label, $subCfg);
 
         // fs + config.php
         $prov = new SubdomainProvisioner();
         $prov->ensureForSite($siteId, $label);
 
+        $this->flash('success', 'Контент и SEO сохранены. Партнерские URL пересчитаны с sub_id для текущего label.');
         $this->redirect('/sites/subcfg?id=' . $siteId . '&label=' . urlencode($label));
         exit;
     }

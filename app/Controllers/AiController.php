@@ -1079,6 +1079,36 @@ class AiController extends Controller
         return $slug !== '' ? strtolower($slug) : 'page';
     }
 
+    private function normalizeRootPageInheritance(array &$cfg): void
+    {
+        $pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];
+        $root = is_array($pages['/'] ?? null) ? $pages['/'] : [];
+        if (empty($root['text_file'])) {
+            $root['text_file'] = 'home.php';
+        }
+        if (!isset($root['priority'])) {
+            $root['priority'] = '1.0';
+        }
+        if (!array_key_exists('sitemap', $root)) {
+            $root['sitemap'] = true;
+        }
+        $root['title'] = '$inherit';
+        $root['h1'] = '$inherit';
+        $root['description'] = '$inherit';
+        $root['keywords'] = '$inherit';
+        $pages['/'] = $root;
+        $cfg['pages'] = $pages;
+    }
+
+    private function applyGeneratedRootMeta(array &$cfg, array $json): void
+    {
+        $cfg['title'] = trim((string)($json['title'] ?? ''));
+        $cfg['h1'] = trim((string)($json['h1'] ?? ''));
+        $cfg['description'] = trim((string)($json['description'] ?? ''));
+        $cfg['keywords'] = trim((string)($json['keywords'] ?? ''));
+        $this->normalizeRootPageInheritance($cfg);
+    }
+
     public function generatePageMeta(): void
     {
         $this->requireAuth();
@@ -1102,30 +1132,24 @@ class AiController extends Controller
 
             $json = $this->generatePageMetaData($siteId, $site, $row, $label, $path, $cfg, $page);
 
-            $overwriteAll = $this->shouldOverwriteAll($siteId);
+            if ($path === '/') {
+                $this->applyGeneratedRootMeta($cfg, $json);
+                $this->saveSubCfgSafe($siteId, $label, $cfg);
+            } else {
+                $page['title'] = (string)($json['title'] ?? '$inherit');
+                $page['h1'] = (string)($json['h1'] ?? '$inherit');
+                $page['description'] = (string)($json['description'] ?? '$inherit');
+                $page['keywords'] = (string)($json['keywords'] ?? '$inherit');
 
-            $oldTitle = (string)($page['title'] ?? '');
-            $oldH1 = (string)($page['h1'] ?? '');
-            $oldDescription = (string)($page['description'] ?? '');
-            $oldKeywords = (string)($page['keywords'] ?? '');
+                if (empty($page['text_file'])) {
+                    $page['text_file'] = $this->makePageSlug($path) . '.php';
+                }
 
-            $newTitle = (string)($json['title'] ?? '$inherit');
-            $newH1 = (string)($json['h1'] ?? '$inherit');
-            $newDescription = (string)($json['description'] ?? '$inherit');
-            $newKeywords = (string)($json['keywords'] ?? '$inherit');
-
-            $page['title'] = ($overwriteAll || $oldTitle === '' || $oldTitle === '$inherit') ? $newTitle : $oldTitle;
-            $page['h1'] = ($overwriteAll || $oldH1 === '' || $oldH1 === '$inherit') ? $newH1 : $oldH1;
-            $page['description'] = ($overwriteAll || $oldDescription === '' || $oldDescription === '$inherit') ? $newDescription : $oldDescription;
-            $page['keywords'] = ($overwriteAll || $oldKeywords === '' || $oldKeywords === '$inherit') ? $newKeywords : $oldKeywords;
-
-            if (empty($page['text_file'])) {
-                $page['text_file'] = ($path === '/') ? 'home.php' : ($this->makePageSlug($path) . '.php');
+                $pages[$path] = $page;
+                $cfg['pages'] = $pages;
+                $this->normalizeRootPageInheritance($cfg);
+                $this->saveSubCfgSafe($siteId, $label, $cfg);
             }
-
-            $pages[$path] = $page;
-            $cfg['pages'] = $pages;
-            $this->saveSubCfgSafe($siteId, $label, $cfg);
 
             $_SESSION['wm_log'][] = "AI meta страницы сгенерированы: {$label} {$path}";
             $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
@@ -1169,6 +1193,7 @@ class AiController extends Controller
             $page['text_file'] = $res['text_file'];
             $pages[$path] = $page;
             $cfg['pages'] = $pages;
+            $this->normalizeRootPageInheritance($cfg);
             $this->saveSubCfgSafe($siteId, $label, $cfg);
 
             $_SESSION['wm_log'][] = "AI текст страницы сгенерирован: {$label} {$path}";
@@ -1241,20 +1266,15 @@ class AiController extends Controller
                 if ($mode === 'meta' || $mode === 'all') {
                     $metaJson = $this->generatePageMetaData($siteId, $site, $row, $label, $path, $cfg, $page);
 
-                    $oldTitle = (string)($page['title'] ?? '');
-                    $oldH1 = (string)($page['h1'] ?? '');
-                    $oldDescription = (string)($page['description'] ?? '');
-                    $oldKeywords = (string)($page['keywords'] ?? '');
-
-                    $newTitle = (string)($metaJson['title'] ?? '$inherit');
-                    $newH1 = (string)($metaJson['h1'] ?? '$inherit');
-                    $newDescription = (string)($metaJson['description'] ?? '$inherit');
-                    $newKeywords = (string)($metaJson['keywords'] ?? '$inherit');
-
-                    $page['title'] = ($overwriteAll || $oldTitle === '' || $oldTitle === '$inherit') ? $newTitle : $oldTitle;
-                    $page['h1'] = ($overwriteAll || $oldH1 === '' || $oldH1 === '$inherit') ? $newH1 : $oldH1;
-                    $page['description'] = ($overwriteAll || $oldDescription === '' || $oldDescription === '$inherit') ? $newDescription : $oldDescription;
-                    $page['keywords'] = ($overwriteAll || $oldKeywords === '' || $oldKeywords === '$inherit') ? $newKeywords : $oldKeywords;
+                    if ($path === '/') {
+                        $this->applyGeneratedRootMeta($cfg, $metaJson);
+                        $pages['/'] = is_array($cfg['pages']['/'] ?? null) ? $cfg['pages']['/'] : $page;
+                    } else {
+                        $page['title'] = (string)($metaJson['title'] ?? '$inherit');
+                        $page['h1'] = (string)($metaJson['h1'] ?? '$inherit');
+                        $page['description'] = (string)($metaJson['description'] ?? '$inherit');
+                        $page['keywords'] = (string)($metaJson['keywords'] ?? '$inherit');
+                    }
                 }
 
                 if ($mode === 'text' || $mode === 'all') {
@@ -1293,6 +1313,14 @@ class AiController extends Controller
 
         try {
             $this->saveSubCfg($siteId, $label, $cfg);
+            if ($label === '_default') {
+                $rootCfg = $cfg;
+                unset($rootCfg['label']);
+                $rootJson = json_encode($rootCfg, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                $pdo = DB::pdo();
+                $pdo->prepare("INSERT INTO site_default_configs (site_id, config_json) VALUES (?, ?) ON DUPLICATE KEY UPDATE config_json = VALUES(config_json), updated_at = CURRENT_TIMESTAMP")->execute([$siteId, $rootJson]);
+                $pdo->prepare("INSERT INTO site_configs (site_id, json) VALUES (?, ?) ON DUPLICATE KEY UPDATE json = VALUES(json), updated_at = CURRENT_TIMESTAMP")->execute([$siteId, $rootJson]);
+            }
         } catch (Throwable $e) {
             $msg = $e->getMessage();
 
@@ -1888,17 +1916,22 @@ class AiController extends Controller
 
             $metaJson = $this->generatePageMetaData($siteId, $site, $row, $label, $path, $cfg, $page);
 
-            if ($overwriteAll || empty($page['title']) || $page['title'] === '$inherit') {
-                $page['title'] = (string)($metaJson['title'] ?? '$inherit');
-            }
-            if ($overwriteAll || empty($page['h1']) || $page['h1'] === '$inherit') {
-                $page['h1'] = (string)($metaJson['h1'] ?? '$inherit');
-            }
-            if ($overwriteAll || empty($page['description']) || $page['description'] === '$inherit') {
-                $page['description'] = (string)($metaJson['description'] ?? '$inherit');
-            }
-            if ($overwriteAll || empty($page['keywords']) || $page['keywords'] === '$inherit') {
-                $page['keywords'] = (string)($metaJson['keywords'] ?? '$inherit');
+            if ($path === '/') {
+                $this->applyGeneratedRootMeta($cfg, $metaJson);
+                $page = is_array($cfg['pages']['/'] ?? null) ? $cfg['pages']['/'] : $page;
+            } else {
+                if ($overwriteAll || empty($page['title']) || $page['title'] === '$inherit') {
+                    $page['title'] = (string)($metaJson['title'] ?? '$inherit');
+                }
+                if ($overwriteAll || empty($page['h1']) || $page['h1'] === '$inherit') {
+                    $page['h1'] = (string)($metaJson['h1'] ?? '$inherit');
+                }
+                if ($overwriteAll || empty($page['description']) || $page['description'] === '$inherit') {
+                    $page['description'] = (string)($metaJson['description'] ?? '$inherit');
+                }
+                if ($overwriteAll || empty($page['keywords']) || $page['keywords'] === '$inherit') {
+                    $page['keywords'] = (string)($metaJson['keywords'] ?? '$inherit');
+                }
             }
 
             $textRes = $this->generatePageTextData($siteId, $site, $row, $label, $path, $cfg, $page);
@@ -1912,6 +1945,7 @@ class AiController extends Controller
         unset($page);
 
         $cfg['pages'] = $pages;
+        $this->normalizeRootPageInheritance($cfg);
         $this->saveSubCfgSafe($siteId, $label, $cfg);
     }
 

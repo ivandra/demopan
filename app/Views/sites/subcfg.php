@@ -4,6 +4,7 @@ $label  = (string)($label ?? '_default');
 $labels = is_array($labels ?? null) ? $labels : ['_default'];
 $cfg    = is_array($cfg ?? null) ? $cfg : [];
 $unused = is_array($unused ?? null) ? $unused : [];
+$partnerSubId = (string)($partnerSubId ?? '');
 
 function e($s): string { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 
@@ -37,7 +38,6 @@ $isRoot = ($label === '_default');
             <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Страницы</a>
             <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Тексты</a>
             <a class="btn btn-secondary" href="/sites/files?id=<?= $siteId ?>">Файлы build</a>
-            <a class="btn btn-secondary" href="/sites/files?id=<?= $siteId ?>&scope=assets&label=<?= urlencode($label) ?>">Assets текущего label</a>
             <a class="btn btn-ai" href="/sites/ai?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">AI для текущего label</a>
         </div>
     </div>
@@ -184,8 +184,15 @@ $isRoot = ($label === '_default');
                 </div>
 
                 <div class="row">
+                    <label>Сгенерированный sub_id</label>
+                    <input type="text" value="<?= e($partnerSubId) ?>" readonly>
+                    <div class="small muted">Для текущего label будет использован именно этот sub_id.</div>
+                </div>
+
+                <div class="row">
                     <label>partner_override_url</label>
                     <input type="text" name="partner_override_url" value="<?= e($cfg['partner_override_url'] ?? '') ?>">
+                    <div class="small muted">Если ссылка внешняя, панель добавит или заменит параметр <code>sub_id=<?= e($partnerSubId) ?></code>. Пустые URL автоматически берутся из root-конфига этого сайта.</div>
                 </div>
 
                 <div class="row">

@@ -21,6 +21,7 @@ $entityHost  = ($label === '_default')
 $configFileForFiles = 'config.default.php';
 
 $baseTextFiles = is_array($textFiles ?? null) ? $textFiles : [];
+$rootMeta = is_array($subCfg ?? null) ? $subCfg : [];
 if (!$baseTextFiles) {
     $baseTextFiles = ['home.php'];
 }
@@ -46,7 +47,7 @@ if (!$baseTextFiles) {
         <br>
         Конфиг генерируется в: <code><?= h($configTargetPath) ?></code>
         |
-        <a href="/sites/files/edit?id=<?= $siteId ?>&file=<?= rawurlencode($configFileForFiles) ?>">Открыть config в Files</a>
+        <a href="/sites/files/edit?id=<?= $siteId ?>&scope=sub&label=<?= $labelEnc ?>&file=config.php">Открыть config в Files</a>
     </div>
 </div>
 
@@ -67,9 +68,6 @@ if (!$baseTextFiles) {
             </a>
         </div>
 
-        <div class="note">
-            Пустые поля в мета-полях сохраняются как <code>$inherit</code>.
-        </div>
     </div>
 
     <div class="panel-card stack-gap-md">
@@ -177,10 +175,23 @@ if (!$baseTextFiles) {
                     </td>
 
                     <td><input type="text" name="url[<?= $i ?>]" value="<?= h($url) ?>"></td>
-                    <td><input type="text" name="title[<?= $i ?>]" value="<?= h((($p['title'] ?? '') === '$inherit') ? '' : ($p['title'] ?? '')) ?>"></td>
-                    <td><input type="text" name="h1[<?= $i ?>]" value="<?= h((($p['h1'] ?? '') === '$inherit') ? '' : ($p['h1'] ?? '')) ?>"></td>
-                    <td><input type="text" name="description[<?= $i ?>]" value="<?= h((($p['description'] ?? '') === '$inherit') ? '' : ($p['description'] ?? '')) ?>"></td>
-                    <td><input type="text" name="keywords[<?= $i ?>]" value="<?= h((($p['keywords'] ?? '') === '$inherit') ? '' : ($p['keywords'] ?? '')) ?>"></td>
+                    <?php $isRootPage = ((string)$url === '/'); ?>
+                    <td>
+                        <input type="text" name="title[<?= $i ?>]" value="<?= h($isRootPage ? ($rootMeta['title'] ?? '') : ((($p['title'] ?? '') === '$inherit') ? '' : ($p['title'] ?? ''))) ?>" <?= $isRootPage ? 'readonly' : '' ?>>
+                        <?php if ($isRootPage): ?><div class="small muted">Главная страница: значение берется из subcfg/root SEO</div><?php endif; ?>
+                    </td>
+                    <td>
+                        <input type="text" name="h1[<?= $i ?>]" value="<?= h($isRootPage ? ($rootMeta['h1'] ?? '') : ((($p['h1'] ?? '') === '$inherit') ? '' : ($p['h1'] ?? ''))) ?>" <?= $isRootPage ? 'readonly' : '' ?>>
+                        <?php if ($isRootPage): ?><div class="small muted">Главная страница: значение берется из subcfg/root SEO</div><?php elseif ((($p['h1'] ?? '') === '$inherit')): ?><div class="small muted">Наследуется</div><?php endif; ?>
+                    </td>
+                    <td>
+                        <input type="text" name="description[<?= $i ?>]" value="<?= h($isRootPage ? ($rootMeta['description'] ?? '') : ((($p['description'] ?? '') === '$inherit') ? '' : ($p['description'] ?? ''))) ?>" <?= $isRootPage ? 'readonly' : '' ?>>
+                        <?php if ($isRootPage): ?><div class="small muted">Главная страница: значение берется из subcfg/root SEO</div><?php elseif ((($p['description'] ?? '') === '$inherit')): ?><div class="small muted">Наследуется</div><?php endif; ?>
+                    </td>
+                    <td>
+                        <input type="text" name="keywords[<?= $i ?>]" value="<?= h($isRootPage ? ($rootMeta['keywords'] ?? '') : ((($p['keywords'] ?? '') === '$inherit') ? '' : ($p['keywords'] ?? ''))) ?>" <?= $isRootPage ? 'readonly' : '' ?>>
+                        <?php if ($isRootPage): ?><div class="small muted">Главная страница: значение берется из subcfg/root SEO</div><?php elseif ((($p['keywords'] ?? '') === '$inherit')): ?><div class="small muted">Наследуется</div><?php endif; ?>
+                    </td>
 
                     <td>
                         <select name="text_file[<?= $i ?>]">

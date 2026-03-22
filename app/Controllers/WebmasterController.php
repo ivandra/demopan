@@ -57,6 +57,11 @@ class WebmasterController extends Controller
        require_once Paths::appRoot() . '/app/Services/WebmasterPublishStateService.php';
 		$wmDeployState = (new WebmasterPublishStateService())->getState($siteId);
         $indexStatusMap = (new YandexIndexWatchService())->getStatusesForSite($siteId, $desired);
+        $cronState = $this->getCronState();
+        $indexWatchLogTail = $this->getIndexWatchLogTailForSite($siteId, 120);
+        $searchApiService = new YandexSearchApiService();
+        $searchApiStatusMap = $searchApiService->getStatusesForSite($siteId, $desired);
+        $searchApiCronState = $searchApiService->getCronState();
 
 		return $this->view('webmaster/site', [
 			'site' => $site,
@@ -64,6 +69,10 @@ class WebmasterController extends Controller
 			'rowMap' => $rowMap,
 			'wmDeployState' => $wmDeployState,
             'indexStatusMap' => $indexStatusMap,
+            'cronState' => $cronState,
+            'indexWatchLogTail' => $indexWatchLogTail,
+            'searchApiStatusMap' => $searchApiStatusMap,
+            'searchApiCronState' => $searchApiCronState,
 		]);
     }
 
@@ -212,7 +221,7 @@ class WebmasterController extends Controller
             $text .= 'Ошибок: <b>' . (int)$errors . "</b>
 ";
             $text .= 'Панель: https://hub.seotop-one.ru/webmaster/site?id=' . (int)$siteId;
-            $tg->send($text);
+            $tg->send($text, 'manual_sync');
         } catch (Throwable $e) {
             @error_log('[TG manual config sync] ' . $e->getMessage());
         }
@@ -417,9 +426,13 @@ class WebmasterController extends Controller
 
         $res = $this->wm->recrawlUrls($userId, (string)$hostId, $urls);
 		$this->wm->saveRecrawlStatus($siteId, $label, count($urls));
+		$reset = $this->wm->disableRedirectAndResetIndexState($siteId, $label);
 
 		$log[] = "OK recrawl: label={$label}, urls=" . count($urls);
 		$log[] = "RESULT: sent={$res['sent']} success={$res['success']} failed={$res['failed']}";
+		$log[] = "REDIRECT RESET: status=" . (string)($reset['sync_status'] ?? '') . (
+		    !empty($reset['sync_context']) ? (' :: ' . (string)$reset['sync_context']) : ''
+		) . (!empty($reset['sync_error']) ? (' :: error=' . (string)$reset['sync_error']) : '');
 		if (!empty($res['errors'])) {
 			$log[] = "ERRORS:\n" . implode("\n", $res['errors']);
 		}
@@ -709,7 +722,9 @@ public function recrawlFromPages()
 
             $res = $this->wm->recrawlUrls($userId, (string)$hostId, $urls);
 			$this->wm->saveRecrawlStatus($siteId, $lb, count($urls));
+			$reset = $this->wm->disableRedirectAndResetIndexState($siteId, $lb);
             $log[] = "OK {$lb}: sent=" . count($urls);
+            $log[] = "RESET {$lb}: status=" . (string)($reset['sync_status'] ?? '') . (!empty($reset['sync_context']) ? (' :: ' . (string)$reset['sync_context']) : '') . (!empty($reset['sync_error']) ? (' :: error=' . (string)$reset['sync_error']) : '');
         }
 
     } catch (Throwable $e) {
@@ -785,6 +800,164 @@ public function robotsGet()
     exit;
 }
 
+
+
+
+
+public function searchApi()
+{
+    $siteId = (int)($_GET['id'] ?? 0);
+    if ($siteId <= 0) {
+        http_response_code(400);
+        echo 'Bad site id';
+        return;
+    }
+
+    $site = DB::withReconnect(function(PDO $pdo) use ($siteId) {
+        $st = $pdo->prepare("SELECT * FROM sites WHERE id = :id LIMIT 1");
+        $st->execute([':id' => $siteId]);
+        return $st->fetch(PDO::FETCH_ASSOC) ?: null;
+    });
+    if (!$site) {
+        http_response_code(404);
+        echo 'Site not found';
+        return;
+    }
+
+    $wm = new YandexWebmasterService();
+    $searchApi = new YandexSearchApiService();
+    $desiredHosts = $wm->getDesiredHostsForSite($siteId);
+    $statuses = $searchApi->getStatusesForSite($siteId, $desiredHosts);
+    $cronState = $searchApi->getCronState();
+    $logTail = $searchApi->getLogTailForSite($siteId, 120);
+    $diag = [];
+
+    return $this->view('webmaster/search-api', [
+        'site' => $site,
+        'settings' => $searchApi->getSettings(),
+        'statuses' => $statuses,
+        'cronState' => $cronState,
+        'logTail' => $logTail,
+        'diag' => $diag,
+        'desiredHosts' => $desiredHosts,
+    ]);
+}
+
+public function searchApiRun()
+{
+    $siteId = (int)($_GET['id'] ?? 0);
+    if ($siteId <= 0) {
+        http_response_code(400);
+        echo 'Bad site id';
+        return;
+    }
+
+    $mode = (string)($_POST['mode'] ?? 'run_manual');
+    $log = [];
+    try {
+        $service = new YandexSearchApiService();
+
+        if ($mode === 'save_settings') {
+            $service->saveSettings([
+                'enabled' => (int)($_POST['enabled'] ?? 0),
+                'endpoint_xml' => (string)($_POST['endpoint_xml'] ?? ''),
+                'endpoint_json' => (string)($_POST['endpoint_json'] ?? ''),
+                'user' => (string)($_POST['user'] ?? ''),
+                'key' => (string)($_POST['key'] ?? ''),
+                'query_interval_minutes' => (int)($_POST['query_interval_minutes'] ?? 30),
+                'recheck_after_detect_minutes' => (int)($_POST['recheck_after_detect_minutes'] ?? 1440),
+                'max_pages_per_run' => (int)($_POST['max_pages_per_run'] ?? 1),
+            ]);
+            $log[] = 'Настройки XMLStock сохранены.';
+            $repair = $service->repairRedirectsForIndexedSite($siteId, 'ALL');
+            foreach ($repair as $item) {
+                $log[] = 'REPAIR ' . (($item['label'] ?? '') === '' ? 'root' : (string)$item['label']) . ' :: ' . (string)($item['host_url'] ?? '') . ' :: ' . (string)($item['status'] ?? '');
+                if (!empty($item['sync']['error'])) {
+                    $log[] = '  sync_error: ' . (string)$item['sync']['error'];
+                } elseif (!empty($item['sync']['uploaded'])) {
+                    $log[] = '  sync_uploaded: ' . implode(', ', (array)$item['sync']['uploaded']);
+                }
+            }
+        } else {
+            $label = (string)($_POST['label'] ?? 'ALL');
+            $results = $service->runManualCheck($siteId, $label !== '' ? $label : 'ALL');
+            foreach ($results as $item) {
+                $log[] = 'SEARCH API ' . (($item['label'] ?? '') === '' ? 'root' : (string)$item['label']) . ' :: ' . (string)($item['host_url'] ?? '') . ' :: ' . (string)($item['status'] ?? '');
+                if (!empty($item['error'])) {
+                    $log[] = '  error: ' . (string)$item['error'];
+                }
+                if (!empty($item['found_urls'])) {
+                    $log[] = '  urls=' . count((array)$item['found_urls']);
+                }
+                if (!empty($item['redirect_changed'])) {
+                    $log[] = '  redirect_enabled=1';
+                    if (!empty($item['sync']['error'])) {
+                        $log[] = '  sync_error: ' . (string)$item['sync']['error'];
+                    } elseif (!empty($item['sync']['uploaded'])) {
+                        $log[] = '  sync_uploaded: ' . implode(', ', (array)$item['sync']['uploaded']);
+                    }
+                }
+            }
+            $repair = $service->repairRedirectsForIndexedSite($siteId, $label !== '' ? $label : 'ALL');
+            foreach ($repair as $item) {
+                $log[] = 'REPAIR ' . (($item['label'] ?? '') === '' ? 'root' : (string)$item['label']) . ' :: ' . (string)($item['host_url'] ?? '') . ' :: ' . (string)($item['status'] ?? '');
+                if (!empty($item['sync']['error'])) {
+                    $log[] = '  sync_error: ' . (string)$item['sync']['error'];
+                } elseif (!empty($item['sync']['uploaded'])) {
+                    $log[] = '  sync_uploaded: ' . implode(', ', (array)$item['sync']['uploaded']);
+                }
+            }
+        }
+    } catch (Throwable $e) {
+        $log[] = 'FATAL search-api: ' . $e->getMessage();
+    }
+
+    $_SESSION['wm_log'] = array_merge($_SESSION['wm_log'] ?? [], $log);
+    header('Location: /webmaster/search-api?id=' . $siteId);
+    exit;
+}
+
+public function techIndex()
+{
+    $siteId = (int)($_GET['id'] ?? 0);
+    if ($siteId <= 0) {
+        http_response_code(400);
+        echo 'Bad site id';
+        return;
+    }
+
+    $site = DB::withReconnect(function(PDO $pdo) use ($siteId) {
+        $st = $pdo->prepare("SELECT * FROM sites WHERE id = :id LIMIT 1");
+        $st->execute([':id' => $siteId]);
+        return $st->fetch(PDO::FETCH_ASSOC) ?: null;
+    });
+    if (!$site) {
+        http_response_code(404);
+        echo 'Site not found';
+        return;
+    }
+
+    $targetLabel = (string)($_GET['label'] ?? 'ALL');
+    $desiredHosts = $this->wm->getDesiredHostsForSite($siteId);
+    $diag = [];
+    $error = '';
+    try {
+        $diag = (new YandexIndexWatchService())->runTechDiagnostics($siteId, $targetLabel !== '' ? $targetLabel : 'ALL');
+    } catch (Throwable $e) {
+        $error = $e->getMessage();
+    }
+
+    return $this->view('webmaster/index-tech', [
+        'site' => $site,
+        'targetLabel' => $targetLabel,
+        'diag' => $diag,
+        'desiredHosts' => $desiredHosts,
+        'error' => $error,
+    ]);
+}
+
+
+
 private function sendVerifiedTelegram(int $siteId, string $label, string $hostUrl): void
 {
     try {
@@ -800,7 +973,7 @@ private function sendVerifiedTelegram(int $siteId, string $label, string $hostUr
         $text .= "Панель: https://hub.seotop-one.ru/webmaster/site?id={$siteId}";
 
         $tg = new TelegramService();
-        $tg->send($text);
+        $tg->send($text, 'manual_sync');
     } catch (Throwable $e) {
         @error_log('[TG webmaster verify] ' . $e->getMessage());
     }
@@ -934,6 +1107,8 @@ public function cron()
         }
 
         $indexWatch = (new YandexIndexWatchService())->runCron(25);
+        $searchApiWatch = (new YandexSearchApiService())->runCron(25);
+        $this->saveCronState(true, $checked, $verified, $notified, count($errors), '');
 
         echo json_encode([
             'ok' => true,
@@ -944,10 +1119,12 @@ public function cron()
                 'errors' => $errors,
             ],
             'index_watch' => $indexWatch,
+            'search_api_watch' => $searchApiWatch,
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         return;
 
     } catch (Throwable $e) {
+        $this->saveCronState(false, $checked, $verified, $notified, count($errors) + 1, $e->getMessage());
         http_response_code(500);
         echo json_encode([
             'ok' => false,
@@ -957,5 +1134,117 @@ public function cron()
     }
 }
 
-	
+
+private function ensureCronStateTable(): void
+{
+    DB::withReconnect(function(PDO $pdo) {
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS webmaster_cron_state (
+                id INT NOT NULL PRIMARY KEY,
+                last_run_at DATETIME DEFAULT NULL,
+                last_ok TINYINT(1) NOT NULL DEFAULT 0,
+                last_checked INT NOT NULL DEFAULT 0,
+                last_verified INT NOT NULL DEFAULT 0,
+                last_notified INT NOT NULL DEFAULT 0,
+                last_errors INT NOT NULL DEFAULT 0,
+                last_error TEXT NULL,
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        ");
+    });
+}
+
+private function getCronState(): array
+{
+    $this->ensureCronStateTable();
+
+    return DB::withReconnect(function(PDO $pdo) {
+        $st = $pdo->prepare("SELECT * FROM webmaster_cron_state WHERE id = 1 LIMIT 1");
+        $st->execute();
+        return $st->fetch(PDO::FETCH_ASSOC) ?: [];
+    });
+}
+
+private function saveCronState(bool $ok, int $checked, int $verified, int $notified, int $errorsCount, string $errorMessage = ''): void
+{
+    $this->ensureCronStateTable();
+
+    DB::withReconnect(function(PDO $pdo) use ($ok, $checked, $verified, $notified, $errorsCount, $errorMessage) {
+        $st = $pdo->prepare("
+            INSERT INTO webmaster_cron_state
+                (id, last_run_at, last_ok, last_checked, last_verified, last_notified, last_errors, last_error, updated_at)
+            VALUES
+                (1, NOW(), :last_ok, :last_checked, :last_verified, :last_notified, :last_errors, :last_error, NOW())
+            ON DUPLICATE KEY UPDATE
+                last_run_at = VALUES(last_run_at),
+                last_ok = VALUES(last_ok),
+                last_checked = VALUES(last_checked),
+                last_verified = VALUES(last_verified),
+                last_notified = VALUES(last_notified),
+                last_errors = VALUES(last_errors),
+                last_error = VALUES(last_error),
+                updated_at = NOW()
+        ");
+        $st->execute([
+            ':last_ok' => $ok ? 1 : 0,
+            ':last_checked' => $checked,
+            ':last_verified' => $verified,
+            ':last_notified' => $notified,
+            ':last_errors' => $errorsCount,
+            ':last_error' => $errorMessage !== '' ? $errorMessage : null,
+        ]);
+    });
+}
+
+private function getIndexWatchLogTailForSite(int $siteId, int $limit = 120): array
+{
+    $limit = max(1, min($limit, 400));
+    $site = DB::withReconnect(function(PDO $pdo) use ($siteId) {
+        $st = $pdo->prepare('SELECT domain FROM sites WHERE id=? LIMIT 1');
+        $st->execute([$siteId]);
+        return $st->fetch(PDO::FETCH_ASSOC) ?: null;
+    });
+
+    $domain = trim((string)($site['domain'] ?? ''));
+    $needles = [];
+    if ($domain !== '') {
+        $needles[] = 'site=' . $siteId;
+        $needles[] = $domain;
+        $rows = $this->wm->getDesiredHostsForSite($siteId);
+        foreach ($rows as $row) {
+            $u = trim((string)($row['host_url'] ?? ''));
+            if ($u !== '') {
+                $needles[] = preg_replace('~^https?://~i', '', $u);
+            }
+        }
+    }
+
+    $file = Paths::storage('logs/yandex_index_watch.log');
+    if (!is_file($file)) {
+        return [];
+    }
+
+    $lines = @file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if (!is_array($lines) || !$lines) {
+        return [];
+    }
+
+    $filtered = [];
+    foreach ($lines as $line) {
+        $line = (string)$line;
+        foreach ($needles as $needle) {
+            if ($needle !== '' && stripos($line, $needle) !== false) {
+                $filtered[] = $line;
+                break;
+            }
+        }
+    }
+
+    if (!$filtered) {
+        $filtered = $lines;
+    }
+
+    return array_slice($filtered, -$limit);
+}
+
 }

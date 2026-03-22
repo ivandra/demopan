@@ -13,28 +13,28 @@ $cfg = array (
   array (
     '/' => 
     array (
-      'title' => '$inherit',
-      'h1' => '$inherit',
-      'description' => '$inherit',
-      'keywords' => '$inherit',
+      'title' => 'Kazik1 тест title',
+      'h1' => 'Kazik1 тест h1',
+      'description' => 'тест Kazik1 desc',
+      'keywords' => 'Kazik1, казино, игровые автоматы, азартные игры, онлайн казино, бонусы, регистрация',
       'text_file' => 'home.php',
       'priority' => '1.0',
     ),
     '/404' => 
     array (
       'title' => '404 — Страница не найдена',
-      'h1' => '$inherit',
+      'h1' => 'Kazik1 тест h1',
       'description' => 'Страница не найдена',
-      'keywords' => '$inherit',
+      'keywords' => 'ошибка 404, страница не найдена, Kazik1, казино, главная страница',
       'text_file' => '404.php',
       'sitemap' => false,
     ),
     '/test' => 
     array (
-      'title' => '$inherit',
-      'h1' => '$inherit',
-      'description' => '$inherit',
-      'keywords' => '$inherit',
+      'title' => 'Kazik1 тест title',
+      'h1' => 'Kazik1 тест h1',
+      'description' => 'тест Kazik1 desc',
+      'keywords' => 'тест, казино Kazik1, игровой функционал, проверка сайта, тестовая страница',
       'text_file' => 'game.php',
     ),
   ),

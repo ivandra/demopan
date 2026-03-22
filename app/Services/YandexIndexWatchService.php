@@ -62,8 +62,17 @@ class YandexIndexWatchService
         }
 
         $userId = null;
+        $apiHostsBrief = [];
         try {
             $userId = (string)$this->wm->getUserId();
+            if ($userId !== '') {
+                try {
+                    $apiHostsBrief = $this->wm->listHostsBrief($userId);
+                    $this->appendLog('API_HOSTS site=' . $siteId . ' user=' . $userId . ' count=' . count($apiHostsBrief) . ' sample=' . $this->stringifyForLog(array_slice($apiHostsBrief, 0, 20), 2500));
+                } catch (Throwable $e) {
+                    $this->appendLog('API_HOSTS_ERR site=' . $siteId . ' user=' . $userId . ' :: ' . $e->getMessage());
+                }
+            }
         } catch (Throwable $e) {
             $this->appendLog('USER_ID_ERR site=' . $siteId . ' :: ' . $e->getMessage());
         }
@@ -79,9 +88,25 @@ class YandexIndexWatchService
 
             $hostUrl = (string)($hrow['host_url'] ?? '');
             $host = preg_replace('~^https?://~i', '', $hostUrl);
-            $hostId = (string)($hostRows[$label]['host_id'] ?? '');
+            $storedHostId = (string)($hostRows[$label]['host_id'] ?? '');
+            $hostId = $storedHostId;
 
-            $check = $this->checkHostIndexed($host, $userId, $hostId);
+            if ($userId !== null && $userId !== '') {
+                $resolvedHostId = $this->resolveHostIdFromApiBrief($apiHostsBrief, $hostUrl);
+                if ($resolvedHostId !== null && $resolvedHostId !== '') {
+                    $hostId = $resolvedHostId;
+                    $this->appendLog('HOST_RESOLVE site=' . $siteId . ' label=' . ($label === '' ? 'root' : $label) . ' host_url=' . $hostUrl . ' stored=' . $storedHostId . ' resolved=' . $resolvedHostId . ' source=api_brief');
+                    if ($storedHostId !== $resolvedHostId) {
+                        $this->updateStoredHostId($siteId, $label, $hostUrl, $resolvedHostId);
+                        $hostRows[$label]['host_id'] = $resolvedHostId;
+                    }
+                } else {
+                    $this->appendLog('HOST_ID_NOT_FOUND_IN_API site=' . $siteId . ' label=' . ($label === '' ? 'root' : $label) . ' host_url=' . $hostUrl . ' stored=' . $storedHostId);
+                }
+            }
+
+            $this->appendLog('HOST_BEGIN site=' . $siteId . ' label=' . ($label === '' ? 'root' : $label) . ' host=' . $host . ' host_url=' . $hostUrl . ' host_id=' . $hostId);
+            $check = $this->checkHostIndexed($host, $userId, $hostId, $hostUrl);
             $this->saveCheckStatus($siteId, $label, $hostUrl, $check);
 
             $rowResult = [
@@ -181,7 +206,7 @@ class YandexIndexWatchService
         ];
     }
 
-    public function checkHostIndexed(string $host, ?string $userId = null, ?string $hostId = null): array
+    public function checkHostIndexed(string $host, ?string $userId = null, ?string $hostId = null, ?string $hostUrl = null): array
     {
         $host = trim($host);
         $debug = [];
@@ -195,6 +220,7 @@ class YandexIndexWatchService
 
         $indexed = false;
         $method = '';
+        $debug[] = 'host input: host=' . $host . ', host_url=' . (string)$hostUrl . ', user_id=' . (string)$userId . ', host_id=' . (string)$hostId;
         $officialOk = false;
 
         if ($userId !== null && $userId !== '' && $hostId !== null && $hostId !== '') {
@@ -293,7 +319,7 @@ class YandexIndexWatchService
                 'pages_added' => $pagesAdded,
             ];
         } catch (Throwable $e) {
-            $debug[] = 'webmaster summary err: ' . $e->getMessage();
+            $debug[] = 'webmaster summary err: ' . $e->getMessage() . ' :: host_id=' . $hostId;
             return [
                 'ok' => false,
                 'pages_in_search' => 0,
@@ -335,7 +361,7 @@ class YandexIndexWatchService
                 return $out;
             }
         } catch (Throwable $e) {
-            $debug[] = 'webmaster history err: ' . $e->getMessage();
+            $debug[] = 'webmaster history err: ' . $e->getMessage() . ' :: host_id=' . $hostId;
         }
 
         try {
@@ -360,7 +386,7 @@ class YandexIndexWatchService
                 return $out;
             }
         } catch (Throwable $e) {
-            $debug[] = 'webmaster samples err: ' . $e->getMessage();
+            $debug[] = 'webmaster samples err: ' . $e->getMessage() . ' :: host_id=' . $hostId;
         }
 
         try {
@@ -389,7 +415,7 @@ class YandexIndexWatchService
                 return $out;
             }
         } catch (Throwable $e) {
-            $debug[] = 'webmaster events err: ' . $e->getMessage();
+            $debug[] = 'webmaster events err: ' . $e->getMessage() . ' :: host_id=' . $hostId;
         }
 
         return $out;
@@ -427,10 +453,14 @@ class YandexIndexWatchService
             || stripos((string)$html, 'OrganicTitle') !== false
             || stripos((string)$html, 'SearchResults') !== false
             || stripos((string)$html, 'main__content') !== false;
-        $directHref = preg_match('~href="https?://(?:www\.)?' . preg_quote($host, '~') . '(?:[/:?#"\\]|$)~iu', (string)$html) === 1;
+        $directHref = preg_match('~href="https?://(?:www\.)?' . preg_quote($host, '~') . '(?:[/?:#"]|$)~iu', (string)$html) === 1;
         $indexed = $directHref || ($occ >= 2 && $hasSerpMarkers);
 
-        $debug[] = 'html site:query: http=' . $http . ', occ=' . (int)$occ . ', serp_markers=' . ($hasSerpMarkers ? '1' : '0') . ', direct_href=' . ($directHref ? '1' : '0');
+        $debug[] = 'html site:query: http=' . $http . ', occ=' . (int)$occ . ', serp_markers=' . ($hasSerpMarkers ? '1' : '0') . ', direct_href=' . ($directHref ? '1' : '0') . ', final=' . $finalUrl;
+        $snippet = trim(preg_replace('~\s+~u', ' ', strip_tags((string)$html)));
+        if ($snippet !== '') {
+            $debug[] = 'html site:query snippet: ' . mb_substr($snippet, 0, 180);
+        }
 
         return [
             'ok' => ($http >= 200 && $http < 500),
@@ -520,7 +550,7 @@ class YandexIndexWatchService
             $tg = new TelegramService();
             $syncOk = is_array($sync) && !empty($sync['ok']);
             $files = is_array($sync) ? implode(', ', (array)($sync['uploaded'] ?? [])) : '';
-            $text  = "🟡 <b>Хост полностью вошел в индекс Яндекса</b>\n";
+            $text  = "🟡 <b>Авто-включение redirect_enabled</b>\n";
             $text .= 'Сайт ID: <b>' . (int)$siteId . "</b>\n";
             $text .= 'Хост: <code>' . htmlspecialchars($host, ENT_QUOTES, 'UTF-8') . "</code>\n";
             $text .= 'Label: <code>' . htmlspecialchars($cfgLabel, ENT_QUOTES, 'UTF-8') . "</code>\n";
@@ -534,7 +564,7 @@ class YandexIndexWatchService
                 $text .= 'Ошибка: <code>' . htmlspecialchars((string)$sync['error'], ENT_QUOTES, 'UTF-8') . "</code>\n";
             }
             $text .= 'Панель: https://hub.seotop-one.ru/webmaster/site?id=' . (int)$siteId;
-            $tg->send($text);
+            $tg->send($text, 'redirect_enabled');
         } catch (Throwable $e) {
             @error_log('[TG index watch] ' . $e->getMessage());
         }
@@ -549,4 +579,165 @@ class YandexIndexWatchService
             @error_log('[index watch log] ' . $e->getMessage());
         }
     }
+
+
+    public function runTechDiagnostics(int $siteId, string $targetLabel = 'ALL'): array
+    {
+        $site = $this->loadSite($siteId);
+        if (!$site) {
+            throw new RuntimeException('site not found');
+        }
+
+        $desired = $this->wm->getDesiredHostsForSite($siteId);
+        $userId = (string)$this->wm->getUserId();
+        $apiHosts = $this->wm->listHostsBrief($userId);
+        $results = [];
+
+        foreach ($desired as $hrow) {
+            $label = (string)($hrow['label'] ?? '');
+            if ($targetLabel !== 'ALL' && $targetLabel !== $label) {
+                continue;
+            }
+            $hostUrl = (string)($hrow['host_url'] ?? '');
+            $host = preg_replace('~^https?://~i', '', $hostUrl);
+            $hostId = $this->resolveHostIdFromApiBrief($apiHosts, $hostUrl) ?: $this->wm->findHostIdByHostUrl($userId, $hostUrl);
+            $debug = [
+                'label' => ($label === '' ? 'root' : $label),
+                'host' => $host,
+                'host_url' => $hostUrl,
+                'host_id' => (string)$hostId,
+            ];
+            $checks = [];
+            try {
+                $summary = $this->wm->getHostSummary($userId, (string)$hostId);
+                $checks['summary'] = ['ok' => true, 'data' => $summary];
+            } catch (Throwable $e) {
+                $checks['summary'] = ['ok' => false, 'error' => $e->getMessage()];
+            }
+            try {
+                $history = $this->wm->getInSearchHistory($userId, (string)$hostId, date('c', strtotime('-30 days')), date('c'));
+                $checks['in_search_history'] = ['ok' => true, 'data' => $history];
+            } catch (Throwable $e) {
+                $checks['in_search_history'] = ['ok' => false, 'error' => $e->getMessage()];
+            }
+            try {
+                $samples = $this->wm->getInSearchSamples($userId, (string)$hostId, 0, 20);
+                $checks['in_search_samples'] = ['ok' => true, 'data' => $samples];
+            } catch (Throwable $e) {
+                $checks['in_search_samples'] = ['ok' => false, 'error' => $e->getMessage()];
+            }
+            try {
+                $events = $this->wm->getSearchEventSamples($userId, (string)$hostId, 0, 20);
+                $checks['search_events'] = ['ok' => true, 'data' => $events];
+            } catch (Throwable $e) {
+                $checks['search_events'] = ['ok' => false, 'error' => $e->getMessage()];
+            }
+            $htmlDebug = [];
+            $checks['html_site_query'] = $this->checkViaHtmlSearch($host, $htmlDebug);
+            $checks['html_site_query']['debug'] = $htmlDebug;
+            $results[] = ['debug' => $debug, 'checks' => $checks];
+        }
+
+        return [
+            'site' => $site,
+            'user_id' => $userId,
+            'api_hosts' => $apiHosts,
+            'results' => $results,
+        ];
+    }
+
+    private function resolveHostIdFromApiBrief(array $apiHostsBrief, string $hostUrl): ?string
+    {
+        $need = $this->normalizeHostUrl($hostUrl);
+        if ($need === '') {
+            return null;
+        }
+        foreach ($apiHostsBrief as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $candidateUrl = (string)($item['host_url'] ?? '');
+            if ($candidateUrl === '' && !empty($item['unicode_host_url'])) {
+                $candidateUrl = (string)$item['unicode_host_url'];
+            }
+            if ($candidateUrl === '' && !empty($item['ascii_host_url'])) {
+                $candidateUrl = (string)$item['ascii_host_url'];
+            }
+            if ($candidateUrl !== '' && $this->normalizeHostUrl($candidateUrl) === $need) {
+                $hostId = (string)($item['host_id'] ?? '');
+                return $hostId !== '' ? $hostId : null;
+            }
+        }
+        return null;
+    }
+
+    private function updateStoredHostId(int $siteId, string $label, string $hostUrl, string $hostId): void
+    {
+        DB::pdo()->prepare("
+            INSERT INTO webmaster_hosts (site_id, label, host_url, host_id, updated_at)
+            VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
+            ON DUPLICATE KEY UPDATE
+                host_url = VALUES(host_url),
+                host_id = VALUES(host_id),
+                updated_at = CURRENT_TIMESTAMP
+        ")->execute([$siteId, $label, $hostUrl, $hostId]);
+    }
+
+    private function normalizeHostUrl(string $url): string
+    {
+        $url = trim($url);
+        if ($url === '') {
+            return '';
+        }
+
+        $url = function_exists('mb_strtolower') ? mb_strtolower($url, 'UTF-8') : strtolower($url);
+        $parts = @parse_url($url);
+        if (!is_array($parts) || empty($parts['host'])) {
+            return rtrim($url, '/');
+        }
+
+        $scheme = isset($parts['scheme']) && $parts['scheme'] !== '' ? (string)$parts['scheme'] : 'https';
+        $host = (string)$parts['host'];
+        $port = isset($parts['port']) ? (int)$parts['port'] : 0;
+        $path = isset($parts['path']) ? rtrim((string)$parts['path'], '/') : '';
+
+        if (($scheme === 'https' && $port === 443) || ($scheme === 'http' && $port === 80)) {
+            $port = 0;
+        }
+
+        $normalized = $scheme . '://' . $host;
+        if ($port > 0) {
+            $normalized .= ':' . $port;
+        }
+        if ($path !== '') {
+            $normalized .= $path;
+        }
+
+        return rtrim($normalized, '/');
+    }
+
+    private function stringifyForLog($data, int $limit = 4000): string
+    {
+        $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if (!is_string($json)) {
+            return '';
+        }
+        return mb_strlen($json) > $limit ? (mb_substr($json, 0, $limit) . '...') : $json;
+    }
+
+    private function isHostMissingInWebmaster(array $check): bool
+    {
+        $debug = $check['debug'] ?? [];
+        if (!is_array($debug)) {
+            return false;
+        }
+        foreach ($debug as $line) {
+            $line = (string)$line;
+            if (stripos($line, 'is not loaded in Ya.Webmaster yet') !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

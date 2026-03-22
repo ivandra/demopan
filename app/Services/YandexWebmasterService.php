@@ -1345,4 +1345,394 @@ public function getHostSummary(string $userId, string $hostId): array
     );
 }
 
+
+
+public function listHostsBrief(string $userId): array
+{
+    $resp = $this->getHosts($userId);
+    $list = [];
+    if (isset($resp['data']['hosts']) && is_array($resp['data']['hosts'])) {
+        $list = $resp['data']['hosts'];
+    } elseif (isset($resp['hosts']) && is_array($resp['hosts'])) {
+        $list = $resp['hosts'];
+    }
+
+    $out = [];
+    foreach ($list as $h) {
+        if (!is_array($h)) {
+            continue;
+        }
+        $out[] = [
+            'host_id' => (string)($h['host_id'] ?? ''),
+            'host_url' => (string)($h['host_url'] ?? ''),
+            'ascii_host_url' => (string)($h['ascii_host_url'] ?? ''),
+            'unicode_host_url' => (string)($h['unicode_host_url'] ?? ''),
+            'verified' => (string)($h['verified'] ?? ''),
+            'main_mirror' => (string)($h['main_mirror'] ?? ''),
+        ];
+    }
+    return $out;
+}
+
+public function findHostIdByHostUrl(string $userId, string $hostUrl): ?string
+{
+    $hosts = $this->getHosts($userId);
+    return $this->findHostIdInHostsResponse($hosts, $hostUrl);
+}
+
+public function debugFindHostMatch(string $userId, string $hostUrl): array
+{
+    $hosts = $this->listHostsBrief($userId);
+    $need = $this->normalizeHostUrl($hostUrl);
+    $matched = null;
+    foreach ($hosts as $h) {
+        $candidate = (string)($h['host_url'] !== '' ? $h['host_url'] : ($h['unicode_host_url'] !== '' ? $h['unicode_host_url'] : $h['ascii_host_url']));
+        $normalized = $this->normalizeHostUrl($candidate);
+        $item = $h;
+        $item['normalized'] = $normalized;
+        $item['equal'] = ($normalized === $need);
+        if ($item['equal'] && $matched === null) {
+            $matched = $item;
+        }
+        $sample[] = $item;
+    }
+    return [
+        'need' => $need,
+        'matched' => $matched,
+        'hosts' => $sample ?? [],
+    ];
+}
+
+public function disableRedirectAndResetIndexState(int $siteId, string $label): array
+{
+    require_once Paths::appRoot() . '/app/Services/SiteConfigResolver.php';
+    require_once Paths::appRoot() . '/app/Services/SubdomainProvisioner.php';
+    require_once Paths::appRoot() . '/app/Services/ConfigSyncService.php';
+
+    $cfgLabel = ($label === '' ? '_default' : $this->normalizeSubLabel($label));
+    $resolver = new SiteConfigResolver();
+    $cfg = $resolver->getResolvedConfig($siteId, $cfgLabel);
+
+    $cfg['redirect_enabled'] = 0;
+    $cfg['label'] = $cfgLabel;
+
+    if ($cfgLabel === '_default') {
+        $resolver->saveSiteDefaultConfig($siteId, $cfg);
+        $resolver->saveLegacySiteConfig($siteId, $cfg);
+        $resolver->saveSubdomainConfig($siteId, '_default', $cfg);
+    } else {
+        $resolver->saveSubdomainConfig($siteId, $cfgLabel, $cfg);
+    }
+
+    try {
+        $provisioner = new SubdomainProvisioner();
+        $provisioner->ensureForSite($siteId, $cfgLabel);
+    } catch (Throwable $e) {
+        // не валим процесс из-за подготовки структуры
+    }
+
+    $syncStatus  = 'idle';
+    $syncContext = 'recrawl_pending';
+    $syncError   = '';
+    $sync = null;
+
+    try {
+        $configSync = new ConfigSyncService();
+        $sync = $configSync->syncLabelConfigFiles($siteId, $cfgLabel);
+        $uploaded = implode(', ', (array)($sync['uploaded'] ?? []));
+        $syncStatus = 'done';
+        $syncContext = trim($uploaded) !== '' ? $uploaded : 'recrawl_pending';
+    } catch (Throwable $e) {
+        $syncStatus = 'error';
+        $syncError = $e->getMessage();
+        $sync = ['ok' => false, 'error' => $syncError];
+    }
+
+    $this->markRedirectAutoDisabled($siteId, $label, $syncStatus, $syncContext, $syncError);
+
+    $site = $this->loadSite($siteId);
+    $domain = (string)($site['domain'] ?? '');
+    $hostUrl = $cfgLabel === '_default'
+        ? ('https://' . $domain)
+        : ('https://' . $cfgLabel . '.' . $domain);
+
+    $this->sendRedirectDisabledTelegram($siteId, $label, $hostUrl, [
+        'ok' => $syncStatus === 'done',
+        'uploaded' => is_array($sync) ? (array)($sync['uploaded'] ?? []) : [],
+        'error' => $syncError,
+        'sync_status' => $syncStatus,
+        'sync_context' => $syncContext,
+        'sync_error' => $syncError,
+    ]);
+
+    return [
+        'ok' => true,
+        'sync_status' => $syncStatus,
+        'sync_context' => $syncContext,
+        'sync_error' => $syncError,
+        'label' => $cfgLabel,
+    ];
+}
+
+private function markRedirectAutoDisabled(int $siteId, string $label, string $syncStatus, string $syncContext, string $syncError): void
+{
+    DB::withReconnect(function(PDO $pdo) use ($siteId, $label, $syncStatus, $syncContext, $syncError) {
+        $st = $pdo->prepare("
+            UPDATE webmaster_hosts
+            SET redirect_auto_enabled_at = NULL,
+                yandex_index_status = 'pending_recheck',
+                yandex_index_last_checked_at = NULL,
+                yandex_index_detected_at = NULL,
+                yandex_pages_in_search = 0,
+                yandex_pages_added = 0,
+                search_api_status = 'idle',
+                search_api_indexed_at = NULL,
+                search_api_last_checked_at = NULL,
+                search_api_error = '',
+                search_api_result_count = 0,
+                search_api_next_check_at = NULL,
+                search_api_found_hosts_json = NULL,
+                search_api_found_urls_json = NULL,
+                config_sync_status = :sync_status,
+                config_sync_last_at = NOW(),
+                config_sync_context = :sync_context,
+                config_sync_error = :sync_error,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE site_id = :sid AND label = :label
+            LIMIT 1
+        ");
+        $st->execute([
+            ':sync_status' => $syncStatus !== '' ? $syncStatus : 'done',
+            ':sync_context' => $syncContext,
+            ':sync_error' => $syncError,
+            ':sid' => $siteId,
+            ':label' => $label,
+        ]);
+
+        if ($label === '') {
+            $st2 = $pdo->prepare("
+                UPDATE sites
+                SET redirect_auto_enabled_at = NULL,
+                    yandex_index_status = 'pending_recheck',
+                    yandex_index_last_checked_at = NULL,
+                    yandex_index_detected_at = NULL,
+                    config_sync_status = :sync_status,
+                    config_sync_last_at = NOW(),
+                    config_sync_context = :sync_context,
+                    config_sync_error = :sync_error
+                WHERE id = :sid
+                LIMIT 1
+            ");
+            $st2->execute([
+                ':sync_status' => $syncStatus !== '' ? $syncStatus : 'done',
+                ':sync_context' => $syncContext,
+                ':sync_error' => $syncError,
+                ':sid' => $siteId,
+            ]);
+        }
+    });
+}
+
+private function sendRedirectDisabledTelegram(int $siteId, string $label, string $hostUrl, array $sync): void
+{
+    try {
+        if (!class_exists('TelegramService')) {
+            require_once Paths::appRoot() . '/app/Services/TelegramService.php';
+        }
+
+        $tg = new TelegramService();
+        $cfgLabel = $label === '' ? '_default' : $label;
+        $syncOk = !empty($sync['ok']);
+        $files = implode(', ', (array)($sync['uploaded'] ?? []));
+
+        $text  = "🟠 <b>Авто-выключение redirect_enabled</b>\n";
+        $text .= 'Сайт ID: <b>' . (int)$siteId . "</b>\n";
+        $text .= 'Host: <code>' . htmlspecialchars((string)$hostUrl, ENT_QUOTES, 'UTF-8') . "</code>\n";
+        $text .= 'Label: <code>' . htmlspecialchars((string)$cfgLabel, ENT_QUOTES, 'UTF-8') . "</code>\n";
+        $text .= "Причина: <code>recrawl_pending</code>\n";
+        $text .= 'Config выгружен на VPS: <b>' . ($syncOk ? 'да' : 'нет') . "</b>\n";
+
+        if ($files !== '') {
+            $text .= 'Файлы: <code>' . htmlspecialchars($files, ENT_QUOTES, 'UTF-8') . "</code>\n";
+        }
+        if (!empty($sync['error'])) {
+            $text .= 'Ошибка: <code>' . htmlspecialchars((string)$sync['error'], ENT_QUOTES, 'UTF-8') . "</code>\n";
+        }
+
+        $text .= 'Панель: https://hub.seotop-one.ru/webmaster/site?id=' . (int)$siteId;
+        $tg->send($text, 'redirect_disabled');
+    } catch (Throwable $e) {
+        @error_log('[TG recrawl redirect_disabled] ' . $e->getMessage());
+    }
+}
+
+private function loadSite(int $siteId): array
+{
+    return DB::withReconnect(function(PDO $pdo) use ($siteId) {
+        $st = $pdo->prepare("SELECT * FROM sites WHERE id = ? LIMIT 1");
+        $st->execute([$siteId]);
+        $row = $st->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) {
+            throw new RuntimeException('Site not found: ' . $siteId);
+        }
+
+        return $row;
+    });
+}
+
+public function enableRedirectAndMarkIndexed(int $siteId, string $label): array
+{
+    require_once Paths::appRoot() . '/app/Services/SiteConfigResolver.php';
+    require_once Paths::appRoot() . '/app/Services/SubdomainProvisioner.php';
+    require_once Paths::appRoot() . '/app/Services/ConfigSyncService.php';
+
+    $cfgLabel = ($label === '' ? '_default' : $this->normalizeSubLabel($label));
+
+    $resolver = new SiteConfigResolver();
+    $cfg = $resolver->getResolvedConfig($siteId, $cfgLabel);
+
+    $cfg['redirect_enabled'] = 1;
+    $cfg['label'] = $cfgLabel;
+
+    if ($cfgLabel === '_default') {
+        $resolver->saveSiteDefaultConfig($siteId, $cfg);
+        $resolver->saveLegacySiteConfig($siteId, $cfg);
+        $resolver->saveSubdomainConfig($siteId, '_default', $cfg);
+    } else {
+        $resolver->saveSubdomainConfig($siteId, $cfgLabel, $cfg);
+    }
+
+    try {
+        $provisioner = new SubdomainProvisioner();
+        $provisioner->ensureForSite($siteId, $cfgLabel);
+    } catch (Throwable $e) {
+        // не валим процесс
+    }
+
+    $syncStatus  = 'idle';
+    $syncContext = 'search_api_detected';
+    $syncError   = '';
+    $sync = null;
+
+    try {
+        $configSync = new ConfigSyncService();
+        $sync = $configSync->syncLabelConfigFiles($siteId, $cfgLabel);
+        $uploaded = implode(', ', (array)($sync['uploaded'] ?? []));
+        $syncStatus = 'done';
+        $syncContext = trim($uploaded) !== '' ? $uploaded : 'search_api_detected';
+    } catch (Throwable $e) {
+        $syncStatus = 'error';
+        $syncError = $e->getMessage();
+        $sync = ['ok' => false, 'error' => $syncError];
+    }
+
+    $this->markRedirectAutoEnabled($siteId, $label, $syncStatus, $syncContext, $syncError);
+
+    $site = $this->loadSite($siteId);
+    $domain = (string)($site['domain'] ?? '');
+    $hostUrl = $cfgLabel === '_default'
+        ? ('https://' . $domain)
+        : ('https://' . $cfgLabel . '.' . $domain);
+
+    $this->sendRedirectEnabledTelegram($siteId, $label, $hostUrl, [
+        'ok' => $syncStatus === 'done',
+        'uploaded' => is_array($sync) ? (array)($sync['uploaded'] ?? []) : [],
+        'error' => $syncError,
+        'sync_status' => $syncStatus,
+        'sync_context' => $syncContext,
+        'sync_error' => $syncError,
+    ]);
+
+    return [
+        'ok' => true,
+        'sync_status' => $syncStatus,
+        'sync_context' => $syncContext,
+        'sync_error' => $syncError,
+        'label' => $cfgLabel,
+    ];
+}
+
+private function markRedirectAutoEnabled(int $siteId, string $label, string $syncStatus, string $syncContext, string $syncError): void
+{
+    DB::withReconnect(function(PDO $pdo) use ($siteId, $label, $syncStatus, $syncContext, $syncError) {
+        $st = $pdo->prepare("
+            UPDATE webmaster_hosts
+            SET redirect_auto_enabled_at = NOW(),
+                yandex_index_status = 'indexed',
+                yandex_index_last_checked_at = NOW(),
+                yandex_index_detected_at = NOW(),
+                config_sync_status = :sync_status,
+                config_sync_last_at = NOW(),
+                config_sync_context = :sync_context,
+                config_sync_error = :sync_error,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE site_id = :sid AND label = :label
+            LIMIT 1
+        ");
+        $st->execute([
+            ':sync_status' => $syncStatus !== '' ? $syncStatus : 'done',
+            ':sync_context' => $syncContext,
+            ':sync_error' => $syncError,
+            ':sid' => $siteId,
+            ':label' => $label,
+        ]);
+
+        if ($label === '') {
+            $st2 = $pdo->prepare("
+                UPDATE sites
+                SET redirect_auto_enabled_at = NOW(),
+                    yandex_index_status = 'indexed',
+                    yandex_index_last_checked_at = NOW(),
+                    yandex_index_detected_at = NOW(),
+                    config_sync_status = :sync_status,
+                    config_sync_last_at = NOW(),
+                    config_sync_context = :sync_context,
+                    config_sync_error = :sync_error
+                WHERE id = :sid
+                LIMIT 1
+            ");
+            $st2->execute([
+                ':sync_status' => $syncStatus !== '' ? $syncStatus : 'done',
+                ':sync_context' => $syncContext,
+                ':sync_error' => $syncError,
+                ':sid' => $siteId,
+            ]);
+        }
+    });
+}
+
+private function sendRedirectEnabledTelegram(int $siteId, string $label, string $hostUrl, array $sync): void
+{
+    try {
+        if (!class_exists('TelegramService')) {
+            require_once Paths::appRoot() . '/app/Services/TelegramService.php';
+        }
+
+        $tg = new TelegramService();
+        $cfgLabel = $label === '' ? '_default' : $label;
+        $syncOk = !empty($sync['ok']);
+        $files = implode(', ', (array)($sync['uploaded'] ?? []));
+
+        $text  = "🟡 <b>Авто-включение redirect_enabled</b>\n";
+        $text .= 'Сайт ID: <b>' . (int)$siteId . "</b>\n";
+        $text .= 'Host: <code>' . htmlspecialchars((string)$hostUrl, ENT_QUOTES, 'UTF-8') . "</code>\n";
+        $text .= 'Label: <code>' . htmlspecialchars((string)$cfgLabel, ENT_QUOTES, 'UTF-8') . "</code>\n";
+        $text .= "Причина: <code>search_api_detected</code>\n";
+        $text .= 'Config выгружен на VPS: <b>' . ($syncOk ? 'да' : 'нет') . "</b>\n";
+
+        if ($files !== '') {
+            $text .= 'Файлы: <code>' . htmlspecialchars($files, ENT_QUOTES, 'UTF-8') . "</code>\n";
+        }
+        if (!empty($sync['error'])) {
+            $text .= 'Ошибка: <code>' . htmlspecialchars((string)$sync['error'], ENT_QUOTES, 'UTF-8') . "</code>\n";
+        }
+
+        $text .= 'Панель: https://hub.seotop-one.ru/webmaster/site?id=' . (int)$siteId;
+        $tg->send($text, 'redirect_enabled');
+    } catch (Throwable $e) {
+        @error_log('[TG search_api redirect_enabled] ' . $e->getMessage());
+    }
+}
+
 }

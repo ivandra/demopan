@@ -5,7 +5,7 @@ $chat  = (string)($row['tg_chat_id'] ?? '');
 ?>
 
 <div class="page-head">
-    <h1 class="page-title">SSL monitor — Telegram настройки</h1>
+    <h1 class="page-title">Telegram настройки</h1>
     <div class="page-actions">
         <a class="btn btn-secondary" href="/ssl">SSL monitor</a>
         <a class="btn btn-secondary" href="/sites">К сайтам</a>
@@ -26,6 +26,15 @@ $chat  = (string)($row['tg_chat_id'] ?? '');
         </div>
     </div>
 
+    <div class="field-row">
+        <label class="mb-8">Какие уведомления отправлять</label>
+        <label><input type="checkbox" name="tg_notify_ssl_ok" value="1" <?= (int)($row['tg_notify_ssl_ok'] ?? 1) === 1 ? 'checked' : '' ?>> SSL OK</label><br>
+        <label><input type="checkbox" name="tg_notify_xmlstock_detected" value="1" <?= (int)($row['tg_notify_xmlstock_detected'] ?? 1) === 1 ? 'checked' : '' ?>> XMLStock увидел хост в поиске</label><br>
+        <label><input type="checkbox" name="tg_notify_redirect_enabled" value="1" <?= (int)($row['tg_notify_redirect_enabled'] ?? 1) === 1 ? 'checked' : '' ?>> Авто-включение redirect_enabled</label><br>
+        <label><input type="checkbox" name="tg_notify_redirect_disabled" value="1" <?= (int)($row['tg_notify_redirect_disabled'] ?? 1) === 1 ? 'checked' : '' ?>> Авто-выключение redirect_enabled</label><br>
+        <label><input type="checkbox" name="tg_notify_manual_sync" value="1" <?= (int)($row['tg_notify_manual_sync'] ?? 1) === 1 ? 'checked' : '' ?>> Ручная выгрузка config на VPS</label>
+    </div>
+
     <div class="page-actions">
         <button type="submit" class="btn btn-primary">Сохранить</button>
     </div>
@@ -33,6 +42,6 @@ $chat  = (string)($row['tg_chat_id'] ?? '');
 
 <div class="panel-card mt-16">
     <div class="small muted">
-        Уведомления отправляются, когда домен стал <b>https_ok=1</b> и при этом <b>notified_at IS NULL</b>.
+        Состояние чекбоксов применяется ко всем Telegram-уведомлениям панели. Если чекбокс выключен, событие логически продолжает выполняться, но сообщение в Telegram не отправляется.
     </div>
 </div>

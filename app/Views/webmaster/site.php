@@ -19,6 +19,10 @@ foreach (($desired ?? []) as $hrow) {
 
 $wmDeployState = $wmDeployState ?? [];
 $indexStatusMap = is_array($indexStatusMap ?? null) ? $indexStatusMap : [];
+$cronState = is_array($cronState ?? null) ? $cronState : [];
+$indexWatchLogTail = is_array($indexWatchLogTail ?? null) ? $indexWatchLogTail : [];
+$searchApiStatusMap = is_array($searchApiStatusMap ?? null) ? $searchApiStatusMap : [];
+$searchApiCronState = is_array($searchApiCronState ?? null) ? $searchApiCronState : [];
 ?>
 
 <div class="page-head">
@@ -27,6 +31,8 @@ $indexStatusMap = is_array($indexStatusMap ?? null) ? $indexStatusMap : [];
         <a class="btn btn-secondary" href="/sites/overview?id=<?= $siteId ?>">Обзор</a>
         <a class="btn btn-secondary" href="/webmaster">К общему списку</a>
         <a class="btn btn-secondary" href="/deploy?id=<?= $siteId ?>">Публикация</a>
+        <a class="btn btn-secondary" href="/webmaster/index-tech?id=<?= $siteId ?>">Техстраница индекса</a>
+        <a class="btn btn-secondary" href="/webmaster/search-api?id=<?= $siteId ?>">XMLStock Search API</a>
     </div>
     <div class="page-subtitle">
         Сайт #<?= $siteId ?> — <code><?= h($site['domain'] ?? '') ?></code>
@@ -39,6 +45,22 @@ $indexStatusMap = is_array($indexStatusMap ?? null) ? $indexStatusMap : [];
         <pre class="log-console"><?= h(implode("\n", $log)) ?></pre>
     </div>
 <?php endif; ?>
+
+<div class="panel-card mt-16">
+    <h2 class="section-title">Статус cron вебмастера</h2>
+    <?php if (!empty($cronState)): ?>
+        <div class="small muted">Последний запуск: <b><?= h($cronState['last_run_at'] ?? '') ?></b></div>
+        <div class="small muted mt-8">OK: <b><?= !empty($cronState['last_ok']) ? 'да' : 'нет' ?></b></div>
+        <div class="small muted">Проверено хостов: <b><?= (int)($cronState['last_checked'] ?? 0) ?></b></div>
+        <div class="small muted">Уведомлений: <b><?= (int)($cronState['last_notified'] ?? 0) ?></b></div>
+        <div class="small muted">Ошибок: <b><?= (int)($cronState['last_errors'] ?? 0) ?></b></div>
+        <?php if (!empty($cronState['last_error'])): ?>
+            <pre class="log-console mt-8"><?= h((string)$cronState['last_error']) ?></pre>
+        <?php endif; ?>
+    <?php else: ?>
+        <div class="small muted">Состояние cron еще не записывалось.</div>
+    <?php endif; ?>
+</div>
 
 <div class="panel-grid panel-grid--2 mt-16">
     <div class="panel-card stack-gap-md">
@@ -57,16 +79,16 @@ $indexStatusMap = is_array($indexStatusMap ?? null) ? $indexStatusMap : [];
         <div class="small muted">
             Проверить верификацию в Яндексе. Перед этим verify-файлы должны быть уже задеплоены на домены.
         </div>
-		
-		<?php $verifyBlocked = !empty($wmDeployState['needs_deploy']); ?>
+
+        <?php $verifyBlocked = !empty($wmDeployState['needs_deploy']); ?>
         <form method="post" action="/webmaster/verify?id=<?= $siteId ?>" data-confirm="Проверить верификацию в Яндексе?">
             <button
-    type="submit"
-    class="btn btn-primary"
-    <?= $verifyBlocked ? 'disabled title="Сначала выполните публикацию на VPS"' : '' ?>
->
-    Проверить верификацию
-</button>
+                type="submit"
+                class="btn btn-primary"
+                <?= $verifyBlocked ? 'disabled title="Сначала выполните публикацию на VPS"' : '' ?>
+            >
+                Проверить верификацию
+            </button>
         </form>
     </div>
 </div>
@@ -194,35 +216,90 @@ $indexStatusMap = is_array($indexStatusMap ?? null) ? $indexStatusMap : [];
     </form>
 </div>
 
+<div class="panel-card mt-16 stack-gap-md">
+    <div class="page-head page-head--compact">
+        <h2 class="section-title">Yandex Search API fallback</h2>
+        <div class="small muted">Этот сервис нужен, когда Вебмастер еще не отдает summary/history или cron Вебмастера пока не дал ясный статус. По умолчанию cron Search API опрашивает только хосты без подтвержденного статуса в Вебмастере, чтобы не жечь платные запросы.</div>
+    </div>
+
+    <div class="inline-form">
+        <a class="btn btn-secondary" href="/webmaster/search-api?id=<?= $siteId ?>">Открыть страницу сервиса</a>
+    </div>
+
+    <?php if (!empty($searchApiCronState)): ?>
+        <div class="small muted mt-8">
+            Последний cron Search API: <b><?= h($searchApiCronState['last_run_at'] ?? '') ?></b>,
+            checked_hosts=<b><?= (int)($searchApiCronState['last_checked_hosts'] ?? 0) ?></b>,
+            detected=<b><?= (int)($searchApiCronState['last_detected_hosts'] ?? 0) ?></b>,
+            skipped=<b><?= (int)($searchApiCronState['last_skipped_hosts'] ?? 0) ?></b>
+        </div>
+    <?php endif; ?>
+
+    <div class="wm-table-wrap">
+        <table class="wm-table">
+            <thead>
+            <tr>
+                <th>Метка</th>
+                <th>Хост</th>
+                <th>Search API статус</th>
+                <th>Последняя проверка</th>
+                <th>Когда найдено</th>
+                <th>URL в ответе</th>
+                <th>Следующая проверка</th>
+                <th>Ошибка</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($desired as $hrow): ?>
+                <?php
+                $label = (string)($hrow['label'] ?? '');
+                $hostUrl = (string)($hrow['host_url'] ?? '');
+                $srow = $searchApiStatusMap[$label] ?? [];
+                ?>
+                <tr>
+                    <td><?= h($label === '' ? '(основной домен)' : $label) ?></td>
+                    <td><?= h($hostUrl) ?></td>
+                    <td><?= h((string)($srow['search_api_status'] ?? 'idle')) ?></td>
+                    <td><?= h((string)($srow['search_api_last_checked_at'] ?? '')) ?></td>
+                    <td><?= h((string)($srow['search_api_indexed_at'] ?? '')) ?></td>
+                    <td><?= (int)($srow['search_api_result_count'] ?? 0) ?></td>
+                    <td><?= h((string)($srow['search_api_next_check_at'] ?? '')) ?></td>
+                    <td><?= h((string)($srow['search_api_error'] ?? '')) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <div class="panel-card mt-16 stack-gap-md">
     <div class="page-head page-head--compact">
         <h2 class="section-title">Индекс Яндекса и авто-редирект</h2>
-        <div class="small muted">Статусы ведутся отдельно по основному домену и по каждому поддомену текущего сайта.
-Redirect включается автоматически только тогда, когда хост найден в индексе и число
-"Страниц в поиске" равно числу "Страниц добавлено" по данным API Яндекс Вебмастера.
-</div>
+        <div class="small muted">
+            Статусы ведутся отдельно по основному домену и по каждому поддомену текущего сайта.
+            Redirect включается автоматически только тогда, когда хост найден в индексе и число
+            "Страниц в поиске" равно числу "Страниц добавлено" по данным API Яндекс Вебмастера.
+        </div>
     </div>
 
-   <div class="inline-form">
-    <form method="post" action="/webmaster/check-index?id=<?= $siteId ?>" data-confirm="Проверить индекс Яндекса сейчас для основного домена и всех поддоменов сайта?">
-        <input type="hidden" name="label" value="ALL">
-        <button type="submit" class="btn btn-primary">Проверить индекс сейчас</button>
-    </form>
+    <div class="inline-form">
+        <form method="post" action="/webmaster/check-index?id=<?= $siteId ?>" data-confirm="Проверить индекс Яндекса сейчас для основного домена и всех поддоменов сайта?">
+            <input type="hidden" name="label" value="ALL">
+            <button type="submit" class="btn btn-primary">Проверить индекс сейчас</button>
+        </form>
 
-    <form method="post" action="/webmaster/manual-sync-configs?id=<?= $siteId ?>" data-confirm="Вручную выгрузить root и все config.php текущего сайта на VPS? Проверка индекса и redirect_enabled не изменяются.">
-        <input type="hidden" name="label" value="ALL">
-        <button type="submit" class="btn btn-secondary">Вручную выгрузить config на VPS</button>
-    </form>
-</div>
+        <form method="post" action="/webmaster/manual-sync-configs?id=<?= $siteId ?>" data-confirm="Вручную выгрузить root и все config.php текущего сайта на VPS? Проверка индекса и redirect_enabled не изменяются.">
+            <input type="hidden" name="label" value="ALL">
+            <button type="submit" class="btn btn-secondary">Вручную выгрузить config на VPS</button>
+        </form>
+    </div>
 
-<div class="small muted mt-8">
-    Ручная выгрузка не проверяет индекс и не меняет redirect_enabled. Она только повторно отправляет уже собранные config-файлы текущего сайта на VPS.
-</div>
-<div class="small muted mt-8">
-    Авто-редирект включается только когда "Страниц в поиске" равно "Страниц добавлено" и хост найден в индексе.
-</div>
-
+    <div class="small muted mt-8">
+        Ручная выгрузка не проверяет индекс и не меняет redirect_enabled. Она только повторно отправляет уже собранные config-файлы текущего сайта на VPS.
+    </div>
+    <div class="small muted mt-8">
+        Авто-редирект включается только когда "Страниц в поиске" равно "Страниц добавлено" и хост найден в индексе.
+    </div>
 
     <div class="wm-table-wrap">
         <table class="wm-table">
@@ -231,8 +308,8 @@ Redirect включается автоматически только тогда
                 <th>Метка</th>
                 <th>Хост</th>
                 <th>Статус индекса</th>
-				<th>Страниц в поиске</th>
-				<th>Страниц добавлено</th>	
+                <th>Страниц в поиске</th>
+                <th>Страниц добавлено</th>
                 <th>Последняя проверка</th>
                 <th>Когда найдено</th>
                 <th>Автовключение redirect</th>
@@ -254,23 +331,22 @@ Redirect включается автоматически только тогда
                 $syncStatus = (string)($idx['config_sync_status'] ?? 'idle');
                 $syncLast = (string)($idx['config_sync_last_at'] ?? '');
                 $syncErr = (string)($idx['config_sync_error'] ?? '');
-				$pagesInSearch = (int)($idx['yandex_pages_in_search'] ?? 0);
-				$pagesAdded = (int)($idx['yandex_pages_added'] ?? 0);
+                $pagesInSearch = (int)($idx['yandex_pages_in_search'] ?? 0);
+                $pagesAdded = (int)($idx['yandex_pages_added'] ?? 0);
                 ?>
-               <tr>
-    <td><?= h($label === '' ? '(основной домен)' : $label) ?></td>
-    <td style="word-break:break-word;min-width:190px"><?= h($hostUrl) ?></td>
-    <td><?= h($idxStatus) ?></td>
-    <td><?= h((string)$pagesInSearch) ?></td>
-    <td><?= h((string)$pagesAdded) ?></td>
-    <td><?= h($idxLast) ?></td>
-    <td><?= h($idxDetected) ?></td>
-    <td><?= h($autoAt) ?></td>
-    <td><?= h($syncStatus) ?></td>
-    <td><?= h($syncLast) ?></td>
-    <td><?= h($syncErr) ?></td>
-</tr>
-
+                <tr>
+                    <td><?= h($label === '' ? '(основной домен)' : $label) ?></td>
+                    <td style="word-break:break-word;min-width:190px"><?= h($hostUrl) ?></td>
+                    <td><?= h($idxStatus) ?></td>
+                    <td><?= h((string)$pagesInSearch) ?></td>
+                    <td><?= h((string)$pagesAdded) ?></td>
+                    <td><?= h($idxLast) ?></td>
+                    <td><?= h($idxDetected) ?></td>
+                    <td><?= h($autoAt) ?></td>
+                    <td><?= h($syncStatus) ?></td>
+                    <td><?= h($syncLast) ?></td>
+                    <td><?= h($syncErr) ?></td>
+                </tr>
             <?php endforeach; ?>
             </tbody>
         </table>
@@ -388,6 +464,24 @@ Redirect включается автоматически только тогда
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="panel-card mt-16">
+    <details>
+        <summary style="cursor:pointer;font-weight:600;">Техническая диагностика индекса</summary>
+
+        <div class="mt-16">
+            <div class="small muted mb-8">
+                Здесь выводится хвост файла <code>storage/logs/yandex_index_watch.log</code> по текущему сайту.
+            </div>
+
+            <?php if (!empty($indexWatchLogTail)): ?>
+                <pre class="log-console" style="max-height:320px;overflow:auto;white-space:pre-wrap;word-break:break-word;"><?= h(implode("\n", $indexWatchLogTail)) ?></pre>
+            <?php else: ?>
+                <div class="small muted">Лог пока пуст.</div>
+            <?php endif; ?>
+        </div>
+    </details>
 </div>
 
 <script>

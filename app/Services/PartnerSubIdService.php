@@ -8,8 +8,10 @@ class PartnerSubIdService
         if ($label === '' || $label === '_default') {
             return '_default';
         }
+
         $label = preg_replace('~[^a-z0-9\-]+~', '', $label);
         $label = trim((string)$label, '-');
+
         return $label !== '' ? $label : '_default';
     }
 
@@ -19,9 +21,11 @@ class PartnerSubIdService
         $domain = preg_replace('~^https?://~i', '', $domain);
         $domain = preg_replace('~[/?#].*$~', '', $domain);
         $domain = preg_replace('~:\d+$~', '', $domain);
+
         $parts = explode('.', $domain);
         $root = trim((string)($parts[0] ?? ''));
         $root = preg_replace('~[^a-z0-9]+~', '', $root);
+
         return $root;
     }
 
@@ -29,9 +33,15 @@ class PartnerSubIdService
     {
         $root = $this->extractRootDomainPart($domain);
         $label = $this->normalizeLabel($label);
+
+        if ($root === '') {
+            return '';
+        }
+
         if ($label === '_default') {
             return $root;
         }
+
         return $label . $root;
     }
 
@@ -41,6 +51,7 @@ class PartnerSubIdService
         if ($url === '') {
             return '';
         }
+
         if (!preg_match('~^https?://~i', $url)) {
             return $url;
         }
@@ -84,6 +95,7 @@ class PartnerSubIdService
         $path     = $parts['path'] ?? '';
         $query    = isset($parts['query']) && $parts['query'] !== '' ? '?' . $parts['query'] : '';
         $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
+
         return $scheme . $auth . $host . $port . $path . $query . $fragment;
     }
 }

@@ -113,17 +113,16 @@ require APP_ROOT . '/app/Services/SubdomainProvisioner.php';
 require APP_ROOT . '/app/Services/ZipBuilder.php';
 require APP_ROOT . '/app/Services/ZipService.php';
 
-require APP_ROOT .'/app/Services/YandexWebmasterService.php';
-require APP_ROOT . '/app/Services/ConfigSyncService.php';
-require APP_ROOT . '/app/Services/YandexIndexWatchService.php';
+require APP_ROOT . '/app/Services/YandexWebmasterService.php';
+require_once APP_ROOT . '/app/Services/ConfigSyncService.php';
+require_once APP_ROOT . '/app/Services/YandexIndexWatchService.php';
+require_once APP_ROOT . '/app/Services/YandexSearchApiService.php';
 
 require APP_ROOT . '/app/Services/SslCheckService.php';
-require APP_ROOT . '/app/Services/TelegramService.php'; 
+require APP_ROOT . '/app/Services/TelegramService.php';
 require APP_ROOT . '/app/Services/DeepseekClient.php';
 
 require APP_ROOT . '/app/Services/PartnerSubIdService.php';
-require APP_ROOT . '/app/Services/ConfigSyncService.php';
-require APP_ROOT . '/app/Services/YandexIndexWatchService.php';
 
 // ---------- 8) Controllers ----------
 require APP_ROOT . '/app/Controllers/AuthController.php';
@@ -282,6 +281,9 @@ $wm = new WebmasterController();
 
 $router->get('/webmaster', action($wm, 'index'));
 $router->get('/webmaster/site', action($wm, 'site'));
+$router->get('/webmaster/index-tech', action($wm, 'techIndex'));
+$router->get('/webmaster/search-api', action($wm, 'searchApi'));
+$router->post('/webmaster/search-api/run', action($wm, 'searchApiRun'));
 $router->get('/webmaster/check-index', action($wm, 'checkIndex'));
 $router->post('/webmaster/check-index', action($wm, 'checkIndex'));
 $router->post('/webmaster/manual-sync-configs', action($wm, 'manualSyncConfigs'));
@@ -348,7 +350,7 @@ $router->get('/ai/generate-all-pages', action($ai, 'generateAllPages'));
 
 $router->post('/ai/generate-selected-meta', action($ai, 'generateSelectedMeta'));
 $router->post('/ai/generate-selected-texts', action($ai, 'generateSelectedTexts'));
-$router->post('/ai/generate-selected-pages', action($ai, 'generateSelectedLabelsPages'));
+$router->post('/ai/generate-selected-pages', action($ai, 'generateSelectedPages'));
 
 $router->get('/webmaster/cron', action($wm, 'cron'));
 $router->post('/subdomains/save', action($subdomains, 'save'));

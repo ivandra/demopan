@@ -236,7 +236,10 @@ if ($vpsIp) {
         $st->execute();
         $registrarAccounts = $st->fetchAll();
 
-        $this->view('sites/edit', compact('site', 'cfg', 'configTargetPath', 'registrarAccounts'));
+        require_once Paths::appRoot() . '/app/Services/PartnerSubIdService.php';
+        $partnerSubId = (new PartnerSubIdService())->buildSubId((string)($cfg['domain'] ?? ''), '_default');
+
+        $this->view('sites/edit', compact('site', 'cfg', 'configTargetPath', 'registrarAccounts', 'partnerSubId'));
     }
 
     public function update(): void
@@ -264,11 +267,22 @@ if ($vpsIp) {
     $cfg['keywords']    = (string)($cfg['keywords'] ?? '');
     $cfg['h1']          = (string)($cfg['h1'] ?? '');
 
-    $cfg['partner_override_url'] = trim((string)($_POST['partner_override_url'] ?? ''));
-    $cfg['internal_reg_url']     = trim((string)($_POST['internal_reg_url'] ?? ''));
+    require_once Paths::appRoot() . '/app/Services/PartnerSubIdService.php';
+    $partnerService = new PartnerSubIdService();
+
+    $partnerBaseUrls = [
+        'partner_override_url' => trim((string)($_POST['partner_override_url'] ?? '')),
+        'internal_reg_url'     => trim((string)($_POST['internal_reg_url'] ?? '')),
+        'base_new_url'         => trim((string)($_POST['base_new_url'] ?? '')),
+        'base_second_url'      => trim((string)($_POST['base_second_url'] ?? '')),
+    ];
+
+    $cfg['partner_override_url'] = $partnerService->applySubIdToUrl($partnerBaseUrls['partner_override_url'], (string)$cfg['domain'], '_default');
+    $cfg['internal_reg_url']     = $partnerService->applySubIdToUrl($partnerBaseUrls['internal_reg_url'], (string)$cfg['domain'], '_default');
     $cfg['redirect_enabled']     = (int)($_POST['redirect_enabled'] ?? 0);
-    $cfg['base_new_url']         = trim((string)($_POST['base_new_url'] ?? ''));
-    $cfg['base_second_url']      = trim((string)($_POST['base_second_url'] ?? ''));
+    $cfg['base_new_url']         = $partnerService->applySubIdToUrl($partnerBaseUrls['base_new_url'], (string)$cfg['domain'], '_default');
+    $cfg['base_second_url']      = $partnerService->applySubIdToUrl($partnerBaseUrls['base_second_url'], (string)$cfg['domain'], '_default');
+    $cfg['label']                = '_default';
 
     $registrarAccountId = (int)($_POST['registrar_account_id'] ?? 0);
     if ($registrarAccountId <= 0) {
@@ -294,6 +308,23 @@ $resolver->ensureSubdomainConfigExists($siteId, '_default', $cfg);
 
 $this->regenerateConfigPhp($siteId, $cfg, '_default');
 
+    $labels = $resolver->listLabels($siteId, true);
+    foreach ($labels as $label) {
+        if ($label === '_default') {
+            continue;
+        }
+
+        $subCfg = $resolver->getResolvedConfig($siteId, $label);
+        foreach (['partner_override_url', 'internal_reg_url', 'base_new_url', 'base_second_url'] as $field) {
+            $subCfg[$field] = $partnerService->applySubIdToUrl((string)($partnerBaseUrls[$field] ?? ''), (string)$cfg['domain'], $label);
+        }
+        $subCfg['domain'] = (string)$cfg['domain'];
+        $subCfg['label'] = $label;
+
+        $resolver->saveSubdomainConfig($siteId, $label, $subCfg);
+        $this->regenerateConfigPhp($siteId, $cfg, $label);
+    }
+
     $this->redirect('/sites/edit?id=' . $siteId);
 }
 
@@ -313,13 +344,29 @@ $this->regenerateConfigPhp($siteId, $cfg, '_default');
     require_once Paths::appRoot() . '/app/Services/SubdomainProvisioner.php';
     (new SubdomainProvisioner())->ensureForSite($siteId, $label);
 
-   $resolver = $this->cfgResolver();
+    $resolver = $this->cfgResolver();
 
-$cfg    = $resolver->loadSiteDefaultConfig($siteId, (string)($site['domain'] ?? ''), $this->defaultConfig((string)($site['domain'] ?? '')));
-$subCfg = $resolver->ensureSubdomainConfigExists($siteId, $label, $cfg);
+    $cfg    = $resolver->loadSiteDefaultConfig($siteId, (string)($site['domain'] ?? ''), $this->defaultConfig((string)($site['domain'] ?? '')));
+    $subCfg = $resolver->ensureSubdomainConfigExists($siteId, $label, $cfg);
 
     $pages = $subCfg['pages'] ?? [];
     if (!is_array($pages)) $pages = [];
+
+    $rootPage = is_array($pages['/'] ?? null) ? $pages['/'] : [];
+    if (empty($rootPage['text_file'])) {
+        $rootPage['text_file'] = 'home.php';
+    }
+    if (!isset($rootPage['priority'])) {
+        $rootPage['priority'] = '1.0';
+    }
+    if (!array_key_exists('sitemap', $rootPage)) {
+        $rootPage['sitemap'] = true;
+    }
+    $rootPage['title'] = (string)($subCfg['title'] ?? '');
+    $rootPage['h1'] = (string)($subCfg['h1'] ?? '');
+    $rootPage['description'] = (string)($subCfg['description'] ?? '');
+    $rootPage['keywords'] = (string)($subCfg['keywords'] ?? '');
+    $pages['/'] = $rootPage;
 
     $textsDir  = $this->getTextsDir($site, $label);
     $textFiles = $this->listTextFiles($textsDir);
@@ -332,7 +379,7 @@ $subCfg = $resolver->ensureSubdomainConfigExists($siteId, $label, $cfg);
 
     $configTargetPath = $this->getConfigTargetPath($siteId, $label);
 
-    $this->view('sites/pages', compact('site', 'cfg', 'pages', 'textFiles', 'used', 'configTargetPath', 'label'));
+    $this->view('sites/pages', compact('site', 'cfg', 'pages', 'textFiles', 'used', 'configTargetPath', 'label', 'subCfg'));
 }
 
     public function pagesTextNew(): void
@@ -394,11 +441,13 @@ $subCfg = $resolver->ensureSubdomainConfigExists($siteId, $label, $cfg);
 
         if ($url[0] !== '/') $url = '/' . $url;
 
+        $isRootPage = ($url === '/');
+
         $newPages[$url] = [
-            'title'       => $this->inheritOrValue((string)($titles[$i] ?? '')),
-            'h1'          => $this->inheritOrValue((string)($h1s[$i] ?? '')),
-            'description' => $this->inheritOrValue((string)($descs[$i] ?? '')),
-            'keywords'    => $this->inheritOrValue((string)($keys[$i] ?? '')),
+            'title'       => $isRootPage ? '$inherit' : $this->inheritOrValue((string)($titles[$i] ?? '')),
+            'h1'          => $isRootPage ? '$inherit' : $this->inheritOrValue((string)($h1s[$i] ?? '')),
+            'description' => $isRootPage ? '$inherit' : $this->inheritOrValue((string)($descs[$i] ?? '')),
+            'keywords'    => $isRootPage ? '$inherit' : $this->inheritOrValue((string)($keys[$i] ?? '')),
             'text_file'   => basename(trim((string)($texts[$i] ?? 'home.php'))),
         ];
 
@@ -666,6 +715,7 @@ if (!is_array($pages)) $pages = [];
 
     $this->view('sites/build', compact('site', 'cfg', 'report', 'configTargetPath', 'label'));
 }
+
     // ----------------------------
     // Files editor
     // ----------------------------
@@ -678,22 +728,54 @@ if (!is_array($pages)) $pages = [];
 
         $site = $this->loadSite($siteId);
         $buildDir = $this->getBuildDir($site);
-
-        $scope = $this->normalizeFilesScope((string)($_GET['scope'] ?? 'root'));
-        $label = $this->normalizeFilesLabel((string)($_GET['label'] ?? '_default'));
-
-        $baseDir = $this->getFilesBaseDir($buildDir, $scope, $label);
-        $allowed = $this->allowedSiteFilesByScope($scope);
-        $labelsForFiles = $this->getFilesLabels($siteId);
+        $scope = $this->getFilesScopeFromRequest('root');
+        $labelsForFiles = $this->loadSiteLabelsForFiles($siteId);
+        $label = $this->resolveRequestedFilesLabel($labelsForFiles, (string)($_GET['label'] ?? '_default'));
 
         $files = [];
-        foreach ($allowed as $f) {
-            $path = rtrim($baseDir, '/\\') . '/' . $f;
-            $files[] = [
-                'name' => $f,
-                'exists' => is_file($path),
-                'size' => is_file($path) ? filesize($path) : 0,
-            ];
+        if ($scope === 'assets') {
+            $assetsDir = rtrim($buildDir, '/\\') . '/subs/' . $label . '/assets';
+            foreach ($this->allowedAssetFiles() as $f) {
+                $path = $assetsDir . '/' . $f;
+                if (!is_file($path)) {
+                    continue;
+                }
+                $files[] = [
+                    'name' => $f,
+                    'exists' => true,
+                    'size' => (int)filesize($path),
+                ];
+            }
+        } elseif ($scope === 'sub') {
+            $subDir = rtrim($buildDir, '/\\') . '/subs/' . $label;
+            $items = [];
+            if (is_file($subDir . '/config.php')) {
+                $items[] = 'config.php';
+            }
+            foreach (glob($subDir . '/yandex_*.html') ?: [] as $p) {
+                if (is_file($p)) {
+                    $items[] = basename($p);
+                }
+            }
+            $items = array_values(array_unique($items));
+            sort($items, SORT_NATURAL | SORT_FLAG_CASE);
+            foreach ($items as $f) {
+                $path = $subDir . '/' . $f;
+                $files[] = [
+                    'name' => $f,
+                    'exists' => true,
+                    'size' => (int)filesize($path),
+                ];
+            }
+        } else {
+            foreach ($this->allowedSiteFiles() as $f) {
+                $path = rtrim($buildDir, '/\\') . '/' . $f;
+                $files[] = [
+                    'name' => $f,
+                    'exists' => is_file($path),
+                    'size' => is_file($path) ? (int)filesize($path) : 0,
+                ];
+            }
         }
 
         $this->view('files/index', compact('site', 'files', 'scope', 'label', 'labelsForFiles'));
@@ -704,46 +786,35 @@ if (!is_array($pages)) $pages = [];
         $this->requireAuth();
 
         $siteId = (int)($_GET['id'] ?? 0);
-        $file   = (string)($_GET['file'] ?? '');
+        $file = (string)($_GET['file'] ?? '');
         if ($siteId <= 0) die('bad id');
 
         $site = $this->loadSite($siteId);
         $buildDir = $this->getBuildDir($site);
+        $scope = $this->getFilesScopeFromRequest('root');
+        $labelsForFiles = $this->loadSiteLabelsForFiles($siteId);
+        $label = $this->resolveRequestedFilesLabel($labelsForFiles, (string)($_GET['label'] ?? '_default'));
 
-        $scope = $this->normalizeFilesScope((string)($_GET['scope'] ?? 'root'));
-        $label = $this->normalizeFilesLabel((string)($_GET['label'] ?? '_default'));
-        $baseDir = $this->getFilesBaseDir($buildDir, $scope, $label);
-
-        $safeFile = $this->sanitizeAllowedFileByScope($file, $scope);
-        $path = rtrim($baseDir, '/\\') . '/' . $safeFile;
-        $isBinary = $this->isBinaryManagedFile($scope, $safeFile);
+        $safeFile = $this->sanitizeSiteFileByScope($scope, $file);
+        $path = $this->resolveSiteFilePath($buildDir, $scope, $label, $safeFile);
+        $isBinary = $this->isBinarySiteFile($scope, $safeFile);
 
         $content = '';
         $previewDataUri = '';
         if (is_file($path)) {
             if ($isBinary) {
-                $ext = strtolower(pathinfo($safeFile, PATHINFO_EXTENSION));
-                $mimeMap = [
-                    'png' => 'image/png',
-                    'webp' => 'image/webp',
-                    'svg' => 'image/svg+xml',
-                    'ico' => 'image/x-icon',
-                ];
-                if (isset($mimeMap[$ext])) {
-                    $raw = file_get_contents($path);
-                    if ($raw !== false && strlen($raw) <= 2 * 1024 * 1024) {
-                        $previewDataUri = 'data:' . $mimeMap[$ext] . ';base64,' . base64_encode($raw);
-                    }
+                $blob = @file_get_contents($path);
+                if ($blob !== false) {
+                    $previewDataUri = 'data:' . $this->guessMimeByExtension($safeFile) . ';base64,' . base64_encode($blob);
                 }
             } else {
-                $c = file_get_contents($path);
+                $c = @file_get_contents($path);
                 $content = ($c === false) ? '' : $c;
             }
         }
 
         $backups = [];
-        $pattern = rtrim($baseDir, '/\\') . '/' . $safeFile . '.bak_*';
-        foreach (glob($pattern) ?: [] as $bp) {
+        foreach (glob($path . '.bak_*') ?: [] as $bp) {
             $backups[] = basename($bp);
         }
         rsort($backups);
@@ -758,40 +829,41 @@ if (!is_array($pages)) $pages = [];
         $siteId = (int)($_GET['id'] ?? 0);
         if ($siteId <= 0) die('bad id');
 
-        $file    = (string)($_POST['file'] ?? '');
+        $file = (string)($_POST['file'] ?? '');
         $content = (string)($_POST['content'] ?? '');
 
         $site = $this->loadSite($siteId);
         $buildDir = $this->getBuildDir($site);
+        $scope = $this->getFilesScopeFromRequest('root');
+        $labelsForFiles = $this->loadSiteLabelsForFiles($siteId);
+        $label = $this->resolveRequestedFilesLabel($labelsForFiles, (string)($_POST['label'] ?? '_default'));
 
-        $scope = $this->normalizeFilesScope((string)($_POST['scope'] ?? ($_GET['scope'] ?? 'root')));
-        $label = $this->normalizeFilesLabel((string)($_POST['label'] ?? ($_GET['label'] ?? '_default')));
-        $baseDir = $this->getFilesBaseDir($buildDir, $scope, $label);
-
-        $safeFile = $this->sanitizeAllowedFileByScope($file, $scope);
-        $path = rtrim($baseDir, '/\\') . '/' . $safeFile;
+        $safeFile = $this->sanitizeSiteFileByScope($scope, $file);
+        $path = $this->resolveSiteFilePath($buildDir, $scope, $label, $safeFile);
+        $isBinary = $this->isBinarySiteFile($scope, $safeFile);
 
         if (is_file($path)) {
-            $ts = date('Ymd_His');
-            $bak = $path . '.bak_' . $ts;
-            @copy($path, $bak);
+            @copy($path, $path . '.bak_' . date('Ymd_His'));
         }
 
         Paths::ensureDir(dirname($path));
 
-        if ($this->isBinaryManagedFile($scope, $safeFile)) {
-            if (empty($_FILES['upload']) || !isset($_FILES['upload']['error']) || (int)$_FILES['upload']['error'] !== UPLOAD_ERR_OK) {
-                die('upload required');
+        if ($isBinary) {
+            if (!isset($_FILES['upload']) || !is_array($_FILES['upload'])) {
+                die('upload missing');
             }
-            $tmpUpload = (string)($_FILES['upload']['tmp_name'] ?? '');
-            if ($tmpUpload === '' || !is_uploaded_file($tmpUpload)) {
+            $tmpName = (string)($_FILES['upload']['tmp_name'] ?? '');
+            $err = (int)($_FILES['upload']['error'] ?? UPLOAD_ERR_NO_FILE);
+            if ($err !== UPLOAD_ERR_OK || $tmpName === '' || !is_uploaded_file($tmpName)) {
                 die('upload failed');
             }
-            if (!@move_uploaded_file($tmpUpload, $path)) {
-                if (!@copy($tmpUpload, $path)) {
-                    die('failed to save upload');
-                }
+            $blob = @file_get_contents($tmpName);
+            if ($blob === false) {
+                die('upload read failed');
             }
+            $tmp = $path . '.tmp_' . time();
+            file_put_contents($tmp, $blob);
+            rename($tmp, $path);
         } else {
             $tmp = $path . '.tmp_' . time();
             file_put_contents($tmp, $content);
@@ -808,37 +880,28 @@ if (!is_array($pages)) $pages = [];
         $siteId = (int)($_GET['id'] ?? 0);
         if ($siteId <= 0) die('bad id');
 
-        $file   = (string)($_POST['file'] ?? '');
+        $file = (string)($_POST['file'] ?? '');
         $backup = (string)($_POST['backup'] ?? '');
 
         $site = $this->loadSite($siteId);
         $buildDir = $this->getBuildDir($site);
+        $scope = $this->getFilesScopeFromRequest('root');
+        $labelsForFiles = $this->loadSiteLabelsForFiles($siteId);
+        $label = $this->resolveRequestedFilesLabel($labelsForFiles, (string)($_POST['label'] ?? '_default'));
 
-        $scope = $this->normalizeFilesScope((string)($_POST['scope'] ?? ($_GET['scope'] ?? 'root')));
-        $label = $this->normalizeFilesLabel((string)($_POST['label'] ?? ($_GET['label'] ?? '_default')));
-        $baseDir = $this->getFilesBaseDir($buildDir, $scope, $label);
-
-        $safeFile = $this->sanitizeAllowedFileByScope($file, $scope);
-
-        if (strpos($backup, $safeFile . '.bak_') !== 0) {
-            die('bad backup');
-        }
-        if (strpos($backup, '/') !== false || strpos($backup, '\\') !== false || strpos($backup, '..') !== false) {
+        $safeFile = $this->sanitizeSiteFileByScope($scope, $file);
+        if (strpos($backup, $safeFile . '.bak_') !== 0 || strpos($backup, '/') !== false || strpos($backup, '\\') !== false || strpos($backup, '..') !== false) {
             die('bad backup');
         }
 
-        $src = rtrim($baseDir, '/\\') . '/' . $backup;
-        $dst = rtrim($baseDir, '/\\') . '/' . $safeFile;
-
+        $dst = $this->resolveSiteFilePath($buildDir, $scope, $label, $safeFile);
+        $src = dirname($dst) . '/' . $backup;
         if (!is_file($src)) {
             die('backup not found');
         }
-
         if (is_file($dst)) {
-            $ts = date('Ymd_His');
-            @copy($dst, $dst . '.bak_' . $ts);
+            @copy($dst, $dst . '.bak_' . date('Ymd_His'));
         }
-
         @copy($src, $dst);
 
         $this->redirect('/sites/files/edit?id=' . $siteId . '&scope=' . rawurlencode($scope) . '&label=' . rawurlencode($label) . '&file=' . rawurlencode($safeFile));
@@ -1365,66 +1428,124 @@ private function regenerateConfigPhp(int $siteId, array $cfg, ?string $label = n
         ];
     }
 
+
     private function allowedAssetFiles(): array
     {
         return [
             'logo.png',
             'logo.webp',
+            'logo.jpg',
+            'logo.jpeg',
             'logo.svg',
-            'favicon.png',
             'favicon.ico',
+            'favicon.png',
             'favicon.svg',
+            'favicon.webp',
         ];
     }
 
-    private function allowedSiteFilesByScope(string $scope): array
+    private function getFilesScopeFromRequest(string $fallback = 'root'): string
     {
-        return $scope === 'assets' ? $this->allowedAssetFiles() : $this->allowedSiteFiles();
-    }
-
-    private function normalizeFilesScope(string $scope): string
-    {
-        return strtolower(trim($scope)) === 'assets' ? 'assets' : 'root';
-    }
-
-    private function normalizeFilesLabel(string $label): string
-    {
-        $label = trim(strtolower($label));
-        if ($label === '' || $label === '_default') {
-            return '_default';
+        $scope = (string)($_GET['scope'] ?? $_POST['scope'] ?? $fallback);
+        $scope = trim(strtolower($scope));
+        if (!in_array($scope, ['root', 'sub', 'assets'], true)) {
+            $scope = $fallback;
         }
-        $label = preg_replace('~[^a-z0-9_-]+~', '', $label);
-        return $label !== '' ? $label : '_default';
+        return $scope;
     }
 
-    private function getFilesBaseDir(string $buildDir, string $scope, string $label): string
+    private function loadSiteLabelsForFiles(int $siteId): array
     {
-        if ($scope === 'assets') {
-            return rtrim($buildDir, '/\\') . '/subs/' . $label . '/assets';
-        }
-        return rtrim($buildDir, '/\\');
-    }
-
-    private function getFilesLabels(int $siteId): array
-    {
-        $labels = ['_default'];
-        try {
-            $st = DB::pdo()->prepare("SELECT label FROM site_subdomains WHERE site_id=? ORDER BY CASE WHEN label='_default' THEN 0 ELSE 1 END, label ASC");
-            $st->execute([$siteId]);
-            foreach ($st->fetchAll(PDO::FETCH_ASSOC) as $row) {
-                $lb = $this->normalizeFilesLabel((string)($row['label'] ?? ''));
-                if (!in_array($lb, $labels, true)) {
-                    $labels[] = $lb;
-                }
+        $labels = [];
+        $st = DB::pdo()->prepare("SELECT label FROM site_subdomains WHERE site_id = ? AND enabled = 1 ORDER BY label ASC");
+        $st->execute([$siteId]);
+        foreach ($st->fetchAll(PDO::FETCH_COLUMN) ?: [] as $lb) {
+            $lb = trim((string)$lb);
+            if ($lb !== '') {
+                $labels[] = $lb;
             }
-        } catch (Throwable $e) {
         }
+        if (!in_array('_default', $labels, true)) {
+            array_unshift($labels, '_default');
+        }
+        $labels = array_values(array_unique($labels));
+        usort($labels, static function ($a, $b) {
+            if ($a === '_default') return -1;
+            if ($b === '_default') return 1;
+            return strcasecmp($a, $b);
+        });
         return $labels;
     }
 
-    private function isBinaryManagedFile(string $scope, string $file): bool
+    private function resolveRequestedFilesLabel(array $labels, string $requested): string
     {
-        return $scope === 'assets';
+        $requested = trim($requested);
+        if ($requested !== '' && in_array($requested, $labels, true)) {
+            return $requested;
+        }
+        return $labels[0] ?? '_default';
+    }
+
+    private function sanitizeSiteFileByScope(string $scope, string $file): string
+    {
+        $file = trim($file);
+        if ($file === '' || strpos($file, '/') !== false || strpos($file, '\\') !== false || strpos($file, '..') !== false) {
+            die('bad file');
+        }
+
+        if ($scope === 'assets') {
+            if (!in_array($file, $this->allowedAssetFiles(), true)) {
+                die('file not allowed');
+            }
+            return $file;
+        }
+
+        if ($scope === 'sub') {
+            if ($file === 'config.php') {
+                return $file;
+            }
+            if (preg_match('~^yandex_[A-Za-z0-9]+\.html$~', $file)) {
+                return $file;
+            }
+            die('file not allowed');
+        }
+
+        return $this->sanitizeAllowedFile($file);
+    }
+
+    private function resolveSiteFilePath(string $buildDir, string $scope, string $label, string $file): string
+    {
+        if ($scope === 'assets') {
+            return rtrim($buildDir, '/\\') . '/subs/' . $label . '/assets/' . $file;
+        }
+        if ($scope === 'sub') {
+            return rtrim($buildDir, '/\\') . '/subs/' . $label . '/' . $file;
+        }
+        return rtrim($buildDir, '/\\') . '/' . $file;
+    }
+
+    private function isBinarySiteFile(string $scope, string $file): bool
+    {
+        if ($scope !== 'assets') {
+            return false;
+        }
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        return in_array($ext, ['png', 'jpg', 'jpeg', 'webp', 'svg', 'ico'], true);
+    }
+
+    private function guessMimeByExtension(string $file): string
+    {
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        switch ($ext) {
+            case 'png': return 'image/png';
+            case 'jpg':
+            case 'jpeg': return 'image/jpeg';
+            case 'webp': return 'image/webp';
+            case 'svg': return 'image/svg+xml';
+            case 'ico': return 'image/x-icon';
+            case 'html': return 'text/html; charset=UTF-8';
+            default: return 'application/octet-stream';
+        }
     }
 
 
@@ -1479,11 +1600,6 @@ private function regenerateConfigPhp(int $siteId, array $cfg, ?string $label = n
 
     private function sanitizeAllowedFile(string $file): string
     {
-        return $this->sanitizeAllowedFileByScope($file, 'root');
-    }
-
-    private function sanitizeAllowedFileByScope(string $file, string $scope): string
-    {
         $file = trim($file);
 
         if ($file === '' || strpos($file, '/') !== false || strpos($file, '\\') !== false) {
@@ -1493,7 +1609,7 @@ private function regenerateConfigPhp(int $siteId, array $cfg, ?string $label = n
             die('bad file');
         }
 
-        $allowed = $this->allowedSiteFilesByScope($scope);
+        $allowed = $this->allowedSiteFiles();
         if (!in_array($file, $allowed, true)) {
             die('file not allowed');
         }

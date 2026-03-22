@@ -516,7 +516,7 @@ class SslController extends Controller
                 $msg = "✅ SSL OK: <b>" . $this->h($domain) . "</b>";
                 if ($exp !== '') $msg .= "\nexpires: <code>" . $this->h($exp) . "</code>";
 
-                $sent = $tg->send($msg);
+                $sent = $tg->send($msg, 'ssl_ok');
 
                 if ($sent) {
                     DB::withReconnect(function(PDO $pdo) use ($id) {
@@ -634,9 +634,17 @@ public function checkNow(): void
 }
 
 // GET /ssl/settings
+
+private function ensureTelegramSettingsColumns(): void
+{
+    $tg = new TelegramService();
+    $tg->ensureNotificationColumns();
+}
+
 public function settings(): void
 {
     $this->requireAuth();
+    $this->ensureTelegramSettingsColumns();
 
     $row = DB::withReconnect(function(PDO $pdo) {
         $st = $pdo->query("SELECT * FROM webmaster_settings ORDER BY id ASC LIMIT 1");
@@ -652,26 +660,43 @@ public function settings(): void
 public function settingsSave(): void
 {
     $this->requireAuth();
+    $this->ensureTelegramSettingsColumns();
 
     $token = trim((string)($_POST['tg_bot_token'] ?? ''));
     $chat  = trim((string)($_POST['tg_chat_id'] ?? ''));
 
-    DB::withReconnect(function(PDO $pdo) use ($token, $chat) {
+    $notifySslOk = isset($_POST['tg_notify_ssl_ok']) ? 1 : 0;
+    $notifyXmlStockDetected = isset($_POST['tg_notify_xmlstock_detected']) ? 1 : 0;
+    $notifyRedirectEnabled = isset($_POST['tg_notify_redirect_enabled']) ? 1 : 0;
+    $notifyRedirectDisabled = isset($_POST['tg_notify_redirect_disabled']) ? 1 : 0;
+    $notifyManualSync = isset($_POST['tg_notify_manual_sync']) ? 1 : 0;
 
-        // гарантируем, что строка существует
+    DB::withReconnect(function(PDO $pdo) use ($token, $chat, $notifySslOk, $notifyXmlStockDetected, $notifyRedirectEnabled, $notifyRedirectDisabled, $notifyManualSync) {
+
         $id = (int)($pdo->query("SELECT id FROM webmaster_settings ORDER BY id ASC LIMIT 1")->fetchColumn() ?: 0);
 
         if ($id > 0) {
-            $st = $pdo->prepare("UPDATE webmaster_settings SET tg_bot_token=?, tg_chat_id=? WHERE id=? LIMIT 1");
-            $st->execute([$token, $chat, $id]);
+            $st = $pdo->prepare("UPDATE webmaster_settings
+                SET tg_bot_token=?,
+                    tg_chat_id=?,
+                    tg_notify_ssl_ok=?,
+                    tg_notify_xmlstock_detected=?,
+                    tg_notify_redirect_enabled=?,
+                    tg_notify_redirect_disabled=?,
+                    tg_notify_manual_sync=?
+                WHERE id=?
+                LIMIT 1");
+            $st->execute([$token, $chat, $notifySslOk, $notifyXmlStockDetected, $notifyRedirectEnabled, $notifyRedirectDisabled, $notifyManualSync, $id]);
         } else {
-            $st = $pdo->prepare("INSERT INTO webmaster_settings (tg_bot_token, tg_chat_id) VALUES (?, ?)");
-            $st->execute([$token, $chat]);
+            $st = $pdo->prepare("INSERT INTO webmaster_settings
+                (tg_bot_token, tg_chat_id, tg_notify_ssl_ok, tg_notify_xmlstock_detected, tg_notify_redirect_enabled, tg_notify_redirect_disabled, tg_notify_manual_sync)
+                VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $st->execute([$token, $chat, $notifySslOk, $notifyXmlStockDetected, $notifyRedirectEnabled, $notifyRedirectDisabled, $notifyManualSync]);
         }
     });
 
     $_SESSION['wm_log'][] = 'TG settings saved';
     $this->redirect('/ssl/settings');
 }
-	
+
 }

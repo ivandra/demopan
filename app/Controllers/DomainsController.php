@@ -41,7 +41,6 @@ class DomainsController extends Controller
         }
 		
 		$availableIps = $this->getAvailableIpsForSite($site, $servers);
-error_log('availableIps count=' . count($availableIps) . ' siteId=' . $siteId);
 
 
         $this->view('domains/form', compact(
@@ -508,51 +507,57 @@ error_log('availableIps count=' . count($availableIps) . ' siteId=' . $siteId);
 	
 private function getAvailableIpsForSite(array $site, array $servers): array
 {
-    // 1) берем сервер из site.fastpanel_server_id
+    $collectIps = static function(array $srv): array {
+        $out = [];
+
+        $extra = trim((string)($srv['extra_ips'] ?? ''));
+        if ($extra !== '') {
+            $parts = preg_split('~[,\s]+~', $extra);
+            foreach ($parts as $v) {
+                $v = trim($v);
+                if ($v === '') continue;
+                if (preg_match('~^(?:\d{1,3}\.){3}\d{1,3}$~', $v)) {
+                    $out[] = $v;
+                }
+            }
+        }
+
+        $host = (string)($srv['host'] ?? '');
+        $host = preg_replace('~^https?://~i', '', $host);
+        $host = preg_replace('~:\d+$~', '', $host);
+        $host = trim($host);
+        if ($host !== '' && preg_match('~^(?:\d{1,3}\.){3}\d{1,3}$~', $host)) {
+            $out[] = $host;
+        }
+
+        return array_values(array_unique($out));
+    };
+
     $sid = (int)($site['fastpanel_server_id'] ?? 0);
-    if ($sid <= 0) return [];
-
-    $srv = null;
-    foreach ($servers as $s) {
-        if ((int)($s['id'] ?? 0) === $sid) { $srv = $s; break; }
-    }
-    if (!$srv) return [];
-
     $ips = [];
 
-    // 2) main source: fastpanel_servers.extra_ips (как в DeployController::form)
-    $extra = trim((string)($srv['extra_ips'] ?? ''));
-    if ($extra !== '') {
-        $parts = preg_split('~[,\s]+~', $extra);
-        foreach ($parts as $v) {
-            $v = trim($v);
-            if ($v === '') continue;
+    // Если сервер уже выбран у сайта — показываем IP только этого сервера.
+    if ($sid > 0) {
+        foreach ($servers as $srv) {
+            if ((int)($srv['id'] ?? 0) === $sid) {
+                $ips = $collectIps($srv);
+                break;
+            }
+        }
+    }
 
-            // строгая проверка ipv4 как в deploy
-            if (preg_match('~^(?:\d{1,3}\.){3}\d{1,3}$~', $v)) {
-                $ips[] = $v;
+    // Для новых сайтов fastpanel_server_id еще может быть пустым.
+    // Тогда собираем IP из всех настроенных Fastpanel-серверов,
+    // чтобы на экране покупки домена пользователь мог выбрать нужный IP.
+    if (empty($ips)) {
+        foreach ($servers as $srv) {
+            foreach ($collectIps($srv) as $ip) {
+                $ips[] = $ip;
             }
         }
     }
 
     $ips = array_values(array_unique($ips));
-
-    // 3) fallback: если extra_ips пуст — пытаемся вытащить IP из host (как в deploy)
-    if (empty($ips)) {
-        $host = (string)($srv['host'] ?? '');
-        $host = preg_replace('~^https?://~i', '', $host);
-        $host = preg_replace('~:\d+$~', '', $host);
-        $host = trim($host);
-
-        if (preg_match('~^\d+\.\d+\.\d+\.\d+$~', $host)) {
-            $ips = [$host];
-        } else {
-            // список IP не задан
-            $ips = [];
-        }
-    }
-
-    // порядок — как удобно в UI
     sort($ips);
     return $ips;
 }

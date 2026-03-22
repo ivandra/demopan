@@ -20,8 +20,9 @@ $previewDataUri = (string)($previewDataUri ?? '');
     <div class="site-context__meta">
         Сайт: <?= h($site['domain'] ?? '') ?>
         <?php if ($scope === 'assets'): ?>
-            · Label: <code><?= h($label) ?></code>
-            · Папка: <code>subs/<?= h($label) ?>/assets</code>
+            · Label: <code><?= h($label) ?></code> · Папка: <code>subs/<?= h($label) ?>/assets</code>
+        <?php elseif ($scope === 'sub'): ?>
+            · Label: <code><?= h($label) ?></code> · Папка: <code>subs/<?= h($label) ?></code>
         <?php else: ?>
             · Корневой build
         <?php endif; ?>
@@ -35,21 +36,11 @@ $previewDataUri = (string)($previewDataUri ?? '');
         <input type="hidden" name="label" value="<?= h($label) ?>">
 
         <?php if ($isBinary): ?>
-            <div class="alert alert-info">
-                Для favicon и logo используется замена через загрузку файла. Текущая версия будет сохранена в backup.
-            </div>
-
+            <div class="alert alert-info">Для favicon и logo используется замена через загрузку файла. Текущая версия будет сохранена в backup.</div>
             <?php if ($previewDataUri !== ''): ?>
-                <div>
-                    <div class="small muted mb-8">Текущее изображение</div>
-                    <img src="<?= h($previewDataUri) ?>" alt="preview" style="max-width:220px;max-height:220px;border:1px solid #d8dee6;border-radius:12px;padding:8px;background:#fff;">
-                </div>
+                <div><div class="small muted mb-8">Текущее изображение</div><img src="<?= h($previewDataUri) ?>" alt="preview" style="max-width:220px;max-height:220px;border:1px solid #d8dee6;border-radius:12px;padding:8px;background:#fff;"></div>
             <?php endif; ?>
-
-            <label>
-                Новый файл
-                <input type="file" name="upload" required>
-            </label>
+            <label>Новый файл<input type="file" name="upload" required></label>
         <?php else: ?>
             <textarea name="content" class="editor-textarea"><?= h($content) ?></textarea>
         <?php endif; ?>
@@ -64,21 +55,11 @@ $previewDataUri = (string)($previewDataUri ?? '');
 <?php if (!empty($backups)): ?>
     <div class="panel-card mt-16">
         <h2 class="section-title">Бэкапы</h2>
-
-        <form method="post"
-              action="/sites/files/restore?id=<?= $siteId ?>"
-              data-confirm="Восстановить выбранный бэкап? Текущий файл будет сохранён как новый бэкап."
-              class="inline-form">
+        <form method="post" action="/sites/files/restore?id=<?= $siteId ?>" data-confirm="Восстановить выбранный бэкап? Текущий файл будет сохранён как новый бэкап." class="inline-form">
             <input type="hidden" name="file" value="<?= h($safeFile) ?>">
             <input type="hidden" name="scope" value="<?= h($scope) ?>">
             <input type="hidden" name="label" value="<?= h($label) ?>">
-
-            <select name="backup">
-                <?php foreach ($backups as $b): ?>
-                    <option value="<?= h($b) ?>"><?= h($b) ?></option>
-                <?php endforeach; ?>
-            </select>
-
+            <select name="backup"><?php foreach ($backups as $b): ?><option value="<?= h($b) ?>"><?= h($b) ?></option><?php endforeach; ?></select>
             <button type="submit" class="btn btn-danger">Восстановить</button>
         </form>
     </div>

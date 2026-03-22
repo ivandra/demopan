@@ -27,13 +27,14 @@ $isAssets = ($scope === 'assets');
             Раздел
             <select name="scope" onchange="this.form.submit()">
                 <option value="root" <?= $scope === 'root' ? 'selected' : '' ?>>Корневые build-файлы</option>
+                <option value="sub" <?= $scope === 'sub' ? 'selected' : '' ?>>Файлы поддомена</option>
                 <option value="assets" <?= $scope === 'assets' ? 'selected' : '' ?>>Assets поддомена</option>
             </select>
         </label>
 
         <label>
             Label
-            <select name="label" onchange="this.form.submit()" <?= $scope === 'assets' ? '' : 'disabled' ?>>
+            <select name="label" onchange="this.form.submit()" <?= in_array($scope, ['sub', 'assets'], true) ? '' : 'disabled' ?>>
                 <?php foreach ($labelsForFiles as $lb): ?>
                     <option value="<?= h($lb) ?>" <?= $lb === $label ? 'selected' : '' ?>><?= h($lb) ?></option>
                 <?php endforeach; ?>
@@ -45,13 +46,15 @@ $isAssets = ($scope === 'assets');
 
     <?php if ($isAssets): ?>
         <div class="alert alert-info">
-            Здесь можно заменять бинарные assets текущего label: логотип и favicon в папке
-            <code>subs/<?= h($label) ?>/assets</code>.
+            Здесь можно заменять бинарные assets текущего label: логотип и favicon в папке <code>subs/<?= h($label) ?>/assets</code>.
+        </div>
+    <?php elseif ($scope === 'sub'): ?>
+        <div class="alert alert-info">
+            Здесь редактируются build-файлы выбранного поддомена из папки <code>subs/<?= h($label) ?></code>, включая его <code>config.php</code> и verification-файлы.
         </div>
     <?php else: ?>
         <div class="alert alert-info">
-            Здесь редактируются только корневые build-файлы сайта.
-            Для multy-шаблона это общий корень build, а не папка отдельного поддомена.
+            Здесь редактируются только корневые build-файлы сайта. Для multy-шаблона это общий корень build, а не папка отдельного поддомена.
         </div>
     <?php endif; ?>
 </div>
@@ -65,39 +68,18 @@ $isAssets = ($scope === 'assets');
     <div class="table-wrap">
         <table class="table">
             <thead>
-            <tr>
-                <th>Файл</th>
-                <th>Статус</th>
-                <th>Размер</th>
-                <th>Действия</th>
-            </tr>
+            <tr><th>Файл</th><th>Статус</th><th>Размер</th><th>Действия</th></tr>
             </thead>
             <tbody>
             <?php foreach ($files as $f): ?>
                 <tr>
                     <td><code><?= h($f['name']) ?></code></td>
-                    <td>
-                        <?php if (!empty($f['exists'])): ?>
-                            <span class="badge badge-success">Есть</span>
-                        <?php else: ?>
-                            <span class="badge badge-muted">Нет</span>
-                        <?php endif; ?>
-                    </td>
+                    <td><?php if (!empty($f['exists'])): ?><span class="badge badge-success">Есть</span><?php else: ?><span class="badge badge-muted">Нет</span><?php endif; ?></td>
                     <td><?= (int)$f['size'] ?> байт</td>
-                    <td>
-                        <a class="btn btn-sm btn-secondary"
-                           href="/sites/files/edit?id=<?= $siteId ?>&scope=<?= rawurlencode($scope) ?>&label=<?= rawurlencode($label) ?>&file=<?= rawurlencode($f['name']) ?>">
-                            Открыть
-                        </a>
-                    </td>
+                    <td><a class="btn btn-sm btn-secondary" href="/sites/files/edit?id=<?= $siteId ?>&scope=<?= rawurlencode($scope) ?>&label=<?= rawurlencode($label) ?>&file=<?= rawurlencode($f['name']) ?>">Открыть</a></td>
                 </tr>
             <?php endforeach; ?>
-
-            <?php if (!$files): ?>
-                <tr>
-                    <td colspan="4" class="muted">Файлы не найдены.</td>
-                </tr>
-            <?php endif; ?>
+            <?php if (!$files): ?><tr><td colspan="4" class="muted">Файлы не найдены.</td></tr><?php endif; ?>
             </tbody>
         </table>
     </div>
