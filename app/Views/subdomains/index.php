@@ -18,11 +18,12 @@ $rows = is_array($rows ?? null) ? $rows : [];
     <div class="panel-card stack-gap-md">
         <h2 class="section-title">Добавить пачкой</h2>
 
-        <form method="post" action="/subdomains/bulk-add" class="stack-gap-md">
-            <textarea name="labels" rows="8" placeholder="1win&#10;pinup&#10;betera"></textarea>
+        <form method="post" action="/subdomains/bulk-add" class="stack-gap-md js-subdomain-manual-form" data-preview-mode="catalog">
+            <textarea name="labels" rows="8" placeholder="888starz | 888Starz | 888Starz&#10;winline | Winline | Винлайн&#10;arkada"></textarea>
             <div class="small muted">
-                Можно вставлять через пробел, запятую или перенос строки.
-                Для `_default` отдельная строка уже должна быть в каталоге и редактируется ниже.
+                Формат строки: <code>Label | Brand | Brand_RU</code>.<br>
+                Можно также оставить только <code>Label</code>.<br>
+                Поддерживаются разделители: <code>|</code>, <code>;</code> и tab.
             </div>
             <div class="page-actions">
                 <button type="submit" class="btn btn-primary">Добавить</button>
@@ -33,10 +34,11 @@ $rows = is_array($rows ?? null) ? $rows : [];
     <div class="panel-card">
         <h2 class="section-title">Подсказка</h2>
         <div class="note">
-            Здесь задается бренд по умолчанию для label. Например:
-            <br><code>banda → Banda Casino</code>
-            <br><code>gizbo → Gizbo Casino (Гизбо Казино)</code>
-            <br><code>_default → общий root fallback</code>
+            Перед отправкой панель покажет предварительный список того, что будет добавлено или обновлено.<br>
+            Пример:<br>
+            <code>gizbo | Gizbo Casino | Гизбо Казино</code><br>
+            <code>winline | Winline | Винлайн</code><br>
+            <code>_default</code> лучше не добавлять через этот блок, а редактировать существующую строку ниже.
         </div>
     </div>
 </div>
@@ -53,7 +55,7 @@ $rows = is_array($rows ?? null) ? $rows : [];
             <tr>
                 <th>ID</th>
                 <th>Label</th>
-                <th>Brand</th>
+                <th colspan="2">Brand / Brand_RU</th>
                 <th>Active</th>
                 <th>Действия</th>
             </tr>
@@ -63,17 +65,24 @@ $rows = is_array($rows ?? null) ? $rows : [];
                 <tr>
                     <td><?= (int)$r['id'] ?></td>
                     <td><code><?= h((string)$r['label']) ?></code></td>
-                    <td style="min-width:320px;">
-                        <form method="post" action="/subdomains/save" class="inline-form" style="display:flex;gap:8px;align-items:center;">
+                    <td colspan="2" style="min-width:680px;">
+                        <form method="post" action="/subdomains/save" class="inline-form" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
                             <input type="hidden" name="id" value="<?= (int)$r['id'] ?>">
                             <input
                                 type="text"
                                 name="brand_name"
                                 value="<?= h((string)($r['brand_name'] ?? '')) ?>"
-                                placeholder="например: Gizbo Casino"
+                                placeholder="Brand, например: Gizbo Casino"
                                 style="min-width:240px;"
                             >
-                            <button type="submit" class="btn btn-sm btn-primary">Сохранить</button>
+                            <input
+                                type="text"
+                                name="brand_name_ru"
+                                value="<?= h((string)($r['brand_name_ru'] ?? '')) ?>"
+                                placeholder="Brand_RU, например: Гизбо Казино"
+                                style="min-width:240px;"
+                            >
+                            <button type="submit" class="btn btn-sm btn-primary">Сохранить оба поля</button>
                         </form>
                     </td>
                     <td>
@@ -105,7 +114,7 @@ $rows = is_array($rows ?? null) ? $rows : [];
 
             <?php if (empty($rows)): ?>
                 <tr>
-                    <td colspan="5" class="muted">Каталог пуст.</td>
+                    <td colspan="6" class="muted">Каталог пуст.</td>
                 </tr>
             <?php endif; ?>
             </tbody>

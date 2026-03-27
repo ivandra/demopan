@@ -79,6 +79,94 @@ class SiteSubdomainsController extends Controller
         ")->execute([$status, $error, $siteId, $label]);
     }
 
+
+    /**
+     * Разбор ручного списка поддоменов.
+     * Поддерживает строки:
+     *   label
+     *   label | Brand
+     *   label | Brand | Brand_RU
+     * Для обратной совместимости по-прежнему принимает label через запятую/пробел/перенос строки.
+     */
+    private function parseManualSubdomainInput(string $raw): array
+    {
+        $items = [];
+        $lines = preg_split('~
+|
+|
+~', $raw) ?: [];
+
+        foreach ($lines as $line) {
+            $line = trim((string)$line);
+            if ($line === '') continue;
+
+            if (strpos($line, '|') !== false || strpos($line, ';') !== false || strpos($line, "	") !== false) {
+                $parts = preg_split('~\s*(?:\||;|	)\s*~u', $line) ?: [];
+                $label = strtolower(trim((string)($parts[0] ?? '')));
+                if ($label === '') continue;
+                if (!preg_match('~^[a-z0-9_](?:[a-z0-9_-]{0,61}[a-z0-9])?$~', $label)) continue;
+
+                $items[$label] = [
+                    'label' => $label,
+                    'brand_name' => trim((string)($parts[1] ?? '')),
+                    'brand_name_ru' => trim((string)($parts[2] ?? '')),
+                ];
+                continue;
+            }
+
+            $parts = preg_split('~[,\s]+~u', $line) ?: [];
+            foreach ($parts as $p) {
+                $label = strtolower(trim((string)$p));
+                if ($label === '') continue;
+                if (!preg_match('~^[a-z0-9_](?:[a-z0-9_-]{0,61}[a-z0-9])?$~', $label)) continue;
+                if (!isset($items[$label])) {
+                    $items[$label] = [
+                        'label' => $label,
+                        'brand_name' => '',
+                        'brand_name_ru' => '',
+                    ];
+                }
+            }
+        }
+
+        return array_values($items);
+    }
+
+    private function upsertCatalogBrands(array $items): void
+    {
+        if (empty($items)) return;
+
+        try {
+            DB::pdo()->exec("ALTER TABLE subdomain_catalog ADD COLUMN brand_name_ru VARCHAR(255) NOT NULL DEFAULT '' AFTER brand_name");
+        } catch (Throwable $e) {
+        }
+
+        $sql = "
+            INSERT INTO subdomain_catalog(label, brand_name, brand_name_ru, is_active)
+            VALUES(?, ?, ?, 1)
+            ON DUPLICATE KEY UPDATE
+                brand_name = CASE
+                    WHEN VALUES(brand_name) <> '' THEN VALUES(brand_name)
+                    ELSE brand_name
+                END,
+                brand_name_ru = CASE
+                    WHEN VALUES(brand_name_ru) <> '' THEN VALUES(brand_name_ru)
+                    ELSE brand_name_ru
+                END
+        ";
+        $st = DB::pdo()->prepare($sql);
+
+        foreach ($items as $item) {
+            $label = strtolower(trim((string)($item['label'] ?? '')));
+            if ($label === '' || $label === '_default') continue;
+            $st->execute([
+                $label,
+                trim((string)($item['brand_name'] ?? '')),
+                trim((string)($item['brand_name_ru'] ?? '')),
+            ]);
+        }
+    }
+
     /* -------------------- registrar helpers -------------------- */
 
     private function listNamecheapAccounts(): array
@@ -623,6 +711,7 @@ class SiteSubdomainsController extends Controller
 
     // ---- 1) собираем выбранные labels из формы ----
     $labelsMap = [];
+    $mode = trim((string)($_POST['mode'] ?? ''));
 
     // Чекбоксы
     if (!empty($_POST['labels']) && is_array($_POST['labels'])) {
@@ -632,15 +721,28 @@ class SiteSubdomainsController extends Controller
         }
     }
 
-    // Быстрый ввод (через запятую/пробел)
+    // Быстрый ввод: label или label | Brand | Brand_RU
     $labelsText = trim((string)($_POST['labels_text'] ?? ''));
+    $manualItems = [];
     if ($labelsText !== '') {
-        $parts = preg_split('~[,\s]+~u', $labelsText);
-        if (is_array($parts)) {
-            foreach ($parts as $p) {
-                $p = strtolower(trim((string)$p));
-                if ($p !== '') $labelsMap[$p] = true;
-            }
+        $manualItems = $this->parseManualSubdomainInput($labelsText);
+        foreach ($manualItems as $item) {
+            $label = strtolower(trim((string)($item['label'] ?? '')));
+            if ($label !== '') $labelsMap[$label] = true;
+        }
+        $this->upsertCatalogBrands($manualItems);
+    }
+
+    $isManualAppend = ($mode === 'append_manual') || ($labelsText !== '' && empty($_POST['labels']));
+
+    // Для ручного добавления НЕ заменяем состав сайта, а дополняем его.
+    if ($isManualAppend) {
+        $existingLabelsStmt = $pdo->prepare("SELECT label FROM site_subdomains WHERE site_id=?");
+        $existingLabelsStmt->execute([$siteId]);
+        $existingLabels = $existingLabelsStmt->fetchAll(PDO::FETCH_COLUMN) ?: [];
+        foreach ($existingLabels as $existingLabel) {
+            $existingLabel = strtolower(trim((string)$existingLabel));
+            if ($existingLabel !== '') $labelsMap[$existingLabel] = true;
         }
     }
 
@@ -674,7 +776,9 @@ class SiteSubdomainsController extends Controller
         . ' labelsDns_sample=' . json_encode(array_slice($labelsDns, 0, 10), JSON_UNESCAPED_UNICODE)
     );
 
-    // ---- 2) приводим site_subdomains к выбранному списку (add missing, delete лишние кроме _default) ----
+    // ---- 2) обновляем site_subdomains ----
+    // Для чекбокс-формы синхронизируем список полностью.
+    // Для ручного добавления только добавляем недостающие и ничего не удаляем.
     $existingRows = $pdo->prepare("SELECT id,label FROM site_subdomains WHERE site_id=?");
     $existingRows->execute([$siteId]);
     $existing = $existingRows->fetchAll(PDO::FETCH_ASSOC) ?: [];
@@ -708,11 +812,13 @@ class SiteSubdomainsController extends Controller
         $ins->execute([$siteId, $l, $fqdn, 1, 1]);
     }
 
-    // delete лишние (кроме _default)
-    foreach ($existMap as $lb => $id) {
-        if ($lb === '_default') continue;
-        if (!isset($labelsSet[$lb])) {
-            $pdo->prepare("DELETE FROM site_subdomains WHERE id=? LIMIT 1")->execute([$id]);
+    // delete лишние (кроме _default) только в режиме полной синхронизации по чекбоксам
+    if (!$isManualAppend) {
+        foreach ($existMap as $lb => $id) {
+            if ($lb === '_default') continue;
+            if (!isset($labelsSet[$lb])) {
+                $pdo->prepare("DELETE FROM site_subdomains WHERE id=? LIMIT 1")->execute([$id]);
+            }
         }
     }
 

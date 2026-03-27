@@ -161,6 +161,87 @@ code{
     margin-top:3px;
 }
 
+
+.hub-statusbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    padding:10px 20px;
+    border-bottom:1px solid var(--line);
+    background:#f8fafc;
+}
+
+.hub-statusbar.is-warning{
+    background:#fff7ed;
+    border-bottom-color:#fdba74;
+}
+
+.hub-statusbar__main{
+    min-width:240px;
+}
+
+.hub-statusbar__title{
+    font-size:13px;
+    font-weight:700;
+}
+
+.hub-statusbar__text{
+    margin-top:2px;
+    font-size:12px;
+    color:var(--muted);
+}
+
+.hub-statusbar__items{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.hub-statusbar__actions{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.hub-statuspill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-size:12px;
+    line-height:1.2;
+    white-space:nowrap;
+}
+
+.hub-statuspill.is-ok{
+    border-color:#86efac;
+    background:#f0fdf4;
+    color:#166534;
+}
+
+.hub-statuspill.is-warn{
+    border-color:#fdba74;
+    background:#fff7ed;
+    color:#9a3412;
+}
+
+.hub-statuspill.is-bad{
+    border-color:#fca5a5;
+    background:#fef2f2;
+    color:#991b1b;
+}
+
+.hub-statuspill b{
+    font-weight:700;
+}
+
 .hub-main{
     padding:20px;
 }
@@ -986,4 +1067,94 @@ form{
     background: rgba(0, 0, 0, 0.06);
     font-family: Consolas, Monaco, monospace;
     font-size: 13px;
+}
+/* HUB_MINIMAL_STATUSLINE_V20260326:start */
+.hub-statusline{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:8px 22px;
+    border-top:1px solid #e2e8f0;
+    border-bottom:1px solid #e2e8f0;
+    background:#f8fafc;
+    overflow-x:auto;
+}
+.hub-statusline.is-warning{
+    background:#fff7ed;
+    border-top-color:#fdba74;
+    border-bottom-color:#fdba74;
+}
+.hub-statusline__left{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:nowrap;
+    min-width:max-content;
+}
+.hub-statusline__right{
+    flex:0 0 auto;
+}
+.hub-statusline .btn-primary{
+    animation:hubStatusPulse 1.8s ease-in-out infinite;
+}
+.hub-statusline .btn-primary:hover{
+    animation:none;
+}
+.hub-mini-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:6px 10px;
+    border-radius:999px;
+    border:1px solid #cbd5e1;
+    background:#fff;
+    color:#334155;
+    white-space:nowrap;
+    line-height:1;
+    font-size:12px;
+}
+.hub-mini-pill__dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:currentColor;
+    display:inline-block;
+    flex:0 0 auto;
+    opacity:.9;
+}
+.hub-mini-pill b,
+.hub-mini-pill span{
+    font-size:12px;
+    line-height:1;
+    color:inherit;
+}
+.hub-mini-pill b{
+    font-weight:500;
+}
+.hub-mini-pill.is-ok{
+    border-color:#86efac;
+    background:#f0fdf4;
+    color:#166534;
+}
+.hub-mini-pill.is-warn{
+    border-color:#fdba74;
+    background:#fff7ed;
+    color:#c2410c;
+}
+.hub-mini-pill.is-bad{
+    border-color:#fca5a5;
+    background:#fef2f2;
+    color:#b91c1c;
+}
+@media (max-width: 900px){
+    .hub-statusline{
+        padding:8px 12px;
+    }
+}
+/* HUB_MINIMAL_STATUSLINE_V20260326:end */
+
+@keyframes hubStatusPulse{
+    0%,100%{transform:translateY(0);box-shadow:0 0 0 0 rgba(37,99,235,.10);}
+    50%{transform:translateY(-1px);box-shadow:0 0 0 6px rgba(37,99,235,.08);}
 }

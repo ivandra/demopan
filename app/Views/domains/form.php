@@ -106,11 +106,20 @@ $decisionRu = function(string $d) {
             </div>
 
             <div class="stack-gap-sm">
-                <div><b>Базовая цена:</b> <?= h($fmt($regular)) ?> USD</div>
-                <div><b>Цена аккаунта:</b> <?= h($fmt($your)) ?> USD</div>
-                <div><b>Цена по купону:</b> <?= h($fmt($coupon)) ?> USD</div>
-                <div><b>Промокод:</b> <?= $promo !== '' ? h($promo) : '—' ?></div>
-                <div><b>Минимальная:</b> <?= h($fmt($min)) ?> USD<?= is_numeric($max) ? ' <span class="small muted">(лимит: ' . h($fmt($max)) . ')</span>' : '' ?></div>
+                <?php
+                $finalPrice = null;
+                foreach ([$coupon, $your, $min, $regular] as $candidatePrice) {
+                    if (is_numeric($candidatePrice)) {
+                        $finalPrice = (float)$candidatePrice;
+                        break;
+                    }
+                }
+                $isBelowLimit = is_numeric($max) && is_numeric($finalPrice) ? ((float)$finalPrice < (float)$max) : null;
+                ?>
+                <div><b>Финальная стоимость:</b> <span class="badge <?= $finalPrice !== null ? 'badge-success' : 'badge-muted' ?>"><?= $finalPrice !== null ? h($fmt($finalPrice)) . ' USD' : '—' ?></span></div>
+                <div><b>Порог:</b> <?= $isBelowLimit === true ? '<span class="badge badge-success">ниже 7 USD</span>' : ($isBelowLimit === false ? '<span class="badge badge-warning">выше лимита</span>' : '—') ?></div>
+                <?php if ($promo !== ''): ?><div><b>Промокод:</b> <?= h($promo) ?></div><?php endif; ?>
+                <?php if ($coupon !== null && is_numeric($coupon)): ?><div class="small muted">Показана цена по купону.</div><?php elseif ($your !== null && is_numeric($your)): ?><div class="small muted">Показана цена аккаунта.</div><?php endif; ?>
             </div>
         </div>
 

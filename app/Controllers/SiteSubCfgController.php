@@ -146,7 +146,28 @@ class SiteSubCfgController extends Controller
         $prov = new SubdomainProvisioner();
         $prov->ensureForSite($siteId, $label);
 
-        $this->flash('success', 'Контент и SEO сохранены. Партнерские URL пересчитаны с sub_id для текущего label.');
+        if (!empty($_POST['copy_to_all_labels'])) {
+            $allLabels = $resolver->listLabels($siteId, true);
+            foreach ($allLabels as $targetLabel) {
+                $targetCfg = $resolver->getResolvedConfig($siteId, $targetLabel);
+                foreach (['title','h1','description','keywords','promolink','internal_reg_url','partner_override_url','redirect_enabled','base_new_url','base_second_url','logo','favicon'] as $field) {
+                    $targetCfg[$field] = $cfg[$field] ?? ($targetCfg[$field] ?? '');
+                }
+                $targetCfg['label'] = $targetLabel;
+                if ($resolver->isRootLabel($targetLabel)) {
+                    $resolver->upsertDefaultConfig($siteId, $targetCfg);
+                    $resolver->saveLegacySiteConfig($siteId, $targetCfg);
+                    $resolver->upsertSubConfig($siteId, '_default', $targetCfg);
+                } else {
+                    $resolver->upsertSubConfig($siteId, $targetLabel, $targetCfg);
+                }
+                $prov->ensureForSite($siteId, $targetLabel);
+            }
+            $this->flash('success', 'Настройки SEO и ссылок сохранены и скопированы на все поддомены сайта.');
+        } else {
+            $this->flash('success', 'Контент и SEO сохранены. Партнерские URL пересчитаны с sub_id для текущего label.');
+        }
+        (new PublishDirtyService())->markDirty($siteId, 'Изменены config, SEO или ссылки. Выгрузите актуальные данные на VPS.');
         $this->redirect('/sites/subcfg?id=' . $siteId . '&label=' . urlencode($label));
         exit;
     }
@@ -164,21 +185,18 @@ class SiteSubCfgController extends Controller
             exit;
         }
 
-        $pdo = DB::pdo();
-		$structure = new SiteStructure();
-		$resolver  = new SiteConfigResolver();
-
+        $resolver  = new SiteConfigResolver();
         $default = $resolver->getDefaultConfig($siteId);
-		if (!isset($default['logo']))    $default['logo'] = 'assets/logo.png';
-		if (!isset($default['favicon'])) $default['favicon'] = 'assets/favicon.png';
+        if (!isset($default['logo']))    $default['logo'] = 'assets/logo.png';
+        if (!isset($default['favicon'])) $default['favicon'] = 'assets/favicon.png';
 
-		$resolver->ensureSubConfigExists($siteId, $label, $default);
+        $resolver->ensureSubConfigExists($siteId, $label, $default);
 
-        // fs + config.php
         $prov = new SubdomainProvisioner();
         $prov->ensureForSite($siteId, $label);
 
-        $this->flash('success', 'Контент и SEO сохранены. Партнерские URL пересчитаны с sub_id для текущего label.');
+        $this->flash('success', 'Поддомен создан.');
+        (new PublishDirtyService())->markDirty($siteId, 'Изменена структура поддоменов. Выгрузите актуальные данные на VPS.');
         $this->redirect('/sites/subcfg?id=' . $siteId . '&label=' . urlencode($label));
         exit;
     }
@@ -216,6 +234,8 @@ class SiteSubCfgController extends Controller
             }
         }
 
+        $this->flash('success', 'Поддомен удален из конфигов.');
+        (new PublishDirtyService())->markDirty($siteId, 'Изменена структура поддоменов. Выгрузите актуальные данные на VPS.');
         $this->redirect('/sites/subcfg?id=' . $siteId . '&label=_default');
         exit;
     }

@@ -31,9 +31,9 @@ $configFileForFiles = 'config.default.php';
 
 <div class="panel-card mt-16">
     <?php if (!empty($report['ok'])): ?>
-        <span class="badge badge-success">BUILD OK</span>
+        <span class="badge badge-success">Build выполнен успешно</span>
     <?php else: ?>
-        <span class="badge badge-danger">BUILD FAILED</span>
+        <span class="badge badge-danger">Build завершился с ошибкой</span>
     <?php endif; ?>
 </div>
 

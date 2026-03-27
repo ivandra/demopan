@@ -15,7 +15,7 @@ $siteId = (int)($site['id'] ?? 0);
 $domain = (string)($site['domain'] ?? '');
 
 function labelTitleAi(string $lb): string {
-    return $lb === '_default' ? 'Основной домен (_default)' : $lb;
+    return $lb === '_default' ? 'Основной домен' : ('Поддомен: ' . $lb);
 }
 ?>
 
@@ -47,9 +47,24 @@ function labelTitleAi(string $lb): string {
 
     <div class="small muted">
         Все параметры ниже относятся только к текущему label.
-        Для root используй <code>_default</code>.
+        Для основного домена используется label <code>_default</code>.
     </div>
 </div>
+
+<?php if (!empty($site['publish_dirty'])): ?>
+    <div class="alert alert-warning mt-16">
+        <b>Есть локальные изменения, сайт нужно выгрузить на VPS.</b><br>
+        <?= h((string)($site['publish_dirty_message'] ?? 'Есть локальные изменения.')) ?>
+        <div class="page-actions mt-8">
+            <a class="btn btn-primary" href="/deploy?id=<?= $siteId ?>">Открыть публикацию</a>
+        </div>
+    </div>
+<?php else: ?>
+    <div class="alert alert-success mt-16">
+        <b>Сейчас по этому сайту нет отложенных локальных изменений.</b><br>
+        Если после сохранения AI, SEO, текстов или config появится необходимость публикации, здесь появится предупреждение.
+    </div>
+<?php endif; ?>
 
 <div class="panel-card mt-16 stack-gap-md">
     <h2 class="section-title">Как устроен раздел</h2>
@@ -127,7 +142,7 @@ function labelTitleAi(string $lb): string {
             <div class="field-row">
                 <label>{LINK_MIRROR}</label>
                 <input type="text" value="<?= h($resolvedMirrorUrl) ?>" readonly>
-                <div class="small muted">Подставляется автоматически из Promolink текущего label.</div>
+                <div class="small muted">Подставляется автоматически из promolink текущего label. Здесь всегда показывается относительный путь, например <code>/reg</code>.</div>
             </div>
         </div>
 
@@ -146,6 +161,8 @@ function labelTitleAi(string $lb): string {
             <textarea name="extra_instruction" rows="6"><?= h($entityAi['extra_instruction'] ?? '') ?></textarea>
         </div>
 
+        <label class="checkbox-inline small"><input type="checkbox" name="copy_all_labels" value="1"> После сохранения скопировать эти настройки на все label сайта</label>
+
         <div class="page-actions">
             <button class="btn btn-primary" type="submit">Сохранить переменные текущего label</button>
         </div>
@@ -154,6 +171,7 @@ function labelTitleAi(string $lb): string {
 
 <div class="panel-card mt-16 stack-gap-md">
     <h2 class="section-title">Batch-настройка</h2>
+    <div class="small muted">Этот режим используется при массовой генерации. «Только пустые / наследуемые» — панель меняет только незаполненные значения. «Перезаписывать все» — заменяет текущие значения даже если они уже заполнены вручную.</div>
 
     <form method="post" action="/ai/options/save?id=<?= $siteId ?>&label=<?= urlencode($currentLabel) ?>" class="stack-gap-md">
         <div class="field-row">

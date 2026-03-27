@@ -129,7 +129,7 @@ $subsTotal   = (int)($subStats['total'] ?? 0);
         Принудительно проверить SSL (root + enabled поддомены).
       </div>
 
-      <form method="post" action="/ssl/check-now?id=<?= (int)$siteId ?>"
+      <form method="post" action="/ssl/site/check-now?id=<?= (int)$siteId ?>"
             onsubmit="return confirm('Принудительно проверить SSL сейчас?');">
         <button type="submit"
                 style="width:100%;padding:10px 12px;border-radius:10px;border:0;background:#2f80ed;color:#fff;font-weight:700;">

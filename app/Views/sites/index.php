@@ -89,63 +89,20 @@ function status_badge(bool $ok, string $okText = 'Да', string $failText = 'Н�
                 $sslHasCert = ((int)($site['ssl_has_cert'] ?? 0) === 1);
                 $sslCertId  = (int)($site['ssl_cert_id'] ?? 0);
                 $sslErr     = (string)($site['ssl_error'] ?? '');
-
-                $fpStateText = 'Нет';
-                $fpStateClass = 'badge-muted';
-
-                if (!$vpsOk) {
-                    $fpStateText = 'FP: —';
-                    $fpStateClass = 'badge-muted';
-                } elseif ($sslErr !== '') {
-                    $fpStateText = 'FP: Ошибка';
-                    $fpStateClass = 'badge-danger';
-                } elseif ($sslReady) {
-                    $fpStateText = 'FP: Готов';
-                    $fpStateClass = 'badge-success';
-                } elseif ($sslHasCert) {
-                    $fpStateText = 'FP: Не применён';
-                    $fpStateClass = 'badge-warning';
-                } else {
-                    $fpStateText = 'FP: Нет SSL';
-                    $fpStateClass = 'badge-muted';
-                }
-
-                $monCount = 0;
-                $monOkCount = 0;
-                $monLast = '';
-                $monAllOk = null;
-
-                try {
-                    $pdo = DB::pdo();
-                    $st = $pdo->prepare("
-                        SELECT
-                          SUM(CASE WHEN enabled=1 THEN 1 ELSE 0 END) AS cnt,
-                          SUM(CASE WHEN enabled=1 AND https_ok=1 THEN 1 ELSE 0 END) AS ok_cnt,
-                          MAX(updated_at) AS last_dt
-                        FROM ssl_checks
-                        WHERE site_id=?
-                    ");
-                    $st->execute([$siteId]);
-                    $agg = $st->fetch(PDO::FETCH_ASSOC) ?: [];
-
-                    $monCount = (int)($agg['cnt'] ?? 0);
-                    $monOkCount = (int)($agg['ok_cnt'] ?? 0);
-                    $monLast = (string)($agg['last_dt'] ?? '');
-
-                    if ($monCount > 0) {
-                        $monAllOk = ($monOkCount === $monCount);
-                    }
-                } catch (Throwable $e) {
-                    $monAllOk = null;
-                }
-
-                $needWarn = ($sslHasCert && !$sslReady && $monAllOk === true);
+                $monCount = (int)($site['ssl_mon_total'] ?? 0);
+                $monOkCount = (int)($site['ssl_mon_ok'] ?? 0);
+                $monLast = (string)($site['ssl_mon_last'] ?? '');
+                $monAllOkRaw = (int)($site['ssl_mon_all_ok'] ?? 0);
+                $monAllOk = ($monCount > 0) ? ($monAllOkRaw === 1) : null;
                 ?>
                 <tr>
                     <td class="nowrap"><?= $siteId ?></td>
 
                     <td>
                         <div class="sites-domain"><?= h($domain) ?></div>
+                        <?php if (!empty($site['publish_dirty'])): ?>
+                            <div class="mt-8"><span class="badge badge-warning">Нужна выгрузка</span></div>
+                        <?php endif; ?>
                         <span class="sites-meta">ID: #<?= $siteId ?></span>
                     </td>
 
@@ -185,13 +142,6 @@ function status_badge(bool $ok, string $okText = 'Да', string $failText = 'Н�
                     <td>
                         <div class="sites-ssl-stack">
                             <div class="sites-ssl-line">
-                                <span class="badge <?= $fpStateClass ?>"><?= h($fpStateText) ?></span>
-                                <?php if ($sslCertId > 0 && $vpsOk): ?>
-                                    <span class="badge badge-muted" title="Внутренний ID сертификата в FastPanel">FP cert #<?= $sslCertId ?></span>
-                                <?php endif; ?>
-                            </div>
-
-                            <div class="sites-ssl-line">
                                 <?php if ($monAllOk === true): ?>
                                     <span class="badge badge-success">Monitor: OK</span>
                                 <?php elseif ($monAllOk === false): ?>
@@ -205,14 +155,14 @@ function status_badge(bool $ok, string $okText = 'Да', string $failText = 'Н�
                                 <?php endif; ?>
                             </div>
 
-                            <?php if ($monLast !== ''): ?>
-                                <div class="small muted">last: <?= h(date('Y-m-d H:i', strtotime($monLast))) ?></div>
+                            <?php if ($sslHasCert): ?>
+                                <div class="small muted">В базе панели: сертификат привязан</div>
+                            <?php elseif ($sslReady): ?>
+                                <div class="small muted">В базе панели: SSL отмечен как готовый</div>
                             <?php endif; ?>
 
-                            <?php if ($needWarn): ?>
-                                <div class="sites-ssl-note">
-                                    Сертификат уже работает по мониторингу, но в FastPanel ещё не отмечен как применённый.
-                                </div>
+                            <?php if ($monLast !== ''): ?>
+                                <div class="small muted">last: <?= h(date('Y-m-d H:i', strtotime($monLast))) ?></div>
                             <?php endif; ?>
 
                             <div class="small">
@@ -244,7 +194,7 @@ function status_badge(bool $ok, string $okText = 'Да', string $failText = 'Н�
                             <a class="btn btn-secondary btn-sm" href="/webmaster/site?id=<?= $siteId ?>">Webmaster</a>
 
                             <form method="post"
-                                  action="/ssl/check-now?id=<?= $siteId ?>"
+                                  action="/ssl/site/check-now?id=<?= $siteId ?>"
                                   data-confirm="Принудительно проверить SSL сейчас для корня и enabled=1 поддоменов?">
                                 <button class="btn btn-secondary btn-sm" type="submit">Проверить SSL</button>
                             </form>

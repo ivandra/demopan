@@ -43,13 +43,7 @@ $isRoot = ($label === '_default');
     </div>
 
     <div class="subcfg-top mt-16">
-        <div class="panel-card">
-            <label>Поиск сущности</label>
-            <input id="subSearch" type="text" placeholder="например: banda, pinup, _default" data-filter-options="#subSelect">
-            <div class="small muted">Фильтрует список root / поддоменов.</div>
-        </div>
-
-        <div class="panel-card">
+<div class="panel-card">
             <label>Выбор root / поддомена</label>
             <select id="subSelect" data-set-query-param="label">
                 <?php foreach ($labels as $lb): ?>
@@ -63,40 +57,13 @@ $isRoot = ($label === '_default');
 
         <div class="panel-card subcfg-top__wide">
             <label>Быстрые действия</label>
-
             <div class="subcfg-actions">
-                <form method="post" action="/sites/subcfg/regenAll" data-confirm="Перегенерировать config.php для всех поддоменов сайта?">
-                    <input type="hidden" name="site_id" value="<?= $siteId ?>">
-                    <button type="submit" class="btn btn-secondary">Пересобрать config.php для всех</button>
-                </form>
-
-                <form method="post" action="/sites/subcfg/create" data-confirm="Создать поддомен, папки и config.php?">
-                    <input type="hidden" name="site_id" value="<?= $siteId ?>">
-                    <input type="text" name="new_label" placeholder="new-sub" class="input-sm">
-                    <button type="submit" class="btn btn-primary">Создать поддомен</button>
-                </form>
-
-                <?php if (!$isRoot): ?>
-                    <form method="post" action="/sites/subcfg/delete" data-confirm="Удалить поддомен полностью поддомена <?= e($label) ?> из БД?">
-                        <input type="hidden" name="site_id" value="<?= $siteId ?>">
-                        <input type="hidden" name="label" value="<?= e($label) ?>">
-                        <label class="checkbox-inline small">
-                            <input type="checkbox" name="delete_folder" value="1"> удалить папку subs/<?= e($label) ?>
-                        </label>
-                        <button type="submit" class="btn btn-danger">Удалить поддомен полностью</button>
-                    </form>
-                <?php endif; ?>
+                <div class="small muted">На этом экране можно отредактировать настройки текущего label и при сохранении сразу скопировать их на все поддомены.</div>
             </div>
         </div>
     </div>
-
-    <div class="alert alert-info mt-16">
-        <b>Важно:</b> при открытии экрана сервис гарантирует наличие
-        <code>subs/&lt;label&gt;/</code> с папками <code>texts</code>, <code>assets</code> и файлом <code>config.php</code>.
-        Для основного домена используется <code>subs/_default</code>.
     </div>
-
-    <form method="post" action="/sites/subcfg/save" class="mt-16 stack-gap-lg">
+<form method="post" action="/sites/subcfg/save" class="mt-16 stack-gap-lg">
         <input type="hidden" name="site_id" value="<?= $siteId ?>">
         <input type="hidden" name="label" value="<?= e($label) ?>">
 
@@ -227,7 +194,8 @@ $isRoot = ($label === '_default');
         </div>
 
         <div class="subcfg-actions">
-            <button type="submit" class="btn btn-primary">Сохранить и пересобрать config</button>
+            <label class="checkbox-inline small"><input type="checkbox" name="copy_to_all_labels" value="1"> Сохранить настройки для всех поддоменов</label>
+            <button type="submit" class="btn btn-primary">Сохранить настройки</button>
             <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Открыть страницы</a>
             <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Открыть тексты</a>
         </div>

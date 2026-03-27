@@ -16,6 +16,8 @@
     <?php endif; ?>
 
     <meta name="robots" content="index, follow">
+	<meta name="robots" content="noarchive">
+
 
     <link rel="canonical" href="<?php echo htmlspecialchars($currentUrl ?? ($domain . '/'), ENT_QUOTES, 'UTF-8'); ?>">
 

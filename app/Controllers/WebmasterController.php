@@ -62,6 +62,8 @@ class WebmasterController extends Controller
         $searchApiService = new YandexSearchApiService();
         $searchApiStatusMap = $searchApiService->getStatusesForSite($siteId, $desired);
         $searchApiCronState = $searchApiService->getCronState();
+        $robotsSummaryMap = $this->buildRobotsSummaryMap($siteId, $desired, $rowMap);
+        $indexSummaryRows = $this->buildIndexSummaryRows($desired, $indexStatusMap, $searchApiStatusMap);
 
 		return $this->view('webmaster/site', [
 			'site' => $site,
@@ -73,7 +75,109 @@ class WebmasterController extends Controller
             'indexWatchLogTail' => $indexWatchLogTail,
             'searchApiStatusMap' => $searchApiStatusMap,
             'searchApiCronState' => $searchApiCronState,
+            'robotsSummaryMap' => $robotsSummaryMap,
+            'indexSummaryRows' => $indexSummaryRows,
 		]);
+    }
+
+
+    private function buildRobotsSummaryMap(int $siteId, array $desired, array $rowMap): array
+    {
+        $out = [];
+        $userId = '';
+        try {
+            $userId = (string)$this->wm->getUserId();
+        } catch (Throwable $e) {
+            $userId = '';
+        }
+
+        foreach ($desired as $hrow) {
+            $label = (string)($hrow['label'] ?? '');
+            $hostUrl = (string)($hrow['host_url'] ?? '');
+            $row = $rowMap[$label] ?? [];
+            $robotsUrl = (string)($row['robots_url'] ?? '');
+            $robotsAt = (string)($row['robots_confirmed_at'] ?? '');
+            $isVerified = ((string)($row['verified_at'] ?? '') !== '');
+            $hostId = (string)($row['host_id'] ?? '');
+            $source = '';
+
+            if ($robotsUrl !== '' || $robotsAt !== '') {
+                $source = 'db';
+            } elseif ($userId !== '' && $hostId !== '') {
+                try {
+                    $apiRobots = $this->wm->getRobots($userId, $hostId);
+                    $apiUrl = '';
+                    if (is_array($apiRobots)) {
+                        $candidates = [
+                            $apiRobots['url'] ?? null,
+                            $apiRobots['data']['url'] ?? null,
+                            $apiRobots['robots_url'] ?? null,
+                            $apiRobots['data']['robots_url'] ?? null,
+                            $apiRobots['content']['url'] ?? null,
+                        ];
+                        foreach ($candidates as $candidate) {
+                            if (is_string($candidate) && trim($candidate) !== '') {
+                                $apiUrl = trim($candidate);
+                                break;
+                            }
+                        }
+                    }
+                    if ($apiUrl !== '') {
+                        $robotsUrl = $apiUrl;
+                        $robotsAt = $robotsAt !== '' ? $robotsAt : date('Y-m-d H:i:s');
+                        $source = 'api';
+                        $this->wm->saveRobotsStatus($siteId, $label, $robotsUrl, $robotsAt);
+                    }
+                } catch (Throwable $e) {
+                    // ignore, use fallback below
+                }
+            }
+
+            if ($robotsUrl === '' && $isVerified) {
+                $robotsUrl = rtrim($hostUrl, '/') . '/robots.txt';
+                $source = $source !== '' ? $source : 'fallback';
+            }
+
+            $out[$label] = [
+                'has_robots' => ($robotsUrl !== '' || $robotsAt !== ''),
+                'robots_url' => $robotsUrl,
+                'robots_at' => $robotsAt,
+                'source' => $source,
+            ];
+        }
+
+        return $out;
+    }
+
+    private function buildIndexSummaryRows(array $desired, array $indexStatusMap, array $searchApiStatusMap): array
+    {
+        $rows = [];
+        foreach ($desired as $hrow) {
+            $label = (string)($hrow['label'] ?? '');
+            $hostUrl = (string)($hrow['host_url'] ?? '');
+            $idx = $indexStatusMap[$label] ?? [];
+            $search = $searchApiStatusMap[$label] ?? [];
+            $rows[] = [
+                'label' => $label,
+                'host_url' => $hostUrl,
+                'webmaster_index_status' => (string)($idx['yandex_index_status'] ?? 'unknown'),
+                'pages_in_search' => (int)($idx['yandex_pages_in_search'] ?? 0),
+                'pages_added' => (int)($idx['yandex_pages_added'] ?? 0),
+                'webmaster_last_checked_at' => (string)($idx['yandex_index_last_checked_at'] ?? ''),
+                'webmaster_detected_at' => (string)($idx['yandex_index_detected_at'] ?? ''),
+                'redirect_auto_enabled_at' => (string)($idx['redirect_auto_enabled_at'] ?? ''),
+                'config_sync_status' => (string)($idx['config_sync_status'] ?? 'idle'),
+                'config_sync_last_at' => (string)($idx['config_sync_last_at'] ?? ''),
+                'config_sync_error' => (string)($idx['config_sync_error'] ?? ''),
+                'search_api_status' => (string)($search['search_api_status'] ?? 'idle'),
+                'search_api_last_checked_at' => (string)($search['search_api_last_checked_at'] ?? ''),
+                'search_api_indexed_at' => (string)($search['search_api_indexed_at'] ?? ''),
+                'search_api_result_count' => (int)($search['search_api_result_count'] ?? 0),
+                'search_api_next_check_at' => (string)($search['search_api_next_check_at'] ?? ''),
+                'search_api_error' => (string)($search['search_api_error'] ?? ''),
+            ];
+        }
+        return $rows;
     }
 
     public function checkIndex()
@@ -1224,27 +1328,34 @@ private function getIndexWatchLogTailForSite(int $siteId, int $limit = 120): arr
         return [];
     }
 
-    $lines = @file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    if (!is_array($lines) || !$lines) {
+    $fh = @fopen($file, 'rb');
+    if (!$fh) {
         return [];
     }
 
     $filtered = [];
-    foreach ($lines as $line) {
-        $line = (string)$line;
+    while (($line = fgets($fh)) !== false) {
+        $line = trim((string)$line);
+        if ($line === '') {
+            continue;
+        }
+        $matched = false;
         foreach ($needles as $needle) {
             if ($needle !== '' && stripos($line, $needle) !== false) {
-                $filtered[] = $line;
+                $matched = true;
                 break;
             }
         }
+        if ($matched || empty($needles)) {
+            $filtered[] = $line;
+            if (count($filtered) > $limit) {
+                array_shift($filtered);
+            }
+        }
     }
+    fclose($fh);
 
-    if (!$filtered) {
-        $filtered = $lines;
-    }
-
-    return array_slice($filtered, -$limit);
+    return $filtered;
 }
 
 }

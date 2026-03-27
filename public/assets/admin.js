@@ -123,3 +123,82 @@
     });
   });
 })();
+
+(function () {
+  function parseManualSubdomainLines(raw) {
+    var lines = (raw || '').split(/\r\n|\r|\n/);
+    var out = [];
+    var seen = {};
+
+    function addItem(label, brand, brandRu) {
+      label = (label || '').trim().toLowerCase();
+      if (!label) return;
+      if (!/^[a-z0-9_](?:[a-z0-9_-]{0,61}[a-z0-9])?$/.test(label)) return;
+      if (seen[label]) return;
+      seen[label] = true;
+      out.push({ label: label, brand: (brand || '').trim(), brandRu: (brandRu || '').trim() });
+    }
+
+    lines.forEach(function (line) {
+      line = (line || '').trim();
+      if (!line) return;
+
+      if (/[|;\t]/.test(line)) {
+        var parts = line.split(/\s*(?:\||;|\t)\s*/);
+        addItem(parts[0], parts[1], parts[2]);
+        return;
+      }
+
+      line.split(/[\s,]+/).forEach(function (part) {
+        addItem(part, '', '');
+      });
+    });
+
+    return out;
+  }
+
+  function buildPreviewMessage(mode, items) {
+    var title = 'Проверь список:';
+    if (mode === 'append') {
+      title = 'Будут добавлены сабы:';
+    } else if (mode === 'catalog') {
+      title = 'Будут добавлены или обновлены записи каталога:';
+    }
+
+    var lines = items.map(function (item) {
+      var suffix = '';
+      if (item.brand || item.brandRu) {
+        suffix = ' — ' + [item.brand || '∅', item.brandRu || '∅'].join(' / ');
+      }
+      return '• ' + item.label + suffix;
+    });
+
+    return title + '\n\n' + lines.join('\n') + '\n\nПродолжить?';
+  }
+
+  document.addEventListener('submit', function (e) {
+    var form = e.target.closest('form.js-subdomain-manual-form');
+    if (!form) return;
+
+    if (form.dataset.previewAccepted === '1') {
+      form.dataset.previewAccepted = '';
+      return;
+    }
+
+    var textarea = form.querySelector('textarea[name="labels"], textarea[name="labels_text"]');
+    if (!textarea) return;
+
+    var items = parseManualSubdomainLines(textarea.value || '');
+    if (!items.length) return;
+
+    var mode = form.getAttribute('data-preview-mode') || 'default';
+    var message = buildPreviewMessage(mode, items);
+
+    if (!window.confirm(message)) {
+      e.preventDefault();
+      return;
+    }
+
+    form.dataset.previewAccepted = '1';
+  });
+})();

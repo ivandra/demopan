@@ -481,6 +481,8 @@ if ($label === '_default') {
 }
 
     $this->regenerateConfigPhp($siteId, $defaultCfg, $label);
+    $this->flash('success', 'Страницы и SEO-поля сохранены.');
+    (new PublishDirtyService())->markDirty($siteId, 'Изменены страницы сайта. Выгрузите актуальные данные на VPS.');
 
     $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
 }
@@ -565,6 +567,8 @@ public function textsIndex(): void
     $tmp = $path . '.tmp_' . time();
     file_put_contents($tmp, $content);
     rename($tmp, $path);
+    $this->flash('success', 'Текстовый файл сохранен.');
+    (new PublishDirtyService())->markDirty($siteId, 'Изменены тексты сайта. Выгрузите актуальные данные на VPS.');
 
     $this->redirect('/sites/texts/edit?id=' . $siteId . '&label=' . urlencode($label) . '&file=' . rawurlencode($safeFile));
 }
@@ -595,6 +599,8 @@ public function textsIndex(): void
 
     Paths::ensureDir($textsDir);
     file_put_contents($path, "<?php\n\n");
+    $this->flash('success', 'Новый текстовый файл создан.');
+    (new PublishDirtyService())->markDirty($siteId, 'Изменены тексты сайта. Выгрузите актуальные данные на VPS.');
     $this->redirect('/sites/texts/edit?id=' . $siteId . '&label=' . urlencode($label) . '&file=' . rawurlencode($safeFile));
 }
 
@@ -618,6 +624,8 @@ public function textsIndex(): void
         if (is_file($path)) {
             @unlink($path);
         }
+        $this->flash('success', 'Текстовый файл удален.');
+        (new PublishDirtyService())->markDirty($siteId, 'Изменены тексты сайта. Выгрузите актуальные данные на VPS.');
 
         $this->redirect('/sites/texts?id=' . $siteId . '&label=' . urlencode($label));
     }
@@ -870,6 +878,8 @@ if (!is_array($pages)) $pages = [];
             rename($tmp, $path);
         }
 
+        $this->flash('success', 'Файл сохранен.');
+        (new PublishDirtyService())->markDirty($siteId, 'Изменены файлы сайта. Выгрузите актуальные данные на VPS.');
         $this->redirect('/sites/files/edit?id=' . $siteId . '&scope=' . rawurlencode($scope) . '&label=' . rawurlencode($label) . '&file=' . rawurlencode($safeFile));
     }
 
@@ -903,6 +913,8 @@ if (!is_array($pages)) $pages = [];
             @copy($dst, $dst . '.bak_' . date('Ymd_His'));
         }
         @copy($src, $dst);
+        $this->flash('success', 'Файл восстановлен из резервной копии.');
+        (new PublishDirtyService())->markDirty($siteId, 'Изменены файлы сайта. Выгрузите актуальные данные на VPS.');
 
         $this->redirect('/sites/files/edit?id=' . $siteId . '&scope=' . rawurlencode($scope) . '&label=' . rawurlencode($label) . '&file=' . rawurlencode($safeFile));
     }

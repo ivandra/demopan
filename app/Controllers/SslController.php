@@ -287,7 +287,7 @@ class SslController extends Controller
     {
         $this->requireAuth();
 
-        $siteId = (int)($_GET['id'] ?? 0);
+        $siteId = (int)($_GET['id'] ?? ($_GET['site_id'] ?? 0));
         if ($siteId <= 0) die('bad id');
 
         $site = $this->loadSite($siteId);
@@ -350,30 +350,82 @@ class SslController extends Controller
     {
         $this->requireAuth();
 
-        $siteId = (int)($_GET['id'] ?? 0);
+        $siteId = (int)($_GET['id'] ?? ($_GET['site_id'] ?? 0));
         if ($siteId <= 0) die('bad id');
-
-        $siteDomains = $this->getSiteDomains($siteId);
-        $this->upsertSslChecksForSite($siteId, $siteDomains);
 
         try {
             $svc = new SslCheckService();
 
-            // 1) правильный путь: сервис умеет проверять конкретный site_id
-            if (method_exists($svc, 'runForSite')) {
-                $svc->runForSite($siteId, 200);
+            if (method_exists($svc, 'upsertTargetsForSiteFromDb')) {
+                $svc->upsertTargetsForSiteFromDb($siteId, true);
+            } elseif (method_exists($svc, 'syncTargetsFromDb')) {
+                $svc->syncTargetsFromDb($siteId, true);
+            } else {
+                $siteDomains = $this->getSiteDomains($siteId);
+                $this->upsertSslChecksForSite($siteId, $siteDomains);
             }
-            // 2) альтернативы (если ты называл метод по-другому)
-            elseif (method_exists($svc, 'runForDomains')) {
-                $domains = array_values(array_unique(array_map(fn($x) => (string)$x['fqdn'], $siteDomains)));
-                $svc->runForDomains($domains);
-            } elseif (method_exists($svc, 'checkDomains')) {
-                $domains = array_values(array_unique(array_map(fn($x) => (string)$x['fqdn'], $siteDomains)));
-                $svc->checkDomains($domains);
-            }
-            // 3) fallback (проверит “пачку” enabled доменов, может затронуть другие сайты)
-            else {
-                $svc->runOneCycle(200);
+
+            $rows = DB::withReconnect(function(PDO $pdo) use ($siteId) {
+                $st = $pdo->prepare("
+                    SELECT id, domain
+                    FROM ssl_checks
+                    WHERE site_id = ?
+                      AND enabled = 1
+                    ORDER BY COALESCE(updated_at, '1970-01-01 00:00:00') ASC, id ASC
+                    LIMIT 300
+                " );
+                $st->execute([$siteId]);
+                return $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            });
+
+            foreach ($rows as $r) {
+                $id = (int)($r['id'] ?? 0);
+                $domain = trim((string)($r['domain'] ?? ''));
+                if ($id <= 0 || $domain === '') {
+                    continue;
+                }
+
+                try {
+                    $res = $svc->checkDomain($domain);
+
+                    DB::withReconnect(function(PDO $pdo) use ($id, $res) {
+                        $st = $pdo->prepare("
+                            UPDATE ssl_checks
+                            SET
+                              http_code = :http_code,
+                              https_ok = :https_ok,
+                              ssl_error = :ssl_error,
+                              ssl_expires_at = :expires,
+                              ssl_issuer = :issuer,
+                              ssl_subject = :subject,
+                              updated_at = NOW()
+                            WHERE id = :id
+                            LIMIT 1
+                        " );
+                        $st->execute([
+                            ':http_code' => (int)($res['http_code'] ?? 0),
+                            ':https_ok' => (int)($res['https_ok'] ?? 0),
+                            ':ssl_error' => (string)($res['ssl_error'] ?? ''),
+                            ':expires' => $res['ssl_expires_at'] ?? null,
+                            ':issuer' => $res['ssl_issuer'] ?? null,
+                            ':subject' => $res['ssl_subject'] ?? null,
+                            ':id' => $id,
+                        ]);
+                    });
+                } catch (Throwable $e) {
+                    DB::withReconnect(function(PDO $pdo) use ($id, $e) {
+                        $st = $pdo->prepare("
+                            UPDATE ssl_checks
+                            SET https_ok = 0, ssl_error = :err, updated_at = NOW()
+                            WHERE id = :id
+                            LIMIT 1
+                        " );
+                        $st->execute([
+                            ':err' => $e->getMessage(),
+                            ':id' => $id,
+                        ]);
+                    });
+                }
             }
         } catch (Throwable $e) {
             @error_log('[ssl siteCheckNow] site_id=' . $siteId . ' err=' . $e->getMessage());
@@ -546,7 +598,7 @@ public function checkNow(): void
 {
     $this->requireAuth();
 
-    $siteId = (int)($_GET['id'] ?? 0);
+    $siteId = (int)($_GET['id'] ?? ($_GET['site_id'] ?? 0));
     if ($siteId <= 0) {
         $this->redirect('/sites');
         return;

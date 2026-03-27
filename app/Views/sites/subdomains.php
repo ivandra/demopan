@@ -87,18 +87,22 @@ $currentVpsIp = (string)($site['vps_ip'] ?? '');
     <div class="panel-card">
         <h2 class="section-title">2) Быстро добавить вручную</h2>
 
-        <form method="post" action="/sites/subdomains/apply?id=<?= $siteId ?>" class="stack-gap-md">
-            <div class="small muted">Можно указать label через запятую, пробел или перенос строки.</div>
-            <textarea name="labels_text" rows="10" placeholder="например: banda, beef, betera"></textarea>
+        <form method="post" action="/sites/subdomains/apply?id=<?= $siteId ?>" class="stack-gap-md js-subdomain-manual-form" data-preview-mode="append">
+            <input type="hidden" name="mode" value="append_manual">
+            <div class="small muted">Формат строки: <code>Label | Brand | Brand_RU</code>. Можно также оставить только <code>Label</code>.</div>
+            <textarea name="labels_text" rows="10" placeholder="например:
+blitzred | Blitz Red | Blitz Red
+winline | Winline | Винлайн
+arkada"></textarea>
             <div class="small muted">
-                Панель приведёт список к выбранному: добавит недостающие и удалит лишние (кроме <code>_default</code>).
+                Перед отправкой будет показан предварительный список. Этот блок работает в режиме <b>добавления</b>: он добавит недостающие сабы к уже существующим и <b>не удалит</b> старые. Если для строки указаны <code>Brand</code> и <code>Brand_RU</code>, каталог поддоменов тоже будет обновлён.
             </div>
             <label class="checkbox-inline">
                 <input type="checkbox" name="apply_dns" value="1">
-                Сразу применить DNS после сохранения
+                Сразу применить DNS после добавления
             </label>
             <div>
-                <button type="submit" class="btn btn-secondary">Применить список</button>
+                <button type="submit" class="btn btn-secondary">Добавить сабы</button>
             </div>
         </form>
     </div>

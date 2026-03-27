@@ -123,6 +123,7 @@ require APP_ROOT . '/app/Services/TelegramService.php';
 require APP_ROOT . '/app/Services/DeepseekClient.php';
 
 require APP_ROOT . '/app/Services/PartnerSubIdService.php';
+require APP_ROOT . '/app/Services/PublishDirtyService.php';
 
 // ---------- 8) Controllers ----------
 require APP_ROOT . '/app/Controllers/AuthController.php';
@@ -321,11 +322,13 @@ $router->post('/ssl/notify', action($ssl, 'notify'));
 
 // per-site page + force check
 $router->get('/ssl/site', action($ssl, 'site'));
+$router->get('/ssl/site/check-now', action($ssl, 'siteCheckNow'));
 $router->post('/ssl/site/check-now', action($ssl, 'siteCheckNow'));
 
 // cron endpoint
 $router->get('/ssl/cron', action($ssl, 'cron'));
-$router->post('/ssl/check-now', action($ssl, 'checkNow'));
+$router->get('/ssl/check-now', action($ssl, 'siteCheckNow'));
+$router->post('/ssl/check-now', action($ssl, 'siteCheckNow'));
 $router->get('/ssl/settings', action($ssl, 'settings'));
 $router->post('/ssl/settings', action($ssl, 'settingsSave'));
 

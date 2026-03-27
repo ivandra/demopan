@@ -23,6 +23,8 @@ $cronState = is_array($cronState ?? null) ? $cronState : [];
 $indexWatchLogTail = is_array($indexWatchLogTail ?? null) ? $indexWatchLogTail : [];
 $searchApiStatusMap = is_array($searchApiStatusMap ?? null) ? $searchApiStatusMap : [];
 $searchApiCronState = is_array($searchApiCronState ?? null) ? $searchApiCronState : [];
+$robotsSummaryMap = is_array($robotsSummaryMap ?? null) ? $robotsSummaryMap : [];
+$indexSummaryRows = is_array($indexSummaryRows ?? null) ? $indexSummaryRows : [];
 ?>
 
 <div class="page-head">
@@ -218,12 +220,8 @@ $searchApiCronState = is_array($searchApiCronState ?? null) ? $searchApiCronStat
 
 <div class="panel-card mt-16 stack-gap-md">
     <div class="page-head page-head--compact">
-        <h2 class="section-title">Yandex Search API fallback</h2>
-        <div class="small muted">Этот сервис нужен, когда Вебмастер еще не отдает summary/history или cron Вебмастера пока не дал ясный статус. По умолчанию cron Search API опрашивает только хосты без подтвержденного статуса в Вебмастере, чтобы не жечь платные запросы.</div>
-    </div>
-
-    <div class="inline-form">
-        <a class="btn btn-secondary" href="/webmaster/search-api?id=<?= $siteId ?>">Открыть страницу сервиса</a>
+        <h2 class="section-title">Сводка индексации и авто-редиректа</h2>
+        <div class="small muted">В одной таблице сведены Search API fallback, индекс Яндекса, автовключение redirect и состояние выгрузки config.</div>
     </div>
 
     <?php if (!empty($searchApiCronState)): ?>
@@ -235,71 +233,20 @@ $searchApiCronState = is_array($searchApiCronState ?? null) ? $searchApiCronStat
         </div>
     <?php endif; ?>
 
-    <div class="wm-table-wrap">
-        <table class="wm-table">
-            <thead>
-            <tr>
-                <th>Метка</th>
-                <th>Хост</th>
-                <th>Search API статус</th>
-                <th>Последняя проверка</th>
-                <th>Когда найдено</th>
-                <th>URL в ответе</th>
-                <th>Следующая проверка</th>
-                <th>Ошибка</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($desired as $hrow): ?>
-                <?php
-                $label = (string)($hrow['label'] ?? '');
-                $hostUrl = (string)($hrow['host_url'] ?? '');
-                $srow = $searchApiStatusMap[$label] ?? [];
-                ?>
-                <tr>
-                    <td><?= h($label === '' ? '(основной домен)' : $label) ?></td>
-                    <td><?= h($hostUrl) ?></td>
-                    <td><?= h((string)($srow['search_api_status'] ?? 'idle')) ?></td>
-                    <td><?= h((string)($srow['search_api_last_checked_at'] ?? '')) ?></td>
-                    <td><?= h((string)($srow['search_api_indexed_at'] ?? '')) ?></td>
-                    <td><?= (int)($srow['search_api_result_count'] ?? 0) ?></td>
-                    <td><?= h((string)($srow['search_api_next_check_at'] ?? '')) ?></td>
-                    <td><?= h((string)($srow['search_api_error'] ?? '')) ?></td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<div class="panel-card mt-16 stack-gap-md">
-    <div class="page-head page-head--compact">
-        <h2 class="section-title">Индекс Яндекса и авто-редирект</h2>
-        <div class="small muted">
-            Статусы ведутся отдельно по основному домену и по каждому поддомену текущего сайта.
-            Redirect включается автоматически только тогда, когда хост найден в индексе и число
-            "Страниц в поиске" равно числу "Страниц добавлено" по данным API Яндекс Вебмастера.
-        </div>
-    </div>
-
     <div class="inline-form">
+        <a class="btn btn-secondary" href="/webmaster/search-api?id=<?= $siteId ?>">Открыть страницу сервиса</a>
         <form method="post" action="/webmaster/check-index?id=<?= $siteId ?>" data-confirm="Проверить индекс Яндекса сейчас для основного домена и всех поддоменов сайта?">
             <input type="hidden" name="label" value="ALL">
             <button type="submit" class="btn btn-primary">Проверить индекс сейчас</button>
         </form>
-
         <form method="post" action="/webmaster/manual-sync-configs?id=<?= $siteId ?>" data-confirm="Вручную выгрузить root и все config.php текущего сайта на VPS? Проверка индекса и redirect_enabled не изменяются.">
             <input type="hidden" name="label" value="ALL">
             <button type="submit" class="btn btn-secondary">Вручную выгрузить config на VPS</button>
         </form>
     </div>
 
-    <div class="small muted mt-8">
-        Ручная выгрузка не проверяет индекс и не меняет redirect_enabled. Она только повторно отправляет уже собранные config-файлы текущего сайта на VPS.
-    </div>
-    <div class="small muted mt-8">
-        Авто-редирект включается только когда "Страниц в поиске" равно "Страниц добавлено" и хост найден в индексе.
-    </div>
+    <div class="small muted mt-8">Search API нужен как fallback, когда данные Яндекс Вебмастера еще не обновились или не дали однозначного статуса.</div>
+    <div class="small muted mt-8">Авто-редирект включается только когда хост найден в индексе и число «Страниц в поиске» не меньше числа «Страниц добавлено».</div>
 
     <div class="wm-table-wrap">
         <table class="wm-table">
@@ -307,47 +254,53 @@ $searchApiCronState = is_array($searchApiCronState ?? null) ? $searchApiCronStat
             <tr>
                 <th>Метка</th>
                 <th>Хост</th>
-                <th>Статус индекса</th>
+                <th>Search API</th>
+                <th>URL в ответе</th>
+                <th>Последняя проверка Search API</th>
+                <th>Индекс Яндекса</th>
                 <th>Страниц в поиске</th>
                 <th>Страниц добавлено</th>
-                <th>Последняя проверка</th>
                 <th>Когда найдено</th>
                 <th>Автовключение redirect</th>
                 <th>Выгрузка config</th>
                 <th>Последняя выгрузка</th>
-                <th>Ошибка выгрузки</th>
+                <th>Следующая проверка</th>
+                <th>Ошибка</th>
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($desired as $hrow): ?>
+            <?php foreach ($indexSummaryRows as $sum): ?>
                 <?php
-                $label   = (string)($hrow['label'] ?? '');
-                $hostUrl = (string)($hrow['host_url'] ?? '');
-                $idx     = $indexStatusMap[$label] ?? [];
-                $idxStatus = (string)($idx['yandex_index_status'] ?? 'unknown');
-                $idxLast = (string)($idx['yandex_index_last_checked_at'] ?? '');
-                $idxDetected = (string)($idx['yandex_index_detected_at'] ?? '');
-                $autoAt = (string)($idx['redirect_auto_enabled_at'] ?? '');
-                $syncStatus = (string)($idx['config_sync_status'] ?? 'idle');
-                $syncLast = (string)($idx['config_sync_last_at'] ?? '');
-                $syncErr = (string)($idx['config_sync_error'] ?? '');
-                $pagesInSearch = (int)($idx['yandex_pages_in_search'] ?? 0);
-                $pagesAdded = (int)($idx['yandex_pages_added'] ?? 0);
+                $sumLabel = (string)($sum['label'] ?? '');
+                $sumErr = trim((string)($sum['config_sync_error'] ?? ''));
+                if ($sumErr === '') {
+                    $sumErr = trim((string)($sum['search_api_error'] ?? ''));
+                }
+                $sumDetected = (string)($sum['webmaster_detected_at'] ?? '');
+                if ($sumDetected === '') {
+                    $sumDetected = (string)($sum['search_api_indexed_at'] ?? '');
+                }
                 ?>
                 <tr>
-                    <td><?= h($label === '' ? '(основной домен)' : $label) ?></td>
-                    <td style="word-break:break-word;min-width:190px"><?= h($hostUrl) ?></td>
-                    <td><?= h($idxStatus) ?></td>
-                    <td><?= h((string)$pagesInSearch) ?></td>
-                    <td><?= h((string)$pagesAdded) ?></td>
-                    <td><?= h($idxLast) ?></td>
-                    <td><?= h($idxDetected) ?></td>
-                    <td><?= h($autoAt) ?></td>
-                    <td><?= h($syncStatus) ?></td>
-                    <td><?= h($syncLast) ?></td>
-                    <td><?= h($syncErr) ?></td>
+                    <td><?= h($sumLabel === '' ? '(основной домен)' : $sumLabel) ?></td>
+                    <td style="word-break:break-word;min-width:190px"><?= h((string)($sum['host_url'] ?? '')) ?></td>
+                    <td><?= h((string)($sum['search_api_status'] ?? 'idle')) ?></td>
+                    <td><?= h((string)($sum['search_api_result_count'] ?? 0)) ?></td>
+                    <td><?= h((string)($sum['search_api_last_checked_at'] ?? '')) ?></td>
+                    <td><?= h((string)($sum['webmaster_index_status'] ?? 'unknown')) ?></td>
+                    <td><?= h((string)($sum['pages_in_search'] ?? 0)) ?></td>
+                    <td><?= h((string)($sum['pages_added'] ?? 0)) ?></td>
+                    <td><?= h($sumDetected) ?></td>
+                    <td><?= h((string)($sum['redirect_auto_enabled_at'] ?? '')) ?></td>
+                    <td><?= h((string)($sum['config_sync_status'] ?? 'idle')) ?></td>
+                    <td><?= h((string)($sum['config_sync_last_at'] ?? '')) ?></td>
+                    <td><?= h((string)($sum['search_api_next_check_at'] ?? '')) ?></td>
+                    <td><?= h($sumErr) ?></td>
                 </tr>
             <?php endforeach; ?>
+            <?php if (empty($indexSummaryRows)): ?>
+                <tr><td colspan="14" class="muted">Данных пока нет.</td></tr>
+            <?php endif; ?>
             </tbody>
         </table>
     </div>
@@ -385,8 +338,10 @@ $searchApiCronState = is_array($searchApiCronState ?? null) ? $searchApiCronStat
                 $fileWritten = $r ? (int)($r['file_written'] ?? 0) : 0;
 
                 $verifiedAt = $r ? (string)($r['verified_at'] ?? '') : '';
-                $robotsAt   = $r ? (string)($r['robots_confirmed_at'] ?? '') : '';
-                $robotsUrl  = $r ? (string)($r['robots_url'] ?? '') : '';
+                $robotsSummary = $robotsSummaryMap[$label] ?? [];
+                $robotsAt   = (string)($robotsSummary['robots_at'] ?? ($r ? (string)($r['robots_confirmed_at'] ?? '') : ''));
+                $robotsUrl  = (string)($robotsSummary['robots_url'] ?? ($r ? (string)($r['robots_url'] ?? '') : ''));
+                $robotsSource = (string)($robotsSummary['source'] ?? '');
                 $sitemapAt  = $r ? (string)($r['sitemap_added_at'] ?? '') : '';
                 $sitemapUrl = $r ? (string)($r['sitemap_url'] ?? '') : '';
 
@@ -394,7 +349,7 @@ $searchApiCronState = is_array($searchApiCronState ?? null) ? $searchApiCronStat
                 $recrawlCnt = $r ? (int)($r['last_recrawl_count'] ?? 0) : 0;
 
                 $isVerified = ($verifiedAt !== '');
-                $hasRobots  = ($robotsAt !== '' || $robotsUrl !== '');
+                $hasRobots  = (bool)($robotsSummary['has_robots'] ?? ($robotsAt !== '' || $robotsUrl !== ''));
                 $hasSitemap = ($sitemapAt !== '' || $sitemapUrl !== '');
                 $hasPages   = ($recrawlAt !== '' || $recrawlCnt > 0);
 
@@ -431,6 +386,11 @@ $searchApiCronState = is_array($searchApiCronState ?? null) ? $searchApiCronStat
                         <?= $badge($hasRobots) ?>
                         <?php if ($robotsUrl !== ''): ?>
                             <div class="wm-small"><?= h($robotsUrl) ?></div>
+                        <?php endif; ?>
+                        <?php if ($robotsSource === 'api'): ?>
+                            <div class="wm-small">Подтянуто из API Вебмастера</div>
+                        <?php elseif ($robotsSource === 'fallback'): ?>
+                            <div class="wm-small">Показано по адресу robots.txt хоста</div>
                         <?php endif; ?>
                     </td>
 

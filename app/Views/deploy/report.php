@@ -1,6 +1,14 @@
 <?php
 function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 $deploy = is_array($deploy ?? null) ? $deploy : [];
+$statusRaw = (string)($deploy['status'] ?? '');
+$statusMap = [
+    'done' => ['Успешно', 'badge-success', 'Операция завершена успешно.'],
+    'error' => ['Ошибка', 'badge-danger', 'Операция завершилась с ошибкой.'],
+    'creating_site' => ['Создание сайта', 'badge-warning', 'Панель создает сайт в FastPanel.'],
+    'uploading_files' => ['Идет выгрузка', 'badge-warning', 'Идет выгрузка файлов на VPS.'],
+];
+$statusInfo = $statusMap[$statusRaw] ?? [($statusRaw !== '' ? $statusRaw : 'Неизвестно'), 'badge-muted', 'Статус операции не распознан.'];
 ?>
 
 <div class="page-head">
@@ -17,7 +25,7 @@ $deploy = is_array($deploy ?? null) ? $deploy : [];
 <div class="panel-grid panel-grid--3">
     <div class="panel-card">
         <div class="small muted">Статус</div>
-        <div class="kpi"><?= h((string)($deploy['status'] ?? '—')) ?></div>
+        <div class="kpi"><span class="badge <?= h($statusInfo[1]) ?>"><?= h($statusInfo[0]) ?></span></div><div class="small muted mt-12"><?= h($statusInfo[2]) ?></div>
     </div>
 
     <div class="panel-card">
@@ -39,11 +47,11 @@ $deploy = is_array($deploy ?? null) ? $deploy : [];
 <?php endif; ?>
 
 <div class="panel-card mt-16">
-    <h2 class="section-title">Payload</h2>
+    <h2 class="section-title">Что отправлялось</h2>
     <pre class="report-code"><?= h((string)($deploy['payload'] ?? '')) ?></pre>
 </div>
 
 <div class="panel-card mt-16">
-    <h2 class="section-title">Ответ</h2>
+    <h2 class="section-title">Ответ сервера</h2>
     <pre class="report-code"><?= h((string)($deploy['response'] ?? '')) ?></pre>
 </div>

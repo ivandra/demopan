@@ -44,6 +44,101 @@ class AiController extends Controller
         return isset($cols[strtolower($column)]);
     }
 
+    private function presetTableColumns(): array
+    {
+        static $cols = null;
+        if ($cols !== null) {
+            return $cols;
+        }
+
+        $cols = [];
+        try {
+            $st = DB::pdo()->query("SHOW COLUMNS FROM ai_prompt_presets");
+            $rows = $st ? $st->fetchAll(PDO::FETCH_ASSOC) : [];
+            foreach ($rows as $r) {
+                $f = strtolower(trim((string)($r['Field'] ?? '')));
+                if ($f !== '') {
+                    $cols[$f] = true;
+                }
+            }
+        } catch (Throwable $e) {
+            $cols = [];
+        }
+
+        return $cols;
+    }
+
+    private function presetTableHas(string $column): bool
+    {
+        $cols = $this->presetTableColumns();
+        return isset($cols[strtolower($column)]);
+    }
+
+    private function buildPresetPayloadFromRow(array $row): array
+    {
+        return [
+            'provider' => (string)($row['provider'] ?? 'deepseek'),
+            'model' => (string)($row['model'] ?? 'deepseek-chat'),
+            'temperature' => (float)($row['temperature'] ?? 0.7),
+            'max_tokens' => (int)($row['max_tokens'] ?? 1200),
+            'meta_prompt_root' => (string)($row['meta_prompt_root'] ?? ''),
+            'meta_prompt_sub' => (string)($row['meta_prompt_sub'] ?? ''),
+            'text_prompt_root' => (string)($row['text_prompt_root'] ?? ''),
+            'text_prompt_sub' => (string)($row['text_prompt_sub'] ?? ''),
+            'page_prompt' => (string)($row['page_prompt'] ?? ''),
+            'page_meta_prompt' => (string)($row['page_meta_prompt'] ?? ''),
+            'global_meta_title_template' => (string)($row['global_meta_title_template'] ?? ''),
+            'global_meta_h1_template' => (string)($row['global_meta_h1_template'] ?? ''),
+            'global_meta_description_template' => (string)($row['global_meta_description_template'] ?? ''),
+            'prompt_v1' => (string)($row['prompt_v1'] ?? ''),
+            'prompt_v2' => (string)($row['prompt_v2'] ?? ''),
+        ];
+    }
+
+    private function extractPresetPayload(array $preset): array
+    {
+        $payloadJson = trim((string)($preset['payload_json'] ?? ''));
+        if ($payloadJson !== '') {
+            $payload = json_decode($payloadJson, true);
+            if (is_array($payload)) {
+                return $payload;
+            }
+        }
+
+        return $this->buildPresetPayloadFromRow($preset);
+    }
+
+    private function ensurePresetTable(): void
+    {
+        DB::withReconnect(function(PDO $pdo) {
+            $pdo->exec("CREATE TABLE IF NOT EXISTS ai_prompt_presets (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, title VARCHAR(150) NOT NULL, description VARCHAR(255) NOT NULL DEFAULT '', payload_json LONGTEXT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+            try {
+                $pdo->exec("ALTER TABLE ai_prompt_presets ADD COLUMN payload_json LONGTEXT NULL AFTER description");
+            } catch (Throwable $e) {
+            }
+        });
+    }
+
+    private function getPresets(): array
+    {
+        $this->ensurePresetTable();
+        return DB::withReconnect(function(PDO $pdo) {
+            $st = $pdo->query("SELECT * FROM ai_prompt_presets ORDER BY title ASC, id DESC");
+            return $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        });
+    }
+
+    private function loadPresetById(int $id): ?array
+    {
+        $this->ensurePresetTable();
+        return DB::withReconnect(function(PDO $pdo) use ($id) {
+            $st = $pdo->prepare("SELECT * FROM ai_prompt_presets WHERE id = ? LIMIT 1");
+            $st->execute([$id]);
+            return $st->fetch(PDO::FETCH_ASSOC) ?: null;
+        });
+    }
+
     private function loadRow(): array
     {
         $st = DB::pdo()->prepare("SELECT * FROM ai_settings WHERE id = 1 LIMIT 1");
@@ -107,6 +202,32 @@ class AiController extends Controller
         return $row;
     }
 
+    private function loadEffectiveAiRow(): array
+    {
+        // База для effective-row должна загружаться из ai_settings,
+        // а не через рекурсивный вызов этого же метода.
+        $row = $this->loadRow();
+
+        $selectedPresetId = (int)($_GET['preset_id'] ?? 0);
+        if ($selectedPresetId <= 0) {
+            $selectedPresetId = (int)($_SESSION['ai_selected_preset_id'] ?? 0);
+        }
+
+        if ($selectedPresetId > 0) {
+            $selectedPreset = $this->loadPresetById($selectedPresetId);
+            if ($selectedPreset) {
+                $payload = $this->extractPresetPayload($selectedPreset);
+                foreach ($payload as $k => $v) {
+                    if (is_string($k) && array_key_exists($k, $row)) {
+                        $row[$k] = $v;
+                    }
+                }
+            }
+        }
+
+        return $row;
+    }
+
     public function settings(): void
     {
         $this->requireAuth();
@@ -122,9 +243,35 @@ class AiController extends Controller
             }
         }
 
+        $presets = $this->getPresets();
+        $selectedPresetId = (int)($_GET['preset_id'] ?? 0);
+        if ($selectedPresetId > 0) {
+            $_SESSION['ai_selected_preset_id'] = $selectedPresetId;
+        } elseif (!empty($_SESSION['ai_selected_preset_id'])) {
+            $selectedPresetId = (int)$_SESSION['ai_selected_preset_id'];
+        } elseif (!empty($presets[0]['id'])) {
+            $selectedPresetId = (int)$presets[0]['id'];
+        }
+
+        $selectedPreset = null;
+        if ($selectedPresetId > 0) {
+            $selectedPreset = $this->loadPresetById($selectedPresetId);
+            if ($selectedPreset) {
+                $payload = $this->extractPresetPayload($selectedPreset);
+                foreach ($payload as $k => $v) {
+                    if (is_string($k) && array_key_exists($k, $row)) {
+                        $row[$k] = $v;
+                    }
+                }
+            }
+        }
+
         $this->view('ai/settings', [
             'row' => $row,
             'apiKey' => $apiKey,
+            'presets' => $presets,
+            'selectedPresetId' => $selectedPresetId,
+            'selectedPreset' => $selectedPreset,
         ]);
     }
 
@@ -168,6 +315,13 @@ class AiController extends Controller
             $maxTokens = 8000;
         }
 
+        $action = trim((string)($_POST['preset_action'] ?? 'save_settings'));
+        $newPresetTitle = trim((string)($_POST['new_preset_title'] ?? ''));
+        $newPresetDescription = trim((string)($_POST['new_preset_description'] ?? ''));
+        $editPresetTitle = trim((string)($_POST['edit_preset_title'] ?? ''));
+        $editPresetDescription = trim((string)($_POST['edit_preset_description'] ?? ''));
+        $presetId = (int)($_POST['preset_id'] ?? 0);
+
         $row = $this->loadRow();
         $apiKeyEnc = (string)($row['api_key_enc'] ?? '');
         if ($apiKey !== '') {
@@ -206,6 +360,80 @@ class AiController extends Controller
             $set['prompt_v2'] = (string)($row['prompt_v2'] ?? '');
         }
 
+        if ($action === 'open_preset') {
+            if ($presetId > 0) {
+                $_SESSION['ai_selected_preset_id'] = $presetId;
+                $this->redirect('/ai/settings?preset_id=' . $presetId);
+            }
+            unset($_SESSION['ai_selected_preset_id']);
+            $this->redirect('/ai/settings');
+            return;
+        }
+
+        if ($action === 'delete_preset' && $presetId > 0) {
+            $this->ensurePresetTable();
+            DB::pdo()->prepare("DELETE FROM ai_prompt_presets WHERE id=? LIMIT 1")->execute([$presetId]);
+            if (((int)($_SESSION['ai_selected_preset_id'] ?? 0)) === $presetId) {
+                unset($_SESSION['ai_selected_preset_id']);
+            }
+            $this->flash('success', 'Набор AI-шаблонов удален.');
+            $this->redirect('/ai/settings');
+            return;
+        }
+
+        if ($action === 'update_preset' && $presetId > 0) {
+            $this->ensurePresetTable();
+            if ($editPresetTitle === '') {
+                $this->flash('error', 'Название набора не может быть пустым.');
+                $this->redirect('/ai/settings?preset_id=' . $presetId);
+                return;
+            }
+            DB::pdo()->prepare("UPDATE ai_prompt_presets SET title=?, description=? WHERE id=? LIMIT 1")->execute([$editPresetTitle, $editPresetDescription, $presetId]);
+            $_SESSION['ai_selected_preset_id'] = $presetId;
+            $this->flash('success', 'Название и описание набора обновлены.');
+            $this->redirect('/ai/settings?preset_id=' . $presetId);
+            return;
+        }
+
+        if ($action === 'save_preset' && $newPresetTitle !== '') {
+            $this->ensurePresetTable();
+            $payloadJson = json_encode($set, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+            if ($this->presetTableHas('provider')) {
+                DB::pdo()->prepare("INSERT INTO ai_prompt_presets(title, description, provider, model, temperature, max_tokens, prompt_v1, prompt_v2, meta_prompt_root, meta_prompt_sub, text_prompt_root, text_prompt_sub, page_prompt, page_meta_prompt, global_meta_title_template, global_meta_h1_template, global_meta_description_template, payload_json) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+                    ->execute([
+                        $newPresetTitle,
+                        $newPresetDescription,
+                        (string)($set['provider'] ?? 'deepseek'),
+                        (string)($set['model'] ?? 'deepseek-chat'),
+                        (float)($set['temperature'] ?? 0.7),
+                        (int)($set['max_tokens'] ?? 1200),
+                        (string)($set['prompt_v1'] ?? ''),
+                        (string)($set['prompt_v2'] ?? ''),
+                        (string)($set['meta_prompt_root'] ?? ''),
+                        (string)($set['meta_prompt_sub'] ?? ''),
+                        (string)($set['text_prompt_root'] ?? ''),
+                        (string)($set['text_prompt_sub'] ?? ''),
+                        (string)($set['page_prompt'] ?? ''),
+                        (string)($set['page_meta_prompt'] ?? ''),
+                        (string)($set['global_meta_title_template'] ?? ''),
+                        (string)($set['global_meta_h1_template'] ?? ''),
+                        (string)($set['global_meta_description_template'] ?? ''),
+                        $payloadJson,
+                    ]);
+            } else {
+                DB::pdo()->prepare("INSERT INTO ai_prompt_presets(title, description, payload_json) VALUES(?, ?, ?)")
+                    ->execute([$newPresetTitle, $newPresetDescription, $payloadJson]);
+            }
+
+            $newPresetId = (int)DB::pdo()->lastInsertId();
+            if ($newPresetId > 0) {
+                $_SESSION['ai_selected_preset_id'] = $newPresetId;
+                $presetId = $newPresetId;
+            }
+            $this->flash('success', 'Набор AI-шаблонов сохранен как отдельный пресет.');
+        }
+
         $parts = [];
         $values = [];
         foreach ($set as $column => $value) {
@@ -220,8 +448,44 @@ class AiController extends Controller
         DB::pdo()->prepare("UPDATE ai_settings SET " . implode(', ', $parts) . " WHERE id = ? LIMIT 1")
             ->execute($values);
 
+        if ($action === 'save_settings' && $presetId > 0) {
+            $this->ensurePresetTable();
+            $payloadJson = json_encode($set, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            if ($this->presetTableHas('provider')) {
+                DB::pdo()->prepare("UPDATE ai_prompt_presets SET provider=?, model=?, temperature=?, max_tokens=?, prompt_v1=?, prompt_v2=?, meta_prompt_root=?, meta_prompt_sub=?, text_prompt_root=?, text_prompt_sub=?, page_prompt=?, page_meta_prompt=?, global_meta_title_template=?, global_meta_h1_template=?, global_meta_description_template=?, payload_json=? WHERE id=? LIMIT 1")
+                    ->execute([
+                        (string)($set['provider'] ?? 'deepseek'),
+                        (string)($set['model'] ?? 'deepseek-chat'),
+                        (float)($set['temperature'] ?? 0.7),
+                        (int)($set['max_tokens'] ?? 1200),
+                        (string)($set['prompt_v1'] ?? ''),
+                        (string)($set['prompt_v2'] ?? ''),
+                        (string)($set['meta_prompt_root'] ?? ''),
+                        (string)($set['meta_prompt_sub'] ?? ''),
+                        (string)($set['text_prompt_root'] ?? ''),
+                        (string)($set['text_prompt_sub'] ?? ''),
+                        (string)($set['page_prompt'] ?? ''),
+                        (string)($set['page_meta_prompt'] ?? ''),
+                        (string)($set['global_meta_title_template'] ?? ''),
+                        (string)($set['global_meta_h1_template'] ?? ''),
+                        (string)($set['global_meta_description_template'] ?? ''),
+                        $payloadJson,
+                        $presetId,
+                    ]);
+            } else {
+                DB::pdo()->prepare("UPDATE ai_prompt_presets SET payload_json=? WHERE id=? LIMIT 1")
+                    ->execute([$payloadJson, $presetId]);
+            }
+            $_SESSION['ai_selected_preset_id'] = $presetId;
+        }
+
+        $this->flash('success', 'AI-настройки сохранены.');
         $_SESSION['wm_log'][] = 'AI settings saved';
-        $this->redirect('/ai/settings');
+        $redirectUrl = '/ai/settings';
+        if ($presetId > 0) {
+            $redirectUrl .= '?preset_id=' . $presetId;
+        }
+        $this->redirect($redirectUrl);
     }
 
     public function test(): void
@@ -296,7 +560,7 @@ class AiController extends Controller
         $currentCfg = $resolver->getResolvedConfig($siteId, $currentLabel);
         $entityAi = $this->loadEntityAiSettings($siteId, $currentLabel, $site);
         $pagePaths = $this->extractPagePaths($currentCfg);
-        $resolvedMirrorUrl = $this->makeEntityUrl($site, $currentLabel, (string)($currentCfg['promolink'] ?? ''));
+        $resolvedMirrorUrl = $this->normalizeInnerPath((string)($currentCfg['promolink'] ?? ''));
 
         $this->view('ai/site', [
             'site' => $site,
@@ -322,10 +586,12 @@ class AiController extends Controller
             }
 
             $site = $this->loadSiteOrFail($siteId);
-            $row = $this->loadRow();
+            $row = $this->loadEffectiveAiRow();
 
             $this->generateMetaForLabel($siteId, $site, $row, '_default');
 
+            $this->flash('success', 'AI-мета для основного домена сгенерированы.');
+            (new PublishDirtyService())->markDirty($siteId, 'Изменены SEO-данные сайта. Выгрузите актуальные данные на VPS.');
             $_SESSION['wm_log'][] = 'AI root meta generated';
             $this->redirect('/sites/subcfg?id=' . $siteId . '&label=_default');
         } catch (Throwable $e) {
@@ -344,24 +610,38 @@ class AiController extends Controller
             }
 
             $site = $this->loadSiteOrFail($siteId);
-            $row = $this->loadRow();
+            $row = $this->loadEffectiveAiRow();
 
-            $st = DB::pdo()->prepare("
-                SELECT label
-                FROM site_subdomains
-                WHERE site_id = ?
-                  AND label <> '_default'
-                  AND enabled = 1
-                ORDER BY label ASC
-            ");
+            $resolver = new SiteConfigResolver(DB::pdo());
+            $allLabels = $resolver->listLabels($siteId, true);
+
+            $enabledMap = [];
+            $st = DB::pdo()->prepare("SELECT label, enabled FROM site_subdomains WHERE site_id = ?");
             $st->execute([$siteId]);
-            $subs = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            foreach (($st->fetchAll(PDO::FETCH_ASSOC) ?: []) as $subRow) {
+                $lb = $this->normalizeAiLabel((string)($subRow['label'] ?? ''));
+                if ($lb !== '') {
+                    $enabledMap[$lb] = (int)($subRow['enabled'] ?? 0) === 1;
+                }
+            }
+
+            $labels = [];
+            foreach ($allLabels as $label) {
+                $label = $this->normalizeAiLabel((string)$label);
+                if ($label === '_default') {
+                    continue;
+                }
+                if (array_key_exists($label, $enabledMap) && !$enabledMap[$label]) {
+                    continue;
+                }
+                $labels[] = $label;
+            }
+            $labels = array_values(array_unique($labels));
 
             $done = 0;
             $errors = 0;
 
-            foreach ($subs as $sub) {
-                $label = trim((string)($sub['label'] ?? ''));
+            foreach ($labels as $label) {
                 if ($label === '') {
                     continue;
                 }
@@ -379,6 +659,8 @@ class AiController extends Controller
                 }
             }
 
+            $this->flash($errors > 0 ? 'error' : 'success', $errors > 0 ? "AI-мета: выполнено {$done}, ошибок {$errors}." : "AI-мета для всех поддоменов сгенерированы: {$done}.");
+            if ($done > 0) { (new PublishDirtyService())->markDirty($siteId, 'Изменены SEO-данные сайта. Выгрузите актуальные данные на VPS.'); }
             $_SESSION['wm_log'][] = "AI subdomains meta done={$done}, errors={$errors}";
             $this->redirect('/sites/ai?id=' . $siteId);
         } catch (Throwable $e) {
@@ -399,10 +681,12 @@ class AiController extends Controller
             }
 
             $site = $this->loadSiteOrFail($siteId);
-            $row = $this->loadRow();
+            $row = $this->loadEffectiveAiRow();
 
             $this->generateMetaForLabel($siteId, $site, $row, $label);
 
+            $this->flash('success', 'AI-мета для текущего поддомена сгенерированы.');
+            (new PublishDirtyService())->markDirty($siteId, 'Изменены SEO-данные сайта. Выгрузите актуальные данные на VPS.');
             $_SESSION['wm_log'][] = 'AI sub meta generated: ' . $label;
             $this->redirect('/sites/subcfg?id=' . $siteId . '&label=' . urlencode($label));
         } catch (Throwable $e) {
@@ -650,6 +934,8 @@ class AiController extends Controller
                 'path' => $res['path'],
             ]);
 
+            $this->flash('success', 'AI-текст для основного домена сгенерирован.');
+            (new PublishDirtyService())->markDirty($siteId, 'Изменены тексты сайта. Выгрузите актуальные данные на VPS.');
             $this->redirect('/sites/texts?id=' . $siteId . '&label=_default');
         } catch (Throwable $e) {
             die($this->h($e->getMessage()));
@@ -683,6 +969,8 @@ class AiController extends Controller
                 'path' => $res['path'],
             ]);
 
+            $this->flash('success', 'AI-текст для текущего поддомена сгенерирован.');
+            (new PublishDirtyService())->markDirty($siteId, 'Изменены тексты сайта. Выгрузите актуальные данные на VPS.');
             $this->redirect('/sites/texts?id=' . $siteId . '&label=' . urlencode($label));
         } catch (Throwable $e) {
             die($this->h($e->getMessage()));
@@ -736,6 +1024,8 @@ class AiController extends Controller
                 }
             }
 
+            $this->flash($errors > 0 ? 'error' : 'success', $errors > 0 ? "AI-тексты: выполнено {$done}, ошибок {$errors}." : "AI-тексты для всех поддоменов сгенерированы: {$done}.");
+            if ($done > 0) { (new PublishDirtyService())->markDirty($siteId, 'Изменены тексты сайта. Выгрузите актуальные данные на VPS.'); }
             $_SESSION['wm_log'][] = "AI all sub texts done={$done}, errors={$errors}";
             $this->redirect('/sites/ai?id=' . $siteId);
         } catch (Throwable $e) {
@@ -1151,6 +1441,8 @@ class AiController extends Controller
                 $this->saveSubCfgSafe($siteId, $label, $cfg);
             }
 
+            $this->flash('success', 'AI-мета для страницы сгенерированы.');
+            (new PublishDirtyService())->markDirty($siteId, 'Изменены SEO-данные сайта. Выгрузите актуальные данные на VPS.');
             $_SESSION['wm_log'][] = "AI meta страницы сгенерированы: {$label} {$path}";
             $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
         } catch (Throwable $e) {
@@ -1196,6 +1488,8 @@ class AiController extends Controller
             $this->normalizeRootPageInheritance($cfg);
             $this->saveSubCfgSafe($siteId, $label, $cfg);
 
+            $this->flash('success', 'AI-текст страницы сгенерирован.');
+            (new PublishDirtyService())->markDirty($siteId, 'Изменены тексты сайта. Выгрузите актуальные данные на VPS.');
             $_SESSION['wm_log'][] = "AI текст страницы сгенерирован: {$label} {$path}";
             $this->redirect('/sites/texts/edit?id=' . $siteId . '&label=' . urlencode($label) . '&file=' . rawurlencode(basename($res['text_file'])));
         } catch (Throwable $e) {
@@ -1294,6 +1588,8 @@ class AiController extends Controller
             $cfg['pages'] = $pages;
             $this->saveSubCfgSafe($siteId, $label, $cfg);
 
+            $this->flash('success', "AI-генерация для выбранных страниц завершена: {$done}.");
+            (new PublishDirtyService())->markDirty($siteId, 'Изменены страницы и тексты сайта. Выгрузите актуальные данные на VPS.');
             $_SESSION['wm_log'][] = "AI selected pages generated ({$done})";
             $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
         } catch (Throwable $e) {
@@ -1425,6 +1721,7 @@ class AiController extends Controller
             'overwrite_mode' => $overwriteMode,
         ];
 
+        $this->flash('success', 'Batch-настройка сохранена.');
         $_SESSION['wm_log'][] = 'AI run options saved';
         $this->redirect('/sites/ai?id=' . $siteId . '&label=' . urlencode((string)($_GET['label'] ?? '_default')));
     }
@@ -1440,6 +1737,7 @@ class AiController extends Controller
         }
 
         unset($_SESSION[$this->sessionOptionsKey($siteId)]);
+        $this->flash('success', 'Batch-настройка сброшена.');
         $_SESSION['wm_log'][] = 'AI run options reset';
 
         $this->redirect('/sites/ai?id=' . $siteId . '&label=' . urlencode((string)($_GET['label'] ?? '_default')));
@@ -1454,6 +1752,24 @@ class AiController extends Controller
 
         $label = preg_replace('~[^a-z0-9\-]+~', '', $label);
         return $label !== '' ? $label : '_default';
+    }
+
+    private function loadCatalogBrandNameRu(string $label): string
+    {
+        $label = $this->normalizeAiLabel($label);
+
+        if ($label === '_default') {
+            return '';
+        }
+
+        try {
+            DB::pdo()->exec("ALTER TABLE subdomain_catalog ADD COLUMN brand_name_ru VARCHAR(255) NOT NULL DEFAULT '' AFTER brand_name");
+        } catch (Throwable $e) {
+        }
+
+        $st = DB::pdo()->prepare("SELECT brand_name_ru FROM subdomain_catalog WHERE label = ? LIMIT 1");
+        $st->execute([$label]);
+        return trim((string)($st->fetchColumn() ?: ''));
     }
 
     private function loadCatalogBrandName(string $label): string
@@ -1473,6 +1789,16 @@ class AiController extends Controller
         $st->execute([$label]);
 
         return trim((string)($st->fetchColumn() ?: ''));
+    }
+
+    private function fallbackBrandNameRu(array $site, string $label): string
+    {
+        $label = $this->normalizeAiLabel($label);
+        if ($label === '_default') {
+            return '';
+        }
+        $catalogBrandRu = $this->loadCatalogBrandNameRu($label);
+        return $catalogBrandRu !== '' ? $catalogBrandRu : '';
     }
 
     private function fallbackBrandName(array $site, string $label): string
@@ -1552,6 +1878,8 @@ class AiController extends Controller
         $forbiddenPhrases = trim((string)($_POST['forbidden_phrases'] ?? ''));
         $extraInstruction = trim((string)($_POST['extra_instruction'] ?? ''));
 
+        $copyAllLabels = !empty($_POST['copy_all_labels']);
+
         DB::pdo()->prepare("
             INSERT INTO site_ai_label_settings (
                 site_id,
@@ -1592,6 +1920,20 @@ class AiController extends Controller
             $extraInstruction,
         ]);
 
+        if ($copyAllLabels) {
+            $labelsStmt = DB::pdo()->prepare("SELECT label FROM site_subdomains WHERE site_id = ? AND enabled = 1 ORDER BY label ASC");
+            $labelsStmt->execute([$siteId]);
+            $labelRows = $labelsStmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            foreach ($labelRows as $labelRow) {
+                $targetLabel = $this->normalizeAiLabel((string)($labelRow['label'] ?? ''));
+                DB::pdo()->prepare("INSERT INTO site_ai_label_settings (site_id,label,brand_name,brand_count,text_symbols,link_registration_path,link_slots_path,link_bonuses_path,required_phrases,forbidden_phrases,extra_instruction) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE brand_name=VALUES(brand_name), brand_count=VALUES(brand_count), text_symbols=VALUES(text_symbols), link_registration_path=VALUES(link_registration_path), link_slots_path=VALUES(link_slots_path), link_bonuses_path=VALUES(link_bonuses_path), required_phrases=VALUES(required_phrases), forbidden_phrases=VALUES(forbidden_phrases), extra_instruction=VALUES(extra_instruction), updated_at=CURRENT_TIMESTAMP")
+                    ->execute([$siteId,$targetLabel,$brandName,$brandCount,$textSymbols,$linkRegistrationPath,$linkSlotsPath,$linkBonusesPath,$requiredPhrases,$forbiddenPhrases,$extraInstruction]);
+            }
+            $this->flash('success', 'Шаблоны и переменные сохранены для текущего label и скопированы на все label сайта.');
+        } else {
+            $this->flash('success', 'Шаблоны и переменные для текущего label сохранены.');
+        }
+
         $_SESSION['wm_log'][] = 'AI entity settings saved: ' . $label;
         $this->redirect('/sites/ai?id=' . $siteId . '&label=' . urlencode($label));
     }
@@ -1613,7 +1955,18 @@ class AiController extends Controller
         }
 
         if (preg_match('~^https?://~i', $path)) {
-            return $path;
+            $parts = parse_url($path);
+            $normalized = (string)($parts['path'] ?? '/');
+            if ($normalized === '') {
+                $normalized = '/';
+            }
+            if (!empty($parts['query'])) {
+                $normalized .= '?' . $parts['query'];
+            }
+            if (!empty($parts['fragment'])) {
+                $normalized .= '#' . $parts['fragment'];
+            }
+            return $normalized;
         }
 
         if ($path[0] !== '/') {
@@ -1655,6 +2008,16 @@ class AiController extends Controller
         $label = $this->normalizeAiLabel($label);
 
         $brand = trim((string)($entityAi['brand_name'] ?? ''));
+        $brandFallback = $this->fallbackBrandName($site, $label);
+        $brandRu = $this->fallbackBrandNameRu($site, $label);
+        if ($brandRu === '') {
+            $brandRu = $brandFallback;
+        }
+
+        if ($brand === '' || preg_match('~\{[A-Z0-9_]+\}~', $brand)) {
+            $brand = $brandFallback !== '' ? $brandFallback : $brandRu;
+        }
+
         $brandCount = (string)((int)($entityAi['brand_count'] ?? 5));
         $symbols = (string)((int)($entityAi['text_symbols'] ?? 4000));
 
@@ -1666,10 +2029,11 @@ class AiController extends Controller
         $linkBonuses = $this->makeEntityUrl($site, $label, (string)($entityAi['link_bonuses_path'] ?? ''));
 
         $promolink = trim((string)($cfg['promolink'] ?? ''));
-        $linkMirror = $this->makeEntityUrl($site, $label, $promolink);
+        $linkMirror = $this->normalizeInnerPath($promolink);
 
         return [
             '{BRAND}' => $brand,
+            '{BRAND_RU}' => $brandRu,
             '{BRAND_COUNT}' => $brandCount,
             '{SYMBOLS}' => $symbols,
             '{DOMAIN}' => $domain,
@@ -1968,6 +2332,8 @@ class AiController extends Controller
                 ? (string)$site['domain']
                 : ($label . '.' . (string)$site['domain']);
 
+            $this->flash('success', 'AI-генерация всех страниц для текущего label завершена.');
+            (new PublishDirtyService())->markDirty($siteId, 'Изменены страницы и тексты сайта. Выгрузите актуальные данные на VPS.');
             $_SESSION['wm_log'][] = "AI pages generated: {$fqdn}";
             $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
         } catch (Throwable $e) {

@@ -21,9 +21,11 @@ $domain = (string)($site['domain'] ?? '');
     <div class="site-context__eyebrow">Что делается на этом экране</div>
     <div class="site-context__title">FastPanel / FTP / загрузка файлов / self-signed SSL</div>
     <div class="site-context__meta">
-        Сначала выбирается сервер и IP, потом создаётся сайт в FastPanel, затем заливаются файлы и при необходимости выпускается self-signed SSL.
+        Сначала выбирается сервер и IP, потом создается сайт в FastPanel, затем выгружаются актуальные данные сайта на VPS и при необходимости выпускается self-signed SSL.
     </div>
 </div>
+
+<div class="alert alert-info mt-16"><b>Что такое build:</b> build — это локальная собранная папка сайта внутри storage/builds. При нажатии на «Выгрузить на VPS» панель берет именно ее содержимое, архивирует и отправляет на сервер. Если вы меняли контент, SEO, файлы или тексты через панель, отдельный build вручную перед выгрузкой обычно не нужен.</div>
 
 <?php if (!empty($ips_error)): ?>
     <div class="alert alert-danger mt-16">
@@ -95,14 +97,14 @@ $domain = (string)($site['domain'] ?? '');
 
     <div class="deploy-step">
         <div class="deploy-step__num">Шаг 2</div>
-        <div class="deploy-step__title">Загрузить файлы и распаковать build</div>
+        <div class="deploy-step__title">Выгрузить актуальные данные на VPS</div>
         <div class="small muted mb-14">
-            Загружает ZIP на сервер, отправляет распаковщик и раскладывает build в рабочую директорию сайта.
+            Собирает ZIP из текущего build, загружает его на сервер и обновляет файлы сайта на VPS.
         </div>
 
         <form method="post" action="/deploy/update-files?id=<?= $siteId ?>">
             <input type="hidden" name="server_id" id="server_id_update" value="<?= (int)$serverId ?>">
-            <button type="submit" class="btn btn-primary">Upload + unpack</button>
+            <button type="submit" class="btn btn-primary">Выгрузить на VPS</button>
         </form>
     </div>
 

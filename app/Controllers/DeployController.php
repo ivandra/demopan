@@ -608,6 +608,12 @@ private function extractIpsFromServerRow(array $server): array
 
             // 5) mark files ok
             DB::pdo()->prepare("UPDATE sites SET fp_files_ready=1, fp_files_last_ok=NOW() WHERE id=?")->execute([$siteId]);
+            if (class_exists('PublishDirtyService')) {
+                try {
+                    (new PublishDirtyService())->clearDirty($siteId);
+                } catch (Throwable $e) {
+                }
+            }
 
             $respShort = [
                 'site_id'   => (int)($site['fp_site_id'] ?? 0),

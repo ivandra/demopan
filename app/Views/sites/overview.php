@@ -30,6 +30,8 @@ $dnsAudit = $dnsAudit ?? [];
     </div>
 </div>
 
+<div class="alert alert-info alert-compact">Сводный статус сайта теперь вынесен в верхний статус-бар и доступен на всех страницах сайта.</div>
+
 <?php if ($freshClone): ?>
     <div class="alert alert-success">
         <b>Клон создан успешно.</b> Ниже — постоянная рабочая карта по подготовке сайта к выпуску.
@@ -268,7 +270,7 @@ $dnsAudit = $dnsAudit ?? [];
         </ul>
 
         <div class="page-actions">
-            <form method="post" action="/ssl/check-now?id=<?= $siteId ?>" data-confirm="Принудительно проверить SSL сейчас?">
+            <form method="post" action="/ssl/site/check-now?id=<?= $siteId ?>" data-confirm="Принудительно проверить SSL сейчас?">
                 <button type="submit" class="btn btn-primary">Проверить SSL сейчас</button>
             </form>
 
