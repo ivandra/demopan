@@ -5,6 +5,16 @@ $siteId = (int)($site['id'] ?? 0);
 $domain = (string)($site['domain'] ?? '');
 ?>
 
+<?php
+$deployFeedback = null;
+if (session_status() !== PHP_SESSION_ACTIVE) { @session_start(); }
+if (!empty($_SESSION['deploy_feedback'][$siteId])) {
+    $deployFeedback = $_SESSION['deploy_feedback'][$siteId];
+    unset($_SESSION['deploy_feedback'][$siteId]);
+}
+?>
+
+
 <div class="page-head">
     <h1 class="page-title">Публикация на VPS</h1>
     <div class="page-actions">
@@ -16,6 +26,15 @@ $domain = (string)($site['domain'] ?? '');
         Сайт: <code><?= h($domain) ?></code>
     </div>
 </div>
+
+<?php if (!empty($deployFeedback)): ?>
+    <div class="alert alert-<?= !empty($deployFeedback['type']) && $deployFeedback['type'] === 'error' ? 'danger' : 'success' ?> mt-16">
+        <b><?= h((string)($deployFeedback['message'] ?? '')) ?></b><br>
+        <?php if (!empty($deployFeedback['report_url'])): ?>
+            <a href="<?= h((string)$deployFeedback['report_url']) ?>">Открыть отчет</a>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
 
 <div class="site-context panel-card">
     <div class="site-context__eyebrow">Что делается на этом экране</div>

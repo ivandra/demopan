@@ -30,7 +30,6 @@ $dnsAudit = $dnsAudit ?? [];
     </div>
 </div>
 
-<div class="alert alert-info alert-compact">Сводный статус сайта теперь вынесен в верхний статус-бар и доступен на всех страницах сайта.</div>
 
 <?php if ($freshClone): ?>
     <div class="alert alert-success">

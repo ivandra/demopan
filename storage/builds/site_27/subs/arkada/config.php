@@ -4,11 +4,11 @@ $cfg = array (
   'domain' => 'arkada.kazik3.casino',
   'yandex_verification' => '',
   'yandex_metrika' => '',
-  'promolink' => '/reg',
-  'title' => 'Arkada тест title',
-  'description' => 'тест Arkada desc',
-  'keywords' => 'Arkada, казино Arkada, игровые автоматы, слоты на деньги, онлайн-казино, азартные игры, бонусы казино',
-  'h1' => 'Arkada тест h1',
+  'promolink' => '/reg2',
+  'title' => 'Kazik3 тест title2',
+  'description' => 'тест Kazik3 desc',
+  'keywords' => 'Kazik3, казино, игровые автоматы, азартные игры, онлайн казино, слоты, бонусы, регистрация',
+  'h1' => 'Kazik3 тест h1',
   'pages' => 
   array (
     '/' => 

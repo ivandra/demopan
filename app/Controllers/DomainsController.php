@@ -220,6 +220,153 @@ class DomainsController extends Controller
      * POST /domains/purchase-dns?id=6
      * body: registrar_account_id, registrar_contact_id, vps_ip
      */
+    /**
+     * POST /domains/recheck-dns?id=6
+     * Перепроверяет DNS у регистратора и, если записи уже корректны,
+     * сбрасывает старую dns_error/domain_purchase_error.
+     */
+    public function recheckDns(): void
+    {
+        $this->requireAuth();
+
+        require_once __DIR__ . '/../Services/Crypto.php';
+        require_once __DIR__ . '/../Services/NamecheapClient.php';
+
+        $siteId = (int)($_GET['id'] ?? 0);
+        if ($siteId <= 0) die('bad id');
+
+        $site = $this->loadSite($siteId);
+        $domain = $this->normalizeDomain((string)($site['domain'] ?? ''));
+        if ($domain === '') die('bad domain');
+
+        $accountId = (int)($site['registrar_account_id'] ?? 0);
+        if ($accountId <= 0) {
+            $_SESSION['flash_domain_check'][$siteId] = [
+                'error' => 'Не выбран аккаунт регистратора для перепроверки DNS.',
+            ];
+            $this->redirect('/domains?id=' . $siteId);
+        }
+
+        $vpsIp = trim((string)($site['vps_ip'] ?? ''));
+        if ($vpsIp === '' || !filter_var($vpsIp, FILTER_VALIDATE_IP)) {
+            $_SESSION['flash_domain_check'][$siteId] = [
+                'error' => 'У сайта не задан корректный VPS IP для проверки DNS.',
+            ];
+            $this->redirect('/domains?id=' . $siteId);
+        }
+
+        $account = $this->loadRegistrarAccount($accountId);
+        [$sld, $tld] = $this->makeClientFromAccount($account)->splitSldTld($domain);
+
+        $serverId = isset($site['fastpanel_server_id']) ? (int)$site['fastpanel_server_id'] : null;
+        if ($serverId !== null && $serverId <= 0) $serverId = null;
+
+        $deployId = $this->createDeployment($siteId, $serverId, 'domain_dns_recheck');
+        $payload = [
+            'stage' => 'domain_dns_recheck',
+            'site_id' => $siteId,
+            'domain' => $domain,
+            'registrar_account_id' => $accountId,
+            'vps_ip' => $vpsIp,
+            'sandbox' => (bool)($account['is_sandbox'] ?? false),
+        ];
+
+        try {
+            $client = $this->makeClientFromAccount($account);
+            $hosts = $client->getHosts($sld, $tld);
+
+            $expectedRootIp = false;
+            $expectedWwwCname = false;
+
+            foreach ($hosts as $host) {
+                $name = strtolower(trim((string)($host['host'] ?? '')));
+                $type = strtoupper(trim((string)($host['type'] ?? '')));
+                $address = strtolower(rtrim(trim((string)($host['address'] ?? '')), '.'));
+
+                if (($name === '@' || $name == '') && $type === 'A' && $address === strtolower($vpsIp)) {
+                    $expectedRootIp = true;
+                }
+                if ($name === 'www' && $type === 'CNAME' && $address === strtolower($domain)) {
+                    $expectedWwwCname = true;
+                }
+            }
+
+            if ($expectedRootIp && $expectedWwwCname) {
+                $sql = "
+                    UPDATE sites SET
+                        dns_status='configured',
+                        dns_applied_at=IFNULL(dns_applied_at, NOW()),
+                        dns_error=NULL,
+                        domain_purchase_status=CASE
+                            WHEN domain_registered_at IS NOT NULL THEN 'purchased'
+                            WHEN domain_purchase_status='error' THEN 'checked'
+                            ELSE domain_purchase_status
+                        END,
+                        domain_purchase_error=CASE
+                            WHEN domain_registered_at IS NOT NULL OR domain_purchase_status='error' THEN NULL
+                            ELSE domain_purchase_error
+                        END
+                    WHERE id=?
+                ";
+                DB::pdo()->prepare($sql)->execute([$siteId]);
+
+                $message = 'DNS записи у регистратора корректны. Ошибка статуса сброшена.';
+                $_SESSION['flash_domain_check'][$siteId] = [
+                    'deploy_id' => $deployId,
+                    'pricing' => [
+                        'domain' => $domain,
+                        'decision' => 'dns_rechecked_ok',
+                    ],
+                ];
+            } else {
+                $problems = [];
+                if (!$expectedRootIp) {
+                    $problems[] = 'не найдена A-запись @ -> ' . $vpsIp;
+                }
+                if (!$expectedWwwCname) {
+                    $problems[] = 'не найдена CNAME-запись www -> ' . $domain;
+                }
+                $message = 'DNS еще не совпадает с ожидаемой конфигурацией: ' . implode('; ', $problems);
+
+                DB::pdo()->prepare("
+                    UPDATE sites SET
+                        dns_status='error',
+                        dns_error=?
+                    WHERE id=?
+                ")->execute([$message, $siteId]);
+
+                $_SESSION['flash_domain_check'][$siteId] = [
+                    'deploy_id' => $deployId,
+                    'error' => $message,
+                ];
+            }
+
+            $this->safeUpdateDeploymentDone($deployId, $payload, [
+                'hosts' => $hosts,
+                'matched' => [
+                    'root_a' => $expectedRootIp,
+                    'www_cname' => $expectedWwwCname,
+                ],
+                'message' => $message,
+            ]);
+        } catch (Throwable $e) {
+            DB::pdo()->prepare("
+                UPDATE sites SET
+                    dns_status='error',
+                    dns_error=?
+                WHERE id=?
+            ")->execute([$e->getMessage(), $siteId]);
+
+            $this->safeUpdateDeploymentError($deployId, $e->getMessage(), $payload);
+            $_SESSION['flash_domain_check'][$siteId] = [
+                'deploy_id' => $deployId,
+                'error' => $e->getMessage(),
+            ];
+        }
+
+        $this->redirect('/domains?id=' . $siteId);
+    }
+
     public function purchaseAndDns(): void
 {
     $this->requireAuth();

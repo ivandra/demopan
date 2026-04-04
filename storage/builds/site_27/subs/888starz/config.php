@@ -4,11 +4,11 @@ $cfg = array (
   'domain' => '888starz.kazik3.casino',
   'yandex_verification' => '',
   'yandex_metrika' => '',
-  'promolink' => '/reg',
-  'title' => '888Starz тест title',
-  'description' => 'тест 888Starz desc',
-  'keywords' => '888starz, 888starz казино, игровые автоматы, ставки на спорт, онлайн казино, бонусы, live казино, регистрация',
-  'h1' => '888Starz тест h1',
+  'promolink' => '/reg2',
+  'title' => 'Kazik3 тест title2',
+  'description' => 'тест Kazik3 desc',
+  'keywords' => 'Kazik3, казино, игровые автоматы, азартные игры, онлайн казино, слоты, бонусы, регистрация',
+  'h1' => 'Kazik3 тест h1',
   'pages' => 
   array (
     '/' => 

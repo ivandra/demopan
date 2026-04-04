@@ -57,7 +57,7 @@ class YandexSearchApiService
         $endpointJson = trim((string)($data['endpoint_json'] ?? 'https://xmlstock.com/yandexlive/json/'));
         $user = trim((string)($data['user'] ?? ''));
         $key = trim((string)($data['key'] ?? ''));
-        $queryIntervalMinutes = max(5, (int)($data['query_interval_minutes'] ?? 30));
+        $queryIntervalMinutes = max(1, (int)($data['query_interval_minutes'] ?? 30));
         $recheckAfterDetectMinutes = max(60, (int)($data['recheck_after_detect_minutes'] ?? 1440));
         $maxPagesPerRun = max(1, min(10, (int)($data['max_pages_per_run'] ?? 1)));
 
@@ -878,9 +878,9 @@ class YandexSearchApiService
             return date('Y-m-d H:i:s', time() + ((int)($settings['recheck_after_detect_minutes'] ?? 1440) * 60));
         }
 
-        $minutes = max(5, (int)($settings['query_interval_minutes'] ?? 30));
+        $minutes = max(1, (int)($settings['query_interval_minutes'] ?? 30));
         if ($force) {
-            $minutes = max(5, min($minutes, 15));
+            $minutes = max(1, min($minutes, 15));
         }
 
         return date('Y-m-d H:i:s', time() + ($minutes * 60));

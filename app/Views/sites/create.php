@@ -85,8 +85,8 @@ if (is_array($check)) {
             <div class="panel-card" id="domainStatusBox">
                 <div><b>Проверка домена</b></div>
                 <div class="small muted mt-8" id="domainStatusText">
-                    Введите домен и нажмите «Проверить домен» или просто начните ввод —
-                    проверка запустится автоматически.
+                    Введите домен и нажмите «Проверить возможность купить домен и цену» или просто начните ввод —
+                    проверка запустится автоматически с учетом регистратора и цены.
                 </div>
             </div>
 
@@ -124,7 +124,7 @@ if (is_array($check)) {
 
             <div class="page-actions">
                 <button type="submit" formaction="/sites/create" class="btn btn-primary">Создать сайт</button>
-                <button type="submit" formaction="/sites/check-domain" class="btn btn-secondary">Проверить домен и цену</button>
+                <button type="submit" formaction="/sites/check-domain" class="btn btn-secondary">Проверить возможность купить домен и цену</button>
             </div>
         </form>
     </div>
@@ -196,10 +196,31 @@ if (is_array($check)) {
             ? esc(obj.fastpanel_server_id_guess)
             : '<span class="small muted">нет</span>';
 
+        let registrarHtml = '<div class="small muted">Аккаунт регистратора не выбран</div>';
+        if (obj.registrar) {
+            if (obj.registrar.error) {
+                registrarHtml = '<div>' + badge('badge-danger', 'Ошибка регистратора') + '</div>' +
+                    '<div class="small">' + esc(obj.registrar.error) + '</div>';
+            } else {
+                const purchaseBadge = obj.registrar.can_purchase
+                    ? badge('badge-success', 'Можно купить')
+                    : badge('badge-danger', 'Купить нельзя');
+                const premiumBadge = obj.registrar.premium ? ' ' + badge('badge-warning', 'premium') : '';
+                const minPrice = (obj.registrar.price_usd_min !== null && obj.registrar.price_usd_min !== undefined)
+                    ? ('$' + esc(obj.registrar.price_usd_min))
+                    : '<span class="small muted">нет данных</span>';
+                registrarHtml =
+                    '<div><b>Регистратор:</b> ' + purchaseBadge + premiumBadge + '</div>' +
+                    '<div class="small muted">' + esc(obj.registrar.status_text || '') + '</div>' +
+                    '<div><b>Мин. цена:</b> ' + minPrice + '</div>';
+            }
+        }
+
         text.innerHTML =
             '<div class="stack-gap-sm">' +
                 '<div><b>Домен:</b> <code>' + esc(obj.domain || '') + '</code></div>' +
-                '<div><b>Статус:</b> ' + exists + '</div>' +
+                '<div><b>Статус в панели:</b> ' + exists + '</div>' +
+                '<div>' + registrarHtml + '</div>' +
                 '<div><b>DNS A сейчас:</b> ' + dnsA + '</div>' +
                 '<div><b>vps_ip (guess):</b> ' + ipGuess + '</div>' +
                 '<div><b>fastpanel_server_id (guess):</b> ' + sidGuess + '</div>' +
@@ -229,12 +250,14 @@ if (is_array($check)) {
         text.innerHTML = '<span class="small muted">Проверяю...</span>';
 
         try {
-            const j1 = await requestJson('/sites/check-domain?domain=' + encodeURIComponent(v), {method:'GET'});
+            const rid = (document.querySelector('select[name="registrar_account_id"]') || {}).value || '';
+            const j1 = await requestJson('/sites/check-domain?domain=' + encodeURIComponent(v) + '&registrar_account_id=' + encodeURIComponent(rid), {method:'GET'});
             if (j1 && (j1.ok === true || j1.error)) { render(j1); return; }
         } catch(e) {}
 
         try {
-            const body = 'domain=' + encodeURIComponent(v);
+            const rid = (document.querySelector('select[name="registrar_account_id"]') || {}).value || '';
+            const body = 'domain=' + encodeURIComponent(v) + '&registrar_account_id=' + encodeURIComponent(rid);
             const j2 = await requestJson('/sites/check-domain', {
                 method:'POST',
                 headers:{'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8'},

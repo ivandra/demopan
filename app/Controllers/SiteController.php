@@ -177,41 +177,116 @@ $this->regenerateConfigPhp($siteId, $cfg, '_default');
 {
     $this->requireAuth();
 
-    header('Content-Type: application/json; charset=utf-8');
+    if (session_status() !== PHP_SESSION_ACTIVE) {
+        @session_start();
+    }
+
+    $method = strtoupper((string)($_SERVER['REQUEST_METHOD'] ?? 'GET'));
+    $accept = strtolower((string)($_SERVER['HTTP_ACCEPT'] ?? ''));
+    $xrw = strtolower((string)($_SERVER['HTTP_X_REQUESTED_WITH'] ?? ''));
+    $wantsJson = ($method === 'GET') || strpos($accept, 'application/json') !== false || $xrw === 'xmlhttprequest';
 
     $domainInput = (string)($_POST['domain'] ?? $_GET['domain'] ?? '');
     $domain = $this->normalizeDomainInput($domainInput);
+    $registrarAccountId = (int)($_POST['registrar_account_id'] ?? $_GET['registrar_account_id'] ?? 0);
+
+    $result = [
+        'ok' => false,
+        'domain' => $domain,
+        'exists' => false,
+        'exists_id' => 0,
+        'dns_a' => [],
+        'vps_ip_guess' => null,
+        'fastpanel_server_id_guess' => null,
+        'registrar' => null,
+    ];
 
     if ($domain === '' || !$this->isValidDomain($domain)) {
-        echo json_encode(['ok' => false, 'error' => 'bad_domain', 'domain' => $domain], JSON_UNESCAPED_UNICODE);
+        $result['error'] = 'bad_domain';
+    } else {
+        $st = DB::pdo()->prepare("SELECT id FROM sites WHERE domain=? LIMIT 1");
+        $st->execute([$domain]);
+        $existsId = (int)($st->fetchColumn() ?: 0);
+
+        $dnsA = $this->resolveDnsA($domain);
+        $vpsIp = $dnsA[0] ?? null;
+        $serverId = $vpsIp ? $this->findFastpanelServerIdByIp($vpsIp) : null;
+
+        $result['ok'] = true;
+        $result['exists'] = ($existsId > 0);
+        $result['exists_id'] = $existsId;
+        $result['dns_a'] = $dnsA;
+        $result['vps_ip_guess'] = $vpsIp;
+        $result['fastpanel_server_id_guess'] = $serverId;
+
+        if ($registrarAccountId > 0) {
+            try {
+                require_once Paths::appRoot() . '/app/Services/Crypto.php';
+                require_once Paths::appRoot() . '/app/Services/NamecheapClient.php';
+
+                $acc = $this->loadRegistrarAccountForCreate($registrarAccountId);
+                $nc = $this->makeNamecheapClientFromAccount($acc);
+                $check = $nc->checkDomain($domain);
+                [, $tld] = $nc->splitSldTld($domain);
+                $pricing = $nc->getPricingRegister1YVariants($tld);
+
+                $regular = isset($pricing['regular_price']) && is_numeric($pricing['regular_price']) ? (float)$pricing['regular_price'] : null;
+                $your = isset($pricing['your_price']) && is_numeric($pricing['your_price']) ? (float)$pricing['your_price'] : null;
+                $coupon = isset($pricing['coupon_price']) && is_numeric($pricing['coupon_price']) ? (float)$pricing['coupon_price'] : null;
+                $minPrice = null;
+                foreach ([$coupon, $your, $regular] as $v) {
+                    if (is_numeric($v)) {
+                        $v = (float)$v;
+                        $minPrice = $minPrice === null ? $v : min($minPrice, $v);
+                    }
+                }
+                if ($minPrice === null && isset($pricing['price']) && is_numeric($pricing['price'])) {
+                    $minPrice = (float)$pricing['price'];
+                }
+
+                $result['registrar'] = [
+                    'provider' => 'namecheap',
+                    'account_id' => $registrarAccountId,
+                    'available' => (bool)($check['available'] ?? false),
+                    'premium' => (bool)($check['premium'] ?? false),
+                    'can_purchase' => (bool)($check['available'] ?? false),
+                    'status_text' => !empty($check['available']) ? 'Можно зарегистрировать' : 'Домен уже занят',
+                    'price_usd_min' => $minPrice,
+                    'regular_price' => $regular,
+                    'your_price' => $your,
+                    'coupon_price' => $coupon,
+                    'promo_code' => (string)($pricing['promo_code'] ?? ''),
+                ];
+            } catch (Throwable $e) {
+                $result['registrar'] = [
+                    'provider' => 'namecheap',
+                    'account_id' => $registrarAccountId,
+                    'error' => $e->getMessage(),
+                ];
+            }
+        }
+    }
+
+    if ($wantsJson) {
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($result, JSON_UNESCAPED_UNICODE);
         return;
     }
 
-    $st = DB::pdo()->prepare("SELECT id FROM sites WHERE domain=? LIMIT 1");
-    $st->execute([$domain]);
-    $existsId = (int)($st->fetchColumn() ?: 0);
+    require_once Paths::appRoot() . '/app/Services/TemplateService.php';
+    $templates = (new TemplateService())->listTemplates();
+    $accounts = DB::pdo()->query("
+        SELECT * FROM registrar_accounts
+        WHERE provider='namecheap'
+        ORDER BY is_sandbox ASC, id DESC
+    " )->fetchAll();
 
-    // DNS A
-    $dnsA = $this->resolveDnsA($domain);
-    $vpsIp = $dnsA[0] ?? null;
-
-    // подбор сервера (опционально)
-    $serverId = null;
-if ($vpsIp) {
-    $serverId = $this->findFastpanelServerIdByIp($vpsIp);
+    $checkResult = $result;
+    $domain = $domain;
+    $template = trim((string)($_POST['template'] ?? 'default'));
+    $registrar_account_id = $registrarAccountId;
+    $this->view('sites/create', compact('templates', 'accounts', 'checkResult', 'domain', 'template', 'registrar_account_id'));
 }
-
-    echo json_encode([
-        'ok' => true,
-        'domain' => $domain,
-        'exists' => ($existsId > 0),
-        'exists_id' => $existsId,
-        'dns_a' => $dnsA,
-        'vps_ip_guess' => $vpsIp,
-        'fastpanel_server_id_guess' => $serverId,
-    ], JSON_UNESCAPED_UNICODE);
-}
-
 
     // ----------------------------
     // Edit + Update (базовый конфиг)
@@ -539,7 +614,9 @@ public function textsIndex(): void
     $content = file_get_contents($path);
     if ($content === false) $content = '';
 
-    $this->view('texts/edit', compact('site', 'safeFile', 'content', 'configTargetPath', 'label'));
+    $mentionStats = $this->buildTextMentionStats($siteId, $site, $label, $content);
+
+    $this->view('texts/edit', compact('site', 'safeFile', 'content', 'configTargetPath', 'label', 'mentionStats'));
 }
 
     public function textsSave(): void
@@ -1314,7 +1391,7 @@ private function regenerateConfigPhp(int $siteId, array $cfg, ?string $label = n
 
     private function defaultConfig(string $domain): array
     {
-        return [
+        $cfg = [
             'domain' => $domain,
             'yandex_verification' => '',
             'yandex_metrika' => '',
@@ -1349,6 +1426,8 @@ private function regenerateConfigPhp(int $siteId, array $cfg, ?string $label = n
             'base_new_url' => '',
             'base_second_url' => '',
         ];
+
+        return $this->applyAiMetaDefaultsToConfig($cfg, '_default');
     }
 
     private function loadSite(int $siteId): array
@@ -1403,6 +1482,103 @@ private function regenerateConfigPhp(int $siteId, array $cfg, ?string $label = n
         }
         sort($files);
         return $files;
+    }
+
+
+    private function buildTextMentionStats(int $siteId, array $site, string $label, string $content): array
+    {
+        $label = $this->normalizeSubLabel($label);
+        $catalog = $this->loadSubdomainCatalogBrand($label);
+        $entity = $this->loadSiteAiLabelSettingsRow($siteId, $label);
+
+        $brand = trim((string)($catalog['brand_name'] ?? ''));
+        $brandRu = trim((string)($catalog['brand_name_ru'] ?? ''));
+        $targetCount = (int)($entity['brand_count'] ?? 0);
+        $targetSymbols = (int)($entity['text_symbols'] ?? 0);
+        $actualSymbols = mb_strlen($content);
+
+        if ($brand === '' && $label !== '_default') {
+            $brand = ucfirst($label);
+        }
+        if ($brandRu === '') {
+            $brandRu = $brand;
+        }
+        if ($label === '_default' && $brand === '') {
+            $brand = (string)($site['domain'] ?? '');
+            $brandRu = $brand;
+        }
+
+        $variants = [];
+        if ($brand !== '') {
+            $variants[$brand] = $this->countExactMentionsInHtml($content, $brand);
+        }
+        if ($brandRu !== '' && !isset($variants[$brandRu])) {
+            $variants[$brandRu] = $this->countExactMentionsInHtml($content, $brandRu);
+        }
+
+        return [
+            'brand' => $brand,
+            'brand_ru' => $brandRu,
+            'target_count' => $targetCount,
+            'actual_count' => array_sum($variants),
+            'target_symbols' => $targetSymbols,
+            'actual_symbols' => $actualSymbols,
+            'variants' => $variants,
+        ];
+    }
+
+    private function loadSubdomainCatalogBrand(string $label): array
+    {
+        if ($label === '_default') {
+            return [];
+        }
+
+        try {
+            $stmt = DB::pdo()->prepare('SELECT brand_name, brand_name_ru FROM subdomain_catalog WHERE label = ? LIMIT 1');
+            $stmt->execute([$label]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return is_array($row) ? $row : [];
+        } catch (Throwable $e) {
+            return [];
+        }
+    }
+
+    private function loadSiteAiLabelSettingsRow(int $siteId, string $label): array
+    {
+        try {
+            $stmt = DB::pdo()->prepare('SELECT * FROM site_ai_label_settings WHERE site_id = ? AND label = ? LIMIT 1');
+            $stmt->execute([$siteId, $label]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (is_array($row)) {
+                return $row;
+            }
+
+            $stmt = DB::pdo()->prepare('SELECT * FROM site_ai_label_settings WHERE site_id = ? AND label = ? LIMIT 1');
+            $stmt->execute([$siteId, '_default']);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return is_array($row) ? $row : [];
+        } catch (Throwable $e) {
+            return [];
+        }
+    }
+
+    private function countExactMentionsInHtml(string $html, string $needle): int
+    {
+        $needle = trim($needle);
+        if ($needle === '') {
+            return 0;
+        }
+
+        $plain = trim((string)preg_replace('~<[^>]+>~u', ' ', $html));
+        if ($plain === '') {
+            return 0;
+        }
+
+        if (!preg_match_all('~' . preg_quote($needle, '~') . '~iu', $plain, $m)) {
+            return 0;
+        }
+
+        return count($m[0]);
     }
 
     private function sanitizeTextFilename(string $name): string
@@ -2401,6 +2577,76 @@ private function makeNamecheapClientFromAccount(array $acc): NamecheapClient
     }
 
     throw new RuntimeException('Cannot construct NamecheapClient. Last error: ' . ($lastErr ?? 'unknown'));
+}
+
+private function loadRegistrarAccountForCreate(int $id): array
+{
+    $st = DB::pdo()->prepare("SELECT * FROM registrar_accounts WHERE id=? LIMIT 1");
+    $st->execute([$id]);
+    $row = $st->fetch(PDO::FETCH_ASSOC);
+    if (!$row) {
+        throw new RuntimeException('registrar account not found');
+    }
+    return $row;
+}
+
+private function loadGlobalAiSettingsRow(): array
+{
+    try {
+        $st = DB::pdo()->query("SELECT * FROM ai_settings ORDER BY id ASC LIMIT 1");
+        $row = $st ? $st->fetch(PDO::FETCH_ASSOC) : false;
+        return is_array($row) ? $row : [];
+    } catch (Throwable $e) {
+        return [];
+    }
+}
+
+private function applyAiMetaDefaultsToConfig(array $cfg, string $label = '_default'): array
+{
+    $ai = $this->loadGlobalAiSettingsRow();
+    if (!$ai) {
+        return $cfg;
+    }
+
+    $domain = (string)($cfg['domain'] ?? '');
+    $rootBrand = preg_replace('~\..*$~', '', $domain);
+    $rootBrand = trim((string)$rootBrand);
+    $brand = $label === '_default' ? $rootBrand : ucfirst($label);
+    $brandRu = $brand;
+
+    if ($label !== '_default') {
+        try {
+            $st = DB::pdo()->prepare("SELECT brand_name, brand_name_ru FROM subdomain_catalog WHERE label=? LIMIT 1");
+            $st->execute([$label]);
+            $row = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+            if (!empty($row['brand_name'])) $brand = trim((string)$row['brand_name']);
+            if (!empty($row['brand_name_ru'])) $brandRu = trim((string)$row['brand_name_ru']);
+        } catch (Throwable $e) {}
+    }
+
+    $vars = [
+        '{BRAND}' => $brand,
+        '{BRAND_RU}' => $brandRu !== '' ? $brandRu : $brand,
+        '{DOMAIN}' => $domain,
+        '{LABEL}' => $label,
+    ];
+
+    foreach ([
+        'title' => 'global_meta_title_template',
+        'h1' => 'global_meta_h1_template',
+        'description' => 'global_meta_description_template',
+    ] as $field => $src) {
+        $tpl = trim((string)($ai[$src] ?? ''));
+        if ($tpl !== '' && trim((string)($cfg[$field] ?? '')) === '') {
+            $cfg[$field] = strtr($tpl, $vars);
+        }
+    }
+
+    if (!isset($cfg['keywords']) || $cfg['keywords'] === null) {
+        $cfg['keywords'] = '';
+    }
+
+    return $cfg;
 }
 
 private function cfgResolver(): SiteConfigResolver

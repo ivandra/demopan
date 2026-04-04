@@ -3,6 +3,7 @@ function h($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'
 
 $siteId  = (int)($site['id'] ?? 0);
 $label   = isset($label) ? (string)$label : '_default';
+$isMulty = true;
 
 $configFileForLink = 'config.default.php';
 $entityTitle = ($label === '_default') ? 'Основной домен (_default)' : ('Поддомен: ' . $label);

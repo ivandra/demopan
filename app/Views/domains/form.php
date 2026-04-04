@@ -220,6 +220,13 @@ $decisionRu = function(string $d) {
         <li><b>Статус DNS:</b> <?= h($dnsStatus !== '' ? $dnsStatus : '—') ?></li>
     </ul>
 
+
+    <div class="page-actions">
+        <form method="post" action="/domains/recheck-dns?id=<?= $siteId ?>">
+            <button type="submit" class="btn btn-secondary">Перепроверить DNS и сбросить ошибку</button>
+        </form>
+    </div>
+
     <?php if (!empty($site['domain_purchase_error'])): ?>
         <div class="alert alert-danger">
             <b>Последняя ошибка домена:</b><br>

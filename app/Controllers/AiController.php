@@ -562,6 +562,10 @@ class AiController extends Controller
         $pagePaths = $this->extractPagePaths($currentCfg);
         $resolvedMirrorUrl = $this->normalizeInnerPath((string)($currentCfg['promolink'] ?? ''));
 
+        $this->ensureAiQueueTables();
+        $aiCron = $this->loadAiCronState();
+        $aiQueue = $this->loadAiQueueOverview($siteId);
+
         $this->view('ai/site', [
             'site' => $site,
             'ai' => $row,
@@ -572,6 +576,8 @@ class AiController extends Controller
             'pagePaths' => $pagePaths,
             'resolvedMirrorUrl' => $resolvedMirrorUrl,
             'runOptions' => $this->loadRunOptions($siteId),
+            'aiCron' => $aiCron,
+            'aiQueue' => $aiQueue,
         ]);
     }
 
@@ -595,6 +601,13 @@ class AiController extends Controller
             $_SESSION['wm_log'][] = 'AI root meta generated';
             $this->redirect('/sites/subcfg?id=' . $siteId . '&label=_default');
         } catch (Throwable $e) {
+            $this->logAiPageTextStage('error', [
+                'site_id' => (int)($_GET['id'] ?? 0),
+                'label' => (string)($_GET['label'] ?? '_default'),
+                'path' => (string)($_GET['path'] ?? '/'),
+                'err' => $e->getMessage(),
+                'class' => get_class($e),
+            ]);
             die($this->h($e->getMessage()));
         }
     }
@@ -708,6 +721,7 @@ class AiController extends Controller
         $cfg = $this->loadSubCfgOrCreate($siteId, $label, $domain);
         $entityAi = $this->loadEntityAiSettings($siteId, $label, $site);
         $vars = $this->buildPromptVars($site, $label, $cfg, $entityAi);
+        $textVars = $this->sanitizeTextPromptVars($vars);
 
         $prompt = trim((string)(
             $label === '_default'
@@ -719,7 +733,7 @@ class AiController extends Controller
             $prompt = 'Ты SEO-копирайтер. Верни только JSON без markdown и без пояснений. Формат: {"title":"","h1":"","description":"","keywords":""}';
         }
 
-        $prompt = $this->replacePromptVars($prompt, $vars);
+        $prompt = $this->replacePromptVars($prompt, $textVars);
 
         $userPrompt = "Сгенерируй SEO-мета для сущности {$fqdn}.
 ";
@@ -987,49 +1001,502 @@ class AiController extends Controller
                 throw new RuntimeException('Некорректный site_id');
             }
 
-            $site = $this->loadSiteOrFail($siteId);
-            $row = $this->loadRow();
-            $client = $this->aiClient();
+            $this->ensureAiQueueTables();
+            $stats = $this->enqueueSubTextJobs($siteId);
 
-            $st = DB::pdo()->prepare("
-                SELECT label
-                FROM site_subdomains
-                WHERE site_id = ?
-                  AND enabled = 1
-                  AND label <> '_default'
-                ORDER BY label ASC
-            ");
-            $st->execute([$siteId]);
-            $subs = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
-
-            $done = 0;
-            $errors = 0;
-
-            foreach ($subs as $sub) {
-                $label = trim((string)($sub['label'] ?? ''));
-                if ($label === '') {
-                    continue;
-                }
-
-                try {
-                    $this->generateHomeTextForLabel($siteId, $site, $row, $client, $label);
-                    $done++;
-                } catch (Throwable $e) {
-                    $errors++;
-                    hub_log('AI_SUB_TEXT_BATCH_ERROR', [
-                        'site_id' => $siteId,
-                        'label' => $label,
-                        'err' => $e->getMessage(),
-                    ]);
-                }
+            if ((int)($stats['queued'] ?? 0) > 0) {
+                $this->flash('success', 'Генерация текстов поставлена в очередь: ' . (int)$stats['queued'] . ' задач. Крон обработает их по одной.');
+            } else {
+                $this->flash('error', 'Не найдено ни одного enabled поддомена для постановки в очередь.');
             }
 
-            $this->flash($errors > 0 ? 'error' : 'success', $errors > 0 ? "AI-тексты: выполнено {$done}, ошибок {$errors}." : "AI-тексты для всех поддоменов сгенерированы: {$done}.");
-            if ($done > 0) { (new PublishDirtyService())->markDirty($siteId, 'Изменены тексты сайта. Выгрузите актуальные данные на VPS.'); }
-            $_SESSION['wm_log'][] = "AI all sub texts done={$done}, errors={$errors}";
+            $_SESSION['wm_log'][] = 'AI sub text queue enqueued=' . (int)($stats['queued'] ?? 0);
             $this->redirect('/sites/ai?id=' . $siteId);
         } catch (Throwable $e) {
             die($this->h($e->getMessage()));
+        }
+    }
+
+
+    public function generateSelectedTexts(): void
+    {
+        $this->requireAuth();
+
+        try {
+            $siteId = (int)($_GET['id'] ?? 0);
+            if ($siteId <= 0) {
+                throw new RuntimeException('Некорректный site_id');
+            }
+
+            $labels = $_POST['labels'] ?? [];
+            if (!is_array($labels) || !$labels) {
+                throw new RuntimeException('Не выбрана ни одна метка');
+            }
+
+            $this->ensureAiQueueTables();
+            $stats = $this->enqueueSelectedTextJobs($siteId, $labels);
+
+            if ((int)($stats['queued'] ?? 0) > 0) {
+                $this->flash('success', 'Тексты главной поставлены в очередь: ' . (int)$stats['queued'] . ' задач.');
+            } else {
+                $this->flash('error', 'Не удалось поставить задачи в очередь.');
+            }
+
+            $this->redirect('/sites/ai?id=' . $siteId);
+        } catch (Throwable $e) {
+            die($this->h($e->getMessage()));
+        }
+    }
+
+    public function generateSelectedPages(): void
+    {
+        $this->requireAuth();
+
+        try {
+            $siteId = (int)($_GET['id'] ?? 0);
+            if ($siteId <= 0) {
+                throw new RuntimeException('Некорректный site_id');
+            }
+
+            $labels = $_POST['labels'] ?? [];
+            if (!is_array($labels) || !$labels) {
+                throw new RuntimeException('Не выбрана ни одна метка');
+            }
+
+            $this->ensureAiQueueTables();
+            $stats = $this->enqueueSelectedPageJobs($siteId, $labels);
+
+            if ((int)($stats['queued'] ?? 0) > 0) {
+                $this->flash('success', 'Внутренние страницы поставлены в очередь: ' . (int)$stats['queued'] . ' задач. 404 не включается.');
+            } else {
+                $this->flash('error', 'Не найдено внутренних страниц для постановки в очередь.');
+            }
+
+            $this->redirect('/sites/ai?id=' . $siteId);
+        } catch (Throwable $e) {
+            hub_log('AI_ENQUEUE_SELECTED_PAGES_ERROR', ['site_id' => (int)($_GET['id'] ?? 0), 'err' => $e->getMessage()]);
+            die($this->h($e->getMessage()));
+        }
+    }
+
+    public function generateAllSubPages(): void
+    {
+        $this->requireAuth();
+
+        try {
+            $siteId = (int)($_GET['id'] ?? 0);
+            if ($siteId <= 0) {
+                throw new RuntimeException('Некорректный site_id');
+            }
+
+            $this->ensureAiQueueTables();
+            $stats = $this->enqueueAllSubPageJobs($siteId);
+
+            if ((int)($stats['queued'] ?? 0) > 0) {
+                $this->flash('success', 'Все внутренние страницы enabled label поставлены в очередь: ' . (int)$stats['queued'] . ' задач. 404 не включается.');
+            } else {
+                $this->flash('error', 'Не найдено внутренних страниц для очереди.');
+            }
+
+            $this->redirect('/sites/ai?id=' . $siteId);
+        } catch (Throwable $e) {
+            die($this->h($e->getMessage()));
+        }
+    }
+
+    public function cron(): void
+    {
+        header('Content-Type: application/json; charset=utf-8');
+
+        try {
+            $this->ensureAiQueueTables();
+            $result = $this->runAiQueueCycle();
+
+            echo json_encode([
+                'ok' => true,
+                'processed' => (bool)($result['processed'] ?? false),
+                'job' => $result['job'] ?? null,
+                'message' => (string)($result['message'] ?? ''),
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        } catch (Throwable $e) {
+            http_response_code(500);
+            echo json_encode([
+                'ok' => false,
+                'error' => $e->getMessage(),
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+    }
+
+
+    private function ensureAiQueueTables(): void
+    {
+        DB::withReconnect(function(PDO $pdo) {
+            $pdo->exec("CREATE TABLE IF NOT EXISTS ai_queue_jobs (
+                id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                site_id INT NOT NULL,
+                label VARCHAR(64) NOT NULL,
+                kind VARCHAR(32) NOT NULL,
+                page_path VARCHAR(255) NULL,
+                status VARCHAR(16) NOT NULL DEFAULT 'queued',
+                tries INT NOT NULL DEFAULT 0,
+                max_tries INT NOT NULL DEFAULT 1,
+                error_text TEXT NULL,
+                locked_at DATETIME NULL,
+                started_at DATETIME NULL,
+                finished_at DATETIME NULL,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                UNIQUE KEY ux_site_label_kind_page (site_id, label, kind, page_path),
+                KEY idx_status_kind (status, kind, updated_at),
+                KEY idx_site_kind (site_id, kind, status),
+                KEY idx_site_label_page (site_id, label, page_path)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+            try {
+                $pdo->exec("ALTER TABLE ai_queue_jobs ADD COLUMN page_path VARCHAR(255) NULL AFTER kind");
+            } catch (Throwable $e) {
+            }
+            try {
+                $pdo->exec("ALTER TABLE ai_queue_jobs DROP INDEX ux_site_label_kind");
+            } catch (Throwable $e) {
+            }
+            try {
+                $pdo->exec("ALTER TABLE ai_queue_jobs ADD UNIQUE KEY ux_site_label_kind_page (site_id, label, kind, page_path)");
+            } catch (Throwable $e) {
+            }
+            try {
+                $pdo->exec("ALTER TABLE ai_queue_jobs ADD KEY idx_site_label_page (site_id, label, page_path)");
+            } catch (Throwable $e) {
+            }
+
+            $pdo->exec("CREATE TABLE IF NOT EXISTS ai_cron_state (
+                id INT NOT NULL PRIMARY KEY,
+                last_run_at DATETIME NULL,
+                last_ok TINYINT(1) NOT NULL DEFAULT 0,
+                last_error TEXT NULL,
+                last_job_site_id INT NULL,
+                last_job_label VARCHAR(64) NOT NULL DEFAULT '',
+                last_job_kind VARCHAR(32) NOT NULL DEFAULT '',
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+            $pdo->exec("INSERT IGNORE INTO ai_cron_state (id, last_ok, last_job_label, last_job_kind) VALUES (1, 0, '', '')");
+        });
+    }
+
+    private function enqueueSubTextJobs(int $siteId): array
+    {
+        return DB::withReconnect(function(PDO $pdo) use ($siteId) {
+            $st = $pdo->prepare("SELECT label FROM site_subdomains WHERE site_id = ? AND enabled = 1 AND label <> '_default' ORDER BY label ASC");
+            $st->execute([$siteId]);
+            $rows = $st->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+            $queued = 0;
+            foreach ($rows as $row) {
+                $label = $this->normalizeAiLabel((string)($row['label'] ?? ''));
+                if ($label === '' || $label === '_default') {
+                    continue;
+                }
+                $queued += $this->enqueueHomeTextJobRow($pdo, $siteId, $label);
+            }
+
+            return ['queued' => $queued];
+        });
+    }
+
+    private function enqueueSelectedTextJobs(int $siteId, array $labels): array
+    {
+        $labels = $this->normalizeQueueLabels($labels);
+        if (!$labels) {
+            return ['queued' => 0];
+        }
+
+        return DB::withReconnect(function(PDO $pdo) use ($siteId, $labels) {
+            $queued = 0;
+            foreach ($labels as $label) {
+                $queued += $this->enqueueHomeTextJobRow($pdo, $siteId, $label);
+            }
+            return ['queued' => $queued];
+        });
+    }
+
+    private function enqueueAllSubPageJobs(int $siteId): array
+    {
+        $labels = DB::withReconnect(function(PDO $pdo) use ($siteId) {
+            $st = $pdo->prepare("SELECT label FROM site_subdomains WHERE site_id = ? AND enabled = 1 ORDER BY CASE WHEN label='_default' THEN 0 ELSE 1 END, label ASC");
+            $st->execute([$siteId]);
+            return array_map(function(array $row) { return $this->normalizeAiLabel((string)($row['label'] ?? '')); }, $st->fetchAll(PDO::FETCH_ASSOC) ?: []);
+        });
+        return $this->enqueueSelectedPageJobs($siteId, $labels);
+    }
+
+    private function enqueueSelectedPageJobs(int $siteId, array $labels): array
+    {
+        $labels = $this->normalizeQueueLabels($labels);
+        if (!$labels) {
+            return ['queued' => 0];
+        }
+
+        $site = $this->loadSiteOrFail($siteId);
+        $domain = (string)($site['domain'] ?? '');
+        $items = [];
+        foreach ($labels as $label) {
+            $cfg = $this->loadSubCfgOrCreate($siteId, $label, $domain);
+            $pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];
+            foreach ($pages as $path => $page) {
+                $path = $this->normalizePagePath((string)$path);
+                if ($path === '/' || $path === '/404') {
+                    continue;
+                }
+                $items[] = [$label, $path];
+            }
+        }
+
+        return DB::withReconnect(function(PDO $pdo) use ($siteId, $items) {
+            $queued = 0;
+            foreach ($items as $item) {
+                [$label, $path] = $item;
+                $queued += $this->enqueuePageJobRow($pdo, $siteId, $label, $path);
+            }
+            return ['queued' => $queued];
+        });
+    }
+
+    private function normalizeQueueLabels(array $labels): array
+    {
+        $out = [];
+        foreach ($labels as $label) {
+            $label = $this->normalizeAiLabel((string)$label);
+            if ($label === '') {
+                continue;
+            }
+            $out[$label] = true;
+        }
+        return array_keys($out);
+    }
+
+    private function enqueueHomeTextJobRow(PDO $pdo, int $siteId, string $label): int
+    {
+        $kind = $label === '_default' ? 'root_home_text' : 'sub_home_text';
+        $stmt = $pdo->prepare("INSERT INTO ai_queue_jobs (site_id, label, kind, page_path, status, tries, max_tries, error_text, locked_at, started_at, finished_at)
+            VALUES (?, ?, ?, NULL, 'queued', 0, 1, NULL, NULL, NULL, NULL)
+            ON DUPLICATE KEY UPDATE status='queued', tries=0, max_tries=1, error_text=NULL, locked_at=NULL, started_at=NULL, finished_at=NULL, updated_at=CURRENT_TIMESTAMP");
+        $stmt->execute([$siteId, $label, $kind]);
+        return 1;
+    }
+
+    private function enqueuePageJobRow(PDO $pdo, int $siteId, string $label, string $pagePath): int
+    {
+        $stmt = $pdo->prepare("INSERT INTO ai_queue_jobs (site_id, label, kind, page_path, status, tries, max_tries, error_text, locked_at, started_at, finished_at)
+            VALUES (?, ?, 'page_bundle', ?, 'queued', 0, 1, NULL, NULL, NULL, NULL)
+            ON DUPLICATE KEY UPDATE status='queued', tries=0, max_tries=1, error_text=NULL, locked_at=NULL, started_at=NULL, finished_at=NULL, updated_at=CURRENT_TIMESTAMP");
+        $stmt->execute([$siteId, $label, $pagePath]);
+        return 1;
+    }
+
+    private function loadAiCronState(): array
+    {
+        $this->ensureAiQueueTables();
+
+        $row = DB::withReconnect(function(PDO $pdo) {
+            $st = $pdo->query("SELECT * FROM ai_cron_state WHERE id = 1 LIMIT 1");
+            return $st ? ($st->fetch(PDO::FETCH_ASSOC) ?: []) : [];
+        });
+
+        $lastRun = (string)($row['last_run_at'] ?? '');
+        $alive = false;
+        if ($lastRun !== '') {
+            $ts = strtotime($lastRun);
+            $alive = $ts !== false && $ts >= (time() - 180);
+        }
+        $row['alive'] = $alive;
+        return $row;
+    }
+
+    private function loadAiQueueOverview(int $siteId): array
+    {
+        $this->ensureAiQueueTables();
+
+        return DB::withReconnect(function(PDO $pdo) use ($siteId) {
+            $jobStmt = $pdo->prepare("SELECT * FROM ai_queue_jobs WHERE site_id = ? ORDER BY updated_at DESC, id DESC LIMIT 100");
+            $jobStmt->execute([$siteId]);
+            $jobs = $jobStmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+            $summary = [
+                'active_total' => 0,
+                'queued' => 0,
+                'running' => 0,
+                'done' => 0,
+                'error' => 0,
+                'labels_total' => 0,
+                'remaining' => 0,
+            ];
+
+            $labelsStmt = $pdo->prepare("SELECT COUNT(*) FROM site_subdomains WHERE site_id = ? AND enabled = 1 AND label <> '_default'");
+            $labelsStmt->execute([$siteId]);
+            $summary['labels_total'] = (int)$labelsStmt->fetchColumn();
+
+            $items = [];
+            foreach ($jobs as $job) {
+                $status = (string)($job['status'] ?? 'queued');
+                if (isset($summary[$status])) {
+                    $summary[$status]++;
+                }
+                $items[] = [
+                    'label' => (string)($job['label'] ?? ''),
+                    'kind' => (string)($job['kind'] ?? ''),
+                    'page_path' => (string)($job['page_path'] ?? ''),
+                    'status' => $status,
+                    'tries' => (int)($job['tries'] ?? 0),
+                    'error_text' => (string)($job['error_text'] ?? ''),
+                    'updated_at' => (string)($job['updated_at'] ?? ''),
+                    'started_at' => (string)($job['started_at'] ?? ''),
+                    'finished_at' => (string)($job['finished_at'] ?? ''),
+                ];
+            }
+
+            $summary['active_total'] = (int)$summary['queued'] + (int)$summary['running'];
+            $summary['remaining'] = $summary['active_total'];
+
+            return [
+                'summary' => $summary,
+                'items' => $items,
+                'has_active' => $summary['active_total'] > 0,
+            ];
+        });
+    }
+
+    private function updateAiCronState(bool $ok, array $job = [], string $error = ''): void
+    {
+        DB::withReconnect(function(PDO $pdo) use ($ok, $job, $error) {
+            $pdo->prepare("UPDATE ai_cron_state SET last_run_at = NOW(), last_ok = ?, last_error = ?, last_job_site_id = ?, last_job_label = ?, last_job_kind = ?, updated_at = NOW() WHERE id = 1")
+                ->execute([
+                    $ok ? 1 : 0,
+                    $error,
+                    isset($job['site_id']) ? (int)$job['site_id'] : null,
+                    (string)($job['label'] ?? ''),
+                    (string)($job['kind'] ?? ''),
+                ]);
+        });
+    }
+
+    private function claimNextAiQueueJob(): ?array
+    {
+        return DB::withReconnect(function(PDO $pdo) {
+            $pdo->beginTransaction();
+            try {
+                $st = $pdo->query("SELECT * FROM ai_queue_jobs
+                    WHERE (kind IN ('sub_home_text','root_home_text','page_bundle'))
+                      AND (
+                        status = 'queued'
+                        OR (status = 'running' AND locked_at IS NOT NULL AND locked_at < (NOW() - INTERVAL 30 MINUTE))
+                      )
+                    ORDER BY CASE WHEN status = 'running' THEN 0 ELSE 1 END, updated_at ASC, id ASC
+                    LIMIT 1
+                    FOR UPDATE");
+                $job = $st ? ($st->fetch(PDO::FETCH_ASSOC) ?: null) : null;
+                if (!$job) {
+                    $pdo->commit();
+                    return null;
+                }
+
+                $id = (int)$job['id'];
+                $pdo->prepare("UPDATE ai_queue_jobs
+                    SET status = 'running',
+                        tries = tries + 1,
+                        locked_at = NOW(),
+                        started_at = IF(started_at IS NULL, NOW(), started_at),
+                        error_text = NULL,
+                        updated_at = NOW()
+                    WHERE id = ? LIMIT 1")
+                    ->execute([$id]);
+                $pdo->commit();
+                $job['status'] = 'running';
+                $job['tries'] = (int)($job['tries'] ?? 0) + 1;
+                return $job;
+            } catch (Throwable $e) {
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
+                throw $e;
+            }
+        });
+    }
+
+    private function finishAiQueueJob(int $id, bool $ok, string $error = ''): void
+    {
+        DB::withReconnect(function(PDO $pdo) use ($id, $ok, $error) {
+            $pdo->prepare("UPDATE ai_queue_jobs
+                SET status = ?, error_text = ?, locked_at = NULL, finished_at = NOW(), updated_at = NOW()
+                WHERE id = ? LIMIT 1")
+                ->execute([$ok ? 'done' : 'error', $error !== '' ? $error : null, $id]);
+        });
+    }
+
+    private function runAiQueueCycle(): array
+    {
+        $job = $this->claimNextAiQueueJob();
+        if (!$job) {
+            $this->updateAiCronState(true, [], '');
+            return ['processed' => false, 'message' => 'queue is empty'];
+        }
+
+        try {
+            $siteId = (int)($job['site_id'] ?? 0);
+            $label = $this->normalizeAiLabel((string)($job['label'] ?? ''));
+            $kind = (string)($job['kind'] ?? '');
+            $pagePath = $this->normalizePagePath((string)($job['page_path'] ?? '/'));
+            if ($siteId <= 0 || $label === '') {
+                throw new RuntimeException('Некорректная AI-задача очереди');
+            }
+
+            $site = $this->loadSiteOrFail($siteId);
+            $row = $this->loadRow();
+            $client = $this->aiClient();
+            $resultJob = ['site_id' => $siteId, 'label' => $label, 'kind' => $kind, 'page_path' => $pagePath];
+
+            if ($kind === 'sub_home_text' || $kind === 'root_home_text') {
+                $res = $this->generateHomeTextForLabel($siteId, $site, $row, $client, $label);
+                $resultJob['file'] = (string)($res['file'] ?? '');
+                hub_log('AI_QUEUE_JOB_DONE', ['site_id' => $siteId, 'label' => $label, 'kind' => $kind, 'file' => $resultJob['file'], 'path' => (string)($res['path'] ?? '')]);
+                (new PublishDirtyService())->markDirty($siteId, 'Изменены тексты сайта. Выгрузите актуальные данные на VPS.');
+            } elseif ($kind === 'page_bundle') {
+                $res = $this->generateSingleInternalPageBundle($siteId, $site, $row, $label, $pagePath);
+                $resultJob['file'] = (string)($res['text_file'] ?? '');
+                hub_log('AI_QUEUE_JOB_DONE', ['site_id' => $siteId, 'label' => $label, 'kind' => $kind, 'page_path' => $pagePath, 'file' => $resultJob['file']]);
+                (new PublishDirtyService())->markDirty($siteId, 'Изменены страницы и тексты сайта. Выгрузите актуальные данные на VPS.');
+            } else {
+                throw new RuntimeException('Неподдерживаемый вид AI-задачи: ' . $kind);
+            }
+
+            $this->finishAiQueueJob((int)$job['id'], true, '');
+            $this->updateAiCronState(true, $resultJob, '');
+
+            return [
+                'processed' => true,
+                'job' => $resultJob,
+                'message' => 'done',
+            ];
+        } catch (Throwable $e) {
+            $this->finishAiQueueJob((int)$job['id'], false, $e->getMessage());
+            $this->updateAiCronState(false, $job, $e->getMessage());
+            hub_log('AI_QUEUE_JOB_ERROR', [
+                'site_id' => (int)($job['site_id'] ?? 0),
+                'label' => (string)($job['label'] ?? ''),
+                'kind' => (string)($job['kind'] ?? ''),
+                'page_path' => (string)($job['page_path'] ?? ''),
+                'err' => $e->getMessage(),
+            ]);
+            return [
+                'processed' => true,
+                'job' => [
+                    'site_id' => (int)($job['site_id'] ?? 0),
+                    'label' => (string)($job['label'] ?? ''),
+                    'kind' => (string)($job['kind'] ?? ''),
+                    'page_path' => (string)($job['page_path'] ?? ''),
+                ],
+                'message' => 'error: ' . $e->getMessage(),
+            ];
         }
     }
 
@@ -1459,6 +1926,18 @@ class AiController extends Controller
             $label  = $this->normalizeAiLabel((string)($_GET['label'] ?? '_default'));
             $path   = $this->normalizePagePath((string)($_GET['path'] ?? '/'));
 
+            $this->logAiPageTextStage('start', [
+                'site_id' => $siteId,
+                'label' => $label,
+                'path' => $path,
+            ]);
+
+            $this->aiPageTextLog('start', [
+                'site_id' => $siteId,
+                'label' => $label,
+                'path' => $path,
+            ]);
+
             if ($siteId <= 0) {
                 throw new RuntimeException('Некорректный site_id');
             }
@@ -1475,132 +1954,75 @@ class AiController extends Controller
                 $page['text_file'] = ($path === '/') ? 'home.php' : ($this->makePageSlug($path) . '.php');
             }
 
+            $this->aiPageTextLog('before_generate', [
+                'site_id' => $siteId,
+                'label' => $label,
+                'path' => $path,
+                'text_file' => basename((string)$page['text_file']),
+                'had_text_file_before' => !empty($page['text_file']) ? 1 : 0,
+            ]);
+
+            $this->logAiPageTextStage('before_generate', [
+                'site_id' => $siteId,
+                'label' => $label,
+                'path' => $path,
+                'text_file' => (string)$page['text_file'],
+                'had_text_file_before' => !empty($page['text_file']) ? 1 : 0,
+            ]);
+
             $res = $this->generatePageTextData($siteId, $site, $row, $label, $path, $cfg, $page);
+
+            $this->aiPageTextLog('after_generate', [
+                'site_id' => $siteId,
+                'label' => $label,
+                'path' => $path,
+                'text_file' => basename((string)$res['text_file']),
+                'html_len' => mb_strlen((string)$res['html']),
+            ]);
 
             $dir = $this->textsDirForLabel($siteId, $label);
             Paths::ensureDir($dir);
             $fullPath = rtrim($dir, '/\\') . '/' . basename($res['text_file']);
             file_put_contents($fullPath, $res['html']);
+            $this->aiPageTextLog('file_written', [
+                'site_id' => $siteId,
+                'label' => $label,
+                'path' => $path,
+                'full_path' => $fullPath,
+            ]);
 
             $page['text_file'] = $res['text_file'];
             $pages[$path] = $page;
             $cfg['pages'] = $pages;
             $this->normalizeRootPageInheritance($cfg);
             $this->saveSubCfgSafe($siteId, $label, $cfg);
+            $this->aiPageTextLog('config_saved', [
+                'site_id' => $siteId,
+                'label' => $label,
+                'path' => $path,
+                'text_file' => basename((string)$res['text_file']),
+            ]);
 
             $this->flash('success', 'AI-текст страницы сгенерирован.');
             (new PublishDirtyService())->markDirty($siteId, 'Изменены тексты сайта. Выгрузите актуальные данные на VPS.');
             $_SESSION['wm_log'][] = "AI текст страницы сгенерирован: {$label} {$path}";
+            $this->aiPageTextLog('done', [
+                'site_id' => $siteId,
+                'label' => $label,
+                'path' => $path,
+            ]);
             $this->redirect('/sites/texts/edit?id=' . $siteId . '&label=' . urlencode($label) . '&file=' . rawurlencode(basename($res['text_file'])));
         } catch (Throwable $e) {
-            die($this->h($e->getMessage()));
-        }
-    }
-
-    public function generateSelectedPages(): void
-    {
-        $this->requireAuth();
-
-        try {
-            $siteId = (int)($_GET['id'] ?? 0);
-            $label  = $this->normalizeAiLabel((string)($_GET['label'] ?? '_default'));
-            $mode   = trim((string)($_POST['mode'] ?? 'all'));
-
-            if ($siteId <= 0) {
-                throw new RuntimeException('Некорректный site_id');
-            }
-
-            if (!in_array($mode, ['meta', 'text', 'all'], true)) {
-                $mode = 'all';
-            }
-
-            $selected = $_POST['selected_urls'] ?? [];
-            if (!is_array($selected) || !$selected) {
-                throw new RuntimeException('Не выбраны страницы');
-            }
-
-            $selectedMap = [];
-            foreach ($selected as $u) {
-                $u = $this->normalizePagePath((string)$u);
-                $selectedMap[$u] = true;
-            }
-
-            $site = $this->loadSiteOrFail($siteId);
-            $row = $this->loadRow();
-
-            $domain = (string)$site['domain'];
-            $cfg = $this->loadSubCfgOrCreate($siteId, $label, $domain);
-            $pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];
-
-            if (!$pages) {
-                throw new RuntimeException('В pages нет страниц');
-            }
-
-            $overwriteAll = $this->shouldOverwriteAll($siteId);
-            $dir = $this->textsDirForLabel($siteId, $label);
-            Paths::ensureDir($dir);
-
-            $done = 0;
-
-            foreach ($pages as $path => &$page) {
-                $path = $this->normalizePagePath((string)$path);
-
-                if (!isset($selectedMap[$path])) {
-                    continue;
-                }
-
-                if (!is_array($page)) {
-                    $page = [];
-                }
-
-                if (empty($page['text_file'])) {
-                    $page['text_file'] = ($path === '/') ? 'home.php' : ($this->makePageSlug($path) . '.php');
-                }
-
-                if ($mode === 'meta' || $mode === 'all') {
-                    $metaJson = $this->generatePageMetaData($siteId, $site, $row, $label, $path, $cfg, $page);
-
-                    if ($path === '/') {
-                        $this->applyGeneratedRootMeta($cfg, $metaJson);
-                        $pages['/'] = is_array($cfg['pages']['/'] ?? null) ? $cfg['pages']['/'] : $page;
-                    } else {
-                        $page['title'] = (string)($metaJson['title'] ?? '$inherit');
-                        $page['h1'] = (string)($metaJson['h1'] ?? '$inherit');
-                        $page['description'] = (string)($metaJson['description'] ?? '$inherit');
-                        $page['keywords'] = (string)($metaJson['keywords'] ?? '$inherit');
-                    }
-                }
-
-                if ($mode === 'text' || $mode === 'all') {
-                    $textRes = $this->generatePageTextData($siteId, $site, $row, $label, $path, $cfg, $page);
-                    $page['text_file'] = $textRes['text_file'];
-
-                    file_put_contents(
-                        rtrim($dir, '/\\') . '/' . basename((string)$textRes['text_file']),
-                        $textRes['html']
-                    );
-                }
-
-                $done++;
-            }
-            unset($page);
-
-            $cfg['pages'] = $pages;
-            $this->saveSubCfgSafe($siteId, $label, $cfg);
-
-            $this->flash('success', "AI-генерация для выбранных страниц завершена: {$done}.");
-            (new PublishDirtyService())->markDirty($siteId, 'Изменены страницы и тексты сайта. Выгрузите актуальные данные на VPS.');
-            $_SESSION['wm_log'][] = "AI selected pages generated ({$done})";
-            $this->redirect('/sites/pages?id=' . $siteId . '&label=' . urlencode($label));
-        } catch (Throwable $e) {
-            hub_log('AI_GENERATE_SELECTED_PAGES_ERROR', [
+            $this->aiPageTextLog('error', [
                 'site_id' => (int)($_GET['id'] ?? 0),
-                'label'   => (string)($_GET['label'] ?? '_default'),
-                'err'     => $e->getMessage(),
+                'label' => $this->normalizeAiLabel((string)($_GET['label'] ?? '_default')),
+                'path' => $this->normalizePagePath((string)($_GET['path'] ?? '/')),
+                'message' => $e->getMessage(),
             ]);
             die($this->h($e->getMessage()));
         }
     }
+
 
     private function saveSubCfgSafe(int $siteId, string $label, array $cfg): void
     {
@@ -1836,7 +2258,7 @@ class AiController extends Controller
         $defaults = [
             'site_id' => $siteId,
             'label' => $label,
-            'brand_name' => $this->fallbackBrandName($site, $label),
+            'brand_name' => '{BRAND}',
             'brand_count' => 5,
             'text_symbols' => 4000,
             'link_registration_path' => '',
@@ -1988,6 +2410,129 @@ class AiController extends Controller
         return $label . '.' . $domain;
     }
 
+    private function buildPreferredBrandForText(array $vars): string
+    {
+        $brandRu = trim((string)($vars['{BRAND_RU}'] ?? ''));
+        if ($brandRu !== '') {
+            return $brandRu;
+        }
+
+        return trim((string)($vars['{BRAND}'] ?? ''));
+    }
+
+    private function sanitizeTextPromptVars(array $vars): array
+    {
+        $vars['{HOST}'] = '';
+        $vars['{DOMAIN}'] = '';
+        $vars['{LABEL}'] = '';
+
+        if (isset($vars['{PAGE_PATH}'])) {
+            $vars['{PAGE_URL}'] = (string)$vars['{PAGE_PATH}'];
+        }
+
+        return $vars;
+    }
+
+    private function stripHostMentionsFromText(string $text, array $site, string $label, array $vars): string
+    {
+        $text = trim($text);
+        if ($text === '') {
+            return $text;
+        }
+
+        $replacement = $this->buildPreferredBrandForText($vars);
+        $host = trim($this->buildEntityHost($site, $label));
+        $domain = trim((string)($site['domain'] ?? ''));
+
+        $needles = array_values(array_filter(array_unique([
+            $host,
+            $domain,
+            'https://' . $host,
+            'http://' . $host,
+            'https://www.' . $host,
+            'http://www.' . $host,
+            'www.' . $host,
+            'https://' . $domain,
+            'http://' . $domain,
+            'https://www.' . $domain,
+            'http://www.' . $domain,
+            'www.' . $domain,
+        ])));
+
+        foreach ($needles as $needle) {
+            $quoted = preg_quote($needle, '~');
+            $text = preg_replace('~' . $quoted . '~iu', $replacement, $text);
+        }
+
+        if ($replacement === '') {
+            $text = preg_replace('~\(\s*\)~u', '', $text);
+            $text = preg_replace('~\s{2,}~u', ' ', $text);
+        }
+
+        return trim($text);
+    }
+
+
+
+    private function aiPageTextLog(string $stage, array $data = []): void
+    {
+        $payload = array_merge(['stage' => $stage], $data);
+        $json = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($json === false) {
+            $json = '{"stage":"' . addslashes($stage) . '","log_error":"json_encode_failed"}';
+        }
+        error_log('[AI_PAGE_TEXT_STAGE] ' . $json);
+    }
+
+    private function countBrandMentionsInHtml(string $html, string $brand): int
+    {
+        $brand = trim($brand);
+        if ($brand === '') {
+            return 0;
+        }
+
+        $plain = trim((string)preg_replace('~<[^>]+>~u', ' ', $html));
+        if ($plain === '') {
+            return 0;
+        }
+
+        $quoted = preg_quote($brand, '~');
+        if (!preg_match_all('~' . $quoted . '~iu', $plain, $m)) {
+            return 0;
+        }
+
+        return count($m[0]);
+    }
+
+    private function analyzeGeneratedTextTargets(string $html, array $vars): array
+    {
+        $plain = trim((string)preg_replace('~<[^>]+>~u', ' ', $html));
+        $plain = preg_replace('~\s+~u', ' ', $plain);
+        $brand = $this->buildPreferredBrandForText($vars);
+        $targetSymbols = max(500, (int)($vars['{SYMBOLS}'] ?? 4000));
+        $targetBrandCount = max(0, (int)($vars['{BRAND_COUNT}'] ?? 0));
+        $actualSymbols = mb_strlen($plain);
+        $actualBrandCount = $this->countBrandMentionsInHtml($html, $brand);
+        $minSymbols = max(400, (int)floor($targetSymbols * 0.85));
+        $maxSymbols = max(600, (int)ceil($targetSymbols * 1.15));
+        $brandMin = max(0, $targetBrandCount - 1);
+        $brandMax = $targetBrandCount > 0 ? ($targetBrandCount + 1) : 999999;
+
+        return [
+            'brand' => $brand,
+            'target_symbols' => $targetSymbols,
+            'actual_symbols' => $actualSymbols,
+            'min_symbols' => $minSymbols,
+            'max_symbols' => $maxSymbols,
+            'target_brand_count' => $targetBrandCount,
+            'actual_brand_count' => $actualBrandCount,
+            'brand_min' => $brandMin,
+            'brand_max' => $brandMax,
+            'symbols_ok' => $actualSymbols >= $minSymbols && $actualSymbols <= $maxSymbols,
+            'brand_ok' => $targetBrandCount <= 0 ? true : ($actualBrandCount >= $brandMin && $actualBrandCount <= $brandMax),
+        ];
+    }
+
     private function makeEntityUrl(array $site, string $label, string $path): string
     {
         $path = $this->normalizeInnerPath($path);
@@ -2096,6 +2641,49 @@ class AiController extends Controller
         return "\n\n" . implode("\n\n", $parts);
     }
 
+    private function buildTextGenerationRequirementsBlock(array $vars): string
+    {
+        $parts = [];
+
+        $brand = trim((string)($vars['{BRAND}'] ?? ''));
+        $brandCount = max(0, (int)($vars['{BRAND_COUNT}'] ?? 0));
+        $symbols = max(500, (int)($vars['{SYMBOLS}'] ?? 0));
+
+        $parts[] = "Технические требования к тексту:";
+        $parts[] = "- итоговый объём текста: около {$symbols} символов без искусственного раздувания";
+        $parts[] = "- минимально допустимый объём: " . max(400, (int)floor($symbols * 0.85)) . " символов";
+        $parts[] = "- максимально допустимый объём: " . max(600, (int)ceil($symbols * 1.15)) . " символов";
+
+        if ($brand !== '') {
+            if ($brandCount > 0) {
+                $brandRu = trim((string)($vars['{BRAND_RU}'] ?? ''));
+                $parts[] = "- в тексте должны использоваться только точные формы бренда {$brand}" . ($brandRu !== '' && $brandRu !== $brand ? " и {$brandRu}" : '') . ", без склонений и без разбиения названия";
+                $parts[] = "- суммарное количество точных упоминаний всех допустимых вариантов бренда должно быть ровно {$brandCount}";
+                if ($brandRu !== '' && $brandRu !== $brand) {
+                    $parts[] = "- считай общую сумму упоминаний {$brand} + {$brandRu}; эта совокупная сумма не должна превышать {$brandCount} и должна быть ровно {$brandCount}";
+                }
+                $parts[] = "- перед ответом самостоятельно перепроверь итоговое количество упоминаний бренда";
+            } else {
+                $parts[] = "- не злоупотребляй повторением бренда {$brand}";
+            }
+        }
+
+        $parts[] = "- не используй хост, домен, URL или label как имя бренда в тексте";
+        $parts[] = "- если русский вариант бренда известен, используй только допустимые формы бренда и контролируй их суммарное количество";
+        $parts[] = "- не подставляй в текст технические переменные, домены и служебные значения";
+
+        return "\n\n" . implode("\n", $parts);
+    }
+
+    private function resolveTextMaxTokens(array $row, array $vars): int
+    {
+        $base = max(200, (int)($row['max_tokens'] ?? 1200));
+        $symbols = max(500, (int)($vars['{SYMBOLS}'] ?? 4000));
+        $estimated = (int)ceil($symbols / 1.8) + 700;
+
+        return min(8000, max($base, $estimated));
+    }
+
     private function applyMetaTemplates(array $json, array $aiRow, array $vars): array
     {
         $titleTpl = trim((string)($aiRow['global_meta_title_template'] ?? ''));
@@ -2127,6 +2715,7 @@ class AiController extends Controller
         $cfg = $this->loadSubCfgOrCreate($siteId, $label, $domain);
         $entityAi = $this->loadEntityAiSettings($siteId, $label, $site);
         $vars = $this->buildPromptVars($site, $label, $cfg, $entityAi);
+        $textVars = $this->sanitizeTextPromptVars($vars);
 
         $prompt = trim((string)(
             $label === '_default'
@@ -2138,17 +2727,18 @@ class AiController extends Controller
             $prompt = 'Ты профессиональный SEO-копирайтер для iGaming. Верни только HTML-фрагмент без markdown и без пояснений.';
         }
 
-        $prompt = $this->replacePromptVars($prompt, $vars);
+        $prompt = $this->replacePromptVars($prompt, $textVars);
 
-        $userPrompt = "Сгенерируй HTML-текст для главной страницы сущности {$fqdn}.\n";
-        $userPrompt .= "Бренд: " . (string)($vars['{BRAND}'] ?? '') . "\n";
-        $userPrompt .= "Объём: " . (string)($vars['{SYMBOLS}'] ?? '') . "\n";
+        $userPrompt = "Сгенерируй HTML-текст для главной страницы бренда.\n";
+        $userPrompt .= "Бренд: " . (string)($textVars['{BRAND}'] ?? '') . "\n";
+        $userPrompt .= "Объём: " . (string)($textVars['{SYMBOLS}'] ?? '') . "\n";
         $userPrompt .= "Ссылки для подстановки:\n";
-        $userPrompt .= "- registration: " . (string)($vars['{LINK_REGISTRATION}'] ?? '') . "\n";
-        $userPrompt .= "- slots: " . (string)($vars['{LINK_SLOTS}'] ?? '') . "\n";
-        $userPrompt .= "- bonuses: " . (string)($vars['{LINK_BONUSES}'] ?? '') . "\n";
-        $userPrompt .= "- mirror: " . (string)($vars['{LINK_MIRROR}'] ?? '') . "\n\n";
+        $userPrompt .= "- registration: " . (string)($textVars['{LINK_REGISTRATION}'] ?? '') . "\n";
+        $userPrompt .= "- slots: " . (string)($textVars['{LINK_SLOTS}'] ?? '') . "\n";
+        $userPrompt .= "- bonuses: " . (string)($textVars['{LINK_BONUSES}'] ?? '') . "\n";
+        $userPrompt .= "- mirror: " . (string)($textVars['{LINK_MIRROR}'] ?? '') . "\n\n";
         $userPrompt .= $prompt;
+        $userPrompt .= $this->buildTextGenerationRequirementsBlock($textVars);
         $userPrompt .= $this->buildEntityExtraBlock($entityAi);
 
         $result = $client->simpleText(
@@ -2156,10 +2746,11 @@ class AiController extends Controller
             $userPrompt,
             (string)($row['model'] ?? 'deepseek-chat'),
             (float)($row['temperature'] ?? 0.7),
-            (int)($row['max_tokens'] ?? 1200)
+            $this->resolveTextMaxTokens($row, $textVars)
         );
 
         $html = $this->cleanupAiText($result);
+        $html = $this->stripHostMentionsFromText($html, $site, $label, $textVars);
         if ($html === '') {
             throw new RuntimeException('AI вернул пустой текст');
         }
@@ -2212,39 +2803,161 @@ class AiController extends Controller
     {
         $label = $this->normalizeAiLabel($label);
 
-        $entityAi = $this->loadEntityAiSettings($siteId, $label, $site);
+        $this->logAiPageTextStage('before_entity_settings', [
+            'site_id' => $siteId,
+            'label' => $label,
+            'path' => $pagePath,
+        ]);
+
+        $entityAi = DB::withReconnect(function () use ($siteId, $label, $site) {
+            return $this->loadEntityAiSettings($siteId, $label, $site);
+        });
+
         $textFile = (string)($page['text_file'] ?? (($pagePath === '/') ? 'home.php' : ($this->makePageSlug($pagePath) . '.php')));
         $vars = $this->buildPagePromptVars($site, $label, $cfg, $entityAi, $pagePath, $textFile, $page);
+        $textVars = $this->sanitizeTextPromptVars($vars);
+
+        $this->logAiPageTextStage('entity_settings_loaded', [
+            'site_id' => $siteId,
+            'label' => $label,
+            'path' => $pagePath,
+            'brand' => (string)($textVars['{BRAND}'] ?? ''),
+            'brand_ru' => (string)($textVars['{BRAND_RU}'] ?? ''),
+            'brand_count' => (int)($textVars['{BRAND_COUNT}'] ?? 0),
+            'symbols' => (int)($textVars['{SYMBOLS}'] ?? 0),
+        ]);
 
         $prompt = trim((string)($row['page_prompt'] ?? ''));
         if ($prompt === '') {
             $prompt = 'Ты веб-копирайтер. Верни только HTML-фрагмент без markdown и без пояснений.';
         }
 
-        $prompt = $this->replacePromptVars($prompt, $vars);
+        $prompt = $this->replacePromptVars($prompt, $textVars);
 
         $userPrompt = "Сгенерируй HTML-текст для страницы {$pagePath}.\n";
-        $userPrompt .= "Хост: " . (string)($vars['{HOST}'] ?? '') . "\n";
-        $userPrompt .= "Бренд: " . (string)($vars['{BRAND}'] ?? '') . "\n\n";
+        $userPrompt .= "Бренд: " . (string)($textVars['{BRAND}'] ?? '') . "\n\n";
         $userPrompt .= $prompt;
+        $userPrompt .= $this->buildTextGenerationRequirementsBlock($textVars);
         $userPrompt .= $this->buildEntityExtraBlock($entityAi);
+
+        $maxTokens = $this->resolveTextMaxTokens($row, $textVars);
+        $this->logAiPageTextStage('ai_request_prepared', [
+            'site_id' => $siteId,
+            'label' => $label,
+            'path' => $pagePath,
+            'text_file' => (string)$textFile,
+            'user_prompt_len' => mb_strlen($userPrompt),
+            'model' => (string)($row['model'] ?? 'deepseek-chat'),
+            'temperature' => (float)($row['temperature'] ?? 0.7),
+            'max_tokens' => $maxTokens,
+            'brand_count' => (int)($textVars['{BRAND_COUNT}'] ?? 0),
+            'symbols' => (int)($textVars['{SYMBOLS}'] ?? 0),
+        ]);
+
+        DB::reset();
+        $this->logAiPageTextStage('db_reset_before_ai', [
+            'site_id' => $siteId,
+            'label' => $label,
+            'path' => $pagePath,
+        ]);
 
         $html = $this->aiClient()->simpleText(
             'Ты веб-копирайтер. Верни только HTML-фрагмент без markdown и без пояснений.',
             $userPrompt,
             (string)($row['model'] ?? 'deepseek-chat'),
             (float)($row['temperature'] ?? 0.7),
-            (int)($row['max_tokens'] ?? 1200)
+            $maxTokens
         );
 
+        $this->logAiPageTextStage('ai_response_received', [
+            'site_id' => $siteId,
+            'label' => $label,
+            'path' => $pagePath,
+            'raw_len' => mb_strlen((string)$html),
+        ]);
+
+        DB::reconnect();
+        $this->logAiPageTextStage('db_reconnected_after_ai', [
+            'site_id' => $siteId,
+            'label' => $label,
+            'path' => $pagePath,
+        ]);
+
         $html = $this->cleanupAiText($html);
+        $html = $this->stripHostMentionsFromText($html, $site, $label, $textVars);
         if ($html === '') {
             throw new RuntimeException('AI вернул пустой текст страницы');
         }
 
+        $analysis = $this->analyzeGeneratedTextTargets($html, $textVars);
+        $this->logAiPageTextStage('generated_text_analyzed', [
+            'site_id' => $siteId,
+            'label' => $label,
+            'path' => $pagePath,
+            'actual_symbols' => (int)($analysis['actual_symbols'] ?? 0),
+            'target_symbols' => (int)($analysis['target_symbols'] ?? 0),
+            'actual_brand_count' => (int)($analysis['actual_brand_count'] ?? 0),
+            'target_brand_count' => (int)($analysis['target_brand_count'] ?? 0),
+            'symbols_ok' => !empty($analysis['symbols_ok']) ? 1 : 0,
+            'brand_ok' => !empty($analysis['brand_ok']) ? 1 : 0,
+        ]);
+
         return [
             'text_file' => basename($textFile),
             'html' => $html,
+        ];
+    }
+
+    private function logAiPageTextStage(string $stage, array $ctx = []): void
+    {
+        if (!function_exists('hub_log')) {
+            return;
+        }
+        $ctx['stage'] = $stage;
+        hub_log('AI_PAGE_TEXT_STAGE', $ctx);
+    }
+
+
+    private function generateSingleInternalPageBundle(int $siteId, array $site, array $row, string $label, string $path): array
+    {
+        $label = $this->normalizeAiLabel($label);
+        $path = $this->normalizePagePath($path);
+        if ($path === '/' || $path === '/404') {
+            throw new RuntimeException('Для очереди внутренних страниц доступны только внутренние URL кроме 404');
+        }
+
+        $domain = (string)($site['domain'] ?? '');
+        $cfg = $this->loadSubCfgOrCreate($siteId, $label, $domain);
+        $pages = is_array($cfg['pages'] ?? null) ? $cfg['pages'] : [];
+        $page = is_array($pages[$path] ?? null) ? $pages[$path] : [];
+        if (!$page && !array_key_exists($path, $pages)) {
+            throw new RuntimeException('Страница не найдена в config pages: ' . $path);
+        }
+        if (empty($page['text_file'])) {
+            $page['text_file'] = $this->makePageSlug($path) . '.php';
+        }
+
+        $metaJson = $this->generatePageMetaData($siteId, $site, $row, $label, $path, $cfg, $page);
+        $page['title'] = (string)($metaJson['title'] ?? '$inherit');
+        $page['h1'] = (string)($metaJson['h1'] ?? '$inherit');
+        $page['description'] = (string)($metaJson['description'] ?? '$inherit');
+        $page['keywords'] = (string)($metaJson['keywords'] ?? '$inherit');
+
+        $textRes = $this->generatePageTextData($siteId, $site, $row, $label, $path, $cfg, $page);
+        $page['text_file'] = $textRes['text_file'];
+
+        $dir = $this->textsDirForLabel($siteId, $label);
+        Paths::ensureDir($dir);
+        file_put_contents(rtrim($dir, '/\\') . '/' . basename((string)$textRes['text_file']), (string)$textRes['html']);
+
+        $pages[$path] = $page;
+        $cfg['pages'] = $pages;
+        $this->normalizeRootPageInheritance($cfg);
+        $this->saveSubCfgSafe($siteId, $label, $cfg);
+
+        return [
+            'path' => $path,
+            'text_file' => (string)$textRes['text_file'],
         ];
     }
 

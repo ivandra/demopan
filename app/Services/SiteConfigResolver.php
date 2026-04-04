@@ -237,6 +237,14 @@ class SiteConfigResolver
         $cfg = $defaultCfg;
         $cfg['label'] = $label;
 
+        // Новый поддомен никогда не должен создаваться с уже включенным редиректом.
+        // redirect_enabled включается только после фактической индексации.
+        if (!$this->isRootLabel($label)) {
+            $cfg['redirect_enabled'] = 0;
+        }
+
+        $cfg = $this->applyGlobalAiMetaTemplates($cfg, $label);
+
         if (empty($cfg['logo'])) {
             $cfg['logo'] = 'assets/logo.webp';
         }
@@ -248,6 +256,56 @@ class SiteConfigResolver
             $this->saveSiteDefaultConfig($siteId, $cfg);
         } else {
             $this->saveSubdomainConfig($siteId, $label, $cfg);
+        }
+
+        return $cfg;
+    }
+
+    private function applyGlobalAiMetaTemplates(array $cfg, string $label): array
+    {
+        try {
+            $st = $this->pdo->query("SELECT global_meta_title_template, global_meta_h1_template, global_meta_description_template FROM ai_settings ORDER BY id ASC LIMIT 1");
+            $ai = $st ? $st->fetch(PDO::FETCH_ASSOC) : false;
+        } catch (Throwable $e) {
+            $ai = false;
+        }
+
+        if (!is_array($ai) || !$ai) {
+            return $cfg;
+        }
+
+        $domain = (string)($cfg['domain'] ?? '');
+        $brand = preg_replace('~\..*$~', '', $domain);
+        $brand = trim((string)$brand);
+        $brandRu = $brand;
+
+        if (!$this->isRootLabel($label)) {
+            try {
+                $st = $this->pdo->prepare("SELECT brand_name, brand_name_ru FROM subdomain_catalog WHERE label=? LIMIT 1");
+                $st->execute([$label]);
+                $row = $st->fetch(PDO::FETCH_ASSOC) ?: [];
+                if (!empty($row['brand_name'])) $brand = trim((string)$row['brand_name']);
+                if (!empty($row['brand_name_ru'])) $brandRu = trim((string)$row['brand_name_ru']);
+            } catch (Throwable $e) {
+            }
+        }
+
+        $vars = [
+            '{BRAND}' => $brand,
+            '{BRAND_RU}' => $brandRu !== '' ? $brandRu : $brand,
+            '{DOMAIN}' => $domain,
+            '{LABEL}' => $label,
+        ];
+
+        foreach ([
+            'title' => 'global_meta_title_template',
+            'h1' => 'global_meta_h1_template',
+            'description' => 'global_meta_description_template',
+        ] as $field => $src) {
+            $tpl = trim((string)($ai[$src] ?? ''));
+            if ($tpl !== '' && trim((string)($cfg[$field] ?? '')) === '') {
+                $cfg[$field] = strtr($tpl, $vars);
+            }
         }
 
         return $cfg;

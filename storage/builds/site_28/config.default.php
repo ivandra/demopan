@@ -41,7 +41,7 @@ $cfg = array (
   ),
   'partner_override_url' => 'https://fastthemegaplay.com//l/67d9467dce1a6a1a5a0494d7?sub_id=856casino',
   'internal_reg_url' => 'https://fastthemegaplay.com//l/67d9467dce1a6a1a5a0494d7?sub_id=856casino',
-  'redirect_enabled' => 0,
+  'redirect_enabled' => 1,
   'base_new_url' => 'https://fastthemegaplay.com//l/67d9467dce1a6a1a5a0494d7?sub_id=856casino',
   'base_second_url' => 'https://fastthemegaplay.com//l/67d9467dce1a6a1a5a0494d7?sub_id=856casino',
   'logo' => 'assets/logo.webp',

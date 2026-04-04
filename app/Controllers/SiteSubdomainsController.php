@@ -733,7 +733,10 @@ class SiteSubdomainsController extends Controller
         $this->upsertCatalogBrands($manualItems);
     }
 
-    $isManualAppend = ($mode === 'append_manual') || ($labelsText !== '' && empty($_POST['labels']));
+    // Любой непустой ручной ввод считаем режимом ДОБАВЛЕНИЯ.
+    // Это защищает от потери уже существующих сабов, даже если hidden mode не приехал
+    // или фронт отправил форму не совсем так, как ожидалось.
+    $isManualAppend = ($mode === 'append_manual') || ($labelsText !== '');
 
     // Для ручного добавления НЕ заменяем состав сайта, а дополняем его.
     if ($isManualAppend) {

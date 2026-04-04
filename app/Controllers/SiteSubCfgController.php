@@ -57,8 +57,18 @@ class SiteSubCfgController extends Controller
 
         $rootCfg = $resolver->getDefaultConfig($siteId);
         foreach (['partner_override_url', 'internal_reg_url', 'base_new_url', 'base_second_url'] as $field) {
-            if (trim((string)($cfg[$field] ?? '')) === '' && trim((string)($rootCfg[$field] ?? '')) !== '') {
-                $cfg[$field] = $partnerService->applySubIdToUrl((string)$rootCfg[$field], (string)($site['domain'] ?? ''), $label);
+            $value = trim((string)($cfg[$field] ?? ''));
+
+            if ($value === '' && trim((string)($rootCfg[$field] ?? '')) !== '') {
+                $value = (string)$rootCfg[$field];
+            }
+
+            if ($value !== '') {
+                $cfg[$field] = $partnerService->applySubIdToUrl(
+                    $value,
+                    (string)($site['domain'] ?? ''),
+                    $label
+                );
             }
         }
 
@@ -148,22 +158,44 @@ class SiteSubCfgController extends Controller
 
         if (!empty($_POST['copy_to_all_labels'])) {
             $allLabels = $resolver->listLabels($siteId, true);
+
             foreach ($allLabels as $targetLabel) {
                 $targetCfg = $resolver->getResolvedConfig($siteId, $targetLabel);
-                foreach (['title','h1','description','keywords','promolink','internal_reg_url','partner_override_url','redirect_enabled','base_new_url','base_second_url','logo','favicon'] as $field) {
+
+                foreach (['title','h1','description','keywords','promolink','redirect_enabled','logo','favicon'] as $field) {
                     $targetCfg[$field] = $cfg[$field] ?? ($targetCfg[$field] ?? '');
                 }
+
+                foreach (['partner_override_url', 'internal_reg_url', 'base_new_url', 'base_second_url'] as $field) {
+                    $sourceValue = (string)($cfg[$field] ?? '');
+
+                    if (trim($sourceValue) === '' && trim((string)($rootCfg[$field] ?? '')) !== '') {
+                        $sourceValue = (string)$rootCfg[$field];
+                    }
+
+                    $targetCfg[$field] = $partnerService->applySubIdToUrl(
+                        $sourceValue,
+                        (string)($site['domain'] ?? ''),
+                        $targetLabel
+                    );
+                }
+
                 $targetCfg['label'] = $targetLabel;
+                $targetCfg['domain'] = (string)($targetCfg['domain'] ?? ($site['domain'] ?? ''));
+
                 if ($resolver->isRootLabel($targetLabel)) {
+                    $targetCfg['label'] = '_default';
                     $resolver->upsertDefaultConfig($siteId, $targetCfg);
                     $resolver->saveLegacySiteConfig($siteId, $targetCfg);
                     $resolver->upsertSubConfig($siteId, '_default', $targetCfg);
                 } else {
                     $resolver->upsertSubConfig($siteId, $targetLabel, $targetCfg);
                 }
+
                 $prov->ensureForSite($siteId, $targetLabel);
             }
-            $this->flash('success', 'Настройки SEO и ссылок сохранены и скопированы на все поддомены сайта.');
+
+            $this->flash('success', 'Настройки SEO и ссылок сохранены и скопированы на все поддомены сайта с уникальными sub_id.');
         } else {
             $this->flash('success', 'Контент и SEO сохранены. Партнерские URL пересчитаны с sub_id для текущего label.');
         }

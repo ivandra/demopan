@@ -180,6 +180,23 @@ private function extractIpsFromServerRow(array $server): array
 
 
 
+
+    private function redirectBackWithReport(int $siteId, int $deployId, string $type, string $message): void
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            @session_start();
+        }
+
+        $_SESSION['deploy_feedback'][$siteId] = [
+            'type' => $type,
+            'message' => $message,
+            'report_url' => '/deploy/report?id=' . $deployId,
+        ];
+
+        $this->redirect('/deploy?id=' . $siteId);
+        exit;
+    }
+
     /**
      * Шаг A: создать сайт в Fastpanel (или найти существующий)
      * GET /deploy/create-site?id=6&server_id=1&ip=95.129.234.93
@@ -320,8 +337,7 @@ private function extractIpsFromServerRow(array $server): array
             ];
 
             $this->safeUpdateDeploymentDone($deployId, ['payload' => $payload, 'steps' => $steps], $respShort);
-            $this->redirect('/deploy/report?id=' . $deployId);
-            exit;
+            $this->redirectBackWithReport($siteId, $deployId, 'success', 'Сайт в FastPanel успешно создан или уже существовал.');
 
         } catch (Throwable $e) {
             try {
@@ -332,8 +348,7 @@ private function extractIpsFromServerRow(array $server): array
                 );
             } catch (Throwable $e2) {}
 
-            $this->redirect('/deploy/report?id=' . $deployId);
-            exit;
+            $this->redirectBackWithReport($siteId, $deployId, 'error', 'Не удалось создать сайт в FastPanel: ' . $e->getMessage());
         }
     }
 
@@ -623,16 +638,14 @@ private function extractIpsFromServerRow(array $server): array
             ];
 
             $this->safeUpdateDeploymentDone($deployId, ['payload' => $payload, 'steps' => $steps], $respShort);
-            $this->redirect('/deploy/report?id=' . $deployId);
-            exit;
+            $this->redirectBackWithReport($siteId, $deployId, 'success', 'Актуальные файлы сайта успешно выгружены на VPS.');
 
         } catch (Throwable $e) {
             try {
                 $this->safeUpdateDeploymentError($deployId, $e->getMessage(), ['payload' => $payload, 'steps' => $steps]);
             } catch (Throwable $e2) {}
 
-            $this->redirect('/deploy/report?id=' . $deployId);
-            exit;
+            $this->redirectBackWithReport($siteId, $deployId, 'error', 'Не удалось выгрузить файлы на VPS: ' . $e->getMessage());
         }
     }
 
@@ -709,8 +722,7 @@ private function extractIpsFromServerRow(array $server): array
                         'certificate' => $state['site']['certificate'] ?? null,
                     ],
                 ]);
-                $this->redirect('/deploy/report?id=' . $deployId);
-                exit;
+                $this->redirectBackWithReport($siteId, $deployId, 'success', 'SSL уже был выпущен и активен для сайта.');
             }
 
             $result = '';
@@ -783,8 +795,7 @@ private function extractIpsFromServerRow(array $server): array
                 ],
             ]);
 
-            $this->redirect('/deploy/report?id=' . $deployId);
-            exit;
+            $this->redirectBackWithReport($siteId, $deployId, 'success', 'Self-signed SSL успешно выпущен или применен.');
 
         } catch (Throwable $e) {
             try {
@@ -792,8 +803,7 @@ private function extractIpsFromServerRow(array $server): array
             } catch (Throwable $e2) {}
 
             $this->safeUpdateDeploymentError($deployId, $e->getMessage(), $payload);
-            $this->redirect('/deploy/report?id=' . $deployId);
-            exit;
+            $this->redirectBackWithReport($siteId, $deployId, 'error', 'Не удалось выпустить или применить self-signed SSL: ' . $e->getMessage());
         }
     }
 

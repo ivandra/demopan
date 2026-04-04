@@ -226,6 +226,7 @@ $router->post('/deploy/issue-ssl', action($deploy, 'issueSslSelfSigned'));
 $router->get('/domains', action($domains, 'form'));
 $router->post('/domains/check', action($domains, 'check'));
 $router->post('/domains/purchase-dns', action($domains, 'purchaseAndDns'));
+$router->post('/domains/recheck-dns', action($domains, 'recheckDns'));
 
 // Registrar accounts
 $router->get('/registrar/accounts', action($registrarAccounts, 'index'));
@@ -344,6 +345,7 @@ $router->get('/ai/generate-sub-meta', action($ai, 'generateSubMeta'));
 $router->get('/ai/generate-root-text', action($ai, 'generateRootText'));
 $router->get('/ai/generate-sub-text', action($ai, 'generateSubText'));
 $router->get('/ai/generate-all-sub-texts', action($ai, 'generateAllSubTexts'));
+$router->get('/ai/cron', action($ai, 'cron'));
 
 $router->post('/ai/options/save', action($ai, 'saveRunOptions'));
 $router->post('/ai/options/reset', action($ai, 'resetRunOptions'));

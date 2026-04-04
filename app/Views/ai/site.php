@@ -10,12 +10,37 @@ $currentCfg = is_array($currentCfg ?? null) ? $currentCfg : [];
 $pagePaths = is_array($pagePaths ?? null) ? $pagePaths : [];
 $currentLabel = (string)($currentLabel ?? '_default');
 $resolvedMirrorUrl = (string)($resolvedMirrorUrl ?? '');
+$aiCron = is_array($aiCron ?? null) ? $aiCron : [];
+$aiQueue = is_array($aiQueue ?? null) ? $aiQueue : [];
+$aiQueueSummary = is_array($aiQueue['summary'] ?? null) ? $aiQueue['summary'] : [];
+$aiQueueItems = is_array($aiQueue['items'] ?? null) ? $aiQueue['items'] : [];
 
 $siteId = (int)($site['id'] ?? 0);
 $domain = (string)($site['domain'] ?? '');
 
 function labelTitleAi(string $lb): string {
     return $lb === '_default' ? 'Основной домен' : ('Поддомен: ' . $lb);
+}
+
+
+function aiKindTitle(string $kind): string {
+    $map = [
+        'sub_home_text' => 'Главная поддомена',
+        'root_home_text' => 'Главная основного домена',
+        'page_bundle' => 'Внутренняя страница',
+    ];
+    return $map[$kind] ?? $kind;
+}
+
+function aiStatusTitle(string $status): string {
+    $map = [
+        'queued' => 'В очереди',
+        'running' => 'Генерируется',
+        'done' => 'Готово',
+        'error' => 'Ошибка',
+        'not_queued' => 'Не поставлено',
+    ];
+    return $map[$status] ?? $status;
 }
 ?>
 
@@ -48,6 +73,134 @@ function labelTitleAi(string $lb): string {
     <div class="small muted">
         Все параметры ниже относятся только к текущему label.
         Для основного домена используется label <code>_default</code>.
+    </div>
+</div>
+
+
+<div class="panel-card mt-16 stack-gap-md">
+    <h2 class="section-title">AI cron и очередь AI-задач</h2>
+
+    <div class="panel-grid panel-grid--2">
+        <div class="stack-gap-sm">
+            <div><b>Статус cron:</b>
+                <?php if (!empty($aiCron['alive'])): ?>
+                    <span class="badge badge-success">работает</span>
+                <?php else: ?>
+                    <span class="badge badge-danger">нет запусков</span>
+                <?php endif; ?>
+            </div>
+            <div class="small muted">Последний запуск: <code><?= h((string)($aiCron['last_run_at'] ?? '—')) ?></code></div>
+            <div class="small muted">Последняя задача: <code><?= h((string)($aiCron['last_job_kind'] ?? '')) ?></code> / <code><?= h((string)($aiCron['last_job_label'] ?? '')) ?></code></div>
+            <?php if (!empty($aiCron['last_error'])): ?>
+                <div class="small" style="color:#b42318;">Последняя ошибка cron: <?= h((string)$aiCron['last_error']) ?></div>
+            <?php endif; ?>
+            <div class="small muted">Cron URL: <code>/ai/cron</code></div>
+        </div>
+
+        <div class="stack-gap-sm">
+            <div><b>Активных задач в очереди:</b> <?= (int)($aiQueueSummary['active_total'] ?? 0) ?></div>
+            <div><b>Всего активных label:</b> <?= (int)($aiQueueSummary['labels_total'] ?? 0) ?></div>
+            <div><b>Готово:</b> <?= (int)($aiQueueSummary['done'] ?? 0) ?></div>
+            <div><b>В очереди:</b> <?= (int)($aiQueueSummary['queued'] ?? 0) ?></div>
+            <div><b>Генерируется:</b> <?= (int)($aiQueueSummary['running'] ?? 0) ?></div>
+            <div><b>Ошибок:</b> <?= (int)($aiQueueSummary['error'] ?? 0) ?></div>
+            <div><b>Осталось:</b> <?= (int)($aiQueueSummary['remaining'] ?? 0) ?></div>
+        </div>
+    </div>
+
+    <div class="page-actions">
+        <button type="button" class="btn btn-secondary" id="aiQueueRefreshNow">Обновить сейчас</button>
+        <label class="checkbox-inline small" style="margin-left:8px;">
+            <input type="checkbox" id="aiQueueAutoRefresh" value="1">
+            Автообновление каждые 15 секунд
+        </label>
+    </div>
+
+    <div class="small muted">
+        Автообновление можно включать и выключать вручную. Настройка сохраняется автоматически сразу после клика по чекбоксу.
+    </div>
+
+    <script>
+        (function () {
+            var checkbox = document.getElementById('aiQueueAutoRefresh');
+            var refreshBtn = document.getElementById('aiQueueRefreshNow');
+            var storageKey = 'aiQueueAutoRefresh';
+            var timer = null;
+
+            function applyState() {
+                if (!checkbox) return;
+                if (checkbox.checked && <?= !empty($aiQueue['has_active']) ? 'true' : 'false' ?>) {
+                    timer = setTimeout(function () { window.location.reload(); }, 15000);
+                }
+            }
+
+            if (checkbox) {
+                checkbox.checked = localStorage.getItem(storageKey) === '1';
+                checkbox.addEventListener('change', function () {
+                    localStorage.setItem(storageKey, checkbox.checked ? '1' : '0');
+                    if (timer) {
+                        clearTimeout(timer);
+                        timer = null;
+                    }
+                    applyState();
+                });
+                applyState();
+            }
+
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', function () {
+                    window.location.reload();
+                });
+            }
+        })();
+    </script>
+
+</div>
+
+<div class="panel-card mt-16">
+    <div class="page-head page-head--compact">
+        <h2 class="section-title">Последние AI-задачи очереди</h2>
+        <div class="small muted">Здесь показываются последние задачи по сайту из очереди, независимо от того, из какого блока они были запущены.</div>
+    </div>
+
+    <div class="table-wrap">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>Тип</th>
+                <th>Label</th>
+                <th>Путь</th>
+                <th>Статус</th>
+                <th>Попыток</th>
+                <th>Обновлено</th>
+                <th>Ошибка</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($aiQueueItems as $queueItem): ?>
+                <?php $status = (string)($queueItem['status'] ?? 'not_queued'); ?>
+                <tr>
+                    <td><?= h(aiKindTitle((string)($queueItem['kind'] ?? ''))) ?></td>
+                    <td><code><?= h((string)($queueItem['label'] ?? '')) ?></code></td>
+                    <td><code><?= h((string)($queueItem['page_path'] ?? '')) ?></code></td>
+                    <td>
+                        <?php if ($status === 'done'): ?>
+                            <span class="badge badge-success"><?= h(aiStatusTitle($status)) ?></span>
+                        <?php elseif ($status === 'running'): ?>
+                            <span class="badge badge-warning"><?= h(aiStatusTitle($status)) ?></span>
+                        <?php elseif ($status === 'error'): ?>
+                            <span class="badge badge-danger"><?= h(aiStatusTitle($status)) ?></span>
+                        <?php else: ?>
+                            <span class="badge badge-muted"><?= h(aiStatusTitle($status)) ?></span>
+                        <?php endif; ?>
+                    </td>
+                    <td><?= (int)($queueItem['tries'] ?? 0) ?></td>
+                    <td><code><?= h((string)($queueItem['updated_at'] ?? '')) ?></code></td>
+                    <td class="small" style="max-width:380px; word-break:break-word;"><?= h((string)($queueItem['error_text'] ?? '')) ?></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -161,34 +314,11 @@ function labelTitleAi(string $lb): string {
             <textarea name="extra_instruction" rows="6"><?= h($entityAi['extra_instruction'] ?? '') ?></textarea>
         </div>
 
-        <label class="checkbox-inline small"><input type="checkbox" name="copy_all_labels" value="1"> После сохранения скопировать эти настройки на все label сайта</label>
+        <label class="checkbox-inline small" style="display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border:2px solid #2563eb;border-radius:10px;background:#eef4ff;color:#123a8f;font-weight:700;"><input type="checkbox" name="copy_all_labels" value="1"> После сохранения скопировать эти настройки на все label сайта</label>
 
         <div class="page-actions">
             <button class="btn btn-primary" type="submit">Сохранить переменные текущего label</button>
         </div>
-    </form>
-</div>
-
-<div class="panel-card mt-16 stack-gap-md">
-    <h2 class="section-title">Batch-настройка</h2>
-    <div class="small muted">Этот режим используется при массовой генерации. «Только пустые / наследуемые» — панель меняет только незаполненные значения. «Перезаписывать все» — заменяет текущие значения даже если они уже заполнены вручную.</div>
-
-    <form method="post" action="/ai/options/save?id=<?= $siteId ?>&label=<?= urlencode($currentLabel) ?>" class="stack-gap-md">
-        <div class="field-row">
-            <label>Режим перезаписи при массовой генерации</label>
-            <select name="overwrite_mode">
-                <option value="fill_empty" <?= (($runOptions['overwrite_mode'] ?? 'fill_empty') === 'fill_empty') ? 'selected' : '' ?>>Только пустые / наследуемые</option>
-                <option value="overwrite_all" <?= (($runOptions['overwrite_mode'] ?? '') === 'overwrite_all') ? 'selected' : '' ?>>Перезаписывать всё</option>
-            </select>
-        </div>
-
-        <div class="page-actions">
-            <button class="btn btn-primary" type="submit">Сохранить batch-настройку</button>
-        </div>
-    </form>
-
-    <form method="post" action="/ai/options/reset?id=<?= $siteId ?>&label=<?= urlencode($currentLabel) ?>" data-confirm="Сбросить batch-настройку?">
-        <button class="btn btn-danger" type="submit">Сбросить batch-настройку</button>
     </form>
 </div>
 
@@ -197,16 +327,16 @@ function labelTitleAi(string $lb): string {
         <h2 class="section-title">Текущая сущность</h2>
 
         <div class="page-actions">
-            <form method="post" action="/ai/generate-meta?id=<?= $siteId ?>" data-confirm="Сгенерировать мета для root?">
+            <form method="post" action="/ai/generate-meta?id=<?= $siteId ?>" data-confirm="Сгенерировать мета для основного домена?">
                 <?php if ($currentLabel === '_default'): ?>
-                    <button class="btn btn-primary" type="submit">Сгенерировать мета для root</button>
+                    <button class="btn btn-primary" type="submit">Сгенерировать мета для основного домена</button>
                 <?php else: ?>
                     <a class="btn btn-primary" href="/ai/generate-sub-meta?id=<?= $siteId ?>&label=<?= urlencode($currentLabel) ?>" data-confirm="Сгенерировать мета для <?= h($currentLabel) ?>?">Сгенерировать мета для текущего label</a>
                 <?php endif; ?>
             </form>
 
             <?php if ($currentLabel === '_default'): ?>
-                <a class="btn btn-ai" href="/ai/generate-root-text?id=<?= $siteId ?>" data-confirm="Сгенерировать текст главной для root?">Сгенерировать текст для root</a>
+                <a class="btn btn-ai" href="/ai/generate-root-text?id=<?= $siteId ?>" data-confirm="Сгенерировать текст главной для основного домена?">Сгенерировать текст для основного домена</a>
             <?php else: ?>
                 <a class="btn btn-ai" href="/ai/generate-sub-text?id=<?= $siteId ?>&label=<?= urlencode($currentLabel) ?>" data-confirm="Сгенерировать текст главной для <?= h($currentLabel) ?>?">Сгенерировать текст для текущего label</a>
             <?php endif; ?>
@@ -226,9 +356,20 @@ function labelTitleAi(string $lb): string {
 
             <a class="btn btn-ai"
                href="/ai/generate-all-sub-texts?id=<?= $siteId ?>"
-               data-confirm="Сгенерировать тексты главной для всех включенных сабов?">
-                Сгенерировать тексты для всех сабов
+               data-confirm="Поставить генерацию текстов главной в очередь для всех включенных сабов?">
+                Поставить тексты для всех сабов в очередь
             </a>
+
+            <a class="btn btn-secondary"
+               href="/ai/generate-all-sub-pages?id=<?= $siteId ?>"
+               data-confirm="Поставить в очередь все внутренние страницы для всех enabled label? 404 не будет включена.">
+                Поставить все внутренние страницы в очередь
+            </a>
+        </div>
+
+        <div class="small muted">
+            Генерация текстов теперь идет не в одном длинном HTTP-запросе, а по очереди через <code>/ai/cron</code>.
+            За один запуск cron обрабатывается одна задача, поэтому 504 больше не должен возникать даже на больших сетках.
         </div>
     </div>
 </div>
@@ -236,9 +377,10 @@ function labelTitleAi(string $lb): string {
 <div class="panel-card mt-16">
     <div class="page-head page-head--compact">
         <h2 class="section-title">Пакетно по выбранным label</h2>
-        <div class="small muted">Отметь нужные label и запусти только нужный тип генерации.</div>
+        <div class="small muted">Отметь нужные label и поставь в очередь только нужный тип генерации.</div>
     </div>
 
+    
     <div class="panel-grid panel-grid--2">
         <div>
             <form id="ai-selected-meta-form" method="post" action="/ai/generate-selected-meta?id=<?= $siteId ?>">
@@ -286,8 +428,8 @@ function labelTitleAi(string $lb): string {
                     form="ai-selected-meta-form"
                     data-require-checked=".label-batch-check"
                     data-require-checked-message="Сначала выберите хотя бы одну метку."
-                    data-confirm="Сгенерировать все страницы для выбранных меток?">
-                Сгенерировать все страницы
+                    data-confirm="Поставить внутренние страницы в очередь для выбранных меток?">
+                Поставить внутренние страницы в очередь
             </button>
         </div>
     </div>

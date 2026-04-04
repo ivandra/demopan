@@ -59,11 +59,15 @@ $isRoot = ($label === '_default');
             <label>Быстрые действия</label>
             <div class="subcfg-actions">
                 <div class="small muted">На этом экране можно отредактировать настройки текущего label и при сохранении сразу скопировать их на все поддомены.</div>
+                <label class="checkbox-inline small" style="display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border:2px solid #f59e0b;border-radius:10px;background:#fff8e6;color:#7a4b00;font-weight:700;">
+                    <input type="checkbox" name="copy_to_all_labels" value="1" form="subcfgSaveForm">
+                    Сохранить настройки для всех поддоменов
+                </label>
             </div>
         </div>
     </div>
     </div>
-<form method="post" action="/sites/subcfg/save" class="mt-16 stack-gap-lg">
+<form method="post" action="/sites/subcfg/save" class="mt-16 stack-gap-lg" id="subcfgSaveForm">
         <input type="hidden" name="site_id" value="<?= $siteId ?>">
         <input type="hidden" name="label" value="<?= e($label) ?>">
 
@@ -194,7 +198,6 @@ $isRoot = ($label === '_default');
         </div>
 
         <div class="subcfg-actions">
-            <label class="checkbox-inline small"><input type="checkbox" name="copy_to_all_labels" value="1"> Сохранить настройки для всех поддоменов</label>
             <button type="submit" class="btn btn-primary">Сохранить настройки</button>
             <a class="btn btn-secondary" href="/sites/pages?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Открыть страницы</a>
             <a class="btn btn-secondary" href="/sites/texts?id=<?= $siteId ?>&label=<?= urlencode($label) ?>">Открыть тексты</a>

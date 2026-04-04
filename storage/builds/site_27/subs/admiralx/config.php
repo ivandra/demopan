@@ -4,11 +4,11 @@ $cfg = array (
   'domain' => 'admiralx.kazik3.casino',
   'yandex_verification' => '',
   'yandex_metrika' => '',
-  'promolink' => '/reg',
-  'title' => 'Admiral X тест title',
-  'description' => 'тест Admiral X desc',
-  'keywords' => 'Admiral X, казино Admiral X, игровые автоматы, рулетка онлайн, покер, лицензионное казино, быстрые выплаты',
-  'h1' => 'Admiral X тест h1',
+  'promolink' => '/reg2',
+  'title' => 'Kazik3 тест title2',
+  'description' => 'тест Kazik3 desc',
+  'keywords' => 'Kazik3, казино, игровые автоматы, азартные игры, онлайн казино, слоты, бонусы, регистрация',
+  'h1' => 'Kazik3 тест h1',
   'pages' => 
   array (
     '/' => 
