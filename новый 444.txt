@@ -1,0 +1,640 @@
+Вот гуард 
+
+<?php
+/**
+ * guard.php — единая точка:
+ *  - маршруты /reg и /reg/* → редирект на $internal_reg_url (из config.php)
+ *  - глобальные партнёрские редиректы (override ИЛИ подмена только домена по панели)
+ *  - защита от двойного подключения
+ *
+ * Production-логика:
+ *  - обычные HTML/страницы: Яндекс = UA && IP
+ *  - SEO-служебные пути: Яндекс = IP
+ *  - статические ассеты: Яндекс = IP
+ *  - путь /go: Яндекс = UA && IP
+ */
+
+if (defined('PROMO_GUARD_LOADED')) {
+    return;
+}
+define('PROMO_GUARD_LOADED', true);
+
+require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/link_agent.php'; // la_get_active_domain(), la_replace_domain()
+
+// Refresh Panel: исходящие IP панели/Webmaster (local==public) → отдаём сам сайт,
+// чтобы wm_recrawl подтвердил URL и отправил переобход. Контент для Яндекса не меняется.
+$__panel_ips = ['155.212.141.141','85.198.71.117','159.194.239.127','45.90.33.30'];
+if (in_array(getClientIp(), $__panel_ips, true)) { return; }
+
+// запасной маркер по UA префлайта
+if (($_SERVER['HTTP_USER_AGENT'] ?? '') === 'refresh-panel-recrawl-preflight') { return; }
+
+/* =========================
+   Настройки логирования
+   ========================= */
+if (!defined('GUARD_YANDEX_LOG_ENABLED')) {
+    define('GUARD_YANDEX_LOG_ENABLED', false);
+}
+
+if (!defined('GUARD_YANDEX_LOG_FILE')) {
+    define('GUARD_YANDEX_LOG_FILE', __DIR__ . '/guard_yandex_log.txt');
+}
+
+/* =========================
+   Helpers
+   ========================= */
+function hasVisited(): bool {
+    return isset($_COOKIE['visited_before']) && $_COOKIE['visited_before'] === '1';
+}
+
+function safe_url(string $u): ?string {
+    return preg_match('~^https?://~i', $u) ? $u : null;
+}
+
+function append_query(string $url, string $qs): string {
+    if ($qs === '') {
+        return $url;
+    }
+
+    return $url . (strpos($url, '?') !== false ? '&' : '?') . $qs;
+}
+
+/**
+ * Redirect responses must never become indexable landing pages.
+ * Keep the destination in the Location header only; do not render it in HTML.
+ */
+function guardSendRedirectSafetyHeaders(): void {
+    if (headers_sent()) {
+        return;
+    }
+
+    header('X-Robots-Tag: noindex, nofollow, noarchive', true);
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0', true);
+    header('Pragma: no-cache', true);
+    header('Expires: 0', true);
+    header('Referrer-Policy: no-referrer', true);
+}
+
+function guardLog(string $message, array $context = []): void {
+    if (!GUARD_YANDEX_LOG_ENABLED) {
+        return;
+    }
+
+    $line = '[' . date('Y-m-d H:i:s') . '] ' . $message;
+
+    if (!empty($context)) {
+        $json = json_encode($context, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        if ($json !== false) {
+            $line .= ' | ' . $json;
+        }
+    }
+
+    $line .= PHP_EOL;
+
+    @file_put_contents(GUARD_YANDEX_LOG_FILE, $line, FILE_APPEND | LOCK_EX);
+}
+
+function getRequestPath(): string {
+    $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+    if (!is_string($path) || $path === '') {
+        return '/';
+    }
+    return $path;
+}
+
+function getClientIp(): string {
+    // Сайт не за Cloudflare/прокси — безопасно берем только REMOTE_ADDR
+    return trim($_SERVER['REMOTE_ADDR'] ?? '');
+}
+
+/* =========================
+   Определение Яндекса по UA
+   ========================= */
+function isYandexUserAgent(): bool {
+    $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    if ($ua === '') {
+        return false;
+    }
+
+    // Яндекс.Переводчик специально исключаем
+    if (stripos($ua, 'YTranslate') !== false) {
+        return false;
+    }
+
+    $needles = [
+        'YandexBot',
+        'YandexMobileBot',
+        'YandexAccessibilityBot',
+        'YandexRenderResourcesBot',
+        'YandexMetrika',
+        'YandexAdNet',
+        'YandexDirect',
+        'YaDirectFetcher',
+        'YandexCalendar',
+        'YandexSitelinks',
+        'YandexImageResizer',
+        'YandexImages',
+        'YandexFavicons',
+        'YandexWebmaster',
+        'YandexPagechecker',
+        'YandexScreenshotBot',
+        'YandexVideo',
+        'YandexMedia',
+        'YandexBlogs',
+        'YandexCatalog',
+        'YandexNews',
+        'YandexAntivirus',
+        'Yandex',
+    ];
+
+    foreach ($needles as $needle) {
+        if (stripos($ua, $needle) !== false) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/* =========================
+   Проверка IP по CIDR
+   ========================= */
+function ipInRangeV4(string $ip, string $cidr): bool {
+    if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+        return false;
+    }
+
+    $parts = explode('/', $cidr, 2);
+    if (count($parts) !== 2) {
+        return false;
+    }
+
+    [$subnet, $mask] = $parts;
+
+    if (!filter_var($subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+        return false;
+    }
+
+    $mask = (int)$mask;
+    if ($mask < 0 || $mask > 32) {
+        return false;
+    }
+
+    $ipLong = ip2long($ip);
+    $subnetLong = ip2long($subnet);
+
+    if ($ipLong === false || $subnetLong === false) {
+        return false;
+    }
+
+    $maskLong = ($mask === 0) ? 0 : (-1 << (32 - $mask));
+
+    return (($ipLong & $maskLong) === ($subnetLong & $maskLong));
+}
+
+function ipInRangeV6(string $ip, string $cidr): bool {
+    if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+        return false;
+    }
+
+    $parts = explode('/', $cidr, 2);
+    if (count($parts) !== 2) {
+        return false;
+    }
+
+    [$subnet, $prefixLength] = $parts;
+
+    if (!filter_var($subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+        return false;
+    }
+
+    $prefixLength = (int)$prefixLength;
+    if ($prefixLength < 0 || $prefixLength > 128) {
+        return false;
+    }
+
+    $ipBin = inet_pton($ip);
+    $subnetBin = inet_pton($subnet);
+
+    if ($ipBin === false || $subnetBin === false) {
+        return false;
+    }
+
+    $bytes = intdiv($prefixLength, 8);
+    $bits  = $prefixLength % 8;
+
+    if ($bytes > 0 && substr($ipBin, 0, $bytes) !== substr($subnetBin, 0, $bytes)) {
+        return false;
+    }
+
+    if ($bits === 0) {
+        return true;
+    }
+
+    $mask = chr((0xFF << (8 - $bits)) & 0xFF);
+
+    return ((ord($ipBin[$bytes]) & ord($mask)) === (ord($subnetBin[$bytes]) & ord($mask)));
+}
+
+function ipInRange(string $ip, string $cidr): bool {
+    return (strpos($cidr, ':') !== false)
+        ? ipInRangeV6($ip, $cidr)
+        : ipInRangeV4($ip, $cidr);
+}
+
+function isYandexIp(string $ip): bool {
+    static $ranges = [
+        // IPv4
+        '5.45.192.0/18',
+        '5.255.192.0/18',
+        '5.255.253.0/24',
+        '37.9.64.0/18',
+        '37.140.128.0/18',
+        '77.88.0.0/18',
+        '84.252.160.0/19',
+        '87.250.224.0/19',
+        '90.156.176.0/20',
+        '92.255.112.0/20',
+        '93.158.128.0/18',
+        '95.108.128.0/17',
+        '141.8.128.0/18',
+        '178.154.128.0/18',
+        '185.32.187.0/24',
+        '213.180.192.0/19',
+
+        // IPv6
+        '2a02:6b8::/29',
+    ];
+
+    foreach ($ranges as $range) {
+        if (ipInRange($ip, $range)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+/* =========================
+   Типы путей
+   ========================= */
+function isSeoServicePath(): bool {
+    $path = strtolower(getRequestPath());
+
+    if (in_array($path, [
+        '/robots.txt',
+        '/sitemap.xml',
+        '/sitemap_index.xml',
+        '/favicon.ico',
+        '/ads.txt',
+        '/humans.txt',
+        '/security.txt',
+        '/manifest.json',
+        '/browserconfig.xml',
+    ], true)) {
+        return true;
+    }
+
+    if (preg_match('~^/sitemap.*\.xml$~', $path)) {
+        return true;
+    }
+
+    return false;
+}
+
+function isStaticAssetPath(): bool {
+    $path = strtolower(getRequestPath());
+
+    return (bool)preg_match(
+        '~\.(css|js|mjs|map|png|jpg|jpeg|gif|webp|svg|ico|bmp|avif|woff|woff2|ttf|otf|eot|mp4|webm|ogg|mp3|json|xml|txt)$~',
+        $path
+    );
+}
+
+function isCriticalYandexPath(): bool {
+    $path = strtolower(getRequestPath());
+
+    return in_array($path, [
+        '/',
+        '/go',
+    ], true);
+}
+
+/* =========================
+   Правила bypass для Яндекса
+   ========================= */
+function shouldBypassForYandexSeoPath(): bool {
+    $ip = getClientIp();
+    if ($ip === '') {
+        return false;
+    }
+
+    $result = isSeoServicePath() && isYandexIp($ip);
+
+    if ($result) {
+        guardLog('Bypass redirect for Yandex SEO path', [
+            'request_uri' => $_SERVER['REQUEST_URI'] ?? '',
+            'client_ip'   => $ip,
+            'ua'          => $_SERVER['HTTP_USER_AGENT'] ?? '',
+        ]);
+    }
+
+    return $result;
+}
+
+function shouldBypassForYandexStaticAsset(): bool {
+    $ip = getClientIp();
+    if ($ip === '') {
+        return false;
+    }
+
+    $result = isStaticAssetPath() && isYandexIp($ip);
+
+    if ($result) {
+        guardLog('Bypass redirect for Yandex static asset', [
+            'request_uri' => $_SERVER['REQUEST_URI'] ?? '',
+            'client_ip'   => $ip,
+            'ua'          => $_SERVER['HTTP_USER_AGENT'] ?? '',
+        ]);
+    }
+
+    return $result;
+}
+
+function isYandexStrictRequest(): bool {
+    $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    $ip = getClientIp();
+
+    $uaOk = isYandexUserAgent();
+    $ipOk = ($ip !== '') && isYandexIp($ip);
+    $result = $uaOk && $ipOk;
+
+    guardLog('Yandex strict check', [
+        'request_uri' => $_SERVER['REQUEST_URI'] ?? '',
+        'remote_addr' => $_SERVER['REMOTE_ADDR'] ?? '',
+        'client_ip'   => $ip,
+        'ua'          => $ua,
+        'ua_ok'       => $uaOk ? 1 : 0,
+        'ip_ok'       => $ipOk ? 1 : 0,
+        'result'      => $result ? 1 : 0,
+    ]);
+
+    return $result;
+}
+
+function shouldBypassForYandex(): bool {
+    // 1) SEO-служебка — по IP
+    if (shouldBypassForYandexSeoPath()) {
+        return true;
+    }
+
+    // 2) Статика — по IP
+    if (shouldBypassForYandexStaticAsset()) {
+        return true;
+    }
+
+    // 3) Критичные HTML/redirect пути — только строго UA && IP
+    if (isCriticalYandexPath() && isYandexStrictRequest()) {
+        guardLog('Bypass redirect for Yandex critical path', [
+            'request_uri' => $_SERVER['REQUEST_URI'] ?? '',
+            'client_ip'   => getClientIp(),
+        ]);
+        return true;
+    }
+
+    // 4) Остальные страницы — тоже строго UA && IP
+    if (isYandexStrictRequest()) {
+        guardLog('Bypass redirect for Yandex page', [
+            'request_uri' => $_SERVER['REQUEST_URI'] ?? '',
+            'client_ip'   => getClientIp(),
+        ]);
+        return true;
+    }
+
+    return false;
+}
+
+/* =========================
+   0) ВНУТРЕННИЙ /reg и /reg/*
+   ========================= */
+$reqPath = getRequestPath();
+
+// Service endpoints (robots.php and similar) can explicitly disable the
+// global redirect without weakening the redirect rules for normal pages.
+if (defined('PROMO_GUARD_BYPASS_GLOBAL_REDIRECT') && PROMO_GUARD_BYPASS_GLOBAL_REDIRECT) {
+    return;
+}
+
+if (preg_match('~^/reg(?:/.*)?$~i', $reqPath)) {
+    if (!empty($internal_reg_url) && ($u = safe_url($internal_reg_url))) {
+        $u = append_query($u, $_SERVER['QUERY_STRING'] ?? '');
+        guardSendRedirectSafetyHeaders();
+        header('Location: ' . $u, true, 302);
+        exit;
+    }
+
+    if (!empty($partner_override_url) && ($u = safe_url($partner_override_url))) {
+        $u = append_query($u, $_SERVER['QUERY_STRING'] ?? '');
+        guardSendRedirectSafetyHeaders();
+        header('Location: ' . $u, true, 302);
+        exit;
+    }
+
+    $activeDomain = la_get_active_domain();
+    $base = $base_new_url ?? '';
+
+    if ($base) {
+        $u = la_replace_domain($base, $activeDomain);
+        $u = append_query($u, $_SERVER['QUERY_STRING'] ?? '');
+        guardSendRedirectSafetyHeaders();
+        header('Location: ' . $u, true, 302);
+        exit;
+    }
+
+    // если ничего не задано — отдаем сайт
+}
+
+/* =========================
+   1) ВЫКЛЮЧАТЕЛЬ ГЛОБАЛЬНЫХ РЕДИРЕКТОВ
+   ========================= */
+if (empty($redirect_enabled)) {
+    return;
+}
+
+/* =========================
+   2) СБОР КОНФИГА ДЛЯ ГЛОБАЛЬНОГО РЕДИРЕКТА
+   ========================= */
+$configRed = null;
+
+// Вариант A — override из конфига
+if (!empty($partner_override_url) && ($ov = safe_url($partner_override_url))) {
+    $configRed = [
+        'new_domain'    => $ov,
+        'second_domain' => $ov,
+    ];
+}
+
+// Вариант B — из базы/панели
+if ($configRed === null) {
+    $activeDomain = la_get_active_domain();
+    $baseNew = $base_new_url ?? '';
+    $baseSecond = $base_second_url ?? '';
+
+    if ($baseNew && $baseSecond) {
+        $configRed = [
+            'new_domain'    => la_replace_domain($baseNew, $activeDomain),
+            'second_domain' => la_replace_domain($baseSecond, $activeDomain),
+        ];
+    }
+}
+
+// Если нет валидного конфига — не редиректим
+if (!is_array($configRed) || empty($configRed['new_domain']) || empty($configRed['second_domain'])) {
+    guardLog('Redirect config not ready', [
+        'request_uri' => $_SERVER['REQUEST_URI'] ?? '',
+    ]);
+    return;
+}
+
+/* =========================
+   3) ЯНДЕКСА НЕ РЕДИРЕКТИМ
+   ========================= */
+if (shouldBypassForYandex()) {
+    return;
+}
+
+/* =========================
+   4) ОСТАЛЬНЫХ РЕДИРЕКТИМ
+   ========================= */
+if (hasVisited()) {
+    guardLog('Redirect repeat visitor', [
+        'to'        => $configRed['second_domain'],
+        'client_ip' => getClientIp(),
+        'request_uri' => $_SERVER['REQUEST_URI'] ?? '',
+    ]);
+
+    guardSendRedirectSafetyHeaders();
+    header('Location: ' . $configRed['second_domain'], true, 301);
+    exit;
+}
+
+setcookie('visited_before', '1', time() + (30 * 24 * 60 * 60), '/', '', false, true);
+
+guardLog('Redirect first visitor', [
+    'to'        => $configRed['new_domain'],
+    'client_ip' => getClientIp(),
+    'request_uri' => $_SERVER['REQUEST_URI'] ?? '',
+]);
+
+guardSendRedirectSafetyHeaders();
+header('Location: ' . $configRed['new_domain'], true, 302);
+exit;
+
+а вот консоль:
+
+login as: root
+root@155.212.141.141's password:
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.8.0-137-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Aug 14 08:26:24 PM UTC 2026
+
+  System load:  0.0                Users logged in:       0
+  Usage of /:   21.0% of 28.02GB   IPv4 address for eth0: 155.212.141.141
+  Memory usage: 45%                IPv4 address for eth0: 45.90.33.30
+  Swap usage:   0%                 IPv4 address for eth0: 159.194.239.127
+  Processes:    167                IPv4 address for eth0: 85.198.71.117
+
+ * Strictly confined Kubernetes makes edge and IoT secure. Learn how MicroK8s
+   just raised the bar for easy, resilient and secure K8s cluster deployment.
+
+   https://ubuntu.com/engage/secure-kubernetes-at-the-edge
+
+Expanded Security Maintenance for Applications is not enabled.
+
+6 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+7 additional security updates can be applied with ESM Apps.
+Learn more about enabling ESM Apps service at https://ubuntu.com/esm
+
+
+Last login: Tue Aug 11 18:58:03 2026 from 77.246.110.113
+
+###########################################################################
+                        Welcome!
+
+This server is captured by FASTPANEL control panel.
+
+Operating System:       Ubuntu 24.04.4 LTS
+===========================================================================
+IPv4:
+
+155.212.141.141
+45.90.33.30
+159.194.239.127
+85.198.71.117
+
+===========================================================================
+By default configuration files can be found in the following directories:
+
+NGINX:          /etc/nginx/fastpanel2-available
+APACHE2:        /etc/apache2/fastpanel2-available
+
+Please do not edit configuration files manually.
+You may do that in your control panel.
+===========================================================================
+
+ 20:26:25 up 7 days,  3:06,  1 user,  load average: 0.00, 0.02, 0.00
+###########################################################################
+root@wxbytoztux:~# curl -sS -L --max-redirs 5 -o /dev/null \
+  -A 'refresh-panel-recrawl-preflight' \
+  -w 'PANEL: code=%{http_code} final=%{url_effective} redirects=%{num_redirects}\n' \
+  https://7k5281.casino/
+
+curl -sS -L --max-redirs 5 -o /dev/null \
+  -A 'Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)' \
+  -w 'YANDEX: code=%{http_code} final=%{url_effective} redirects=%{num_redirects}\n' \
+  https://7k5281.casino/
+PANEL: code=200 final=https://dealredirectfast.com/?s=137&ref=sk_w238255c276915l18265p2169_7k5281&encoded_url=cmVnaXN0ZXI/dGFiRm9ybT1waG9uZQ==&sub_id=7k5281 redirects=2
+YANDEX: code=200 final=https://dealredirectfast.com/?s=137&ref=sk_w238255c276915l18265p2169_7k5281&encoded_url=cmVnaXN0ZXI/dGFiRm9ybT1waG9uZQ==&sub_id=7k5281 redirects=2
+root@wxbytoztux:~# grep -rn "dealredirectfast" /path/to/7k5281.casino/
+grep: /path/to/7k5281.casino/: No such file or directory
+root@wxbytoztux:~# ls -d /var/www/*/data/www/7k5281.casino 2>/dev/null
+root@wxbytoztux:~# SITE=$(ls -d /var/www/*/data/www/7k5281.casino 2>/dev/null | head -1); echo "$SITE"
+grep -rniE "dealredirectfast|YandexBot|crawler|bot|redirect|Location:|header\(" "$SITE" \
+  --include='*.php' --include='.htaccess' -l
+
+grep: : No such file or directory
+root@wxbytoztux:~# # где документ-рут по данным веб-сервера
+grep -rniE "7k5281" /etc/nginx /etc/apache2 2>/dev/null | grep -iE "root|documentroot|server_name"
+root@wxbytoztux:~# # и прямой поиск каталога по имени (в типовых местах FASTPANEL)
+find /var/www /home /srv -maxdepth 5 -type d -name "7k5281.casino" 2>/dev/null
+root@wxbytoztux:~# tail -f /var/www/*/logs/*7k5281*access* 2>/dev/null | grep -iE 'refresh-panel|recrawl-preflight'
+root@wxbytoztux:~# curl -sSL -o /dev/null -w '%{http_code} %{url_effective}\n' \
+  -A 'refresh-panel-recrawl-preflight' https://7k5281.casino/
+200 https://7k5281.casino/
+root@wxbytoztux:~# curl --interface 159.194.239.127 -sSL -o /dev/null \
+  -w '%{http_code} %{url_effective}\n' \
+  -A 'refresh-panel-recrawl-preflight' https://7k5281.casino/
+200 https://7k5281.casino/
+root@wxbytoztux:~# curl -sSL -o /dev/null -w '%{http_code} %{url_effective}\n' \
+  -A 'refresh-panel-recrawl-preflight' https://7k5281.casino/
+200 https://7k5281.casino/
+root@wxbytoztux:~# curl -sSL -o /dev/null -w '%{http_code} %{url_effective}\n' \
+  -A 'refresh-panel-recrawl-preflight' https://7k5281.casino/
+200 https://7k5281.casino/
+root@wxbytoztux:~# for ip in 155.212.141.141 85.198.71.117 159.194.239.127 45.90.33.30; do
+  echo -n "$ip -> "
+  curl --interface $ip -sSL -o /dev/null -w '%{http_code} %{url_effective}\n' \
+    -A 'refresh-panel-recrawl-preflight' https://7k5281.casino/
+done
+155.212.141.141 -> 200 https://7k5281.casino/
+85.198.71.117 -> 200 https://7k5281.casino/
+159.194.239.127 -> 200 https://7k5281.casino/
+45.90.33.30 -> 200 https://7k5281.casino/
+root@wxbytoztux:~#
