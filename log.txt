@@ -1,0 +1,355 @@
+<div class="card">
+    <h3>Лог событий (26)</h3>
+                    <div style="max-height: 600px; overflow-y: auto;">
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:13:23">
+                    2026-08-16 19:13:23                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="ssl_reconciler">
+                    Выпуск сертификата                </span>
+                <span style="flex:1;">
+                    На домене пока установлен временный сертификат; доверенный сертификат ещё не готов (выпуск через FastPanel / Let's Encrypt / DNS).                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">SSL issuance продолжается (pending), следующая проверка запланирована.
+{
+    "stage": "ssl_reconciler",
+    "stage_raw": "ssl_reconciler",
+    "level": "info",
+    "event_code": "",
+    "raw_message": "SSL issuance продолжается (pending), следующая проверка запланирована.",
+    "technical_code": "ssl_pending"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:13:22">
+                    2026-08-16 19:13:22                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="ssl_le_polling">
+                    Выпуск сертификата                </span>
+                <span style="flex:1;">
+                    Новый домен пока не определяется в DNS. Это нормально сразу после регистрации или изменения DNS.                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">Live check: TLS connect failed (ssl connect failed: 0 php_network_getaddresses: getaddrinfo failed: Name or service not known). Продолжаю polling FP cert.
+{
+    "stage": "ssl_le_polling",
+    "stage_raw": "ssl_le_polling",
+    "level": "info",
+    "event_code": "",
+    "raw_message": "Live check: TLS connect failed (ssl connect failed: 0 php_network_getaddresses: getaddrinfo failed: Name or service not known). Продолжаю polling FP cert.",
+    "technical_code": "dns_not_resolving"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--danger); font-weight: bold; min-width: 20px;">✖</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:13:22">
+                    2026-08-16 19:13:22                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="verify_replacement">
+                    Проверка внесённых изменений                </span>
+                <span style="flex:1;">
+                    Провалены проверки: new_robots                                            <span class="muted small">(повторено 7 раз)</span>
+                                                            <div style="margin-top:6px; display:flex; flex-wrap:wrap; gap:6px; font-size:0.78em;">
+                        <span style="background:#7a2330; color:#fff; padding:1px 8px; border-radius:10px;">ОШИБКА — ЭТАП ОСТАНОВЛЕН</span>
+                        <span style="background:#22283a; color:#c8d2e6; padding:1px 8px; border-radius:10px;">Источник: Источник не установлен</span>
+                                                <span style="background:#22283a; color:#c8d2e6; padding:1px 8px; border-radius:10px;">Вмешательство: может понадобиться</span>
+                    </div>
+                    <details style="margin-top:4px;">
+                        <summary class="muted small" style="cursor:pointer;">Подробнее о проблеме</summary>
+                        <div style="font-size:0.9em; line-height:1.5; margin-top:4px; color:var(--text);">
+                            <div><b>Критичность:</b> ОШИБКА — ЭТАП ОСТАНОВЛЕН</div>
+                            <div><b>Источник:</b> Источник не установлен (уверенность: не установлена)</div>
+                            <div><b>Что заблокировано:</b> Этап остановлен и не считается выполненным.</div>                            <div><b>Что уже сделано безопасно:</b> Дальнейшие действия по этой джобе не выполняются автоматически.</div>                                                        <div><b>Что делать:</b> Откройте технические детали и проверьте исходное сообщение об ошибке.</div>                                                        <div class="muted small" style="margin-top:3px;"><b>Тех. код:</b> <code>unknown_stage_error</code></div>
+                        </div>
+                    </details>
+                                                        </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:08:51">
+                    2026-08-16 19:08:51                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="redirect_disable">
+                    Отключение редиректа                </span>
+                <span style="flex:1;">
+                    Редирект временно отключён на время перевыставления сайта.                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">Файлы кандидатов на редактирование: .htaccess, config.php, index.php
+{
+    "stage": "redirect_disable",
+    "stage_raw": "redirect_disable",
+    "level": "info",
+    "event_code": "",
+    "raw_message": "Файлы кандидатов на редактирование: .htaccess, config.php, index.php",
+    "technical_code": "redirect_disabled"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:08:37">
+                    2026-08-16 19:08:37                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="verify_replacement">
+                    Проверка внесённых изменений                </span>
+                <span style="flex:1;">
+                    Штатное событие обработки джобы.                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">Переход на стадию: verify_replacement [chain depth=3]
+{
+    "stage": "verify_replacement",
+    "stage_raw": "verify_replacement",
+    "level": "info",
+    "event_code": "",
+    "raw_message": "Переход на стадию: verify_replacement [chain depth=3]",
+    "technical_code": "stage_event"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--success); font-weight: bold; min-width: 20px;">✓</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:08:37">
+                    2026-08-16 19:08:37                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="config_replaced">
+                    Обновление настроек сайта                </span>
+                <span style="flex:1;">
+                    Изменения подтверждены повторным чтением файла с сервера (exact read-back).                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">config.php exact read-back подтверждён: домен='mellstroy80.casino'.
+{
+    "stage": "config_replaced",
+    "stage_raw": "config_replaced",
+    "level": "ok",
+    "event_code": "config.readback_verified",
+    "raw_message": "config.php exact read-back подтверждён: домен='mellstroy80.casino'.",
+    "technical_code": "config_readback_verified"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:08:35">
+                    2026-08-16 19:08:35                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="config_replaced">
+                    Обновление настроек сайта                </span>
+                <span style="flex:1;">
+                    Переход на стадию: config_replaced [chain                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">Переход на стадию: config_replaced [chain depth=2]
+{
+    "stage": "config_replaced",
+    "stage_raw": "config_replaced",
+    "level": "info",
+    "event_code": "",
+    "raw_message": "Переход на стадию: config_replaced [chain depth=2]",
+    "technical_code": "stage_event"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:08:34">
+                    2026-08-16 19:08:34                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="analyze_site">
+                    Анализ сайта                </span>
+                <span style="flex:1;">
+                    Переход на стадию: analyze_site [chain                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">Переход на стадию: analyze_site [chain depth=1]
+{
+    "stage": "analyze_site",
+    "stage_raw": "analyze_site",
+    "level": "info",
+    "event_code": "",
+    "raw_message": "Переход на стадию: analyze_site [chain depth=1]",
+    "technical_code": "stage_event"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:08:34">
+                    2026-08-16 19:08:34                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="redirect_disable">
+                    Отключение редиректа                </span>
+                <span style="flex:1;">
+                    На время выполнения pipeline редиректы отключены и будут восстановлены автоматически.                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">Партнёрский редирект штатно временно отключён на время refresh.
+{
+    "stage": "redirect_disable",
+    "stage_raw": "redirect_disable",
+    "level": "info",
+    "event_code": "redirect.disabled",
+    "raw_message": "Партнёрский редирект штатно временно отключён на время refresh.",
+    "technical_code": "redirect_disabled"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:08:33">
+                    2026-08-16 19:08:33                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="redirect_disable">
+                    Отключение редиректа                </span>
+                <span style="flex:1;">
+                    Редирект временно отключён на время перевыставления сайта.                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">Переход на стадию: redirect_disable
+{
+    "stage": "redirect_disable",
+    "stage_raw": "redirect_disable",
+    "level": "info",
+    "event_code": "",
+    "raw_message": "Переход на стадию: redirect_disable",
+    "technical_code": "redirect_disabled"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--success); font-weight: bold; min-width: 20px;">✓</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:08:33">
+                    2026-08-16 19:08:33                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="ssl_self_signed_first">
+                    Установка временного сертификата                </span>
+                <span style="flex:1;">
+                    На новый домен временно установлен самоподписанный сертификат — промежуточный этап, пока выпускается доверенный SSL-сертификат.                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">Создан self-signed cert_id=2686 (CN=mellstroy80.casino, SAN=www.mellstroy80.casino) и привязан к FP-сайту
+{
+    "stage": "ssl_self_signed_first",
+    "stage_raw": "ssl_self_signed_first",
+    "level": "ok",
+    "event_code": "",
+    "raw_message": "Создан self-signed cert_id=2686 (CN=mellstroy80.casino, SAN=www.mellstroy80.casino) и привязан к FP-сайту",
+    "technical_code": "ssl_self_signed"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:08:17">
+                    2026-08-16 19:08:17                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="ssl_self_signed_first">
+                    Установка временного сертификата                </span>
+                <span style="flex:1;">
+                    На новый домен временно установлен самоподписанный сертификат — промежуточный этап, пока выпускается доверенный SSL-сертификат.                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">Переход на стадию: ssl_self_signed_first
+{
+    "stage": "ssl_self_signed_first",
+    "stage_raw": "ssl_self_signed_first",
+    "level": "info",
+    "event_code": "",
+    "raw_message": "Переход на стадию: ssl_self_signed_first",
+    "technical_code": "ssl_self_signed"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--success); font-weight: bold; min-width: 20px;">✓</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:08:17">
+                    2026-08-16 19:08:17                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="aliases_added">
+                    Добавление доменных алиасов                </span>
+                <span style="flex:1;">
+                    Добавлено в FP: mellstroy80.casino. Всего алиасов теперь: 2                                                                            </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:07:43">
+                    2026-08-16 19:07:43                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="ssl_reconciler">
+                    Выпуск сертификата                </span>
+                <span style="flex:1;">
+                    На домене пока установлен временный сертификат; доверенный сертификат ещё не готов (выпуск через FastPanel / Let's Encrypt / DNS).                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">SSL issuance продолжается (pending), следующая проверка запланирована.
+{
+    "stage": "ssl_reconciler",
+    "stage_raw": "ssl_reconciler",
+    "level": "info",
+    "event_code": "",
+    "raw_message": "SSL issuance продолжается (pending), следующая проверка запланирована.",
+    "technical_code": "ssl_pending"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:07:42">
+                    2026-08-16 19:07:42                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="ssl_le_polling">
+                    Выпуск сертификата                </span>
+                <span style="flex:1;">
+                    Новый домен пока не определяется в DNS. Это нормально сразу после регистрации или изменения DNS.                                                                                <details class="technical-details" style="margin-top:4px;">
+                        <summary class="muted small">технические детали</summary>
+                        <pre style="white-space:pre-wrap; margin:4px 0 0; font-size:11px; color:var(--text-muted);">Live check: TLS connect failed (ssl connect failed: 0 php_network_getaddresses: getaddrinfo failed: Name or service not known). Продолжаю polling FP cert.
+{
+    "stage": "ssl_le_polling",
+    "stage_raw": "ssl_le_polling",
+    "level": "info",
+    "event_code": "",
+    "raw_message": "Live check: TLS connect failed (ssl connect failed: 0 php_network_getaddresses: getaddrinfo failed: Name or service not known). Продолжаю polling FP cert.",
+    "technical_code": "dns_not_resolving"
+}</pre>
+                    </details>
+                                    </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:07:41">
+                    2026-08-16 19:07:41                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="aliases_added">
+                    Добавление доменных алиасов                </span>
+                <span style="flex:1;">
+                    Переход на стадию: aliases_added                                                                            </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--success); font-weight: bold; min-width: 20px;">✓</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:07:40">
+                    2026-08-16 19:07:40                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="domain_purchasing">
+                    Покупка домена                </span>
+                <span style="flex:1;">
+                    ✓ mellstroy80.casino куплен! (order #211312006)                                                                            </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:07:16">
+                    2026-08-16 19:07:16                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="domain_purchasing">
+                    Покупка домена                </span>
+                <span style="flex:1;">
+                    Переход на стадию: domain_purchasing                                                                            </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--success); font-weight: bold; min-width: 20px;">✓</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:07:16">
+                    2026-08-16 19:07:16                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="queued">
+                    В очереди                </span>
+                <span style="flex:1;">
+                    Джоба в очереди, начинаем покупку домена                                                                            </span>
+            </div>
+                                <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; gap:12px;">
+                <span style="color: var(--text-muted); font-weight: bold; min-width: 20px;">·</span>
+                <span style="color: var(--text-muted); min-width: 140px; font-size: 0.85em;" title="UTC: 2026-08-16 16:07:16">
+                    2026-08-16 19:07:16                </span>
+                <span style="color: var(--text-muted); min-width: 150px; font-size: 0.85em;" title="queued">
+                    В очереди                </span>
+                <span style="flex:1;">
+                    Джоба создана. Режим: перевыставление. Старый домен: mellstroy77.casino                                                                            </span>
+            </div>
+                </div>
+    </div>
