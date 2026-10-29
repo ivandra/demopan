@@ -1,0 +1,101 @@
+try {
+    $manifest_file=$design.'/.install/manifest.json';
+    if (!is_file($manifest_file)) { li_fail('Не найдены файлы пакета v5.'); }
+    $manifest=json_decode(file_get_contents($manifest_file),true);
+    if (!$manifest || (int)$manifest['version']!==5) { li_fail('Нужен полный пакет v5.'); }
+    $site_id=1;
+    if ((int)$db->get_var('SELECT COUNT(*) FROM Catalogue')!==1) { li_fail('Этот чистый патч рассчитан на приложенную базу с одним сайтом.'); }
+    $catalogue=$db->get_row('SELECT * FROM Catalogue WHERE Catalogue_ID=1',ARRAY_A);
+    if (!$catalogue) { li_fail('Исходный сайт №1 не найден.'); }
+    if ((int)$db->get_var('SELECT Class_ID FROM Sub_Class WHERE Sub_Class_ID=57')!==223) { li_fail('Нет исходного компонента регионов №223 / инфоблока №57.'); }
+    if (!is_writable($nc_core->CLASS_TEMPLATE_FOLDER) || !is_writable($nc_core->TEMPLATE_FOLDER) || !is_writable($nc_core->FILES_FOLDER)) { li_fail('Папки шаблонов и файлов Netcat недоступны для записи.'); }
+    li_out('Netcat '.$nc_core->get_settings('VersionNumber').'; PHP '.PHP_VERSION.'; чистый патч v5');
+    if ($mode==='check') {
+        li_payload_check(false);
+        li_out('Проверены файлы. В пакете '.count($manifest['pages']).' разделов и '.(count($manifest['layouts'])+1).' макетов. Старые разделы, инфоблоки, макеты и компоненты переноса будут удалены после полной резервной копии.');
+        exit;
+    }
+    if ($mode==='status') { li_out(!empty($state['active'])?'Чистый сайт включён.':'Можно продолжить установку.');exit; }
+    if ($mode==='verify') { li_verify_clean();exit; }
+    if (!is_dir($state_dir) && !mkdir($state_dir,0700,true)) { li_fail('Не создана папка резервной копии.'); }
+    $lock=fopen($state_dir.'/install.lock','c');
+    if (!$lock || !flock($lock,LOCK_EX|LOCK_NB)) { li_fail('Другой запрос установщика ещё выполняется.'); }
+    if ($mode==='rollback' || $mode==='reset') { li_restore();li_out('Восстановлены исходная база и файлы из полной резервной копии.');exit; }
+    $state+=array('version'=>5,'site_id'=>1,'domain'=>$catalogue['Domain'],'active'=>false,'classes'=>array(),'pages'=>array(),'blocks'=>array(),'new_subdivisions'=>array(),'new_blocks'=>array(),'seeded'=>array(),'collections'=>array());
+    li_save();
+    if ($mode==='install') {
+        if (!empty($state['installed'])) { li_out('Патч уже установлен. Повторные записи не создавались.');exit; }
+        li_snapshot(1);
+        if (empty($state['payload_checked'])) { li_payload_check(true); }
+        foreach ($manifest['classes'] as $key=>$definition) { li_component($key,$definition); }
+        li_layouts();
+        $pages=$manifest['pages'];
+        usort($pages,function($a,$b){return substr_count($a['url'],'/')<=>substr_count($b['url'],'/');});
+        foreach ($pages as $page) {
+            $url=$page['url'];
+            if (isset($state['pages'][$url])) { continue; }
+            if ($url==='/regions/') { $state['pages'][$url]=8;li_save();continue; }
+            $parent_url=preg_replace('~[^/]+/$~','',$url);
+            $parent=$parent_url==='/'?0:(int)($state['pages'][$parent_url]??0);
+            $id=(int)$nc_core->subdivision->create(array('Catalogue_ID'=>1,'Parent_Sub_ID'=>$parent,'Subdivision_Name'=>$page['title'],'EnglishName'=>'life-draft-'.bin2hex(random_bytes(4)),'Checked'=>0,'Read_Access_ID'=>3,'Write_Access_ID'=>3,'Template_ID'=>$state['template_id']));
+            if (!$id) { li_fail('Не создан раздел '.$page['title']); }
+            $state['pages'][$url]=$id;$state['new_subdivisions'][]=$id;li_save();li_checkpoint('Подготовлен раздел: '.$page['title']);
+        }
+        $state['home_id']=(int)$state['pages']['/'];li_save();
+        foreach ($manifest['pages'] as $page) {
+            foreach ($page['blocks'] as $index=>$block) {
+                $id=li_infoblock($block['class'],$state['pages'][$page['url']],$block['name'],$index+1,$block['settings']);
+                li_seed($id,$block['class'],$block['records']);
+                foreach ($manifest['collections'] as $name=>$collection) {
+                    if ($collection['class']===$block['class'] && $collection['page']===$page['url']) {
+                        $state['collections'][$name]=array('class_id'=>$state['classes'][$collection['class']],'cc_id'=>$id,'sub_id'=>$state['pages'][$page['url']]);li_save();
+                    }
+                }
+            }
+        }
+        foreach (array('regions','leads') as $name) {
+            $collection=$manifest['collections'][$name];
+            $id=li_infoblock($collection['class'],$state['pages'][$collection['page']],$collection['name'],1);
+            $state['collections'][$name]=array('class_id'=>$state['classes'][$collection['class']],'cc_id'=>$id,'sub_id'=>$state['pages'][$collection['page']]);li_save();
+            li_seed($id,$collection['class'],$collection['records']);
+        }
+        $table='Message'.(int)$state['classes']['life_leads'];
+        if (!$db->get_var("SELECT INDEX_NAME FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='".$table."' AND INDEX_NAME='life_request_key'")) { li_query('ALTER TABLE `'.$table.'` ADD UNIQUE KEY life_request_key (request_key)'); }
+        $state['installed']=true;li_save();li_out('Полная резервная копия и заполненный сайт подготовлены. Следующий шаг — включить сайт и очистить прежние объекты CMS.');exit;
+    }
+    if ($mode==='activate') {
+        if (empty($state['installed'])) { li_fail('Сначала завершите установку.'); }
+        if (!empty($state['active']) && !empty($state['cleaned'])) { li_out('Чистый сайт уже включён.');exit; }
+        if (empty($state['switched'])) {
+            $keep=array_merge(array(8),array_map('intval',array_values($state['pages'])));
+            $old_sections=(array)$db->get_col('SELECT Subdivision_ID FROM Subdivision WHERE Catalogue_ID=1 AND Subdivision_ID NOT IN ('.implode(',',$keep).')');
+            foreach ($old_sections as $old_id) {
+                li_update('Subdivision','Subdivision_ID',$old_id,array('EnglishName'=>'life-old-'.(int)$old_id,'Hidden_URL'=>'/life-old-'.(int)$old_id.'/','Parent_Sub_ID'=>0));
+            }
+            $nav=array('/o-nas/'=>1,'/podrostkam/'=>2,'/roditelyam/'=>3,'/spetsialistam/'=>4,'/blog/'=>5,'/kontakty/'=>6);
+            foreach ($manifest['pages'] as $index=>$page) {
+                $url=$page['url'];$id=(int)$state['pages'][$url];$private=in_array($url,array('/regions/','/zayavki/'),true)||!empty($page['draft']);
+                $template=$page['layout']==='root'?$state['template_id']:$state['templates'][$page['layout']];
+                $props=array('Subdivision_Name'=>$page['title'],'Template_ID'=>$template,'Checked'=>$page['nav']?1:0,'Read_Access_ID'=>$private?3:1,'Write_Access_ID'=>$url==='/zayavki/'?1:3,'Title'=>$page['title'].' — Жизнь подростка','Keywords'=>'','ncH1'=>$page['title'],'ExternalURL'=>'','Priority'=>$nav[$url]??($index+10));
+                if ($url==='/') { $props['Hidden_URL']='/';$props['EnglishName']='home'; }
+                if ($url!=='/') {
+                    $props['Hidden_URL']=$url;$props['EnglishName']=basename(trim($url,'/'));
+                    $parent=preg_replace('~[^/]+/$~','',$url);$props['Parent_Sub_ID']=$parent==='/'?0:(int)($state['pages'][$parent]??0);
+                }
+                li_update('Subdivision','Subdivision_ID',$id,$props);
+            }
+            foreach ($state['new_blocks'] as $id) { li_update('Sub_Class','Sub_Class_ID',$id,array('Checked'=>1,'Read_Access_ID'=>$state['block_classes'][$id]==='life_leads'?3:1)); }
+            file_put_contents(__DIR__.'/netcat/modules/default/function.inc.php',file_get_contents($design.'/function.inc.php.txt'),LOCK_EX);
+            file_put_contents(__DIR__.'/netcat_template/widget/regions/Template.html',file_get_contents($design.'/regions-widget.html'),LOCK_EX);
+            if (function_exists('opcache_invalidate')) { opcache_invalidate(__DIR__.'/netcat/modules/default/function.inc.php',true);opcache_invalidate(__DIR__.'/netcat_template/widget/regions/Template.html',true); }
+            $lead=$state['collections']['leads'];
+            li_update('Catalogue','Catalogue_ID',1,array('Catalogue_Name'=>'Жизнь подростка','Template_ID'=>$state['template_id'],'Title_Sub_ID'=>$state['home_id'],'E404_Sub_ID'=>$state['pages']['/404/'],'PrivacyPolicy_Sub_ID'=>$state['pages']['/politika-konfidentsialnosti/'],'Consent_Sub_ID'=>$state['pages']['/policy/'],'zakaz_sub'=>$lead['sub_id'],'zakaz_cc'=>$lead['cc_id'],'mail_admin'=>'','Checked'=>1));
+            $state['switched']=true;li_save();
+        }
+        li_cleanup();
+        $state['active']=true;li_save();li_clear_cache();li_verify_clean();
+        li_out('Чистый сайт включён. Заявки сохраняются в Netcat.');
+    }
+} catch (Throwable $error) {
+    $li_ajax_ok=false;nc_set_http_response_code(500);li_out('ОШИБКА: '.$error->getMessage());exit(1);
+}

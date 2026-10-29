@@ -1,0 +1,1801 @@
+{
+  "passed": true,
+  "fields": 74,
+  "checks": [
+    {
+      "name": "no formatter tokens components/life_specialists/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists/EditCond.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists/EditCond.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_subscription/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_subscription/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_subscription/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_subscription/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_subscription/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_subscription/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles/EditCond.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles/EditCond.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_program_service/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_program_service/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_program_service/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_program_service/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_program_service/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_program_service/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_featured/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_featured/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_featured/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_featured/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_featured/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_featured/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_featured/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_featured/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_featured/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_featured/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_founder/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_founder/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_founder/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_founder/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_founder/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_founder/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_gallery/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_gallery/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_gallery/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_gallery/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_gallery/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_gallery/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_related/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_related/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_related/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_related/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_related/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_related/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_related/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_related/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_related/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_related/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_faq/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_faq/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_faq/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_faq/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_faq/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_faq/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_specialists/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_specialists/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_specialists/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_specialists/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_specialists/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_specialists/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_values/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_values/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_values/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_values/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_values/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_values/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_reviews_home/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_reviews_home/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_reviews_home/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_reviews_home/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_reviews_home/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_reviews_home/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_reviews_home/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_reviews_home/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_faq_contacts/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_faq_contacts/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_faq_contacts/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_faq_contacts/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_faq_contacts/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_faq_contacts/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_faq_contacts/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_faq_contacts/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_steps/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_steps/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_steps/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_steps/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_steps/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_steps/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_socials/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_socials/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_socials/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_socials/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_socials/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_socials/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_certificates_home/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_certificates_home/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_certificates_home/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_certificates_home/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_certificates_home/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_certificates_home/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_certificates_home/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_certificates_home/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_first_step/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_first_step/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_first_step/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_first_step/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_first_step/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_first_step/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_about/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_about/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_about/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_about/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_about/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_about/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_text/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_text/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_text/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_text/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_text/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_text/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_way/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_way/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_way/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_way/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_way/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_way/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_home/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_home/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_home/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_home/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_home/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_home/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_home/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_home/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_articles_home/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_articles_home/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_peoples/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_peoples/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_peoples/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_peoples/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_peoples/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_peoples/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_subscription_shared/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_subscription_shared/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_subscription_shared/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_subscription_shared/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_subscription_shared/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_subscription_shared/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_subscription_shared/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_subscription_shared/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_popup/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_popup/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_popup/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_popup/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_popup/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_popup/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_home/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_home/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_home/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_home/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_home/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_home/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_home/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_home/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_home/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_home/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_quiz/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_quiz/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_quiz/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_quiz/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_quiz/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_quiz/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_program/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_program/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_program/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_program/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_program/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_program/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_contacts/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_contacts/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_contacts/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_contacts/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_contacts/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_contacts/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_video/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_video/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_video/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_video/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_video/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_video/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_location/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_location/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_location/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_location/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_location/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_location/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_team/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_team/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_team/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_team/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_team/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_team/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_team/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_team/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_team/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_team/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_about_text/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_about_text/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_about_text/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_about_text/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_about_text/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_about_text/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_help/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_help/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_help/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_help/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_help/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_help/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_whom/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_whom/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_whom/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_whom/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_whom/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_whom/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_gallery/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_gallery/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_gallery/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_gallery/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_gallery/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_gallery/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_parent_group/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_parent_group/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_parent_group/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_parent_group/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_parent_group/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_parent_group/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_home/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_home/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_home/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_home/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_home/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_home/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_certificates/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_certificates/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_certificates/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_certificates/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_certificates/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_certificates/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_reviews/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_reviews/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_reviews/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_reviews/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_reviews/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_reviews/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_calculator/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_calculator/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_calculator/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_calculator/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_calculator/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_calculator/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_other/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_other/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_other/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_other/RecordTemplateFull.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_other/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_other/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_other/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_other/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_specialists_other/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_specialists_other/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_offer/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_offer/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_offer/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_offer/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_offer/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_offer/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_reasons/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_reasons/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_reasons/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_reasons/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_cards_reasons/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_cards_reasons/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_leads/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_leads/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_leads/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_leads/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_leads/AddTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_leads/AddTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_leads/AddCond.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_leads/AddCond.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_leads/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_leads/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_leads/AddActionTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_leads/AddActionTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_service/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_service/FormPrefix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_service/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_service/FormSuffix.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens components/life_banner_service/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments components/life_banner_service/RecordTemplate.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens files/netcat_template/template/life_teen/Footer.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments files/netcat_template/template/life_teen/Footer.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens files/netcat_template/template/life_teen/Header.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments files/netcat_template/template/life_teen/Header.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens files/netcat_template/template/life_teen/regions-widget.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments files/netcat_template/template/life_teen/regions-widget.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no formatter tokens files/netcat_template/template/life_teen/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no HTML comments files/netcat_template/template/life_teen/Settings.html",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "all markup classes exist in supplied HTML",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "all default record classes exist in supplied HTML",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "source CSS rules unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "source common.js unchanged",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "no added stylesheet",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "only source layout markup",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "reduced fields",
+      "passed": true,
+      "detail": 74
+    },
+    {
+      "name": "static block in prefix life_parent_group",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static block in prefix life_first_step",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static block in prefix life_socials",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static block in prefix life_subscription",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static block in prefix life_calculator",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "static block in prefix life_popup",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "video has four fields",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "inherited layout home",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "inherited layout about",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "inherited layout service",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "inherited layout blog",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "inherited layout specialists",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "inherited layout gallery",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "inherited layout contacts",
+      "passed": true,
+      "detail": null
+    }
+  ]
+}

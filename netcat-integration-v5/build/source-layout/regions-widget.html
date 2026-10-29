@@ -1,0 +1,51 @@
+<?php
+
+$region_fields = [
+    "main_domain",
+    "codename",
+    "city",
+    "inCity",
+    "cityregion",
+    "cityregionRP",
+    "cityRP",
+    "cityDP",
+    "address",
+    "phone",
+    "phone2",
+    "email",
+    "regim",
+    "licinfo",
+    "max",
+    "telegram",
+    "whatsapp",
+    "vk",
+    "youtube",
+    "instagram",
+    "inst",
+    "mapcode",
+    "email_to",
+    "email_from",
+    "email_enabled",
+];
+$region_field = $fields[0] ?? "";
+if (in_array($region_field, $region_fields, true)) {
+    static $region_rows = [];
+    $region_host = strtolower(preg_replace('/:\d+$/', "", $_SERVER["HTTP_HOST"] ?? ""));
+    if (!array_key_exists($region_host, $region_rows)) {
+        $region_class = (int) $nc_core->db->get_var(
+            "SELECT Class_ID FROM Sub_Class WHERE Sub_Class_ID=57",
+        );
+        $region_rows[$region_host] = $region_class
+            ? $nc_core->db->get_row(
+                "SELECT * FROM Message" .
+                    $region_class .
+                    " WHERE Sub_Class_ID=57 AND Checked=1 AND main_domain='" .
+                    $nc_core->db->escape($region_host) .
+                    "' ORDER BY Priority, Message_ID LIMIT 1",
+                ARRAY_A,
+            )
+            : [];
+    }
+    echo (string) ($region_rows[$region_host][$region_field] ?? "");
+}
+?>

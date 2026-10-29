@@ -1,0 +1,9 @@
+__pycache__/
+/components/
+/installer/
+/internal-qa/
+tests/*.html
+tests/*.log
+files/netcat_template/template/life_teen/img/
+files/netcat_template/template/life_teen/fonts/
+files/netcat_template/template/life_teen/video.mp4

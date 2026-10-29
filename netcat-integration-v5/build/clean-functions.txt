@@ -1,0 +1,178 @@
+function li_snapshot($site_id) {
+    global $state,$state_dir,$db,$nc_core;
+    if (!empty($state['snapshot_complete'])) { return; }
+    $folder=$state_dir.'/snapshot';
+    if (!is_dir($folder.'/db')) { mkdir($folder.'/db',0700,true); }
+    file_put_contents($state_dir.'/.htaccess',"Require all denied\nDeny from all\n");
+    if (empty($state['snapshot_tables'])) {
+        $state['snapshot_tables']=(array)$db->get_col('SHOW TABLES');
+        $state['snapshot_table_index']=0;
+        $state['snapshot_row_offset']=0;
+        $paths=array();
+        foreach (array($nc_core->CLASS_TEMPLATE_FOLDER,$nc_core->TEMPLATE_FOLDER,$nc_core->FILES_FOLDER,__DIR__.'/netcat_template/widget/regions') as $base) {
+            if (!is_dir($base)) { continue; }
+            $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($base,FilesystemIterator::SKIP_DOTS));
+            foreach ($it as $file) {
+                $path=$file->getPathname();
+                if (!$file->isFile() || strpos($path,$state_dir.'/')===0 || strpos($path,__DIR__.'/netcat_template/template/life_teen/')===0) { continue; }
+                $paths[substr($path,strlen(__DIR__)+1)]=true;
+            }
+        }
+        $paths['netcat/modules/default/function.inc.php']=true;
+        foreach (array('lp-install.php','lp-request.php') as $name) {
+            if (is_file(__DIR__.'/'.$name)) { $paths[$name]=true; }
+        }
+        $state['snapshot_files']=array_keys($paths);
+        $state['snapshot_file_index']=0;
+        li_save();
+    }
+    while ($state['snapshot_table_index']<count($state['snapshot_tables'])) {
+        $table=$state['snapshot_tables'][$state['snapshot_table_index']];
+        $safe=str_replace('`','``',$table);
+        $offset=(int)$state['snapshot_row_offset'];
+        $rows=(array)$db->get_results('SELECT * FROM `'.$safe.'` LIMIT '.$offset.',250',ARRAY_A);
+        if (!$offset) {
+            $create=$db->get_row('SHOW CREATE TABLE `'.$safe.'`',ARRAY_N);
+            li_write_php($folder.'/db/'.rawurlencode($table).'-schema.php',array('sql'=>$create[1]));
+        }
+        if ($rows) {
+            li_write_php($folder.'/db/'.rawurlencode($table).'-'.$offset.'.php',$rows);
+            $state['snapshot_row_offset']+=count($rows);
+        } else {
+            $state['snapshot_table_index']++;
+            $state['snapshot_row_offset']=0;
+        }
+        li_save();li_checkpoint('Сохранена база: '.$table);
+    }
+    while ($state['snapshot_file_index']<count($state['snapshot_files'])) {
+        $relative=$state['snapshot_files'][$state['snapshot_file_index']];
+        $target=$folder.'/files/'.$relative;
+        if (!is_dir(dirname($target))) { mkdir(dirname($target),0700,true); }
+        if (!copy(__DIR__.'/'.$relative,$target) || !hash_equals(hash_file('sha256',__DIR__.'/'.$relative),hash_file('sha256',$target))) {
+            li_fail('Не удалось проверить резервную копию файла '.$relative);
+        }
+        @chmod($target,0600);
+        $state['snapshot_file_index']++;
+        li_save();li_checkpoint('Сохранены файлы: '.$state['snapshot_file_index']);
+    }
+    li_write_php($folder.'/manifest.php',array('tables'=>$state['snapshot_tables'],'files'=>$state['snapshot_files'],'created'=>date('c')));
+    $state['snapshot_complete']=true;li_save();
+}
+function li_restore() {
+    global $state,$state_dir,$db;
+    $folder=$state_dir.'/snapshot';
+    if (empty($state['snapshot_complete']) || !is_file($folder.'/manifest.php')) { li_fail('Полная резервная копия ещё не завершена.'); }
+    $backup=include $folder.'/manifest.php';
+    if (!isset($state['restore_table_index'])) {
+        $state['restore_table_index']=0;$state['restore_row_offset']=0;$state['restore_file_index']=0;$state['restore_admin_id']=(int)($GLOBALS['AUTH_USER_ID']??0);
+        $state['restore_class_dirs']=array();
+        foreach (($state['classes']??array()) as $id) {
+            if ((int)$id===223) { continue; }
+            $path=$db->get_var('SELECT File_Path FROM Class WHERE Class_ID='.(int)$id);
+            if ($path) { $state['restore_class_dirs'][]=nc_core()->CLASS_TEMPLATE_FOLDER.trim($path,'/'); }
+        }
+        $extra=array_diff((array)$db->get_col('SHOW TABLES'),$backup['tables']);
+        foreach ($extra as $table) {
+            if (preg_match('/^Message[0-9]+$/',$table)) { li_query('DROP TABLE `'.$table.'`'); }
+        }
+        li_save();
+    }
+    li_query('SET FOREIGN_KEY_CHECKS=0');
+    while ($state['restore_table_index']<count($backup['tables'])) {
+        $table=$backup['tables'][$state['restore_table_index']];
+        $safe=str_replace('`','``',$table);$offset=(int)$state['restore_row_offset'];
+        if (!$offset) {
+            $schema=include $folder.'/db/'.rawurlencode($table).'-schema.php';
+            li_query('DROP TABLE IF EXISTS `'.$safe.'`');li_query($schema['sql']);
+        }
+        $file=$folder.'/db/'.rawurlencode($table).'-'.$offset.'.php';
+        if (is_file($file)) {
+            $rows=include $file;
+            foreach ($rows as $row) {
+                $columns=array();$values=array();
+                foreach ($row as $name=>$value) {
+                    $columns[]='`'.str_replace('`','``',$name).'`';
+                    $values[]=$value===null?'NULL':"X'".bin2hex((string)$value)."'";
+                }
+                li_query('INSERT INTO `'.$safe.'` ('.implode(',',$columns).') VALUES ('.implode(',',$values).')');
+            }
+            $state['restore_row_offset']+=count($rows);
+        } else {
+            $state['restore_table_index']++;$state['restore_row_offset']=0;
+        }
+        if (in_array($table,array('Session','User'),true) && !empty($state['restore_admin_id'])) {
+            nc_core()->user->authorize_by_id((int)$state['restore_admin_id']);
+        }
+        li_save();li_checkpoint('Восстановлена база: '.$table);
+    }
+    li_query('SET FOREIGN_KEY_CHECKS=1');
+    foreach (($state['restore_class_dirs']??array()) as $directory) {
+        if (!is_dir($directory)) { continue; }
+        $iterator=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory,FilesystemIterator::SKIP_DOTS),RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($iterator as $file) { $file->isDir()?rmdir($file->getPathname()):unlink($file->getPathname()); }
+        rmdir($directory);
+    }
+    $state['restore_class_dirs']=array();li_save();
+    while ($state['restore_file_index']<count($backup['files'])) {
+        $relative=$backup['files'][$state['restore_file_index']];$target=__DIR__.'/'.$relative;
+        if (!is_dir(dirname($target))) { mkdir(dirname($target),0755,true); }
+        if (!copy($folder.'/files/'.$relative,$target)) { li_fail('Не восстановлен файл '.$relative); }
+        @chmod($target,0644);
+        if (function_exists('opcache_invalidate')) { opcache_invalidate($target,true); }
+        $state['restore_file_index']++;li_save();li_checkpoint('Восстановлены файлы: '.$state['restore_file_index']);
+    }
+    $state=array('version'=>5,'site_id'=>1,'snapshot_complete'=>true,'snapshot_tables'=>$backup['tables'],'snapshot_files'=>$backup['files'],'active'=>false,'restored'=>true);
+    li_save();
+}
+function li_cleanup() {
+    global $state,$db,$nc_core;
+    if (empty($state['snapshot_complete'])) { li_fail('Очистка без полной резервной копии запрещена.'); }
+    if (!empty($state['cleaned'])) { return; }
+    require_once $nc_core->ADMIN_FOLDER.'subdivision.inc.php';
+    require_once $nc_core->ADMIN_FOLDER.'class/function.inc.php';
+    $keep=array_merge(array(57),array_map('intval',$state['new_blocks']));
+    $blocks=(array)$db->get_col('SELECT Sub_Class_ID FROM Sub_Class WHERE Catalogue_ID='.(int)$state['site_id'].' AND Sub_Class_ID NOT IN ('.implode(',',$keep).') ORDER BY Parent_Sub_Class_ID DESC,Sub_Class_ID DESC');
+    foreach ($blocks as $id) {
+        if ($db->get_var('SELECT Sub_Class_ID FROM Sub_Class WHERE Sub_Class_ID='.(int)$id)) { $nc_core->sub_class->delete((int)$id); }
+        li_checkpoint('Удалён прежний инфоблок #'.$id);
+    }
+    $keep=array_merge(array(8),array_map('intval',array_values($state['pages'])));
+    li_update('Subdivision','Subdivision_ID',8,array('Parent_Sub_ID'=>0));
+    $sections=(array)$db->get_col('SELECT Subdivision_ID FROM Subdivision WHERE Catalogue_ID='.(int)$state['site_id'].' AND Subdivision_ID NOT IN ('.implode(',',$keep).') ORDER BY Subdivision_ID DESC');
+    foreach ($sections as $id) { CascadeDeleteSubdivision((int)$id);li_checkpoint('Удалён прежний раздел #'.$id); }
+    $classes=(array)$db->get_col("SELECT Class_ID FROM Class WHERE Class_ID<>223 AND ClassTemplate=0 AND (Class_Group IN ('medelta','medelta о нас','Архив неудачного переноса','Архив нового переноса') OR Keyword LIKE 'zhp\\_%' OR Keyword LIKE 'lp\\_%')");
+    foreach ($classes as $id) {
+        if ($db->get_var('SELECT Sub_Class_ID FROM Sub_Class WHERE Class_ID='.(int)$id)) { li_fail('Прежний компонент используется другим сайтом: #'.$id); }
+        CascadeDeleteClass((int)$id);li_checkpoint('Удалён прежний компонент #'.$id);
+    }
+    $templates=(array)$db->get_results("SELECT Template_ID,File_Path FROM Template WHERE File_Path LIKE '/medelta/%' OR File_Path LIKE '/lifepodrostka/%' OR File_Path LIKE '/zhizn_podrostka/%' ORDER BY LENGTH(File_Path) DESC",ARRAY_A);
+    foreach ($templates as $row) {
+        $id=(int)$row['Template_ID'];
+        if ($db->get_var('SELECT Catalogue_ID FROM Catalogue WHERE Template_ID='.$id) || $db->get_var('SELECT Subdivision_ID FROM Subdivision WHERE Template_ID='.$id)) { li_fail('Прежний макет ещё используется: #'.$id); }
+        $editor=new nc_tpl_template_editor($nc_core->TEMPLATE_FOLDER,$db);$editor->load_template($id);$editor->delete_template();
+        li_query('DELETE FROM Template WHERE Template_ID='.$id);
+        $nc_core->event->execute(nc_Event::AFTER_TEMPLATE_DELETED,$id);
+        li_checkpoint('Удалён прежний макет #'.$id);
+    }
+    foreach (array('zhizn_podrostka','lifepodrostka') as $name) {
+        $directory=rtrim($nc_core->FILES_FOLDER,'/').'/'.$name;
+        if (!is_dir($directory)) { continue; }
+        $iterator=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory,FilesystemIterator::SKIP_DOTS),RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($iterator as $file) { $file->isDir()?rmdir($file->getPathname()):unlink($file->getPathname()); }
+        rmdir($directory);
+    }
+    foreach (array('lp-install.php','lp-request.php') as $name) {
+        if (is_file(__DIR__.'/'.$name)) { unlink(__DIR__.'/'.$name); }
+    }
+    li_update('Class','Class_ID',223,array('Class_Group'=>'Регионы'));
+    $state['cleaned']=true;li_save();
+}
+function li_verify_clean() {
+    global $state,$db,$nc_core;
+    if (empty($state['active']) || empty($state['cleaned'])) { li_fail('Чистая установка ещё не завершена.'); }
+    $keep=array_merge(array(8),array_map('intval',array_values($state['pages'])));
+    if ($db->get_var('SELECT COUNT(*) FROM Subdivision WHERE Catalogue_ID='.(int)$state['site_id'].' AND Subdivision_ID NOT IN ('.implode(',',$keep).')')) { li_fail('Остались прежние разделы.'); }
+    if ($db->get_var("SELECT COUNT(*) FROM Template WHERE File_Path LIKE '/medelta/%' OR File_Path LIKE '/lifepodrostka/%' OR File_Path LIKE '/zhizn_podrostka/%'")) { li_fail('Остались прежние макеты.'); }
+    if ($db->get_var("SELECT COUNT(*) FROM Class WHERE Keyword LIKE 'zhp\\_%' OR Keyword LIKE 'lp\\_%'")) { li_fail('Остались компоненты прежнего переноса.'); }
+    li_out('В дереве сайта готовые страницы, запрошенные пустые черновики и существующий справочник регионов. Прежние макеты и компоненты удалены.');
+}

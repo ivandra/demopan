@@ -1,0 +1,44 @@
+function li_clear_cache(){global $nc_core,$state;$nc_core->event->execute(nc_event::AFTER_SITE_UPDATED,(int)$state['site_id']);foreach($state['pages']??array() as $id){$nc_core->event->execute(nc_event::AFTER_SUBDIVISION_UPDATED,(int)$state['site_id'],(int)$id);}}
+function li_component($key,$def){
+ global $db,$nc_core,$state,$manifest,$design;
+ if(!empty($def['existing'])){return li_existing_regions($key,$def);}
+ $id=(int)($state['classes'][$key]??0);if($id&&!empty($state['component_ready'][$key])){return $id;}$parent=$def['parent']?(int)$state['classes'][$def['parent']]:null;
+ if(!$id){
+  if($db->get_var("SELECT Class_ID FROM Class WHERE Keyword='".$db->escape($key)."' AND ClassTemplate=".(int)$parent)){li_fail('Ключ компонента уже занят: '.$key);}
+  $custom=$def['settings']?'$settings_array='.var_export($def['settings'],true).';':'';
+  $id=(int)$nc_core->component->create(array('Class_Name'=>$def['name'],'Keyword'=>$key,'Class_Group'=>'Жизнь подростка','DisableBlockMarkup'=>1,'TitleTemplate'=>$def['title_template']??('$f_'.$def['title_field']),'FullPageMode'=>in_array($key,array('life_specialists','life_articles'),true)?'template':'none','RecordsPerPage'=>100,'CustomSettingsTemplate'=>$custom),null,$parent);
+  if(!$id){li_fail('Не создан компонент '.$key);}$state['classes'][$key]=$id;li_save();li_checkpoint('Создан компонент: '.$def['name']);
+ }
+ // Refresh the settings schema on upgrade as well as on first creation.
+ li_update('Class','Class_ID',$id,array('CustomSettingsTemplate'=>$def['settings']?'$settings_array='.var_export($def['settings'],true).';':''));
+ $existing=(array)$db->get_col('SELECT Field_Name FROM Field WHERE Class_ID='.$id);
+ foreach($def['fields'] as $f){
+  if(in_array($f['name'],$existing,true)){continue;}$types=array('string'=>NC_FIELDTYPE_STRING,'text'=>NC_FIELDTYPE_TEXT,'html'=>NC_FIELDTYPE_TEXT,'file'=>NC_FIELDTYPE_FILE,'datetime'=>NC_FIELDTYPE_DATETIME,'bool'=>NC_FIELDTYPE_BOOLEAN,'int'=>NC_FIELDTYPE_INT,'multifile'=>NC_FIELDTYPE_MULTIFILE);
+  $format=$f['type']==='html'?'12:70;html:1;br:2;fck:1;panel:0;typo:0;bbcode:0;':($f['type']==='text'?'4:70;html:2;br:2;fck:2;panel:0;typo:0;bbcode:0;':($f['type']==='file'?'fs1:inline;use_resize:0;use_preview:0;':''));
+  $nc_core->component->add_field($id,array('Field_Name'=>$f['name'],'Description'=>$f['label'],'TypeOfData_ID'=>$types[$f['type']],'Format'=>$format,'NotNull'=>$f['required']?1:0,'DefaultState'=>'','DoSearch'=>0));$state['added_fields'][$key][]=$f['name'];li_save();li_checkpoint('Добавлено поле: '.$f['label']);
+ }
+ $desired=array_column($def['fields'],'name');
+ if(!$parent){
+  $names=$desired?implode(',',array_map(function($name)use($db){return "'".$db->escape($name)."'";},$desired)):"''";
+  li_query('UPDATE Field SET Checked=IF(Field_Name IN ('.$names.'),1,0) WHERE Class_ID='.$id);
+ }
+ li_update('Class','Class_ID',$id,array('Class_Name'=>$def['name'],'CustomSettingsTemplate'=>$def['settings']?'$settings_array='.var_export($def['settings'],true).';':''));
+ $path=(string)$db->get_var('SELECT File_Path FROM Class WHERE Class_ID='.$id);$dir=rtrim($nc_core->CLASS_TEMPLATE_FOLDER,'/').'/'.trim($path,'/');$src=$design.'/.install/components/'.$key;$master='';
+ foreach(array('FormPrefix','RecordTemplate','FormSuffix') as $part){$master.='<!-- '.$part.' -->'.(is_file($src.'/'.$part.'.html')?file_get_contents($src.'/'.$part.'.html'):'').'<!-- /'.$part.' -->'."\n";}
+ file_put_contents($dir.'/Class.html',$master,LOCK_EX);$tpl=new nc_tpl($nc_core->CLASS_TEMPLATE_FOLDER,$db);$tpl->load($id,'Class');nc_tpl_parser::main2parts($tpl,(string)$db->get_var('SELECT File_Hash FROM Class WHERE Class_ID='.$id));
+ foreach(glob($src.'/*.html') as $file){if(!in_array(basename($file),array('FormPrefix.html','RecordTemplate.html','FormSuffix.html'),true)){file_put_contents($dir.'/'.basename($file),file_get_contents($file),LOCK_EX);}}
+ $state['component_ready'][$key]=true;li_save();li_checkpoint('Готов компонент: '.$def['name']);return $id;
+}
+function li_infoblock($key,$sub_id,$title,$priority,$settings=array()){
+ global $db,$nc_core,$state,$manifest;$state_key=$sub_id.':'.$key;if(isset($state['blocks'][$state_key])){$id=(int)$state['blocks'][$state_key];li_update('Sub_Class','Sub_Class_ID',$id,array('Priority'=>$priority));return $id;}
+ if($key==='life_regions'){return 57;}
+ $parent=$manifest['classes'][$key]['parent'];$base=$parent?:$key;$private=in_array($key,array('life_regions','life_leads'),true);
+ $id=(int)$nc_core->sub_class->create($state['classes'][$base],array('Subdivision_ID'=>$sub_id,'Class_Template_ID'=>$parent?$state['classes'][$key]:0,'Sub_Class_Name'=>$title,'EnglishName'=>$key,'Checked'=>0,'Priority'=>$priority,'DefaultAction'=>'index','RecordsPerPage'=>$key==='life_articles'?6:100,'Read_Access_ID'=>$private?3:1,'Write_Access_ID'=>$key==='life_leads'?1:3,'Edit_Access_ID'=>3,'Delete_Access_ID'=>3,'Checked_Access_ID'=>3),$settings);
+ if(!$id){li_fail('Не создан инфоблок '.$title);}$state['blocks'][$state_key]=$id;$state['new_blocks'][]=$id;$state['block_locations'][$id]=$sub_id;$state['block_classes'][$id]=$base;li_save();li_checkpoint('Создан инфоблок: '.$title);return $id;
+}
+function li_seed($id,$key,$records){global $nc_core,$db,$state,$manifest;li_new_field_values($id,$key,$records);$base=$manifest['classes'][$key]['parent']?:$key;$class=(int)$state['classes'][$base];foreach($records as $i=>$r){$sk=$id.':'.$i;if(!empty($state['seeded'][$sk])){continue;}if($key==='life_regions'&&$i===0){$r['main_domain']=$state['domain'];}$r['Priority']=$i+1;$r['Checked']=1;$r['Keyword']=$r['Keyword']??('zhp-item-'.($i+1));$existing=(int)$db->get_var("SELECT Message_ID FROM Message".$class." WHERE Sub_Class_ID=".(int)$id." AND Keyword='".$db->escape($r['Keyword'])."'");if($existing){$state['seeded'][$sk]=$existing;li_save();continue;}if(in_array($key,array('life_specialists','life_articles'),true)){$r['ncTitle']=($r['fio']??$r['name']).' — Жизнь подростка';$r['ncDescription']=$r['intro']??'';}$msg=(int)$nc_core->message->create($id,$r);if(!$msg){li_fail('Не создана запись '.$key);}$state['seeded'][$sk]=$msg;li_save();li_checkpoint('Импортирована запись: '.$key);}}
+function li_payload_check($persistent=false){
+ global $design,$state;$hash_file=$design.'/.install/hashes.json';if(!is_file($hash_file)){li_fail('Не найден список файлов пакета.');}$hashes=json_decode(file_get_contents($hash_file),true);if(!$hashes){li_fail('Повреждён список файлов пакета.');}
+ foreach($hashes as $file=>$hash){if($persistent&&!empty($state['checked_files'][$file])){continue;}if(!is_file($design.'/'.$file)||!hash_equals($hash,hash_file('sha256',$design.'/'.$file))){li_fail('Файл отсутствует или изменён при загрузке: '.$file.'. Загрузите его повторно из этого архива.');}if($persistent){$state['checked_files'][$file]=true;li_save();li_checkpoint('Проверен файл '.$file);}}
+ if($persistent){$state['payload_checked']=true;li_save();}
+}

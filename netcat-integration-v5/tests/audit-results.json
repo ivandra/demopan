@@ -1,0 +1,502 @@
+[
+  {
+    "name": "installed and physically cleaned",
+    "passed": true
+  },
+  {
+    "name": "every project template inspected",
+    "passed": true
+  },
+  {
+    "name": "no comments or extra wrappers in template 23",
+    "passed": true
+  },
+  {
+    "name": "no comments or extra wrappers in template 24",
+    "passed": true
+  },
+  {
+    "name": "no comments or extra wrappers in template 25",
+    "passed": true
+  },
+  {
+    "name": "no comments or extra wrappers in template 26",
+    "passed": true
+  },
+  {
+    "name": "no comments or extra wrappers in template 27",
+    "passed": true
+  },
+  {
+    "name": "no comments or extra wrappers in template 28",
+    "passed": true
+  },
+  {
+    "name": "no comments or extra wrappers in template 29",
+    "passed": true
+  },
+  {
+    "name": "no comments or extra wrappers in template 30",
+    "passed": true
+  },
+  {
+    "name": "old project templates absent from CMS",
+    "passed": true
+  },
+  {
+    "name": "old project components absent from CMS",
+    "passed": true
+  },
+  {
+    "name": "section exists /",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /",
+    "passed": true
+  },
+  {
+    "name": "section exists /o-nas/",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /o-nas/",
+    "passed": true
+  },
+  {
+    "name": "section exists /blog/",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /blog/",
+    "passed": true
+  },
+  {
+    "name": "section exists /kontakty/",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /kontakty/",
+    "passed": true
+  },
+  {
+    "name": "section exists /o-nas/spetsialisty/",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /o-nas/spetsialisty/",
+    "passed": true
+  },
+  {
+    "name": "section exists /o-nas/foto/",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /o-nas/foto/",
+    "passed": true
+  },
+  {
+    "name": "section exists /o-nas/otzyvy/",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /o-nas/otzyvy/",
+    "passed": true
+  },
+  {
+    "name": "section exists /o-nas/voprosy-i-otvety/",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /o-nas/voprosy-i-otvety/",
+    "passed": true
+  },
+  {
+    "name": "section exists /o-nas/sertifikaty/",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /o-nas/sertifikaty/",
+    "passed": true
+  },
+  {
+    "name": "section exists /regions/",
+    "passed": true
+  },
+  {
+    "name": "section exists /zayavki/",
+    "passed": true
+  },
+  {
+    "name": "section exists /politika-konfidentsialnosti/",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /politika-konfidentsialnosti/",
+    "passed": true
+  },
+  {
+    "name": "section exists /policy/",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /policy/",
+    "passed": true
+  },
+  {
+    "name": "section exists /404/",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /404/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/trevoga-i-perezhivaniya/",
+    "passed": true
+  },
+  {
+    "name": "ready section has components /podrostkam/trevoga-i-perezhivaniya/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/trevoga-i-perezhivaniya/trevozhnye-mysli-i-strahi/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/trevoga-i-perezhivaniya/trevozhnye-mysli-i-strahi/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/trevoga-i-perezhivaniya/stress-i-silnye-perezhivaniya/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/trevoga-i-perezhivaniya/stress-i-silnye-perezhivaniya/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/neuverennost-v-sebe/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/neuverennost-v-sebe/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/neuverennost-v-sebe/sravnenie-sebya-s-drugimi/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/neuverennost-v-sebe/sravnenie-sebya-s-drugimi/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/neuverennost-v-sebe/strah-neudachi-i-oshibok/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/neuverennost-v-sebe/strah-neudachi-i-oshibok/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/neuverennost-v-sebe/rabota-nad-samootsenkoy/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/neuverennost-v-sebe/rabota-nad-samootsenkoy/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/otnosheniya-s-roditelyami/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/otnosheniya-s-roditelyami/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/otnosheniya-s-roditelyami/konflikty-i-sposoby-ih-resheniya/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/otnosheniya-s-roditelyami/konflikty-i-sposoby-ih-resheniya/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/otnosheniya-s-roditelyami/kak-govorit-o-slozhnom/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/otnosheniya-s-roditelyami/kak-govorit-o-slozhnom/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/raspoznavanie-svoih-emotsiy/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/raspoznavanie-svoih-emotsiy/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/tehniki-samoregulyatsii/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/tehniki-samoregulyatsii/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/kogda-stoit-obratitsya-za-podderzhkoy/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/kogda-stoit-obratitsya-za-podderzhkoy/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/ucheba-i-motivatsiya/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/ucheba-i-motivatsiya/",
+    "passed": true
+  },
+  {
+    "name": "section exists /podrostkam/poisk-sebya/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /podrostkam/poisk-sebya/",
+    "passed": true
+  },
+  {
+    "name": "section exists /roditelyam/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /roditelyam/",
+    "passed": true
+  },
+  {
+    "name": "section exists /spetsialistam/",
+    "passed": true
+  },
+  {
+    "name": "empty unpublished draft /spetsialistam/",
+    "passed": true
+  },
+  {
+    "name": "no extra sections in tree",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_cards",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_cards_whom",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_cards_steps",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_cards_offer",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_cards_values",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_cards_peoples",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_cards_way",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_cards_reasons",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_cards_help",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_banner",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_banner_home",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_banner_about",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_banner_about_text",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_banner_specialists",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_banner_gallery",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_banner_service",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_founder",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_video",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_program",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_program_service",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_parent_group",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_first_step",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_socials",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_specialists",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_specialists_home",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_specialists_team",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_articles",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_articles_home",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_articles_featured",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_reviews",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_reviews_home",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_faq",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_faq_contacts",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_certificates",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_certificates_home",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_gallery",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_text",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_contacts",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_calculator",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_quiz",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_subscription",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_regions",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_leads",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_location",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_subscription_shared",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_articles_related",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_specialists_other",
+    "passed": true
+  },
+  {
+    "name": "component parts have no added wrappers or HTML comments life_popup",
+    "passed": true
+  }
+]

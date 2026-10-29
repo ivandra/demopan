@@ -1,0 +1,131 @@
+<?php
+
+if ($posting && !defined("NETCAT_VERSION_OF_OBJECT")) {
+    require_once $nc_core->ADMIN_FOLDER . "lang/" . $nc_core->lang->detect_lang() . ".php";
+}
+
+if (!isset($parsed_url) || !is_array($parsed_url)) {
+    $parsed_url = ["query" => $_SERVER["QUERY_STRING"] ?? ""];
+}
+if (!($inside_admin && $nc_core->InsideAdminAccess()) && $posting) {
+    $life_fail = "";
+    if (
+        !is_string($_POST["life_nonce"] ?? null) ||
+        empty($_SESSION["life_form_nonce"]) ||
+        !hash_equals($_SESSION["life_form_nonce"], $_POST["life_nonce"])
+    ) {
+        $life_fail = "Обновите страницу и повторите отправку.";
+    }
+    if (
+        !is_string($_POST["nc_token"] ?? null) ||
+        !hash_equals($nc_core->token->get(), $_POST["nc_token"])
+    ) {
+        $life_fail = "Недействительный токен формы.";
+    }
+    $life_type = is_string($f_form_type ?? null) ? $f_form_type : "";
+    foreach (
+        ["name", "phone", "email", "contact", "message", "page_url", "answers", "request_key"]
+        as $life_key
+    ) {
+        $life_var = "f_" . $life_key;
+        $$life_var = is_string($$life_var ?? null) ? trim($$life_var) : "";
+    }
+    if (!empty($_POST["life_website"])) {
+        $life_fail = "Отправка отклонена.";
+    }
+    if (!in_array($life_type, ["contact", "consult", "subscribe", "quiz", "calc"], true)) {
+        $life_fail = "Неизвестная форма.";
+    }
+    if (in_array($life_type, ["contact", "subscribe"], true) && empty($f_consent)) {
+        $life_fail = "Необходимо согласие на обработку данных.";
+    }
+    if (
+        mb_strlen($f_message) > 5000 ||
+        mb_strlen($f_answers) > 6000 ||
+        mb_strlen($f_name) > 150 ||
+        mb_strlen($f_page_url) > 2000
+    ) {
+        $life_fail = "Слишком длинные данные.";
+    }
+    if (!preg_match('/^[a-f0-9]{32}$/', $f_request_key)) {
+        $life_fail = "Неверный ключ отправки.";
+    }
+    if ($life_type === "subscribe") {
+        if (!filter_var($f_email, FILTER_VALIDATE_EMAIL)) {
+            $life_fail = "Укажите корректный email.";
+        }
+    } else {
+        $life_contact = $f_contact ?: ($f_phone ?: $f_email);
+        if (
+            !filter_var($life_contact, FILTER_VALIDATE_EMAIL) &&
+            strlen(preg_replace("/\D/", "", $life_contact)) < 10
+        ) {
+            $life_fail = "Укажите email или телефон (не менее 10 цифр).";
+        }
+    }
+    if ($life_type === "quiz") {
+        $life_qclass = (int) $db->get_var(
+            "SELECT Class_ID FROM Class WHERE Keyword='life_quiz' AND ClassTemplate=0",
+        );
+        $life_answers = [];
+        $life_questions = $life_qclass
+            ? (array) $db->get_results(
+                "SELECT a.Message_ID,a.question,a.answers FROM Message" .
+                    $life_qclass .
+                    " a JOIN Sub_Class c ON c.Sub_Class_ID=a.Sub_Class_ID WHERE c.Catalogue_ID=" .
+                    (int) $catalogue .
+                    " AND c.Checked=1 AND a.Checked=1 ORDER BY a.Priority,a.Message_ID",
+                ARRAY_A,
+            )
+            : [];
+        if (!$life_questions) {
+            $life_fail = "Квиз временно недоступен.";
+        }
+        foreach ($life_questions as $life_q) {
+            $life_answer = $_POST["quiz_" . $life_q["Message_ID"]] ?? null;
+            $life_options = array_map("trim", preg_split("/\\R/u", trim($life_q["answers"])));
+            if (!is_string($life_answer) || !in_array($life_answer, $life_options, true)) {
+                $life_fail = "Ответьте на все вопросы квиза.";
+            } else {
+                $life_answers[] = $life_q["question"] . ": " . $life_answer;
+            }
+        }
+        $f_answers = implode("\n", $life_answers);
+    }
+    if ($f_email !== "" && !filter_var($f_email, FILTER_VALIDATE_EMAIL)) {
+        $life_fail = "Проверьте email.";
+    }
+    if (
+        !empty($_SESSION["life_sent"]) &&
+        count(
+            array_filter($_SESSION["life_sent"], function ($t) {
+                return $t > time() - 600;
+            }),
+        ) >= 10
+    ) {
+        $life_fail = "Слишком много отправок. Попробуйте позже.";
+    }
+    $life_duplicate = (int) $db->get_var(
+        "SELECT Message_ID FROM Message" .
+            (int) $classID .
+            " WHERE request_key='" .
+            $db->escape($f_request_key) .
+            "'",
+    );
+    if ($life_duplicate) {
+        $posting = 0;
+        $life_already_saved = true;
+    }
+    if ($life_fail) {
+        $posting = 0;
+        $warnText = $life_fail;
+        $life_already_saved = false;
+    }
+    $f_name = strip_tags($f_name);
+    $f_form_type = $life_type;
+    $f_domain = strtolower(preg_replace('/:\d+$/', "", $_SERVER["HTTP_HOST"]));
+    $f_utm = get_utm();
+    $f_delivery = "Сохранено в Netcat";
+    $f_consent = empty($f_consent) ? 0 : 1;
+}
+?>

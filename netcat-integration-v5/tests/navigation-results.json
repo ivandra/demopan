@@ -1,0 +1,22 @@
+[
+  {
+    "name": "level one source dropdown works",
+    "passed": true
+  },
+  {
+    "name": "level two source dropdown works",
+    "passed": true
+  },
+  {
+    "name": "third level is visible",
+    "passed": true
+  },
+  {
+    "name": "source popup is visible at mobile width",
+    "passed": true
+  },
+  {
+    "name": "source popup fits mobile window",
+    "passed": true
+  }
+]

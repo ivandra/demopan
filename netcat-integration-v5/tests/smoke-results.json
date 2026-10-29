@@ -1,0 +1,1671 @@
+{
+  "pages": [
+    {
+      "url": "/",
+      "status": 200,
+      "layout": "home",
+      "placeholder": false
+    },
+    {
+      "url": "/o-nas/",
+      "status": 200,
+      "layout": "about",
+      "placeholder": false
+    },
+    {
+      "url": "/blog/",
+      "status": 200,
+      "layout": "blog",
+      "placeholder": false
+    },
+    {
+      "url": "/kontakty/",
+      "status": 200,
+      "layout": "contacts",
+      "placeholder": false
+    },
+    {
+      "url": "/o-nas/spetsialisty/",
+      "status": 200,
+      "layout": "specialists",
+      "placeholder": false
+    },
+    {
+      "url": "/o-nas/foto/",
+      "status": 200,
+      "layout": "gallery",
+      "placeholder": false
+    },
+    {
+      "url": "/o-nas/otzyvy/",
+      "status": 200,
+      "layout": "root",
+      "placeholder": false
+    },
+    {
+      "url": "/o-nas/voprosy-i-otvety/",
+      "status": 200,
+      "layout": "root",
+      "placeholder": false
+    },
+    {
+      "url": "/o-nas/sertifikaty/",
+      "status": 200,
+      "layout": "root",
+      "placeholder": false
+    },
+    {
+      "url": "/politika-konfidentsialnosti/",
+      "status": 200,
+      "layout": "root",
+      "placeholder": false
+    },
+    {
+      "url": "/policy/",
+      "status": 200,
+      "layout": "root",
+      "placeholder": false
+    },
+    {
+      "url": "/404/",
+      "status": 404,
+      "layout": "root",
+      "placeholder": false
+    },
+    {
+      "url": "/podrostkam/trevoga-i-perezhivaniya/",
+      "status": 200,
+      "layout": "service",
+      "placeholder": false
+    }
+  ],
+  "assets": [
+    {
+      "path": "/netcat_template/template/life_teen/style.css",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/css/swiper-bundle.min.css",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/css/jquery.fancybox.min.css",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/css/jquery-ui.min.css",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/css/1/components.css?1793310938",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/logo.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/avatar1.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/avatar2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/avatar3.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/avatar4.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/453_1.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/455_1.jpg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/line.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/461_1.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/program-icon1.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/program-icon2.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/program-icon3.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/program.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/parents-group.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/calc.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/calc2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/first-step.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/first-step-icon1.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/first-step-icon2.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/first-step-icon3.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/before1.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_1.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/before2.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_3.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/steps.jpg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_4.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/steps-number1.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_5.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/steps-number2.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_6.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/steps-number3.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_7.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/steps-number4.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_8.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_9.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_10.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_11.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_12.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/specialists-icon.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/specialists-icon2.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/specialists-icon3.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/472_2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/472_3.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/472_4.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/472_5.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/472_1.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/review2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/491_2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/review3.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/491_3.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/review1.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/491_1.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/495_1.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/484_1.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/484_2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/484_3.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/social1.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/social-image1.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/social2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/social-image2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/social3.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/social-image3.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/social4.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/social-image4.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/popup.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/popup2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/logo2.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/js/jquery.min.js",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/js/swiper-bundle.min.js",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/js/jquery.fancybox.min.js",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/js/jquery-ui.min.js",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/js/jquery.ui.touch-punch.min.js",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/js/common.js",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/js/forms.js",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/css/1/components.css?1793310939",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/453_2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/453_3.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_13.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_14.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_15.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_16.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/before8.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_17.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/449_17.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/449_18.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_19.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/way-number1.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_20.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/way-number2.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_21.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/way-number3.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_22.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/way-number4.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/line3.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/contacts.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/contacts.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/contacts-icon1.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/contacts-icon2.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/contacts-icon3.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/contacts-icon4.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/social1.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/social2.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/social3.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/social4.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/map-icon1.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/map-icon2.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/453_4.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/line4.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/453_5.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/498_1.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/498_2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/498_3.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/498_4.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/498_5.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/498_6.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/498_7.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/498_8.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/498_9.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/498_10.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/498_11.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/498_12.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/css/1/components.css?1793310941",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/service.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/service-icon1.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/service-icon2.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/service-icon3.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/service-icon4.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/service2.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/before10.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_template/template/life_teen/img/steps2.jpg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_23.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_24.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_25.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_26.svg",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_27.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_28.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_29.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_30.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_31.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_32.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_33.png",
+      "status": 200
+    },
+    {
+      "path": "/netcat_files/448_34.png",
+      "status": 200
+    }
+  ],
+  "details": [
+    {
+      "type": "article",
+      "path": "/blog/kak-spravlyatsya-s-trevogoy-pered-ekzamenami.html"
+    },
+    {
+      "type": "specialist",
+      "path": "/o-nas/spetsialisty/golub-irina-aleksandrovna.html"
+    }
+  ],
+  "checks": [
+    {
+      "name": "HTTP /",
+      "passed": true
+    },
+    {
+      "name": "heading structure /",
+      "passed": true
+    },
+    {
+      "name": "section content /",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /",
+      "passed": true
+    },
+    {
+      "name": "HTTP /o-nas/",
+      "passed": true
+    },
+    {
+      "name": "heading structure /o-nas/",
+      "passed": true
+    },
+    {
+      "name": "section content /o-nas/",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /o-nas/",
+      "passed": true
+    },
+    {
+      "name": "HTTP /blog/",
+      "passed": true
+    },
+    {
+      "name": "heading structure /blog/",
+      "passed": true
+    },
+    {
+      "name": "section content /blog/",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /blog/",
+      "passed": true
+    },
+    {
+      "name": "HTTP /kontakty/",
+      "passed": true
+    },
+    {
+      "name": "heading structure /kontakty/",
+      "passed": true
+    },
+    {
+      "name": "section content /kontakty/",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /kontakty/",
+      "passed": true
+    },
+    {
+      "name": "HTTP /o-nas/spetsialisty/",
+      "passed": true
+    },
+    {
+      "name": "heading structure /o-nas/spetsialisty/",
+      "passed": true
+    },
+    {
+      "name": "section content /o-nas/spetsialisty/",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /o-nas/spetsialisty/",
+      "passed": true
+    },
+    {
+      "name": "HTTP /o-nas/foto/",
+      "passed": true
+    },
+    {
+      "name": "heading structure /o-nas/foto/",
+      "passed": true
+    },
+    {
+      "name": "section content /o-nas/foto/",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /o-nas/foto/",
+      "passed": true
+    },
+    {
+      "name": "HTTP /o-nas/otzyvy/",
+      "passed": true
+    },
+    {
+      "name": "heading structure /o-nas/otzyvy/",
+      "passed": true
+    },
+    {
+      "name": "section content /o-nas/otzyvy/",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /o-nas/otzyvy/",
+      "passed": true
+    },
+    {
+      "name": "HTTP /o-nas/voprosy-i-otvety/",
+      "passed": true
+    },
+    {
+      "name": "heading structure /o-nas/voprosy-i-otvety/",
+      "passed": true
+    },
+    {
+      "name": "section content /o-nas/voprosy-i-otvety/",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /o-nas/voprosy-i-otvety/",
+      "passed": true
+    },
+    {
+      "name": "HTTP /o-nas/sertifikaty/",
+      "passed": true
+    },
+    {
+      "name": "heading structure /o-nas/sertifikaty/",
+      "passed": true
+    },
+    {
+      "name": "section content /o-nas/sertifikaty/",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /o-nas/sertifikaty/",
+      "passed": true
+    },
+    {
+      "name": "HTTP /politika-konfidentsialnosti/",
+      "passed": true
+    },
+    {
+      "name": "heading structure /politika-konfidentsialnosti/",
+      "passed": true
+    },
+    {
+      "name": "section content /politika-konfidentsialnosti/",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /politika-konfidentsialnosti/",
+      "passed": true
+    },
+    {
+      "name": "HTTP /policy/",
+      "passed": true
+    },
+    {
+      "name": "heading structure /policy/",
+      "passed": true
+    },
+    {
+      "name": "section content /policy/",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /policy/",
+      "passed": true
+    },
+    {
+      "name": "HTTP /404/",
+      "passed": true
+    },
+    {
+      "name": "heading structure /404/",
+      "passed": true
+    },
+    {
+      "name": "section content /404/",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /404/",
+      "passed": true
+    },
+    {
+      "name": "HTTP /podrostkam/trevoga-i-perezhivaniya/",
+      "passed": true
+    },
+    {
+      "name": "heading structure /podrostkam/trevoga-i-perezhivaniya/",
+      "passed": true
+    },
+    {
+      "name": "section content /podrostkam/trevoga-i-perezhivaniya/",
+      "passed": true
+    },
+    {
+      "name": "no text placeholders /podrostkam/trevoga-i-perezhivaniya/",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/style.css",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/css/swiper-bundle.min.css",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/css/jquery.fancybox.min.css",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/css/jquery-ui.min.css",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/css/1/components.css?1793310938",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/logo.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/avatar1.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/avatar2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/avatar3.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/avatar4.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/453_1.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/455_1.jpg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/line.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/461_1.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/program-icon1.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/program-icon2.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/program-icon3.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/program.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/parents-group.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/calc.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/calc2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/first-step.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/first-step-icon1.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/first-step-icon2.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/first-step-icon3.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/before1.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_1.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/before2.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_3.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/steps.jpg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_4.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/steps-number1.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_5.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/steps-number2.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_6.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/steps-number3.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_7.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/steps-number4.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_8.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_9.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_10.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_11.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_12.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/specialists-icon.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/specialists-icon2.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/specialists-icon3.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/472_2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/472_3.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/472_4.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/472_5.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/472_1.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/review2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/491_2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/review3.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/491_3.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/review1.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/491_1.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/495_1.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/484_1.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/484_2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/484_3.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/social1.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/social-image1.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/social2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/social-image2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/social3.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/social-image3.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/social4.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/social-image4.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/popup.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/popup2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/logo2.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/js/jquery.min.js",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/js/swiper-bundle.min.js",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/js/jquery.fancybox.min.js",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/js/jquery-ui.min.js",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/js/jquery.ui.touch-punch.min.js",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/js/common.js",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/js/forms.js",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/css/1/components.css?1793310939",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/453_2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/453_3.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_13.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_14.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_15.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_16.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/before8.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_17.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/449_17.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/449_18.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_19.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/way-number1.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_20.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/way-number2.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_21.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/way-number3.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_22.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/way-number4.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/line3.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/contacts.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/contacts.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/contacts-icon1.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/contacts-icon2.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/contacts-icon3.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/contacts-icon4.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/social1.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/social2.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/social3.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/social4.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/map-icon1.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/map-icon2.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/453_4.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/line4.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/453_5.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/498_1.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/498_2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/498_3.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/498_4.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/498_5.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/498_6.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/498_7.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/498_8.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/498_9.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/498_10.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/498_11.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/498_12.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/css/1/components.css?1793310941",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/service.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/service-icon1.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/service-icon2.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/service-icon3.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/service-icon4.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/service2.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/before10.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_template/template/life_teen/img/steps2.jpg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_23.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_24.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_25.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_26.svg",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_27.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_28.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_29.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_30.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_31.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_32.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_33.png",
+      "passed": true
+    },
+    {
+      "name": "asset /netcat_files/448_34.png",
+      "passed": true
+    },
+    {
+      "name": "article body",
+      "passed": true
+    },
+    {
+      "name": "article source subscription",
+      "passed": true
+    },
+    {
+      "name": "specialist bio",
+      "passed": true
+    },
+    {
+      "name": "specialist source subscription",
+      "passed": true
+    },
+    {
+      "name": "specialist filter hides other categories",
+      "passed": true
+    },
+    {
+      "name": "mobile menu opens",
+      "passed": true
+    },
+    {
+      "name": "draft sections are absent from public menu",
+      "passed": true
+    },
+    {
+      "name": "mobile menu closes",
+      "passed": true
+    },
+    {
+      "name": "menu anchors have targets",
+      "passed": true
+    },
+    {
+      "name": "source calculator reacts to slider",
+      "passed": true
+    },
+    {
+      "name": "responsive 360 /",
+      "passed": true
+    },
+    {
+      "name": "responsive 360 /o-nas/",
+      "passed": true
+    },
+    {
+      "name": "responsive 360 /blog/",
+      "passed": true
+    },
+    {
+      "name": "responsive 360 /kontakty/",
+      "passed": true
+    },
+    {
+      "name": "responsive 360 /o-nas/spetsialisty/",
+      "passed": true
+    },
+    {
+      "name": "responsive 360 /o-nas/foto/",
+      "passed": true
+    },
+    {
+      "name": "responsive 360 /podrostkam/trevoga-i-perezhivaniya/",
+      "passed": true
+    },
+    {
+      "name": "responsive 360 /blog/kak-spravlyatsya-s-trevogoy-pered-ekzamenami.html",
+      "passed": true
+    },
+    {
+      "name": "responsive matches source 360 /o-nas/spetsialisty/golub-irina-aleksandrovna.html",
+      "passed": true
+    },
+    {
+      "name": "responsive matches source 768 /",
+      "passed": true
+    },
+    {
+      "name": "responsive 768 /o-nas/",
+      "passed": true
+    },
+    {
+      "name": "responsive 768 /blog/",
+      "passed": true
+    },
+    {
+      "name": "responsive 768 /kontakty/",
+      "passed": true
+    },
+    {
+      "name": "responsive 768 /o-nas/spetsialisty/",
+      "passed": true
+    },
+    {
+      "name": "responsive matches source 768 /o-nas/foto/",
+      "passed": true
+    },
+    {
+      "name": "responsive 768 /podrostkam/trevoga-i-perezhivaniya/",
+      "passed": true
+    },
+    {
+      "name": "responsive 768 /blog/kak-spravlyatsya-s-trevogoy-pered-ekzamenami.html",
+      "passed": true
+    },
+    {
+      "name": "responsive 768 /o-nas/spetsialisty/golub-irina-aleksandrovna.html",
+      "passed": true
+    },
+    {
+      "name": "responsive 1440 /",
+      "passed": true
+    },
+    {
+      "name": "responsive 1440 /o-nas/",
+      "passed": true
+    },
+    {
+      "name": "responsive 1440 /blog/",
+      "passed": true
+    },
+    {
+      "name": "responsive 1440 /kontakty/",
+      "passed": true
+    },
+    {
+      "name": "responsive 1440 /o-nas/spetsialisty/",
+      "passed": true
+    },
+    {
+      "name": "responsive 1440 /o-nas/foto/",
+      "passed": true
+    },
+    {
+      "name": "responsive 1440 /podrostkam/trevoga-i-perezhivaniya/",
+      "passed": true
+    },
+    {
+      "name": "responsive 1440 /blog/kak-spravlyatsya-s-trevogoy-pered-ekzamenami.html",
+      "passed": true
+    },
+    {
+      "name": "responsive 1440 /o-nas/spetsialisty/golub-irina-aleksandrovna.html",
+      "passed": true
+    },
+    {
+      "name": "no public JavaScript errors",
+      "passed": true
+    }
+  ],
+  "errors": [],
+  "sourceOverflow": [
+    {
+      "url": "/o-nas/spetsialisty/golub-irina-aleksandrovna.html",
+      "viewport": 360,
+      "integrated": 382,
+      "original": 382
+    },
+    {
+      "url": "/",
+      "viewport": 768,
+      "integrated": 778,
+      "original": 778
+    },
+    {
+      "url": "/o-nas/foto/",
+      "viewport": 768,
+      "integrated": 774,
+      "original": 774
+    }
+  ],
+  "sourceErrors": [
+    {
+      "url": "http://dev.lifepodrostka.ru:8080/__source/specialist.html",
+      "message": "Cannot read properties of undefined (reading 'match')"
+    },
+    {
+      "url": "http://dev.lifepodrostka.ru:8080/__source/gallery.html",
+      "message": "Cannot read properties of undefined (reading 'match')"
+    }
+  ]
+}
