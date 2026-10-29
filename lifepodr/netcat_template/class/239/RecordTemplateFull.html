@@ -1,0 +1,46 @@
+<?= $f_AdminButtons; ?>
+<div class="case">
+	<div class="wrap">
+		<div class="breadcrumbs">
+			<?
+					$navi = nc_browse_path_range(-1, $sub_level_count-1, $breadcrumbs_template,0,2);
+					echo shortcode_component( $navi);
+				
+				?>
+		</div>
+		<h1 class="article__name"><?=shortcode_component($f_maintitle)?></h1>
+		<div class="case__top-block">
+			<h3>Проблема:</h3>
+			<?=shortcode_component($f_problem)?>
+		</div>
+		<div class="case__top-block">
+			<h3>Состояние при обращении:</h3>
+			<?=shortcode_component($f_sost)?>
+		</div>
+		
+		<?if($f_etaps){?>
+		<div class="case__steps">
+			<?=$f_etaps?>
+		</div>
+		<?}?>
+		
+		<div class="case__result">
+			<h3>Результат терапии:</h3>
+			<?=shortcode_component($f_result)?>
+		</div>
+        
+      <?if($f_citata){?>
+		<div class="history__quote">
+			<div class="history__image" style="background: url('<?=$f_img?>') center/cover"></div>
+			<h3>Обратная связь клиента</h3>
+			<?=shortcode_component($f_citata)?>
+            <?if($f_history){?>
+              
+                  <?=shortcode_component($f_history)?>
+              
+	        <?}?>
+</div>
+       <?}?>
+       
+	</div>
+</div>

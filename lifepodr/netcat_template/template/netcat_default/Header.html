@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="<?= $current_sub['Language']; ?>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <?= $nc_core->page->get_metatags(); ?>
+    <title><?= $nc_core->page->get_title(); ?></title>
+    <?php if ($nc_core->admin_mode) { echo nc_js(); } ?>
+    <link href="<?= $nc_parent_template_folder_path; ?>css/defaults.css" rel="stylesheet" type="text/css">
+    <link href="<?= $nc_parent_template_folder_path; ?>css/template.css" rel="stylesheet" type="text/css">
+    <script>
+        (function() {
+            var onReady = function() {
+                var paginations = document.querySelectorAll('nav.pagination');
+                for (var i = 0; i < paginations.length; i++) {
+                    var pages = paginations[i].querySelectorAll('.pagination-page');
+                    var activeIndex = -1;
+                    for (var j = 0; j < pages.length; j++) {
+                        if (pages[j].className.indexOf('active') !== -1) {
+                            activeIndex = j;
+                            break;
+                        }
+                    }
+                    if (activeIndex === -1) { continue; }
+
+                    var neighbors = [activeIndex - 1, activeIndex, activeIndex + 1];
+                    for (var k = 0; k < neighbors.length; k++) {
+                        var idx = neighbors[k];
+                        if (idx >= 0 && idx < pages.length) {
+                            pages[idx].className += ' pagination-page-visible';
+                        }
+                    }
+                }
+            };
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', onReady);
+            } else {
+                onReady();
+            }
+        })();
+    </script>
+</head>
+<body>
+<?= nc_area('main') ?>

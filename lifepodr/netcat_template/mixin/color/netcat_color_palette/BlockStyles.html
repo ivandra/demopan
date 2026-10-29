@@ -1,0 +1,144 @@
+<?php
+
+/** @var string $selector */
+/** @var array $settings */
+
+$css = '';
+$color_generator = new nc_tpl_color_generator();
+
+// Определяем, используется новый формат (palette + roles) или старый (color_*)
+$has_new_format = !empty($settings['palette']) || !empty($settings['roles']);
+
+if ($has_new_format) {
+    // === Новый формат: palette + roles ===
+
+    // Примечание: CSS-переменные палитры --tpl-color-list-* теперь генерируются
+    // из Catalogue.ncColorList в nc_tpl_mixin_cache::generate_palette_css()
+    // Здесь генерируются только ролевые переменные --tpl-color-*
+
+    // Карта палитры (ключ => hex) для разворачивания ссылок var(--tpl-color-list-KEY).
+    // Роль может ссылаться на цвет палитры, а не хранить конкретный hex; ниже это значение
+    // нужно развернуть до реального цвета — иначе не считаются вариации яркости (parse_color
+    // не умеет работать с var()), а на :root (порталы: попапы, модалки) ссылка вообще не
+    // разрешается, т.к. --tpl-color-list-* объявлены только на .tpl-body-site-N.
+    $palette_map = array();
+    if (!empty($settings['palette'])) {
+        $palette_map = is_string($settings['palette'])
+            ? json_decode($settings['palette'], true)
+            : $settings['palette'];
+        if (!is_array($palette_map)) {
+            $palette_map = array();
+        }
+    }
+    $resolve_palette_ref = function ($value) use ($palette_map) {
+        if (is_string($value) && preg_match('/^var\(--tpl-color-list-([a-z0-9]+)\)$/i', trim($value), $m)) {
+            if (!empty($palette_map[$m[1]])) {
+                return $palette_map[$m[1]];
+            }
+        }
+        return $value;
+    };
+
+    // Маппинг ролей на CSS-переменные
+    $role_mapping = array(
+        'foreground_main' => '--tpl-color-foreground-main',
+        'foreground_accent' => '--tpl-color-foreground-accent',
+        'brand' => '--tpl-color-brand',
+        'background_main' => '--tpl-color-background-main',
+        'background_accent' => '--tpl-color-background-accent',
+    );
+
+    // Собираем цвета ролей.
+    //  - $role_colors_resolved — развёрнутый hex (для расчёта вариаций яркости и для :root);
+    //  - $role_colors_original — исходное значение (как правило var(--tpl-color-list-KEY)) —
+    //    остаётся «живой» ссылкой в базовом объявлении на основном селекторе: меняешь цвет
+    //    палитры/роли — связанные с ролью свойства (рамка, фон и т. п.) меняются автоматически.
+    $role_colors_resolved = array();
+    $role_colors_original = array();
+    if (!empty($settings['roles']) && is_array($settings['roles'])) {
+        foreach ($role_mapping as $role => $css_var) {
+            if (!empty($settings['roles'][$role])) {
+                $role_colors_resolved[$css_var] = $resolve_palette_ref($settings['roles'][$role]);
+                $role_colors_original[$css_var] = $settings['roles'][$role];
+            }
+        }
+    }
+
+    // Генерация CSS-переменных ролей: базовое объявление — «живая» ссылка, вариации — из hex
+    if (!empty($role_colors_resolved)) {
+        $css .= $color_generator->generate_colors_modifications_css($role_colors_resolved, $role_colors_original);
+    }
+
+    // Сокращённые алиасы для совместимости с инверсией палитры
+    $alias_mapping = array(
+        '--tpl-color-fm' => 'foreground_main',
+        '--tpl-color-fa' => 'foreground_accent',
+        '--tpl-color-bm' => 'background_main',
+        '--tpl-color-ba' => 'background_accent',
+        '--tpl-color-abm' => 'background_main',
+        '--tpl-color-aba' => 'background_accent',
+    );
+
+    foreach ($alias_mapping as $alias => $role) {
+        if (!empty($settings['roles'][$role])) {
+            $css .= "$alias: " . $settings['roles'][$role] . ";\n";
+        }
+    }
+
+    // Применение базовых стилей
+    if (!empty($settings['roles']['foreground_main'])) {
+        $css .= "color: var(--tpl-color-foreground-main);\n";
+    }
+    if (!empty($settings['roles']['background_main'])) {
+        $css .= "background-color: var(--tpl-color-background-main);\n";
+    }
+
+} else {
+    // === Старый формат: color_* (обратная совместимость) ===
+
+    $colors = array(
+        // Цвета палитры — для использования в шаблонах компонентов
+        '--tpl-color-foreground-main' => $settings['color_foreground_main'],
+        '--tpl-color-foreground-accent' => $settings['color_foreground_accent'],
+        '--tpl-color-brand' => $settings['color_brand'],
+        '--tpl-color-background-accent' => $settings['color_background_accent'],
+        '--tpl-color-background-main' => $settings['color_background_main'],
+        // Значения цветов — для использования в миксине инверсии палитры
+        '--tpl-color-fm' => $settings['color_foreground_main'],
+        '--tpl-color-fa' => $settings['color_foreground_accent'],
+        '--tpl-color-ba' => $settings['color_background_accent'],
+        '--tpl-color-bm' => $settings['color_background_main'],
+        // «Актуальные цвета» для свопа цветов фона
+        '--tpl-color-aba' => $settings['color_background_accent'],
+        '--tpl-color-abm' => $settings['color_background_main'],
+    );
+    $colors = array_filter($colors);
+
+    $css .= $color_generator->generate_colors_modifications_css($colors);
+
+    if (!empty($settings['color_foreground_main'])) {
+        $css .= "color: var(--tpl-color-foreground-main);\n";
+    }
+
+    if (!empty($settings['color_background_main'])) {
+        $css .= "background-color: var(--tpl-color-background-main);\n";
+    }
+}
+
+// Дублируем CSS переменные на :root для элементов-порталов (попапы, модалки),
+// которые выносятся в body и не наследуют переменные от .tpl-body-site-X.
+// Здесь используем развёрнутый hex (а не «живую» ссылку): на :root переменные
+// --tpl-color-list-* не объявлены, поэтому var(--tpl-color-list-KEY) не разрешится.
+// Заодно генерируются вариации яркости — иначе var(--tpl-color-*-darker и т. п.)
+// в порталах окажутся неопределёнными.
+$root_css = '';
+if (!empty($role_colors_resolved)) {
+    $root_css = $color_generator->generate_colors_modifications_css($role_colors_resolved);
+}
+
+$result = "$selector {\n$css }\n";
+if ($root_css) {
+    $result .= ":root {\n$root_css}\n";
+}
+
+return $result;

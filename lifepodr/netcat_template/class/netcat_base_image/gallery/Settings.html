@@ -1,0 +1,28 @@
+<?php
+
+// Валидация objectSize: если значение от другого шаблона - использовать default
+$valid_object_sizes = array('real', '5by1', '4by1', '3by1', '2by1', '16by9', '1-62by1', '3by2', '4by3', '1by1', '3by4', '2by3', '1by1-62', '9by16', '1by2', '1by3', '1by4', '1by5', 'custom');
+$objectSize = nc_array_value($cc_settings, 'objectSize', '16by9');
+if (!in_array($objectSize, $valid_object_sizes, true)) {
+    $objectSize = '16by9'; // default_value из CustomSettingsTemplate
+}
+
+// Валидация imageSize: если значение от другого шаблона (напр. 'full' от single) - использовать default
+$valid_image_sizes = array('cover', 'contain', 'none', 'fill');
+$imageSize = nc_array_value($cc_settings, 'imageSize', 'cover');
+if (!in_array($imageSize, $valid_image_sizes, true)) {
+    $imageSize = 'cover'; // default_value из CustomSettingsTemplate
+}
+
+$size = $objectSize === 'custom'
+    ? nc_array_value($cc_settings, 'customSize', 'real')
+    : $objectSize;
+
+$size = str_replace(array('-', 'by', ' '), array('.', ':', ''), $size);
+
+if ($size !== 'real') {
+    list($w, $h) = explode(":", str_replace(',', '.', $size));
+    $styles = " style='--tpl-image-padding-top: " . sprintf('%0.3F', ($h / $w) * 100) . "%'";
+} else {
+    $styles = '';
+}

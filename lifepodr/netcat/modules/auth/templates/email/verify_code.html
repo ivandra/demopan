@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>%PURPOSE%</title>
+    <style>
+        /* Базовые стили */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .wrapper {
+            width: 100%;
+            background-color: #f5f5f5;
+            padding: 40px 0;
+        }
+
+        .container {
+            max-width: 560px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            padding: 32px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .content {
+            padding: 40px 32px;
+        }
+
+        .greeting {
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .code-section {
+            text-align: center;
+            margin: 32px 0;
+        }
+
+        .code-label {
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 12px;
+        }
+
+        .code {
+            display: inline-block;
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: #1a1a1a;
+            background-color: #f8f8f8;
+            padding: 20px 32px;
+            border-radius: 12px;
+            border: 2px dashed #ddd;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 32px 0;
+            color: #999999;
+            font-size: 13px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: #eeeeee;
+        }
+
+        .divider span {
+            padding: 0 16px;
+        }
+
+        .button-section {
+            text-align: center;
+            margin: 24px 0;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 14px 32px;
+            background-color: #2563eb;
+            color: #ffffff !important;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .button:hover {
+            background-color: #1d4ed8;
+        }
+
+        .validity {
+            text-align: center;
+            font-size: 13px;
+            color: #888888;
+            margin-top: 24px;
+        }
+
+        .validity strong {
+            color: #666666;
+        }
+
+        .footer {
+            padding: 24px 32px;
+            background-color: #fafafa;
+            border-top: 1px solid #eeeeee;
+        }
+
+        .footer p {
+            font-size: 12px;
+            color: #888888;
+            margin: 0 0 8px;
+        }
+
+        .footer a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .warning {
+            background-color: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px 16px;
+            margin-top: 24px;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: #92400e;
+        }
+
+        /* Мобильная адаптация */
+        @media only screen and (max-width: 600px) {
+            .wrapper {
+                padding: 20px 16px;
+            }
+
+            .container {
+                border-radius: 8px;
+            }
+
+            .header {
+                padding: 24px;
+            }
+
+            .content {
+                padding: 32px 20px;
+            }
+
+            .code {
+                font-size: 28px;
+                letter-spacing: 6px;
+                padding: 16px 24px;
+            }
+
+            .footer {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <div class="header">
+                <h1>%SITE_NAME%</h1>
+            </div>
+
+            <div class="content">
+                <div class="greeting">
+                    <strong>%PURPOSE%</strong>
+                </div>
+
+                <div class="code-section">
+                    <div class="code-label">Ваш код подтверждения:</div>
+                    <div class="code">%CODE%</div>
+                </div>
+
+                <div class="divider">
+                    <span>или перейдите по ссылке</span>
+                </div>
+
+                <div class="button-section">
+                    <a href="%VERIFY_URL%" class="button">Подтвердить</a>
+                </div>
+
+                <div class="validity">
+                    Код действителен <strong>%TTL% минут</strong>
+                </div>
+
+                <div class="warning">
+                    Если вы не запрашивали этот код, просто проигнорируйте это письмо.
+                    Никому не сообщайте этот код.
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>
+                    Это автоматическое сообщение от сайта
+                    <a href="https://%SITE_URL%">%SITE_NAME%</a>
+                </p>
+                <p>
+                    Пожалуйста, не отвечайте на это письмо.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

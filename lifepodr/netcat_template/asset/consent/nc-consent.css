@@ -1,0 +1,158 @@
+/* Cookie Consent — нижняя плашка согласия. @see docs/proposals/cookie-consent.md */
+
+.nc-consent {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    /* сплошной фон — fallback для браузеров без backdrop-filter */
+    background: var(--tpl-color-background-main, #ffffff);
+    color: var(--tpl-color-foreground-main, #222222);
+    box-shadow: 0 -3px 16px rgba(0, 0, 0, 0.16);
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+/* Лёгкий глассморфизм (совсем чуть) — там, где поддерживается backdrop-filter.
+   Фон 88% непрозрачности через color-mix от темовой переменной, чтобы темы не ломались. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .nc-consent {
+        background: color-mix(in srgb, var(--tpl-color-background-main, #ffffff) 88%, transparent);
+        -webkit-backdrop-filter: saturate(150%) blur(8px);
+        backdrop-filter: saturate(150%) blur(8px);
+    }
+}
+
+.nc-consent__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+}
+
+.nc-consent__text {
+    flex: 1 1 320px;
+}
+
+.nc-consent__more {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.nc-consent__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.nc-consent__panel {
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 0 4px;
+}
+
+.nc-consent__cat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.nc-consent__cat-hint {
+    opacity: 0.6;
+    font-size: 13px;
+}
+
+/* Структурный сброс — перебивает устаревшие глобальные сбросы вида
+   `button { overflow: hidden; height: 1%; margin-top: 21px; padding-bottom: 20px }`.
+   Специфичность (0,2,0) надёжно перекрывает элементный селектор (0,0,1). */
+.nc-consent .nc-consent__btn {
+    box-sizing: border-box;
+    display: inline-block;
+    height: auto;
+    overflow: visible;
+    margin: 0;
+    padding: 9px 18px;
+    line-height: normal;
+    vertical-align: middle;
+}
+
+/* Скин кнопок — фолбэк через :where() (нулевая специфичность): если шаблон
+   определяет .tpl-button / .tpl-button-primary / -secondary, тема перебивает
+   наши правила, и кнопки выглядят родными для сайта. На шаблонах без tpl-button
+   срабатывает этот фолбэк. */
+:where(.nc-consent__btn) {
+    -webkit-appearance: none;
+    appearance: none;
+    border: 1px solid var(--tpl-color-foreground-main, #222222);
+    background: transparent;
+    color: inherit;
+    padding: 9px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: opacity 0.2s;
+}
+
+:where(.nc-consent__btn):hover {
+    opacity: 0.85;
+}
+
+:where(.nc-consent__btn--primary) {
+    background: var(--tpl-color-accent, #007bff);
+    border-color: var(--tpl-color-accent, #007bff);
+    color: #ffffff;
+}
+
+@media (max-width: 600px) {
+    .nc-consent__inner {
+        padding: 12px 14px;
+    }
+    .nc-consent__actions {
+        width: 100%;
+    }
+    .nc-consent__btn {
+        flex: 1 1 auto;
+    }
+}
+
+/* Плейсхолдер вместо блокированного карты/видео-виджета.
+   @see files/netcat/system/nc_consent.class.php::autodetect_wrap() */
+.nc-consent-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 160px;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--tpl-color-background-secondary, #f4f4f4);
+    border: 1px dashed rgba(0, 0, 0, 0.18);
+    border-radius: 4px;
+}
+
+/* Пока есть data-nc-consent — узел инертен; скрываем его визуально (он без
+   src/контента всё равно не показал бы ничего, но может иметь заданные
+   размеры). Атрибут снимается рантаймом при активации — правило само
+   перестаёт действовать, элемент проявляется обычным образом. */
+.nc-consent-placeholder [data-nc-consent] {
+    display: none;
+}
+
+.nc-consent-placeholder__body {
+    max-width: 360px;
+    padding: 20px;
+    text-align: center;
+}
+
+.nc-consent-placeholder__text {
+    margin: 0 0 12px;
+    opacity: 0.85;
+}

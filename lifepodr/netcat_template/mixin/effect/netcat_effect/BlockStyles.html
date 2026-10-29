@@ -1,0 +1,229 @@
+<?php
+
+/** @var string $selector */
+/** @var string $list_selector */
+/** @var array $settings */
+
+$css = array();
+$css_hidden = array(); // начальное состояние для анимаций при скролле
+$transitions = array();
+$keyframes = array();
+$stagger_rules = array();
+
+foreach (array_reverse($settings) as $layer) {
+    $type = nc_array_value($layer, 'type', '');
+
+    switch ($type) {
+        case 'fade':
+            // Эффект при наведении
+            $opacity = (float)nc_array_value($layer, 'fade_opacity', 0.7);
+            $time = (float)nc_array_value($layer, 'fade_time', 0.3);
+
+            $css['fade_hover'] = "opacity: $opacity";
+            $transitions['fade'] = "opacity {$time}s ease";
+            break;
+
+        case 'fadein':
+            // Проявление при появлении в viewport
+            $time = (float)nc_array_value($layer, 'fadein_time', 0.6);
+            $delay = (float)nc_array_value($layer, 'fadein_delay', 0);
+
+            $css_hidden['fadein'] = "opacity: 0";
+            $css['fadein'] = "opacity: 1";
+            $transitions['fadein'] = "opacity {$time}s ease {$delay}s";
+            break;
+
+        case 'slide':
+            // Выезжание при появлении
+            $direction = nc_array_value($layer, 'slide_direction', 'up');
+            $distance = (int)nc_array_value($layer, 'slide_distance', 50);
+            $time = (float)nc_array_value($layer, 'slide_time', 0.6);
+            $delay = (float)nc_array_value($layer, 'slide_delay', 0);
+
+            $transform_from = '';
+            switch ($direction) {
+                case 'up':    $transform_from = "translateY({$distance}px)"; break;
+                case 'down':  $transform_from = "translateY(-{$distance}px)"; break;
+                case 'left':  $transform_from = "translateX({$distance}px)"; break;
+                case 'right': $transform_from = "translateX(-{$distance}px)"; break;
+            }
+
+            $css_hidden['slide'] = "opacity: 0; transform: $transform_from";
+            $css['slide'] = "opacity: 1; transform: translateX(0) translateY(0)";
+            $transitions['slide'] = "opacity {$time}s ease {$delay}s, transform {$time}s ease {$delay}s";
+            break;
+
+        case 'zoom':
+            // Масштабирование при появлении
+            $scale = (float)nc_array_value($layer, 'zoom_scale', 0.8);
+            $time = (float)nc_array_value($layer, 'zoom_time', 0.6);
+            $delay = (float)nc_array_value($layer, 'zoom_delay', 0);
+
+            $css_hidden['zoom'] = "opacity: 0; transform: scale($scale)";
+            $css['zoom'] = "opacity: 1; transform: scale(1)";
+            $transitions['zoom'] = "opacity {$time}s ease {$delay}s, transform {$time}s ease {$delay}s";
+            break;
+
+        case 'rotate':
+            // Вращение при появлении
+            $angle = (int)nc_array_value($layer, 'rotate_angle', -15);
+            $time = (float)nc_array_value($layer, 'rotate_time', 0.6);
+            $delay = (float)nc_array_value($layer, 'rotate_delay', 0);
+
+            $css_hidden['rotate'] = "opacity: 0; transform: rotate({$angle}deg)";
+            $css['rotate'] = "opacity: 1; transform: rotate(0deg)";
+            $transitions['rotate'] = "opacity {$time}s ease {$delay}s, transform {$time}s ease {$delay}s";
+            break;
+
+        case 'bounce':
+            // Отскок при появлении
+            $direction = nc_array_value($layer, 'bounce_direction', 'up');
+            $height = (int)nc_array_value($layer, 'bounce_height', 30);
+            $time = (float)nc_array_value($layer, 'bounce_time', 0.8);
+            $delay = (float)nc_array_value($layer, 'bounce_delay', 0);
+
+            $y_start = $direction === 'up' ? $height : -$height;
+            $y_bounce = $direction === 'up' ? -($height * 0.3) : ($height * 0.3);
+
+            // Генерируем уникальное имя keyframes
+            $keyframe_name = 'nc-bounce-' . substr(md5($selector), 0, 6);
+
+            $keyframes[$keyframe_name] = "@keyframes $keyframe_name {
+  0% { opacity: 0; transform: translateY({$y_start}px); }
+  60% { opacity: 1; transform: translateY({$y_bounce}px); }
+  80% { transform: translateY(" . ($y_bounce * 0.5) . "px); }
+  100% { opacity: 1; transform: translateY(0); }
+}";
+
+            $css_hidden['bounce'] = "opacity: 0; transform: translateY({$y_start}px)";
+            $css['bounce'] = "animation: $keyframe_name {$time}s ease {$delay}s forwards";
+            break;
+
+        case 'stagger':
+            // Каскад для дочерних элементов
+            $effect = nc_array_value($layer, 'stagger_effect', 'fadein');
+            $interval = (float)nc_array_value($layer, 'stagger_interval', 0.1);
+            $time = (float)nc_array_value($layer, 'stagger_time', 0.5);
+
+            // Генерируем правила для nth-child
+            $child_selector = $list_selector ? "$list_selector > *" : "$selector > *";
+
+            // Начальное состояние для дочерних
+            switch ($effect) {
+                case 'fadein':
+                    $stagger_rules['hidden'] = "opacity: 0";
+                    $stagger_rules['visible'] = "opacity: 1";
+                    $stagger_rules['transition'] = "opacity {$time}s ease";
+                    break;
+                case 'slide':
+                    $stagger_rules['hidden'] = "opacity: 0; transform: translateY(30px)";
+                    $stagger_rules['visible'] = "opacity: 1; transform: translateY(0)";
+                    $stagger_rules['transition'] = "opacity {$time}s ease, transform {$time}s ease";
+                    break;
+                case 'zoom':
+                    $stagger_rules['hidden'] = "opacity: 0; transform: scale(0.8)";
+                    $stagger_rules['visible'] = "opacity: 1; transform: scale(1)";
+                    $stagger_rules['transition'] = "opacity {$time}s ease, transform {$time}s ease";
+                    break;
+            }
+
+            $stagger_rules['interval'] = $interval;
+            $stagger_rules['selector'] = $child_selector;
+            break;
+    }
+}
+
+// Генерация CSS
+$output = '';
+
+// Keyframes (если есть)
+foreach ($keyframes as $kf) {
+    $output .= "$kf\n";
+}
+
+// Начальное состояние (hidden)
+if ($css_hidden) {
+    $output .= "$selector:not(.tpl-mixin-effect-visible) {\n";
+    $output .= "  " . implode(";\n  ", $css_hidden) . ";\n";
+    $output .= "}\n";
+}
+
+// Видимое состояние и transitions
+if ($css || $transitions) {
+    $rules = array();
+
+    // Обычные CSS-свойства (для hover-эффекта fade)
+    if (isset($css['fade_hover'])) {
+        $output .= "$selector:hover { {$css['fade_hover']}; }\n";
+        unset($css['fade_hover']);
+    }
+
+    // Остальные свойства для видимого состояния
+    foreach ($css as $key => $value) {
+        if ($key !== 'fade_hover') {
+            $rules[] = $value;
+        }
+    }
+
+    if ($transitions) {
+        $rules[] = "transition: " . implode(", ", $transitions);
+    }
+
+    if ($rules) {
+        $output .= "$selector.tpl-mixin-effect-visible {\n";
+        $output .= "  " . implode(";\n  ", $rules) . ";\n";
+        $output .= "}\n";
+    }
+}
+
+// Базовый transition для fade при наведении
+if (isset($transitions['fade'])) {
+    $output .= "$selector { transition: {$transitions['fade']}; }\n";
+}
+
+// Stagger правила
+if ($stagger_rules) {
+    $child_sel = $stagger_rules['selector'];
+    $interval = $stagger_rules['interval'];
+
+    // Фильтр для исключения служебных элементов
+    $filter = ":not(.resize-sensor):not([class^='nc-']):not(.tpl-anchor)";
+
+    // Определяем, используем ли list_selector или selector
+    if ($list_selector) {
+        // list_selector уже содержит полный путь (например ".tpl-block-48 .tpl-block-48-list")
+        // Заменяем ТОЛЬКО первое вхождение selector на версию с модификатором класса
+        // (используем substr, т.к. str_replace заменит все вхождения, включая .tpl-block-48-list)
+        $rest = substr($list_selector, strlen($selector));
+        $hidden_list = "$selector:not(.tpl-mixin-effect-visible)$rest";
+        $visible_list = "$selector.tpl-mixin-effect-visible$rest";
+
+        // Начальное состояние дочерних (скрыты пока родитель не получит класс)
+        $output .= "$hidden_list > *$filter { {$stagger_rules['hidden']}; }\n";
+
+        // Transition на дочерних элементах
+        $output .= "$list_selector > *$filter { transition: {$stagger_rules['transition']}; }\n";
+
+        // Видимое состояние (когда родитель получает класс)
+        $output .= "$visible_list > *$filter { {$stagger_rules['visible']}; }\n";
+
+        // Задержки для nth-child (первые 20 элементов)
+        // Добавляем $filter для той же специфичности, что и у transition
+        for ($i = 1; $i <= 20; $i++) {
+            $delay = ($i - 1) * $interval;
+            $output .= "$list_selector > *:nth-child($i)$filter { transition-delay: {$delay}s; }\n";
+        }
+    } else {
+        // Без list_selector применяем к прямым потомкам блока
+        $output .= "$selector:not(.tpl-mixin-effect-visible) > *$filter { {$stagger_rules['hidden']}; }\n";
+        $output .= "$selector > *$filter { transition: {$stagger_rules['transition']}; }\n";
+        $output .= "$selector.tpl-mixin-effect-visible > *$filter { {$stagger_rules['visible']}; }\n";
+
+        for ($i = 1; $i <= 20; $i++) {
+            $delay = ($i - 1) * $interval;
+            $output .= "$selector > *:nth-child($i)$filter { transition-delay: {$delay}s; }\n";
+        }
+    }
+}
+
+return $output;

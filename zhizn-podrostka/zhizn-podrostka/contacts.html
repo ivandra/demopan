@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.2/themes/base/jquery-ui.css">
+</head>
+<body>
+	<header class="header">
+		<div class="wrap">
+			<a href="#" class="header__logo"><img src="img/logo.svg"></a>
+			<nav class="header__nav">
+				<ul class="header__list">
+					<li class="header__item">
+						<a href="#" class="header__link">О проекте</a>
+					</li>
+					<li class="header__item header__item--dropdown">
+						<a href="#" class="header__link">Подросткам</a>
+						<ul class="header__sublist">
+							<li class="header__subitem header__subitem--dropdown">
+								<a href="#" class="header__sublink">Тревога и переживания</a>
+								<ul class="header__subsublist">
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Тревожные мысли и страхи</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Стресс и сильные переживания</a>
+									</li>
+								</ul>
+							</li>
+							<li class="header__subitem header__subitem--dropdown">
+								<a href="#" class="header__sublink">Неуверенность в себе</a>
+								<ul class="header__subsublist">
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Сравнение себя с другими</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Страх неудачи и ошибок</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Работа над самооценкой</a>
+									</li>
+								</ul>
+							</li>
+							<li class="header__subitem header__subitem--dropdown">
+								<a href="#" class="header__sublink">Отношения с родителями</a>
+								<ul class="header__subsublist">
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Конфликты и способы их решения</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Как говорить о сложном</a>
+									</li>
+								</ul>
+							</li>
+							<li class="header__subitem header__subitem--dropdown">
+								<a href="#" class="header__sublink">Эмоциональные перепады и трудности с управлением эмоциями</a>
+								<ul class="header__subsublist">
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Распознавание своих эмоций</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Техники саморегуляции</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Когда стоит обратиться за поддержкой</a>
+									</li>
+								</ul>
+							</li>
+							<li class="header__subitem">
+								<a href="#" class="header__sublink">Учёба и мотивация</a>
+							</li>
+							<li class="header__subitem">
+								<a href="#" class="header__sublink">Поиск себя</a>
+							</li>
+						</ul>
+					</li>
+					<li class="header__item">
+						<a href="#" class="header__link">Родителям</a>
+					</li>
+					<li class="header__item">
+						<a href="#" class="header__link">Специалистам</a>
+					</li>
+					<li class="header__item">
+						<a href="#" class="header__link">Блог</a>
+					</li>
+					<li class="header__item">
+						<a href="#" class="header__link">Контакты</a>
+					</li>
+				</ul>
+			</nav>
+			<a href="#" class="header__button">
+				Нужна помощь? →
+			</a>
+		</div>
+	</header>
+	<div class="breadcrumbs">
+		<div class="wrap">
+			<a href="#">Главная</a>
+			<span>›</span>
+			Контакты
+		</div>
+	</div>
+	<section class="contacts-page">
+		<div class="wrap">
+			<div class="contacts-page__main">
+				<div class="contacts-page__header">
+					<h1 class="hero__title">
+						Контакты
+						<img src="img/line5.svg" class="hero__title-line">
+					</h1>
+					<p class="hero__description">
+						Мы рядом, чтобы поддержать вас и ответить на любые вопросы. Свяжитесь с нами удобным для вас способом — мы обязательно поможем.
+					</p>
+				</div>
+				<div class="contacts-page__top-image">
+					<img src="img/contacts.png">
+				</div>
+				<div class="contacts-page__subheader">
+					<img src="img/contacts.svg">
+				</div>
+				<div class="contacts-page__list">
+					<div class="contacts-page__card">
+						<div class="contacts-page__card-name">
+							<div class="contacts-page__card-icon"><img src="img/contacts-icon1.svg"></div>
+							<h3 class="contacts-page__card-title">Телефон</h3>
+						</div>
+						<p class="contacts-page__card-value">8 (800) 123-45-67</p>
+						<p class="contacts-page__card-note">Пн-Пт: 10:00 — 20:00</p>
+						<p class="contacts-page__card-note">Ответим на ваши вопросы в рабочее время</p>
+					</div>
+					<div class="contacts-page__card">
+						<div class="contacts-page__card-name">
+							<div class="contacts-page__card-icon"><img src="img/contacts-icon2.svg"></div>
+							<h3 class="contacts-page__card-title">Email</h3>
+						</div>
+						<p class="contacts-page__card-value">info@life-podrostka.ru</p>
+						<p class="contacts-page__card-note">Ответим в течение 24 часов</p>
+					</div>
+					<div class="contacts-page__card">
+						<div class="contacts-page__card-name">
+							<div class="contacts-page__card-icon"><img src="img/contacts-icon3.svg"></div>
+							<h3 class="contacts-page__card-title">Мессенджеры</h3>
+						</div>
+						<p class="contacts-page__card-value">Telegram, WhatsApp</p>
+						<p class="contacts-page__card-note">Напишите нам в удобном мессенджере — мы на связи</p>
+					</div>
+					<div class="contacts-page__card">
+						<div class="contacts-page__card-name">
+							<div class="contacts-page__card-icon"><img src="img/contacts-icon4.svg"></div>
+							<h3 class="contacts-page__card-title">Адрес</h3>
+						</div>
+						<p class="contacts-page__card-value">г. Москва, ул. Примерная, 15</p>
+						<p class="contacts-page__card-note">Офис и консультационный центр (по предварительной записи)</p>
+					</div>
+				</div>
+			</div>
+			<div class="contacts-page__dual-section">
+				<div class="contacts-page__form-block">
+					<h3 class="contacts-page__form-title">Напишите нам</h3>
+					<h2 class="contacts-page__form-subtitle">
+						Остались вопросы?<br>
+						Мы поможем!
+					</h2>
+					<p class="hero__description">
+						Заполните форму, и мы свяжемся с вами!
+					</p>
+					<form class="contacts-page__form">
+						<input type="text" placeholder="Ваше имя" class="contacts-page__form-input">
+						<input type="text" placeholder="Email или телефон" class="contacts-page__form-input">
+						<textarea placeholder="Ваше сообщение" class="contacts-page__form-textarea"></textarea>
+						<input type="checkbox" id="privacy-policy">
+						<label for="privacy-policy" class="contacts-page__form-label">
+							Я согласен(а) на <a href="#">обработку персональных данных</a>
+						</label>
+						<button type="submit" class="hero__button hero__button--primary">
+							Отправить сообщение →
+						</button>
+					</form>
+				</div>
+				<aside class="contacts-page__socials-block">
+					<h3 class="contacts-page__socials-title">Мы в социальных сетях</h3>
+					<p class="hero__description">
+						Подписывайтесь на наши страницы, чтобы получать полезный контент и быть в курсе новостей проекта.
+					</p>
+					<div class="contacts-page__socials-list">
+						<div class="contacts-page__socials-card">
+							<div class="contacts-page__socials-icon">
+								<img src="img/social1.svg">
+							</div>
+							<h4 class="contacts-page__socials-name">YouTube</h4>
+							<p class="contacts-page__socials-desc">
+								Видео, лекции и советы специалистов
+							</p>
+							<a href="#" class="first-step__link">Перейти →</a>
+						</div>
+						<div class="contacts-page__socials-card">
+							<div class="contacts-page__socials-icon">
+								<img src="img/social2.svg">
+							</div>
+							<h4 class="contacts-page__socials-name">VK</h4>
+							<p class="contacts-page__socials-desc">
+								Видео, лекции и советы специалистов
+							</p>
+							<a href="#" class="first-step__link">Перейти →</a>
+						</div>
+						<div class="contacts-page__socials-card">
+							<div class="contacts-page__socials-icon">
+								<img src="img/social3.svg">
+							</div>
+							<h4 class="contacts-page__socials-name">Instagram</h4>
+							<p class="contacts-page__socials-desc">
+								Видео, лекции и советы специалистов
+							</p>
+							<a href="#" class="first-step__link">Перейти →</a>
+						</div>
+						<div class="contacts-page__socials-card">
+							<div class="contacts-page__socials-icon">
+								<img src="img/social4.svg">
+							</div>
+							<h4 class="contacts-page__socials-name">Telegram</h4>
+							<p class="contacts-page__socials-desc">
+								Видео, лекции и советы специалистов
+							</p>
+							<a href="#" class="first-step__link">Перейти →</a>
+						</div>
+					</div>
+				</aside>
+			</div>
+		</div>
+	</section>
+	<section class="faq-block">
+		<div class="wrap">
+			<span class="hero__label">FAQ</span>
+			<h2 class="faq-block__title">Часто задаваемые вопросы</h2>
+			<div class="faq-block__list">
+				<div class="faq-block__col">
+					<div class="faq-block__item">
+						<div class="faq-block__trigger">
+							<span class="faq-block__question">Как получить консультацию специалиста?</span>
+						</div>
+						<div class="faq-block__answer">
+							<p>
+								Вы можете оставить заявку через форму на сайте, позвонить по телефону 8 (800) 123-45-67 или написать в мессенджеры. Менеджер свяжется с вами в течение 24 часов, чтобы подобрать подходящего специалиста и удобное время.
+							</p>
+						</div>
+					</div>
+					<div class="faq-block__item">
+						<div class="faq-block__trigger">
+							<span class="faq-block__question">Как записаться на очную встречу?</span>
+						</div>
+						<div class="faq-block__answer">
+							<p>
+								После первичной консультации (онлайн или по телефону) координатор предложит вам варианты дат и времени для очного приема в нашем центре в Москве. Запись осуществляется по предварительной договоренности.
+							</p>
+						</div>
+					</div>
+					<div class="faq-block__item">
+						<div class="faq-block__trigger">
+							<span class="faq-block__question">Можно ли обратиться анонимно?</span>
+						</div>
+						<div class="faq-block__answer">
+							<p>
+								На этапе первичного обращения вы можете не указывать личные данные — достаточно оставить контактный номер или email. Полная идентификация происходит только при заключении договора на оказание услуг.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="faq-block__col">
+					<div class="faq-block__item">
+						<div class="faq-block__trigger">
+							<span class="faq-block__question">Какие документы нужны для консультации?</span>
+						</div>
+						<div class="faq-block__answer">
+							<p>
+								Для заключения договора потребуется паспорт (или свидетельство о рождении, если консультация для ребенка). Для несовершеннолетних также необходимо согласие законного представителя.
+							</p>
+						</div>
+					</div>
+					<div class="faq-block__item">
+						<div class="faq-block__trigger">
+							<span class="faq-block__question">Сколько стоит помощь?</span>
+						</div>
+						<div class="faq-block__answer">
+							<p>
+								Стоимость консультации зависит от специалиста и формата (очно/онлайн). Средняя цена одной сессии — от 3500 ₽. Для подростков и студентов действуют льготные тарифы и бесплатные групповые встречи.
+							</p>
+						</div>
+					</div>
+					<div class="faq-block__item">
+						<div class="faq-block__trigger">
+							<span class="faq-block__question">Как вы обеспечиваете конфиденциальность?</span>
+						</div>
+						<div class="faq-block__answer">
+							<p>
+								Все данные клиентов защищены в соответствии с ФЗ-152 «О персональных данных». Информация о консультациях не передается третьим лицам. Исключение — ситуации, угрожающие жизни и здоровью клиента или окружающих.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="location-block">
+		<div class="wrap">
+			<div class="location-block__content">
+				<div class="location-block__map">
+					<script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A7a085dc786473b9cfd83000ba51dfb544c7b6b5b376f6aa346213e401b401870&amp;width=100%&amp;height=100%&amp;lang=ru_RU&amp;scroll=false"></script>
+				</div>
+				<div class="location-block__info">
+					<h2 class="location-block__title">Будем рады видеть вас!</h2>
+					<p class="hero__description location-block__text">
+						Наш офис находится в центре Москвы. Приходите на очную консультацию — по предварительной записи.
+					</p>
+					<div class="location-block__detail-item">
+						<span class="location-block__icon"><img src="img/map-icon1.svg"></span>
+						<span class="location-block__detail-text">г. Москва, ул. Примерная, 15</span>
+					</div>
+					<div class="location-block__detail-item">
+						<span class="location-block__icon"><img src="img/map-icon2.svg"></span>
+						<span class="location-block__detail-text">Пн-Пт: 10:00 - 20:00</span>
+					</div>
+					<button class="header__button">
+						Построить маршрут →
+					</button>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<footer class="footer">
+		<div class="wrap">
+			<div class="footer__col footer__col--logo">
+				<a href="#" class="footer__logo">
+					<img src="img/logo2.svg">
+				</a>
+				<p class="footer__description">
+					Проект о том, как проходить подростковый возраст и оставаться в контакте с собой и близкими.
+				</p>
+			</div>
+			<div class="footer__col">
+				<h4 class="footer__col-title">Навигация</h4>
+				<ul class="footer__list">
+					<li class="footer__list-item"><a href="#" class="footer__link">О проекте</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Подросткам</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Родителям</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Специалистам</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Блог</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Контакты</a></li>
+				</ul>
+			</div>
+			<div class="footer__col">
+				<h4 class="footer__col-title">Подросткам</h4>
+				<ul class="footer__list">
+					<li class="footer__list-item"><a href="#" class="footer__link">Статьи</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Тесты</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Вебинары</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Поддержка</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Вопросы и ответы</a></li>
+				</ul>
+			</div>
+			<div class="footer__col">
+				<h4 class="footer__col-title">Родителям</h4>
+				<ul class="footer__list">
+					<li class="footer__list-item"><a href="#" class="footer__link">Советы психологов</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Тесты</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Вебинары</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Полезные материалы</a></li>
+				</ul>
+			</div>
+			<div class="footer__col footer__col--contacts">
+				<h4 class="footer__col-title">Контакты</h4>
+				<p class="footer__contact-item">info@zhizn-podrostka.ru</p>
+				<p class="footer__contact-item">+7 (800) 123-45-67</p>
+				<p class="footer__contact-item">Россия, г. Краснодар</p>
+				<div class="footer__socials">
+					<a href="#" class="footer__social-link">
+						<img src="img/social1.png">
+					</a>
+					<a href="#" class="footer__social-link">
+						<img src="img/social2.png">
+					</a>
+					<a href="#" class="footer__social-link">
+						<img src="img/social3.png">
+					</a>
+					<a href="#" class="footer__social-link">
+						<img src="img/social4.png">
+					</a>
+				</div>
+			</div>
+			<p class="footer__copy">© 2024 Жизнь подростка. Все права защищены.</p>
+		</div>
+	</footer>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+	<script src="js/common.js"></script>
+	<script src="https://code.jquery.com/ui/1.14.2/jquery-ui.js"></script>
+	<script>
+	  $(function() {
+	      $("#slider-range-max").slider({
+	          range: "max",
+	          min: 1,
+	          max: 90,
+	          value: 30,
+	          slide: function(event, ui) {
+	              $("#amount").val(ui.value + " суток");
+	              updateCalc();
+	          }
+	      });
+	      $("#amount").val($("#slider-range-max").slider("value") + " суток");
+	      $("#slider-range-max2").slider({
+	          range: "max",
+	          min: 3000,
+	          max: 6000,
+	          value: 4500,
+	          step: 100,
+	          slide: function(event, ui) {
+	              $("#amount2").val(ui.value + " ₽");
+	              updateCalc();
+	          }
+	      });
+	      $("#amount2").val($("#slider-range-max2").slider("value") + " ₽");
+	      function updateCalc() {
+	          const val1 = $("#amount").val();
+	          const val2 = $("#amount2").val();
+	          const days = parseInt(val1.match(/\d+/)[0], 10);
+	          const pricePerDay = parseInt(val2.match(/\d+/)[0], 10);
+	          if (isNaN(days) || isNaN(pricePerDay)) return;
+	          const total = days * pricePerDay;
+	          const formattedTotal = total.toLocaleString('ru-RU') + " ₽";
+	          const formattedDays = days.toLocaleString('ru-RU');
+	          const formattedPrice = pricePerDay.toLocaleString('ru-RU') + " ₽";
+	          $(".calc__result-value").text(formattedTotal);
+	          $(".calc__result-formula").text(`${formattedDays} суток × ${formattedPrice}`);
+	      }
+	      updateCalc();
+	  });
+	</script>
+</body>
+</html>

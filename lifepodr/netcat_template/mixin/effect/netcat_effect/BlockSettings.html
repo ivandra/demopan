@@ -1,0 +1,232 @@
+<div class="nc-mixins-mixin-settings-netcat-effect">
+    <!-- шаблон слоя -->
+    <div class="nc-mixins-mixin-settings-netcat-effect-layer nc-mixins-mixin-settings-row nc-mixins-mixin-settings-row-template">
+        <div class="nc-mixins-mixin-settings-row-move">
+            <i class="nc-icon nc--move" title="изменить порядок"></i>
+        </div>
+        <div class="nc-mixins-mixin-settings-netcat-effect-layer-type nc-mixins-mixin-settings-row-type">
+            <select name="mixin.settings.#.type" class="nc-mixins-mixin-settings-netcat-effect-layer-type-select">
+                <optgroup label="При наведении">
+                    <option value="fade">Прозрачность (fade)</option>
+                </optgroup>
+                <optgroup label="При появлении в viewport">
+                    <option value="fadein">Проявление (fade in)</option>
+                    <option value="slide">Выезжание (slide)</option>
+                    <option value="zoom">Масштабирование (zoom)</option>
+                    <option value="rotate">Вращение (rotate)</option>
+                    <option value="bounce">Отскок (bounce)</option>
+                </optgroup>
+                <optgroup label="Каскадные эффекты">
+                    <option value="stagger">Каскад для дочерних (stagger)</option>
+                </optgroup>
+            </select>
+        </div>
+        <div class="nc-mixins-mixin-settings-netcat-effect-layer-properties">
+
+            <!-- fade: при наведении -->
+            <div class="nc-mixins-mixin-settings-netcat-effect-layer-properties-fade nc-mixins-mixin-settings-row-properties">
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>длительность</label>
+                    <input type="number" name="mixin.settings.#.fade_time" autocomplete="off" min="0" max="4" step="0.1" value="0.3">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>прозрачность</label>
+                    <input type="number" name="mixin.settings.#.fade_opacity" autocomplete="off" min="0" max="1" step="0.1" value="0.7">
+                </div>
+            </div>
+
+            <!-- fadein: проявление при скролле -->
+            <div class="nc-mixins-mixin-settings-netcat-effect-layer-properties-fadein nc-mixins-mixin-settings-row-properties">
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>длительность</label>
+                    <input type="number" name="mixin.settings.#.fadein_time" autocomplete="off" min="0" max="4" step="0.1" value="0.6">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>задержка</label>
+                    <input type="number" name="mixin.settings.#.fadein_delay" autocomplete="off" min="0" max="10" step="0.1" value="0">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+            </div>
+
+            <!-- slide: выезжание -->
+            <div class="nc-mixins-mixin-settings-netcat-effect-layer-properties-slide nc-mixins-mixin-settings-row-properties">
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>направление</label>
+                    <select name="mixin.settings.#.slide_direction">
+                        <option value="up">снизу вверх</option>
+                        <option value="down">сверху вниз</option>
+                        <option value="left">справа налево</option>
+                        <option value="right">слева направо</option>
+                    </select>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>расстояние</label>
+                    <input type="number" name="mixin.settings.#.slide_distance" autocomplete="off" min="0" max="500" step="10" value="50">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">px</span>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>длительность</label>
+                    <input type="number" name="mixin.settings.#.slide_time" autocomplete="off" min="0" max="4" step="0.1" value="0.6">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>задержка</label>
+                    <input type="number" name="mixin.settings.#.slide_delay" autocomplete="off" min="0" max="10" step="0.1" value="0">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+            </div>
+
+            <!-- zoom: масштабирование -->
+            <div class="nc-mixins-mixin-settings-netcat-effect-layer-properties-zoom nc-mixins-mixin-settings-row-properties">
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>начальный масштаб</label>
+                    <input type="number" name="mixin.settings.#.zoom_scale" autocomplete="off" min="0" max="3" step="0.1" value="0.8">
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>длительность</label>
+                    <input type="number" name="mixin.settings.#.zoom_time" autocomplete="off" min="0" max="4" step="0.1" value="0.6">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>задержка</label>
+                    <input type="number" name="mixin.settings.#.zoom_delay" autocomplete="off" min="0" max="10" step="0.1" value="0">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+            </div>
+
+            <!-- rotate: вращение -->
+            <div class="nc-mixins-mixin-settings-netcat-effect-layer-properties-rotate nc-mixins-mixin-settings-row-properties">
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>начальный угол</label>
+                    <input type="number" name="mixin.settings.#.rotate_angle" autocomplete="off" min="-360" max="360" step="5" value="-15">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">°</span>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>длительность</label>
+                    <input type="number" name="mixin.settings.#.rotate_time" autocomplete="off" min="0" max="4" step="0.1" value="0.6">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>задержка</label>
+                    <input type="number" name="mixin.settings.#.rotate_delay" autocomplete="off" min="0" max="10" step="0.1" value="0">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+            </div>
+
+            <!-- bounce: отскок -->
+            <div class="nc-mixins-mixin-settings-netcat-effect-layer-properties-bounce nc-mixins-mixin-settings-row-properties">
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>направление</label>
+                    <select name="mixin.settings.#.bounce_direction">
+                        <option value="up">снизу</option>
+                        <option value="down">сверху</option>
+                    </select>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>высота</label>
+                    <input type="number" name="mixin.settings.#.bounce_height" autocomplete="off" min="0" max="200" step="10" value="30">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">px</span>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>длительность</label>
+                    <input type="number" name="mixin.settings.#.bounce_time" autocomplete="off" min="0" max="4" step="0.1" value="0.8">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>задержка</label>
+                    <input type="number" name="mixin.settings.#.bounce_delay" autocomplete="off" min="0" max="10" step="0.1" value="0">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+            </div>
+
+            <!-- stagger: каскад -->
+            <div class="nc-mixins-mixin-settings-netcat-effect-layer-properties-stagger nc-mixins-mixin-settings-row-properties">
+                <div class="nc-mixins-mixin-settings-row-property">
+                <label>эффект</label>
+                    <select name="mixin.settings.#.stagger_effect">
+                        <option value="fadein">проявление</option>
+                        <option value="slide">выезжание</option>
+                        <option value="zoom">масштаб</option>
+                    </select>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>интервал между элементами</label>
+                    <input type="number" name="mixin.settings.#.stagger_interval" autocomplete="off" min="0" max="1" step="0.05" value="0.1">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+                <div class="nc-mixins-mixin-settings-row-property">
+                    <label>длительность</label>
+                    <input type="number" name="mixin.settings.#.stagger_time" autocomplete="off" min="0" max="4" step="0.1" value="0.5">
+                    <span class="nc-mixins-mixin-settings-row-property-unit">сек</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="nc-mixins-mixin-settings-row-remove">
+            <i class="nc-icon nc--remove" title="удалить"></i>
+        </div>
+    </div>
+    <!-- тут будут собственно слои -->
+    <div class="nc-mixins-mixin-settings-rows">
+    </div>
+    <!-- кнопка добавления нового слоя -->
+    <div>
+        <a href="#" class="nc-mixins-mixin-settings-row-add">Добавить эффект</a>
+    </div>
+</div>
+
+<script>
+(function () {
+    var prefix = '.nc-mixins-mixin-settings-netcat-effect';
+
+    function init(event, data) {
+        var updated_container = data && data.row ? data.row : $nc(this);
+
+        // переключение типа эффекта
+        updated_container.find(prefix + '-layer-type-select')
+            .off('change.effect')
+            .on('change.effect', update_layer_type)
+            .trigger('change');
+
+        // Автодобавление первого эффекта при открытии пустых настроек
+        if (!data || !data.row) {
+            var mixin_container = $nc(this).find(prefix);
+            if (mixin_container.length) {
+                var rows_container = mixin_container.find('.nc-mixins-mixin-settings-rows');
+                if (rows_container.length && rows_container.children().length === 0) {
+                    mixin_container.find('.nc-mixins-mixin-settings-row-add').trigger('click');
+                }
+            }
+        }
+    }
+
+    // переключение типа эффекта
+    function update_layer_type() {
+        var select = $nc(this),
+            type = select.val(),
+            properties_container = select.closest(prefix + '-layer').find(prefix + '-layer-properties');
+
+        properties_container.children().removeClass('nc--active');
+        properties_container.find(prefix + '-layer-properties-' + type).addClass('nc--active');
+    }
+
+    // Инициализация событий
+    var settings_container = $nc(prefix).closest('.nc-mixins-mixin-settings');
+
+    settings_container
+        .off(nc_mixin_settings_editor.mixin_settings_set_values_event + '.effect')
+        .on(nc_mixin_settings_editor.mixin_settings_set_values_event + '.effect', init)
+        .off(nc_mixin_settings_editor.mixin_settings_new_row_event + '.effect')
+        .on(nc_mixin_settings_editor.mixin_settings_new_row_event + '.effect', init);
+
+    // Инициализация при загрузке
+    $nc(prefix).each(function() {
+        var container = $nc(this).closest('.nc-mixins-mixin-settings');
+        if (container.length) {
+            init.call(container[0], null, {});
+        }
+    });
+})();
+</script>

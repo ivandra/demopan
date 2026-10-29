@@ -1,0 +1,41 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<div class="services">
+	<div class="wrap">
+		<h2 class="services__name">Услуги наркологической клиники</h2>
+			<div class="services__desc">Все услуги оказываются опытным и внимательным персоналом с большим стажем работы!</div>
+		<div class="services__list"><!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+<a href="<?=$f_link?>" class="services__item">
+	<div class="services__item-head">
+		<h3><?=shortcode_component($f_name)?></h3>
+		<span class="services__arrow"></span>
+	</div>
+	<?if($f_descr){?>
+		<p><?=shortcode_component($f_descr)?></p>
+	<?}?>
+</a>
+<?php
+	if (!isset($GLOBALS['svc_ld'])) $GLOBALS['svc_ld'] = array();
+	$svc_name = trim(strip_tags(shortcode_component((string)$f_name)));
+	if ($svc_name !== '') {
+		$sch_base = 'https://' . (nc_core()->widget->generate('regions', array('main_domain')) ?: $_SERVER['HTTP_HOST']);
+		$svc = array('@type' => 'MedicalProcedure', 'name' => $svc_name);
+		if (trim((string)$f_link) !== '') $svc['url'] = (strpos($f_link, 'http') === 0 ? $f_link : $sch_base . $f_link);
+		$GLOBALS['svc_ld'][] = array('@type' => 'ListItem', 'position' => count($GLOBALS['svc_ld']) + 1, 'item' => $svc);
+	}
+?><!-- /RecordTemplate -->
+
+<!-- FormSuffix --></div>
+
+	</div>
+</div>
+<?php
+	if (!empty($GLOBALS['svc_ld'])) {
+		echo '<script type="application/ld+json">' . json_encode(array(
+			'@context' => 'https://schema.org', '@type' => 'ItemList',
+			'itemListElement' => $GLOBALS['svc_ld'],
+		), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
+	}
+?>
+<!-- /FormSuffix -->

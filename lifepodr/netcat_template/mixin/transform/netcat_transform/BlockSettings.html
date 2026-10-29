@@ -1,0 +1,74 @@
+<div class="nc-mixins-mixin-settings-netcat-transform">
+    <!-- шаблон слоя -->
+    <div class="nc-mixins-mixin-settings-netcat-transform-layer nc-mixins-mixin-settings-row nc-mixins-mixin-settings-row-template">
+        <div class="nc-mixins-mixin-settings-row-move">
+            <i class="nc-icon nc--move" title="изменить порядок"></i>
+        </div>
+        <div class="nc-mixins-mixin-settings-netcat-transform-layer-type">
+            <select name="mixin.settings.#.type" class="nc-mixins-mixin-settings-netcat-transform-layer-type-select">
+                 <option value="rotate">поворот</option>
+                 <option value="translate">сдвиг</option>
+            </select>
+        </div>
+        <div class="nc-mixins-mixin-settings-netcat-transform-layer-properties">
+
+            <div class="nc-mixins-mixin-settings-netcat-transform-layer-properties-rotate">
+                <label>угол поворота</label>
+                <input type="number" name="mixin.settings.#.rotate_angle"  min="-180" max="180" title="от -180 до 180 градусов"/>&deg;
+            </div>
+
+            <div class="nc-mixins-mixin-settings-netcat-transform-layer-properties-translate">
+                <label>по горизонтали</label>
+                <input type="number" name="mixin.settings.#.translate_x" size="4">
+                <input type="hidden" name="mixin.settings.#.translate_x_unit" value="px">
+                px, &nbsp;
+                <label>по вертикали</label>
+                <input type="number" name="mixin.settings.#.translate_y" size="4">
+                <input type="hidden" name="mixin.settings.#.translate_y_unit" value="px">
+                px
+            </div>
+        </div>
+        <div class="nc-mixins-mixin-settings-row-remove">
+            <i class="nc-icon nc--remove" title="удалить"></i>
+        </div>
+    </div>
+    <!-- тут будут собственно слои -->
+    <div class="nc-mixins-mixin-settings-rows">
+    </div>
+    <!-- кнопка добавления нового слоя -->
+    <div>
+        <a href="#" class="nc-mixins-mixin-settings-row-add">Добавить</a>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var prefix = '.nc-mixins-mixin-settings-netcat-transform';
+
+        var background_settings_container = $nc(prefix);
+
+        function init(event, data) {
+            var updated_container = data.row || $nc(this);
+
+            // переключение типа слоя
+            updated_container.find(prefix + '-layer-type-select')
+                .on('change', update_layer_type)
+                .trigger('change');
+        }
+
+        // Инициализация событий
+        background_settings_container.closest('.nc-mixins-mixin-settings')
+            .off(nc_mixin_settings_editor.mixin_settings_set_values_event)
+            .on(nc_mixin_settings_editor.mixin_settings_set_values_event, init)
+            .off(nc_mixin_settings_editor.mixin_settings_new_row_event)
+            .on(nc_mixin_settings_editor.mixin_settings_new_row_event, init);
+
+        // переключение типа слоя фона (цвет/картинка/градиент)
+        function update_layer_type() {
+            var select = $nc(this),
+                type = select.val(),
+                properties_container = select.closest(prefix + '-layer').find(prefix + '-layer-properties');
+            properties_container.children().hide().filter(prefix + '-layer-properties-' + type).show();
+        }
+    })();
+</script>

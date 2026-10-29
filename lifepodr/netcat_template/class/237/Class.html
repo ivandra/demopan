@@ -1,0 +1,46 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<div class="faq">
+	<div class="wrap">
+		<div class="faq__text">
+			<div class="actions__top-text">
+				FAQ
+			</div>
+			<h2 class="actions__name">Ответы <br/>на вопросы</h2>
+			<div class="actions__desc">
+				Если не нашли ответа — позвоните нам <br/>
+				Мы на связи круглосуточно
+			</div>
+		</div>
+		<div class="faq__list"><!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+<div class="faq__item">
+	<h3><?= shortcode_component($f_question) ?></h3>
+	<div class="faq__answer">
+		<?= shortcode($f_answer) ?>
+	</div>
+</div>
+<?php
+	if (!isset($GLOBALS['faq_ld'])) $GLOBALS['faq_ld'] = array();
+	$faq_q = trim(strip_tags(shortcode_component((string)$f_question)));
+	$faq_a = trim(strip_tags(shortcode((string)$f_answer)));
+	if ($faq_q !== '' && $faq_a !== '') {
+		$GLOBALS['faq_ld'][] = array(
+			'@type' => 'Question', 'name' => $faq_q,
+			'acceptedAnswer' => array('@type' => 'Answer', 'text' => $faq_a),
+		);
+	}
+?><!-- /RecordTemplate -->
+
+<!-- FormSuffix -->		</div>
+	</div>
+</div>
+<?php
+	if (!empty($GLOBALS['faq_ld'])) {
+		echo '<script type="application/ld+json">' . json_encode(array(
+			'@context' => 'https://schema.org', '@type' => 'FAQPage',
+			'mainEntity' => $GLOBALS['faq_ld'],
+		), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
+	}
+?>
+<!-- /FormSuffix -->

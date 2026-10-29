@@ -1,0 +1,43 @@
+<?= $f_AdminCommon; ?>
+
+<?php if ($AUTH_USER_ID): ?>
+    <?php
+    $display = $cc_settings['displayAuth'];
+    $show_icon = in_array($display, $show_icon_modes);
+    $show_text = ($display !== 'icon');
+    ?>
+    <a href="<?= $cabinet_url ?: '#'; ?>" class="nc-auth-widget nc-auth-widget--auth nc-auth-widget--<?= $display; ?>" data-nc-auth-widget data-cabinet-url="<?= htmlspecialchars($cabinet_url ?: ''); ?>"<?= $widget_style_attr; ?><?php if ($display === 'icon'): ?> title="<?= htmlspecialchars($user_display_value); ?>"<?php endif; ?>>
+        <?php if ($show_icon): ?>
+            <span class="<?= $icon_class; ?>">
+                <?php if (!empty($cc_settings['icon']) && is_object($cc_settings['icon'])): ?>
+                    <?= $cc_settings['icon']->as_icon(); ?>
+                <?php else: ?>
+                    <?= $default_icon_svg; ?>
+                <?php endif; ?>
+            </span>
+        <?php endif; ?>
+        <?php if ($show_text): ?>
+            <span class="nc-auth-widget-text"><?= htmlspecialchars($user_display_value); ?></span>
+        <?php endif; ?>
+    </a>
+<?php else: ?>
+    <?php
+    $display = $cc_settings['displayGuest'];
+    $show_icon = in_array($display, $show_icon_modes);
+    $show_text = ($display !== 'icon');
+    ?>
+    <a href="#" onclick="if(typeof NcAuth!=='undefined'){NcAuth.open();}return false;" class="nc-auth-widget nc-auth-widget--guest nc-auth-widget--<?= $display; ?>" data-nc-auth-widget data-cabinet-url="<?= htmlspecialchars($cabinet_url ?: ''); ?>"<?= $widget_style_attr; ?><?php if ($display === 'icon'): ?> title="<?= htmlspecialchars($cc_settings['textGuest']); ?>"<?php endif; ?>>
+        <?php if ($show_icon): ?>
+            <span class="<?= $icon_class; ?>">
+                <?php if (!empty($cc_settings['icon']) && is_object($cc_settings['icon'])): ?>
+                    <?= $cc_settings['icon']->as_icon(); ?>
+                <?php else: ?>
+                    <?= $default_icon_svg; ?>
+                <?php endif; ?>
+            </span>
+        <?php endif; ?>
+        <?php if ($show_text): ?>
+            <span class="nc-auth-widget-text"><?= htmlspecialchars($cc_settings['textGuest']); ?></span>
+        <?php endif; ?>
+    </a>
+<?php endif; ?>

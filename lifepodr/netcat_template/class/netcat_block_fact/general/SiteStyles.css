@@ -1,0 +1,133 @@
+.nc-editable-image-container {
+    width: 60px;
+    height: auto;
+}
+
+.object-item .object-item-image {
+    margin: 0;
+}
+
+.object-item .icon-none {
+    display: block;
+}
+
+.object-item .icon-left {
+    display: flex;
+    align-items: flex-start;
+    flex-shrink: 0;
+}
+
+.object-item .icon-top {
+    display: block;
+}
+
+.object-item-title {
+    color: var(--tpl-object-item--title-color);
+    display: block;
+}
+
+.object-item-title.has-icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.object-item-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.icon-layout {
+    display: flex;
+    align-items: flex-start;
+}
+
+.icon-layout.icon-none {
+    display: block;
+}
+
+.icon-layout.icon-top {
+    display: block;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.icon-layout.icon-left .object-item-image {
+    margin-right: var(--tpl-object-item--icon-space-text);
+}
+
+.icon-layout.icon-top .object-item-image {
+    margin-bottom: var(--tpl-object-item--icon-space-text);
+}
+
+/* Специальное правило для центрирования иконки и заголовка в режиме только title слева */
+.advantages.blocks-layout-title .icon-layout.icon-left {
+    align-items: center;
+}
+
+.tpl-icon {
+    height: 1em;
+    width: 1em;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0;
+}
+
+.tpl-icon.tpl-text-inherit {
+    width: 40px;
+    height: 40px;
+    min-height: 1.15em; 
+    line-height: 1.15;
+}
+
+.tpl-icon svg, .tpl-icon img {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.tpl-icon img {
+    object-fit: contain;
+}
+
+.tpl-icon.library-icon {
+    fill: var(--tpl-object-item--icon-color, revert-layer);
+}
+
+.tpl-icon:not(.library-icon) path {
+    stroke: var(--tpl-object-item--icon-color, revert-layer);
+}
+
+.tpl-icon[class*='icon-decor-'] svg, .tpl-icon[class*='icon-decor-'] img {
+    max-width: 50%;
+    max-height: 50%;
+}
+
+.tpl-icon[class*='icon-decor-circle'] {
+    border-radius: 50%;
+}
+
+.tpl-icon[class*='icon-decor-circle'] svg, .tpl-icon[class*='icon-decor-circle'] img {
+    max-width: 40%;
+    max-height: 40%;
+}
+
+.tpl-icon[class*='icon-decor-'] {
+    border: 1px solid var(--tpl-object-item--icon-decor-color);
+}
+
+.tpl-icon[class*='icon-decor-'][class*='-fill'] {
+    background-color: var(--tpl-object-item--icon-decor-color);
+}
+
+.object-item-description {
+    color: var(--tpl-object-item--title-color);
+}
+
+.object-item-link {
+    display: inline-block;
+    margin-top: 0.5em;
+}

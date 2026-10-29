@@ -1,0 +1,61 @@
+<?php
+$styles = array();
+
+$cc_settings = nc_get_visual_settings($cc_env['Sub_Class_ID']);
+
+if ($cc_settings['iconColor'] !== 'inherit') {
+    $styles[] = "--tpl-object-item--icon-color: var(--tpl-color-" . $cc_settings['iconColor'] . ")";
+}
+if ($cc_settings['iconDecor'] !== 'none' && $cc_settings['iconDecorColor'] !== 'inherit') {
+    $styles[] = "--tpl-object-item--icon-decor-color: var(--tpl-color-" . $cc_settings['iconDecorColor'] . ")";
+}
+
+$styles[] = "--tpl-object-item--icon-space-text: " . str_replace(",", ".", ($cc_settings['textSpace'] / 100)) . "em";
+$styles[] = "--tpl-object-icon-size: 1em";
+$styles = " style='" . implode(";", $styles) . "'";
+
+$icon_size_class = "tpl-text-" . $cc_settings['iconSize'];
+
+$_icon_default = "";
+
+if (!empty($cc_settings["icon_default"])) {
+    if (is_object($cc_settings["icon_default"]) && method_exists($cc_settings["icon_default"], "as_icon")) {
+        $_icon_default = $cc_settings["icon_default"]->as_icon();
+    } elseif (is_array($cc_settings["icon_default"])) {
+        $icon_default_library = $cc_settings["icon_default"]["icon_library"] ?? "";
+        $icon_default_icon = $cc_settings["icon_default"]["icon"] ?? "";
+
+        if ($icon_default_library && $icon_default_icon) {
+            $_icon_default = nc_get_icon_from_library($icon_default_library, $icon_default_icon, array("class" => "library-icon"));
+        }
+    } else {
+        $icon_default_value = (string)$cc_settings["icon_default"];
+
+        if ($icon_default_value !== "") {
+            if (strpos($icon_default_value, "<") !== false) {
+                $_icon_default = $icon_default_value;
+            } else {
+                $nc_core = nc_core::get_object();
+                $icon_default_full_path = ($icon_default_value[0] === "/" ? $nc_core->DOCUMENT_ROOT : $nc_core->DOCUMENT_ROOT . $nc_core->SUB_FOLDER) . $icon_default_value;
+
+                $_icon_default = preg_match("/\\.svg($|\\?)/", $icon_default_value)
+                    ? nc_get_svg_as_icon($icon_default_full_path)
+                    : "";
+
+                if (!$_icon_default) {
+                    $icon_default_src = ($icon_default_value[0] === "/" ? "" : $nc_core->SUB_FOLDER) . $icon_default_value;
+                    $_icon_default = "<img src='" . htmlspecialchars($icon_default_src, ENT_QUOTES) . "' alt=''>";
+                }
+            }
+        }
+    }
+}
+
+$icon_class = array();
+$icon_class[] = "item-icon";
+$icon_class[] = "tpl-icon";
+$icon_class[] = "tpl-text-" . $cc_settings['iconSize'];
+
+if ($cc_settings['iconDecor'] !== 'none') {
+    $icon_class[] = "icon-decor-" . $cc_settings['iconDecor'];
+}

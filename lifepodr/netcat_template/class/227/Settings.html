@@ -1,0 +1,10 @@
+<?php
+
+
+
+//исполняем этот код если отправлена форма подсчёт заявок
+if($_POST[podscet]==1){
+	$query_where="a.Created>='$_POST[date1] 23:59:59' AND a.Created<='$_POST[date2] 23:59:59' AND phone!=''"; //
+     $query_group='phone';
+}
+?>

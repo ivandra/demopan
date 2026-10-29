@@ -1,0 +1,216 @@
+<?
+
+$phone_temp = $f_phone;
+$phone_temp = str_replace(array('+', ' ', '(' , ')', '-'), '', $phone_temp);
+if (strlen($phone_temp)==11)
+{$phone_temp = substr($phone_temp, 1);}
+if (strlen($phone_temp)==10){$phone_temp="8".$phone_temp;}
+
+//отправка письма
+//Уведомление письмо
+$to = $current_catalogue['mail_admin']; //кому 1
+$host = $_SERVER[HTTP_HOST];
+$from = $reply = "no-reply@medelta.clinic"; //куда отправлять ответ
+
+$subject = "Заявка №$message с $host от $_POST[f_name] "; //тема
+$from_name = $_POST[f_name]." - ".$host . " № " .$message; //Имя  
+
+$text = "
+<h3>Вам поступила заявка с сайта $host</h3>
+".opt($_POST[f_name], "<p><b>Имя:</b> $_POST[f_name]</p>")."
+".opt($_POST[f_phone], "<p><b>Телефон:</b> <a href='tel:$phone_temp'>$_POST[f_phone]</a></p>")."
+".opt($_POST[f_email], "<p><b>E-mail:</b> $_POST[f_email]</p>")."
+".opt($_POST[f_message], "<p><b>Сообщение:</b> $_POST[f_message]</p>")."
+".opt($_POST[f_utm], "<p><b>UTM:</b> $_POST[f_utm]</p>")."
+".opt($_POST[f_istochnik], "<p><b>Источник трафика:</b> $_POST[f_istochnik]</p>")."
+".opt($_POST[f_urlMessage], "<p><b>Страница обращения:</b> $_POST[f_urlMessage]</p>")."
+"; //Текст	
+
+if ($_POST['calcform']){
+      $_POST[f_message].= "Возраст пациента ".$_POST['age'].";&nbsp; Вещество ".$_POST['substance'].";&nbsp; Срок употребления: ".trim($_POST["term_of_use"]);
+}
+
+//отправляем письмо только если email или телефон не пустые 
+if($_POST[f_phone]!="" OR $_POST[f_email]!=""){
+  $mailer = new CMIMEMail();
+  $mailer->mailbody( strip_tags($text), $text);
+  $mailer->send($to, $from, $reply, $subject, $from_name);
+}
+
+/*Код добавления заявки в Битрикс*/
+
+$default_domain = "medplusrostov.bitrix24.ru";
+$default_login = "medplusrostov@yandex.ru";
+$default_pass = "4r8vVYUY[]{}";
+
+
+$region_domain = $nc_core->widget->generate('regions', array('bitrix_domain'));
+$region_login = $nc_core->widget->generate('regions', array('bitrix_login'));
+$region_pass = $nc_core->widget->generate('regions', array('bitrix_pass'));
+
+
+$bitrix_domain = (empty($region_domain)) ? $default_domain : $region_domain;
+$bitrix_login = (empty($region_login)) ? $default_login : $region_login;
+$bitrix_pass = (empty($region_pass)) ? $default_pass : $region_pass;
+             
+// CRM server conection data
+define('CRM_HOST', $bitrix_domain); // your CRM domain name
+define('CRM_PORT', '443'); // CRM server port
+define('CRM_PATH', '/crm/configs/import/lead.php'); // CRM server REST service path
+
+
+define('CRM_LOGIN', $bitrix_login); // login of a CRM user able to manage leads
+define('CRM_PASSWORD', $bitrix_pass); // password of a CRM user
+// OR you can send special authorization hash which is sent by server after first successful connection with login and password
+//define('CRM_AUTH', 'e54ec19f0c5f092ea11145b80f465e1a'); // authorization hash
+
+/********************************************************************************************/
+
+// POST processing
+
+ 
+ // get lead data from the form
+	$postData = array(
+	  'TITLE' => "$_POST[f_name] - Лид с сайта $_SERVER[HTTP_HOST]",
+	  'NAME' => $_POST[f_name],
+	  'PHONE_MOBILE' =>  $_POST[f_phone],
+	  'EMAIL_WORK' => $_POST[f_email],
+	  'COMMENTS' => $_POST[f_message],
+	  'SOURCE_ID' => "WEB",
+	  'ASSIGNED_BY_ID' => 1,
+	  'OPENED' => 1,
+	);
+
+
+ // append authorization data
+ if (defined('CRM_AUTH'))
+ {
+  $postData['AUTH'] = CRM_AUTH;
+ }
+ else
+ {
+  $postData['LOGIN'] = CRM_LOGIN;
+  $postData['PASSWORD'] = CRM_PASSWORD;
+ }
+
+ // open socket to CRM
+ $fp = fsockopen("ssl://".CRM_HOST, CRM_PORT, $errno, $errstr, 30);
+ if ($fp)
+ {
+  // prepare POST data
+  $strPostData = '';
+  foreach ($postData as $key => $value)
+   $strPostData .= ($strPostData == '' ? '' : '&').$key.'='.urlencode($value);
+
+  // prepare POST headers
+  $str = "POST ".CRM_PATH." HTTP/1.0\r\n";
+  $str .= "Host: ".CRM_HOST."\r\n";
+  $str .= "Content-Type: application/x-www-form-urlencoded\r\n";
+  $str .= "Content-Length: ".strlen($strPostData)."\r\n";
+  $str .= "Connection: close\r\n\r\n";
+
+  $str .= $strPostData;
+
+  // send POST to CRM
+  fwrite($fp, $str);
+
+  // get CRM headers
+  $result = '';
+  while (!feof($fp))
+  {
+   $result .= fgets($fp, 128);
+  }
+  fclose($fp);
+
+  // cut response headers
+  $response = explode("\r\n\r\n", $result);
+
+  $output = '<pre>'.print_r($response[1], 1).'</pre>';
+ }
+ else
+ {
+  echo 'Connection Failed! '.$errstr.' ('.$errno.')';
+ }
+//echo $output;
+/*Конец Кода добавления заявки в Битрикс*/
+	
+
+if ($inside_admin) {
+	ob_end_clean();
+	header('Location: ' . $goBackLink . '&inside_admin=1');
+	exit;
+} else {
+
+	// телефон для кнопки «Позвонить сейчас»
+	$phone_raw  = function_exists('shortcode') ? shortcode('[phone]') : '+7(949)766-70-56';
+	$phone_link = str_replace(array(' ', '(', ')', '-'), '', $phone_raw);
+
+	if ($_POST['f_phone'] != "" OR $_POST['f_email'] != "") {
+
+		if ($_POST['landing'] == 1) {
+			echo "<script>alert('Спасибо, что обратились к нам! Мы обязательно с вами свяжемся в ближайшее время.')</script>";
+		} else {
+
+			// подзаголовок — только для каталогов 1, 2 и 4 (как было)
+			$subtitle = '';
+			if ($catalogue == 1 OR $catalogue == 2 OR $catalogue == 4) {
+				$subtitle = '<p class="thanks__text">Мы обязательно с вами свяжемся в ближайшее время.</p>';
+			}
+
+			echo <<<HTML
+<div class="thanks">
+	<div class="wrap">
+		<div class="thanks__icon">
+			<svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<circle cx="36" cy="36" r="34" stroke="url(#thanks-grad)" stroke-width="4"/>
+				<path d="M22 37.5L31.5 47L50 27" stroke="url(#thanks-grad)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+				<defs>
+					<linearGradient id="thanks-grad" x1="0" y1="36" x2="72" y2="36" gradientUnits="userSpaceOnUse">
+						<stop stop-color="#1B3FA0"/>
+						<stop offset="1" stop-color="#3E64D8"/>
+					</linearGradient>
+				</defs>
+			</svg>
+		</div>
+		<h1 class="thanks__name">Спасибо, что обратились к нам!</h1>
+		{$subtitle}
+		<ul class="thanks__list">
+			<li>Обычно перезваниваем в течение 10 минут</li>
+			<li>Консультация бесплатная и анонимная</li>
+		</ul>
+		<div class="thanks__buttons">
+			<a href="/" class="thanks__button">На главную</a>
+			<a href="tel:{$phone_link}" class="thanks__button thanks__button--outline">Позвонить сейчас</a>
+		</div>
+	</div>
+</div>
+HTML;
+		}
+
+	} else {
+
+		if ($_POST['landing'] == 1) {
+			echo "<script>alert('Вы не заполнили обязательные поля! Вернитесь пожалуйста и введите актуальные данные, чтобы мы могли связаться с вами')</script>";
+		} else {
+			echo <<<HTML
+<div class="thanks thanks--error">
+	<div class="wrap">
+		<div class="thanks__icon">
+			<svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<circle cx="36" cy="36" r="34" stroke="#FE4E5B" stroke-width="4"/>
+				<path d="M26 26L46 46M46 26L26 46" stroke="#FE4E5B" stroke-width="5" stroke-linecap="round"/>
+			</svg>
+		</div>
+		<h1 class="thanks__name thanks__name--error">Вы не заполнили обязательные поля</h1>
+		<p class="thanks__text">Вернитесь, пожалуйста, и введите актуальные данные, чтобы мы могли связаться с вами.</p>
+		<div class="thanks__buttons">
+			<a href="javascript:history.back()" class="thanks__button">← Вернуться к форме</a>
+			<a href="tel:{$phone_link}" class="thanks__button thanks__button--outline">Позвонить сейчас</a>
+		</div>
+	</div>
+</div>
+HTML;
+		}
+	}
+}
+?>

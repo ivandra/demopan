@@ -1,0 +1,17 @@
+<?php
+/**
+ * Слоты миксинов для компонента "Баннер"
+ */
+return array(
+    // Слоты для списка
+    'list_image' => array(
+        'name' => 'Изображение',
+        'selector' => '.item-image',
+        'scopes' => array('border', 'border_radius', 'shadow', 'effect'),
+    ),
+    'list_content' => array(
+        'name' => 'Текстовая часть',
+        'selector' => '.item-info',
+        'scopes' => array('color', 'padding', 'margin', 'background', 'border', 'border_radius', 'shadow'),
+    ),
+);

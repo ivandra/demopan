@@ -1,0 +1,151 @@
+.cookie-consent-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; 
+    justify-content: flex-start;
+}
+
+.in-center .cookie-consent-buttons {
+    justify-content: center;
+}
+
+.in-right .cookie-consent-buttons {
+    justify-content: flex-end;
+}
+.cookie-consent {
+    position: fixed;
+    background: var(--tpl-color-background-main, #ffffff);
+    color: var(--tpl-color-foreground-main, #333333);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    max-width: 400px;
+    line-height: 1.4;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cookie-consent.show {
+    display: block;
+    opacity: 1;
+}
+
+.in-left {
+	text-align: left;
+}    
+
+.in-center {
+	text-align: center;
+}    
+
+.in-right {
+	text-align: right;
+}    
+
+/* Вертикальное позиционирование */
+.cookie-consent.top {
+    top: 20px;
+}
+
+.cookie-consent.bottom {
+    bottom: 20px;
+}
+
+.cookie-consent.centerv {
+    top: 50%;
+}
+
+/* Горизонтальное позиционирование */
+.cookie-consent.left {
+    left: 20px;
+}
+
+.cookie-consent.right {
+    right: 20px;
+}
+
+.cookie-consent.centerh {
+    left: 50%;
+}
+
+/* Transform для центрирования */
+.cookie-consent.centerh:not(.centerv) {
+    transform: translateX(-50%);
+}
+
+.cookie-consent.centerv:not(.centerh) {
+    transform: translateY(-50%);
+}
+
+.cookie-consent.centerh.centerv {
+    transform: translate(-50%, -50%);
+}
+
+.cookie-consent-text {
+    margin-bottom: 15px;
+}
+
+.cookie-consent-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+/* Модальное окно */
+.cookie-consent-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.cookie-consent-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+.cookie-consent.modal {
+    z-index: 10001;
+}
+
+/* Блокировка прокрутки для модального окна */
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .cookie-consent {
+        left: 10px !important;
+        right: 10px !important;
+        max-width: none;
+        transform: none !important;
+    }
+    
+    .cookie-consent.bottom {
+        bottom: 10px;
+    }
+    
+    .cookie-consent.top {
+        top: 10px;
+    }
+    
+    .cookie-consent.centerv {
+        top: 50%;
+        transform: translateY(-50%) !important;
+    }
+}
+

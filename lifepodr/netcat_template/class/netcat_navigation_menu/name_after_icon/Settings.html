@@ -1,0 +1,6 @@
+<?php
+require $nc_parent_field_path;
+
+// Определяем позицию иконки (по умолчанию - слева для обратной совместимости)
+$icon_position = isset($cc_settings['item_icon_position']) ? $cc_settings['item_icon_position'] : 'left';
+$icon_position_class = 'menu-icon-position-' . $icon_position;

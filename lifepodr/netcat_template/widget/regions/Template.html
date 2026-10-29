@@ -1,0 +1,8 @@
+<?
+$comp_field = $fields[0];
+$domain = $_SERVER['SERVER_NAME'];
+if($comp_field){
+    $data = $nc_core->db->get_var("SELECT `".$comp_field."` FROM Message198 WHERE `main_domain`= '".$domain."'"); 
+    echo $data;
+}
+?>

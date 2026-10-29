@@ -1,0 +1,319 @@
+/* ==========================================================================
+   Результаты поиска - Товары
+   Стили карточки товара копируются из netcat_module_netshop_goods_universal
+   Компоновка и отступы настраиваются через миксины на уровне блока
+   ========================================================================== */
+
+/* ==========================================================================
+   КАРТОЧКА ТОВАРА (из netcat_module_netshop_goods_universal)
+   ========================================================================== */
+
+&.tpl-block-list .item-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* --- Медиа-блок (картинка + бейджи + кнопки) --- */
+
+&.tpl-block-list .item-card__media {
+    position: relative;
+}
+
+&.tpl-block-list .item-card__image-link {
+    display: block;
+    text-decoration: none;
+}
+
+&.tpl-block-list .item-card__image {
+    position: relative;
+    padding-top: var(--item-image-padding-top, 100%);
+    overflow: hidden;
+    background: var(--tpl-color-background-main-dark, #f5f5f5);
+}
+
+/* Дефолтное скругление через :where() для возможности переопределения миксинами */
+:where(&.tpl-block-list) .item-card__image {
+    border-radius: 20px;
+}
+
+&.tpl-block-list .item-card__image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: var(--item-image-fit, contain);
+}
+
+/* Контейнер редактируемого изображения (режим редактирования) */
+&.tpl-block-list .item-card__image .nc-editable-image-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+&.tpl-block-list .item-card__image .nc-editable-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: var(--item-image-fit, contain);
+}
+
+/* --- Бейдж скидки --- */
+
+&.tpl-block-list .item-card__badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 28px;
+    padding: 0 8px;
+    background: var(--tpl-color-foreground-accent, #e53935);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* --- Кнопки действий (избранное, сравнение) --- */
+
+&.tpl-block-list .item-card__actions {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+&.tpl-block-list .item-card__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+&.tpl-block-list .item-card__action.is-active {
+    background: var(--tpl-color-brand, #1976d2);
+}
+
+&.tpl-block-list .item-card__action.is-active .item-card__action-icon {
+    filter: brightness(0) invert(1);
+}
+
+/* Иконки через CSS mask */
+&.tpl-block-list .item-card__action-icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    background-color: var(--tpl-color-foreground-main, #333);
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+&.tpl-block-list .item-card__action-icon--compare {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill-rule='evenodd' d='M9.31 1.38v17.24h1.38V1.38H9.31zM8.96 0C8.4 0 7.93.46 7.93 1.03v17.93c0 .57.46 1.04 1.03 1.04h2.07c.57 0 1.04-.46 1.04-1.03V1.03c0-.57-.47-1.03-1.04-1.03H8.96zm5.87 4.83v13.79h1.38V4.83h-1.38zm-.35-1.38c-.57 0-1.03.46-1.03 1.03v14.48c0 .57.46 1.04 1.03 1.04h2.07c.57 0 1.03-.47 1.03-1.04V4.48c0-.57-.46-1.03-1.03-1.03h-2.07zM3.79 18.62v-8.28h1.38v8.28H3.79zM2.41 10c0-.57.46-1.03 1.04-1.03h2.06c.57 0 1.04.46 1.04 1.03v8.97c0 .57-.47 1.03-1.04 1.03H3.45c-.58 0-1.04-.46-1.04-1.03V10z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill-rule='evenodd' d='M9.31 1.38v17.24h1.38V1.38H9.31zM8.96 0C8.4 0 7.93.46 7.93 1.03v17.93c0 .57.46 1.04 1.03 1.04h2.07c.57 0 1.04-.46 1.04-1.03V1.03c0-.57-.47-1.03-1.04-1.03H8.96zm5.87 4.83v13.79h1.38V4.83h-1.38zm-.35-1.38c-.57 0-1.03.46-1.03 1.03v14.48c0 .57.46 1.04 1.03 1.04h2.07c.57 0 1.03-.47 1.03-1.04V4.48c0-.57-.46-1.03-1.03-1.03h-2.07zM3.79 18.62v-8.28h1.38v8.28H3.79zM2.41 10c0-.57.46-1.03 1.04-1.03h2.06c.57 0 1.04.46 1.04 1.03v8.97c0 .57-.47 1.03-1.04 1.03H3.45c-.58 0-1.04-.46-1.04-1.03V10z'/%3E%3C/svg%3E");
+}
+
+&.tpl-block-list .item-card__action-icon--favorite {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'%3E%3Cpath d='M11 19.5l-1.4-1.3C4.4 13.4 1 10.4 1 6.7 1 3.7 3.4 1.3 6.4 1.3c1.7 0 3.4.8 4.6 2.1 1.2-1.3 2.9-2.1 4.6-2.1 3 0 5.4 2.4 5.4 5.4 0 3.7-3.4 6.7-8.6 11.5L11 19.5z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'%3E%3Cpath d='M11 19.5l-1.4-1.3C4.4 13.4 1 10.4 1 6.7 1 3.7 3.4 1.3 6.4 1.3c1.7 0 3.4.8 4.6 2.1 1.2-1.3 2.9-2.1 4.6-2.1 3 0 5.4 2.4 5.4 5.4 0 3.7-3.4 6.7-8.6 11.5L11 19.5z'/%3E%3C/svg%3E");
+}
+
+/* --- Галерея изображений --- */
+
+&.tpl-block-list .item-card__gallery {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+&.tpl-block-list .item-card__gallery-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+&.tpl-block-list .item-card__gallery-slide.is-active {
+    opacity: 1;
+}
+
+&.tpl-block-list .item-card__gallery-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: var(--item-image-fit, contain);
+}
+
+&.tpl-block-list .item-card__gallery-dots {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+&.tpl-block-list .item-card__image--gallery:hover .item-card__gallery-dots,
+&.tpl-block-list .item-card__image--gallery.is-swiping .item-card__gallery-dots {
+    opacity: 1;
+}
+
+&.tpl-block-list .item-card__gallery-dot {
+    width: 6px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+&.tpl-block-list .item-card__gallery-dot.is-active {
+    background: var(--tpl-color-brand, #1976d2);
+}
+
+/* --- Контент карточки --- */
+
+&.tpl-block-list .item-card__content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 0;
+}
+
+&.tpl-block-list .item-card__title-link {
+    text-decoration: none;
+    color: inherit;
+    flex-grow: 1;
+}
+
+&.tpl-block-list .item-card__title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+&.tpl-block-list .item-card__title-link:hover .item-card__title {
+    color: var(--tpl-color-brand, #1976d2);
+}
+
+/* --- Цена --- */
+
+&.tpl-block-list .item-card__price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+&.tpl-block-list .item-card__price-current {
+    white-space: nowrap;
+}
+
+&.tpl-block-list .item-card__price-old {
+    color: var(--tpl-color-foreground-main-lightest, #999);
+    text-decoration: line-through;
+    white-space: nowrap;
+}
+
+/* --- Мета-информация (рейтинг, отзывы, варианты) --- */
+
+&.tpl-block-list .item-card__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+&.tpl-block-list .item-card__rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+&.tpl-block-list .item-card__rating-star {
+    width: 14px;
+    height: 14px;
+    background: #ffc107;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 1l2.39 6.11H19l-5.3 4.14 2.04 6.75L10 14.14 4.26 18l2.04-6.75L1 7.11h6.61z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 1l2.39 6.11H19l-5.3 4.14 2.04 6.75L10 14.14 4.26 18l2.04-6.75L1 7.11h6.61z'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
+
+&.tpl-block-list .item-card__reviews::before,
+&.tpl-block-list .item-card__variants::before {
+    content: "·";
+    margin-right: 6px;
+}
+
+/* --- Футер карточки (кнопка) --- */
+
+&.tpl-block-list .item-card__footer {
+    margin-top: auto;
+}
+
+&.tpl-block-list .item-card__cart-form {
+    display: contents;
+}
+
+&.tpl-block-list .item-card__cart-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   АДАПТИВНОСТЬ
+   ========================================================================== */
+
+@nc-list-object (max-width: 200px) {
+    &.tpl-block-list .item-card__actions {
+        flex-direction: row;
+    }
+
+    &.tpl-block-list .item-card__action {
+        width: 32px;
+        height: 32px;
+    }
+
+    &.tpl-block-list .item-card__badge {
+        min-width: 40px;
+        height: 24px;
+    }
+
+    &.tpl-block-list .item-card__reviews {
+        width: 100%;
+    }
+
+    &.tpl-block-list .item-card__reviews::before {
+        display: none;
+    }
+}

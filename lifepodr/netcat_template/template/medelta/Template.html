@@ -1,0 +1,287 @@
+<!-- Header --><!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<?
+		$pageHederTitle = (($nc_core->page->get_title()) ? $nc_core->page->get_title() : $f_title); 
+		 /* Обработка SHORT CODE */        
+        $pageHederTitle = shortcode($pageHederTitle);
+        /* Обработка SHORT CODE */		
+	?>	
+    <title><?=$pageHederTitle?></title>
+    
+    <?=($nc_core->page->get_keywords() ? "<meta name='keywords' content='".$nc_core->page->get_keywords()."'>" : NULL );?>
+    <?      $pageDesc = $nc_core->page->get_description(); 
+		  /* Обработка SHORT CODE */ 
+              $pageDesc = shortcode($pageDesc); 
+              $pageDesc = trim($pageDesc);
+             ?>
+	<meta name='description' content='<?=$pageDesc?>'>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="<?=$nc_parent_template_folder_path;?>css/style.css?v=<?=date('YmdHis')?>">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <script src="<?=$nc_parent_template_folder_path;?>js/jquery.maskedinput.min.js"></script>
+	<script src="<?=$nc_parent_template_folder_path;?>js/common.js?v=<?=date('YmdHis')?>"></script>
+    
+      <link rel="icon" href="/favicon/favicon.ico" sizes="any">
+      <link rel="icon" type="image/svg+xml" href="<?=$nc_parent_template_folder_path;?>img/favicon/favicon.svg">
+      <link rel="icon" type="image/png" sizes="32x32" href="<?=$nc_parent_template_folder_path;?>img/favicon/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="<?=$nc_parent_template_folder_path;?>img/favicon/favicon-16x16.png">
+      <link rel="apple-touch-icon" sizes="180x180" href="<?=$nc_parent_template_folder_path;?>img/favicon/apple-touch-icon.png">
+      <link rel="manifest" href="<?=$nc_parent_template_folder_path;?>img/favicon/site.webmanifest">
+      <link rel="mask-icon" href="<?=$nc_parent_template_folder_path;?>img/favicon/safari-pinned-tab.svg" color="#FE4E5B">
+      <meta name="theme-color" content="#FE4E5B">
+      <meta name="msapplication-TileColor" content="#ffffff">
+      <meta name="msapplication-config" content="<?=$nc_parent_template_folder_path;?>img/favicon/browserconfig.xml">
+
+
+     <?=$nc_core->widget->generate('regions', array('yandexwebmaster'))?>
+     
+      <?php
+        print_open_graph_tags();
+        print_website_schema();
+        print_organization_schema();
+        print_medicalorganization_schema();
+    ?>
+</head>
+<body>
+	 <?=$nc_core->widget->generate('regions', array('gtag'))?>
+	<nav class="mobile-menu">
+		<div class="mobile-menu__logo">
+			<a href="/"><img src="<?=$nc_parent_template_folder_path;?>img/logo.svg"></a>
+		</div>
+		<div class="mobile-menu__phone">
+			<div class="mobile-menu__tel">
+				<a href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone]'))?>"><?=shortcode('[phone]')?></a>
+				Круглосуточно 24/7
+			</div>
+		</div>
+		<?= nc_browse_level(0, $mobile_menu) ?>
+		<div class="mobile-menu__bottom">
+			<a class="mobile-menu__close">Меню</a>
+			<div class="mobile-menu__mess">
+                <?/*
+				<a href="<?=shortcode('[telegram]')?>">
+					<img src="<?=$nc_parent_template_folder_path;?>img/mess1.svg">
+					Telegram
+				</a>
+				<a href="<?=shortcode('[whatsapp]')?>">
+					<img src="<?=$nc_parent_template_folder_path;?>img/mess2.svg">
+					Whatssapp
+				</a>
+                */?>
+				<a href="<?=shortcode('[max]')?>">
+					<img src="<?=$nc_parent_template_folder_path;?>img/mess3.svg">
+					Max
+				</a>
+			</div>
+		</div>
+	</nav>
+	<div class="site-header">
+	<div class="top-page-line">
+		<div class="wrap">
+			<div class="top-page-line__adress">
+				<?=shortcode('[city]')?>, <?=shortcode('[address]')?>
+			</div>
+			<div class="top-page-line__contacts">
+				<a class="top-page-line__link" href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone]'))?>"><?=shortcode('[phone]')?></a>
+				<a class="top-page-line__link" href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone2]'))?>"><?=shortcode('[phone2]')?></a>
+				<a class="top-page-line__link" href="mailto:<?=$nc_core->widget->generate('regions', array('email'))?>"><?=$nc_core->widget->generate('regions', array('email'))?></a>
+				<div class="top-page-line__mess">
+					<a href="<?=shortcode('[max]')?>">
+						<svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M7.23976 0.0105827C2.77154 0.244864 -0.178006 3.76123 0.00834868 8.19537C0.0897449 10.1362 0.867293 11.8063 1.05151 13.6483C1.09863 14.1255 0.961542 14.7144 1.5099 14.9229C2.18463 15.1787 3.21922 14.7488 3.78471 14.3555C3.97749 14.2243 4.1617 14.0717 4.30307 13.8826C4.88784 14.2716 5.44262 14.6478 6.13877 14.8154C9.20398 15.5526 12.5626 13.8654 14.0556 11.155C16.8617 6.0632 13.0682 -0.294627 7.23976 0.0105827ZM5.50474 10.637C5.26269 10.8262 5.02921 11.0841 4.76146 11.2324C4.37376 11.4409 4.25381 11.2238 4.10815 10.8799C3.64976 9.7859 3.59407 7.9224 3.86182 6.77679C4.22168 5.2185 5.42334 3.8472 7.07483 3.70104C8.74559 3.55274 10.2964 4.40389 10.9968 5.94068C12.5477 9.36032 8.57852 12.737 5.50474 10.6392V10.637Z" fill="#F2F5F9"/>
+						</svg>
+					</a>
+                      <?/*
+					<a href="<?=shortcode('[telegram]')?>">
+						<svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path fill-rule="evenodd" clip-rule="evenodd" d="M1.03117 5.16592C5.0577 3.47245 7.74268 2.356 9.08611 1.81659C12.9219 0.276465 13.7189 0.00892841 14.2384 9.41924e-05C14.3527 -0.00184879 14.6082 0.0254864 14.7737 0.155112C14.9134 0.264566 14.9518 0.412421 14.9702 0.516195C14.9886 0.619969 15.0115 0.856369 14.9933 1.04108C14.7855 3.1494 13.8861 8.26573 13.4285 10.6271C13.2349 11.6262 12.8536 11.9613 12.4845 11.9941C11.6825 12.0653 11.0734 11.4823 10.2965 10.9908C9.08085 10.2215 8.39409 9.74265 7.21409 8.992C5.8504 8.1245 6.73442 7.64771 7.51159 6.86849C7.71498 6.66457 11.249 3.56151 11.3174 3.28001C11.326 3.2448 11.3339 3.11357 11.2532 3.04428C11.1724 2.97498 11.0532 2.99868 10.9672 3.01753C10.8453 3.04424 8.90325 4.28334 5.14115 6.73483C4.58991 7.10023 4.09062 7.27826 3.64327 7.26893C3.15011 7.25865 2.20146 6.99976 1.49623 6.77846C0.631245 6.50704 -0.0562297 6.36353 0.00363389 5.90257C0.0348146 5.66247 0.377327 5.41692 1.03117 5.16592Z" fill="#F2F5F9"/>
+						</svg>
+					</a>
+					<a href="<?=shortcode('[whatsapp]')?>">
+						<svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M7.50002 0C3.3646 0 4.83988e-05 3.36457 4.83988e-05 7.5C4.83988e-05 8.7913 0.333634 10.0611 0.966241 11.1815L0.0121136 14.5859C-0.0191907 14.6977 0.0111353 14.8177 0.0920046 14.9009C0.154287 14.9651 0.239069 15 0.326134 15C0.352221 15 0.378634 14.9967 0.404395 14.9905L3.95743 14.1104C5.04231 14.6928 6.26416 15 7.50002 15C11.6354 15 15 11.6354 15 7.5C15 3.36457 11.6354 0 7.50002 0ZM11.2728 10.1465C11.1124 10.5907 10.3428 10.996 9.97306 11.0504C9.6411 11.099 9.22111 11.1199 8.76002 10.9751C8.48056 10.8871 8.12187 10.7703 7.66241 10.5743C5.73101 9.75065 4.46971 7.83033 4.37319 7.70348C4.27699 7.57663 3.58699 6.67272 3.58699 5.73717C3.58699 4.80163 4.08427 4.34152 4.26101 4.15109C4.43775 3.96065 4.64612 3.91304 4.7746 3.91304C4.90308 3.91304 5.03123 3.91467 5.14373 3.91989C5.2621 3.92576 5.4209 3.87522 5.5771 4.2463C5.73753 4.62717 6.12264 5.56272 6.17025 5.65826C6.21851 5.75348 6.25046 5.86467 6.18655 5.99152C6.12264 6.11837 6.09068 6.19761 5.99416 6.3088C5.89764 6.42 5.79199 6.55663 5.70525 6.64207C5.60873 6.73696 5.50862 6.83967 5.62079 7.03011C5.73296 7.22054 6.11938 7.84304 6.69198 8.34717C7.42731 8.99478 8.04785 9.19565 8.24024 9.29087C8.43263 9.38609 8.54513 9.37011 8.6573 9.24326C8.76948 9.11609 9.13861 8.68793 9.26676 8.49783C9.39491 8.30772 9.52339 8.33902 9.70013 8.40261C9.87686 8.46587 10.8235 8.92565 11.0159 9.02087C11.2083 9.11609 11.3368 9.1637 11.385 9.24294C11.4333 9.32185 11.4333 9.70272 11.2728 10.1465Z" fill="#F2F5F9"/>
+						</svg>
+					</a>
+                    */?>
+				</div>
+			</div>
+		</div>
+	</div>
+	<header class="header">
+		<div class="wrap">
+			<div class="header__logo">
+				<a href="/"><img src="<?=$nc_parent_template_folder_path;?>img/logo.svg"></a>
+			</div>
+			<?=nc_browse_level(0, $h_menu)?>
+			<button class="header__button" data-fancybox="popup" data-src="#popup" >Консультация</button>
+			<a class="header__burger"></a>
+		</div>
+	</header>
+	</div><!-- /.site-header -->
+	<div class="site-header-spacer"></div><!-- /Header -->
+
+<!-- Footer --><div class="bottom-contacts">
+	<div class="wrap">
+		<h2>Мы на связи 24 / 7</h2>
+		<div class="bottom-contacts__phone">
+			<a href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone]'))?>"><?=shortcode('[phone]')?></a>
+			Позвонить прямо сейчас — бесплатно
+		</div>
+		<div class="bottom-contacts__mess">
+			Написать:
+			<a href="<?=shortcode('[max]')?>">
+				<svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M10.6183 0.0148158C4.06492 0.342809 -0.261075 5.26572 0.0122447 11.4735C0.131626 14.1907 1.27203 16.5288 1.54221 19.1076C1.61132 19.7757 1.41026 20.6002 2.21451 20.892C3.20412 21.2501 4.72152 20.6483 5.5509 20.0976C5.83365 19.9141 6.10383 19.7004 6.31117 19.4356C7.16883 19.9803 7.98251 20.5069 9.00353 20.7416C13.4992 21.7737 18.4252 19.4116 20.6149 15.6171C24.7304 8.48847 19.1666 -0.412478 10.6183 0.0148158ZM8.07362 14.8919C7.71861 15.1567 7.37618 15.5178 6.98348 15.7254C6.41485 16.0173 6.23892 15.7134 6.02529 15.2319C5.35298 13.7003 5.2713 11.0914 5.664 9.4875C6.19179 7.3059 7.95424 5.38608 10.3764 5.18146C12.8269 4.97383 15.1014 6.16544 16.1287 8.31696C18.4032 13.1045 12.5818 17.8318 8.07362 14.8949V14.8919Z" fill="url(#paint0_linear_2001_3406)"/>
+				<defs>
+				<linearGradient id="paint0_linear_2001_3406" x1="0" y1="10.5" x2="22" y2="10.5" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#1B3FA0"/>
+				<stop offset="1" stop-color="#3E64D8"/>
+				</linearGradient>
+				</defs>
+				</svg>
+			</a>
+             <?/*
+			<a href="<?=shortcode('[telegram]')?>">
+				<svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M1.51239 7.74888C7.41795 5.20867 11.3559 3.534 13.3263 2.72489C18.9521 0.414697 20.1211 0.0133926 20.883 0.000141289C21.0506 -0.00277319 21.4253 0.0382296 21.668 0.232668C21.873 0.396848 21.9294 0.618632 21.9563 0.774293C21.9833 0.929954 22.0169 1.28455 21.9902 1.56163C21.6854 4.7241 20.3662 12.3986 19.6951 15.9406C19.4111 17.4394 18.852 17.9419 18.3107 17.9911C17.1343 18.098 16.2409 17.2235 15.1015 16.4861C13.3186 15.3323 12.3113 14.614 10.5807 13.488C8.58059 12.1868 9.87715 11.4716 11.017 10.3027C11.3153 9.99686 16.4986 5.34226 16.5989 4.92001C16.6115 4.86721 16.6231 4.67036 16.5047 4.56642C16.3862 4.46248 16.2114 4.49802 16.0852 4.52629C15.9064 4.56636 13.0581 6.42501 7.54035 10.1022C6.73187 10.6503 5.99958 10.9174 5.34347 10.9034C4.62016 10.888 3.2288 10.4996 2.19447 10.1677C0.925826 9.76056 -0.0824703 9.5453 0.00532971 8.85385C0.0510613 8.4937 0.553413 8.12538 1.51239 7.74888Z" fill="url(#paint0_linear_2001_3408)"/>
+				<defs>
+				<linearGradient id="paint0_linear_2001_3408" x1="0" y1="9" x2="22" y2="9" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#1B3FA0"/>
+				<stop offset="1" stop-color="#3E64D8"/>
+				</linearGradient>
+				</defs>
+				</svg>
+			</a>
+			<a href="<?=shortcode('[max]')?>">
+				<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M11 0C4.93475 0 7.09849e-05 4.9347 7.09849e-05 11C7.09849e-05 12.8939 0.48933 14.7563 1.41715 16.3996L0.0177666 21.3926C-0.0281463 21.5567 0.0163318 21.7327 0.13494 21.8546C0.226288 21.9488 0.350635 22 0.47833 22C0.516591 22 0.55533 21.9952 0.593113 21.9861L5.80423 20.6953C7.39539 21.5495 9.18743 22 11 22C17.0653 22 22 17.0653 22 11C22 4.9347 17.0653 0 11 0ZM16.5335 14.8816C16.2982 15.533 15.1695 16.1274 14.6272 16.2073C14.1403 16.2786 13.5243 16.3092 12.848 16.0968C12.4382 15.9677 11.9121 15.7965 11.2382 15.509C8.40548 14.301 6.55557 11.4845 6.41401 11.2984C6.27292 11.1124 5.26092 9.78665 5.26092 8.41452C5.26092 7.04239 5.99027 6.36757 6.24949 6.08826C6.5087 5.80896 6.81431 5.73913 7.00274 5.73913C7.19118 5.73913 7.37913 5.74152 7.54413 5.74917C7.71774 5.75778 7.95065 5.68365 8.17974 6.22791C8.41504 6.78652 8.97987 8.15865 9.04969 8.29878C9.12048 8.43843 9.16735 8.60152 9.07361 8.78757C8.97987 8.97361 8.933 9.08983 8.79143 9.25291C8.64987 9.416 8.49491 9.61639 8.3677 9.7417C8.22613 9.88087 8.07931 10.0315 8.24383 10.3108C8.40835 10.5901 8.97509 11.5031 9.81491 12.2425C10.8934 13.1923 11.8035 13.487 12.0857 13.6266C12.3679 13.7663 12.5329 13.7428 12.6974 13.5568C12.8619 13.3703 13.4033 12.7423 13.5912 12.4635C13.7792 12.1847 13.9676 12.2306 14.2269 12.3238C14.4861 12.4166 15.8745 13.091 16.1566 13.2306C16.4388 13.3703 16.6272 13.4401 16.698 13.5563C16.7688 13.672 16.7688 14.2307 16.5335 14.8816Z" fill="url(#paint0_linear_2001_3410)"/>
+				<defs>
+				<linearGradient id="paint0_linear_2001_3410" x1="0" y1="11" x2="22" y2="11" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#1B3FA0"/>
+				<stop offset="1" stop-color="#3E64D8"/>
+				</linearGradient>
+				</defs>
+				</svg>
+			</a>
+            */?>
+		</div>
+	</div>
+</div>
+<footer class="footer">
+		<div class="wrap">
+			<div class="footer__company">
+				<div class="footer__logo">
+					<a href="/"><img src="<?=$nc_parent_template_folder_path;?>img/logo.svg"></a>
+				</div>
+				<a class="footer__license" href="/#license" title="Посмотреть лицензию на главной">Лицензия № <?=$nc_core->widget->generate('regions', array('licinfo'))?></a>
+			</div>
+			<nav class="footer__nav">
+				<h3>Услуги</h3>
+				<ul>
+					<li><a href="/uslugi/vyvod-iz-zapoya/">Вывод из запоя</a></li>
+					<li><a href="/uslugi/vyvod-iz-zapoya/vyvod-iz-zapoya-na-domu/">Вывод из запоя на дому</a></li>
+					<li><a href="/uslugi/vyvod-iz-zapoya/vyvod-iz-zapoya-v-statsionare/">Вывод из запоя в стационаре</a></li>
+					<li><a href="/uslugi/lechenie-alkogolizma/">Лечение алкоголизма</a></li>
+					<li><a href="/uslugi/lechenie-narkomanii/">Лечение наркомании</a></li>
+					<li><a href="/uslugi/kodirovanie-ot-alkogolizma/">Кодирование от алкоголизма</a></li>
+					<li><a href="/uslugi/narkologicheskaya-pomosch/">Наркологическая помощь</a></li>
+				</ul>
+			</nav>
+			<nav class="footer__nav">
+				<h3>Центр</h3>
+				<ul>
+					<li><a href="/o-nas/">О центре</a></li>
+					<li><a href="/o-nas/spetsialisty/">Специалисты</a></li>
+					<li><a href="/cases/">Кейсы</a></li>
+					<li><a href="/blog/">Статьи</a></li>
+					<li><a href="/o-nas/litsenzii/">Лицензии</a></li>
+					<li><a href="/kontakty/">Контакты</a></li>
+				</ul>
+			</nav>
+			<div class="footer__contacts">
+				<h3>Контакты</h3>
+				<a class="footer__phone" href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone]'))?>"><?=shortcode('[phone]')?></a>
+				<a class="footer__phone" href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone2]'))?>"><?=shortcode('[phone2]')?></a>
+				<a class="footer__mail" href="mailto:<?=$nc_core->widget->generate('regions', array('email'))?>"><?=$nc_core->widget->generate('regions', array('email'))?></a>
+				<div class="footer__adress">
+					<?=shortcode('[city]')?>, <?=shortcode('[address]')?>
+				</div>
+				<div class="footer__hours">
+					Круглосуточно, без выходных
+				</div>
+			</div>
+		</div>
+	</footer>
+	<div class="copy">
+		<div class="wrap">
+			© <?=date('Y')?> Центр медицины и психологии
+			<span>·</span>
+			Все права защищены
+			<span>·</span>
+			<a href="/politika-konfidencialnosti/">Политика конфиденциальности</a>
+		</div>
+	</div>
+	
+<div class="popup" id="popup" style="display: none; width: 100%; max-width: 760px;">
+		<div class="flex">
+			<div class="popup__info">
+				<div class="popup__top-text">
+					Бесплатная консультация
+				</div>
+				<h2 class="popup__name">Первый шаг <br/>к <span>выздоровлению</span></h2>
+				<ul>
+					<li>Анонимно — без постановки на учёт</li>
+					<li>Ответим в течение 10 минут</li>
+					<li>Работаем круглосуточно, 7 дней в неделю</li>
+					<li>Приезжаем на дом в экстренных ситуациях</li>
+				</ul>
+				<div class="popup__phone">
+					Позвонить напрямую
+					<a href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone]'))?>"><?=shortcode('[phone]')?></a>
+				</div>
+			</div>
+			<form class="popup__form" enctype='multipart/form-data' method="post" action='<?= $SUB_FOLDER ?><?= $HTTP_ROOT_PATH ?>add.php'>
+				<input name='catalogue' type='hidden' value='<?= $catalogue ?>' />
+				<input name='cc' type='hidden' value="<?=$current_catalogue['zakaz_cc']?>" />
+				<input name='sub' type='hidden' value="<?=$current_catalogue['zakaz_sub']?>"/>
+				<input name='posting' type='hidden' value='1' />
+				<input name="f_urlMessage" type="hidden" value="<?=$nc_core->url->source_url()?>"> 
+				<input name="f_utm" type="hidden" value="<?=get_utm()?>">
+				<h3>Записаться на консультацию</h3>
+				<p>Оставьте имя и номер — перезвоним в удобное для вас время</p>
+				<div class="popup__label">
+					Ваше имя
+				</div>
+				<input type="text" name="f_name" placeholder="Иван" required>
+				<div class="popup__label">
+					Телефон
+				</div>
+				<input type="text" name="f_phone" placeholder="+7 999 999 99 99" required>
+				<button type="submit">Отправить заявку →</button>
+				<div class="agree">
+					<input type="checkbox" class="checkbox" id="agree-popup" required><label for="agree-popup">Я даю свое согласие на <a href="/policy/">обработку персональных данных</a> и соглашаюсь с <a href="/politika-konfidencialnosti/">политикой конфиденциальности</a></label>
+				</div>
+			</form>
+		</div>
+	</div>
+	<!-- cookie notice (информационный) -->
+	<div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Уведомление о файлах cookie">
+		<div class="cookie-banner__in">
+			<div class="cookie-banner__text">
+				Мы используем файлы cookie, чтобы сайт работал корректно и им было удобнее пользоваться. Продолжая просмотр сайта, вы соглашаетесь с использованием файлов cookie. <a href="/cookie/" class="cookie-banner__link">Политика использования cookie</a>
+			</div>
+			<div class="cookie-banner__btns">
+				<button type="button" class="cookie-banner__btn cookie-banner__btn--all" data-cookie-accept>Принять</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html><!-- /Footer -->

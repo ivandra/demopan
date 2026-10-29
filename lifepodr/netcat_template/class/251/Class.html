@@ -1,0 +1,48 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<?php $GLOBALS['dir266_cnt'] = 0; ?>
+<div class="reasons"><div class="wrap">
+	<div class="actions__top-text">Основные направления работы клиники</div>
+	<h2 class="actions__name">С чем обращаются<br>в «МедЭльта»</h2>
+	<div class="actions__desc">В «МедЭльта» обращаются при различных проблемах, связанных с употреблением алкоголя и наркотических веществ. Медицинская помощь может потребоваться как при резком ухудшении самочувствия, так и в ситуации, когда человек готов начать системное лечение зависимости.</div>
+	<div class="reasons__list"><!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+<?php
+$__links = '';
+if (preg_match_all('#<a\b[^>]*>.*?</a>#is', (string)$f_linksblock, $__m)) {
+    foreach ($__m[0] as $__a) $__links .= '<li>' . $__a . '</li>';
+}
+$__txt = trim(strip_tags(str_replace('&nbsp;', ' ', (string)$f_maintitle . (string)$f_comment . (string)$f_buttonname)));
+if ($__links !== '' || $__txt !== ''):
+    $GLOBALS['dir266_cnt'] = (int)$GLOBALS['dir266_cnt'] + 1;
+?>
+<div class="reasons__item">
+	<h3><?=shortcode_component($f_maintitle)?></h3>
+<?php if ($__links !== '') echo '<ul>' . $__links . '</ul>'; ?>
+	<div class="reasons__item-text"><?=shortcode_component($f_comment)?></div>
+	<button type="button"><?=shortcode_component($f_buttonname)?></button>
+</div>
+<?php endif; ?><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><?php if (empty($GLOBALS['dir266_cnt'])): ?>
+	<div class="reasons__item"><h3>Вывод из запоя</h3><ul><li><a href="/uslugi/vyvod-iz-zapoya/vyvod-iz-zapoya-na-domu/">Вывод из запоя на дому</a></li><li><a href="/uslugi/vyvod-iz-zapoya/vyvod-iz-zapoya-v-statsionare/">Вывод из запоя в стационаре</a></li></ul><div class="reasons__item-text">Передовые методы и препараты</div><button type="button">Вызов нарколога</button></div>
+	<div class="reasons__item"><h3>Лечение зависимостей</h3><ul><li><a href="/uslugi/lechenie-alkogolizma/">Лечение алкоголизма</a></li><li><a href="/uslugi/lechenie-narkomanii/">Лечение наркомании</a></li><li><a href="/uslugi/narkologicheskaya-pomosch/">Наркологическая помощь</a></li></ul><div class="reasons__item-text">Работаем со всеми видами зависимостей</div><button type="button">Консультация</button></div>
+	<div class="reasons__item"><h3>Кодирование</h3><ul><li><a href="/uslugi/kodirovanie-ot-alkogolizma/">Кодирование от алкоголизма</a></li></ul><div class="reasons__item-text">Индивидуальный подход к каждому</div><button type="button">Записаться</button></div>
+<?php endif; ?>
+	</div>
+	<div class="dir-lead">Основные направления включают:</div>
+	<ul class="dir-list">
+		<li>консультации специалистов;</li>
+		<li>наркологическую помощь;</li>
+		<li>вывод из запоя;</li>
+		<li>помощь на дому и лечение в стационаре;</li>
+		<li>детоксикационные мероприятия по медицинским показаниям;</li>
+		<li>лечение алкогольной зависимости;</li>
+		<li>лечение наркотической зависимости;</li>
+		<li>кодирование от алкоголизма;</li>
+		<li>психологическую и психотерапевтическую поддержку;</li>
+		<li>профилактику повторных срывов;</li>
+		<li>дальнейшее сопровождение пациента.</li>
+	</ul>
+	<div class="muted onas-note onas-note--mt">Перед началом лечения специалист оценивает состояние человека и определяет, какой формат помощи будет наиболее обоснованным. При наличии медицинских показаний может быть рекомендовано наблюдение в стационаре.</div>
+</div></div><!-- /FormSuffix -->

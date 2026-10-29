@@ -1,0 +1,28 @@
+<?php
+if (!($inside_admin && $nc_core->InsideAdminAccess()) && $posting) {
+ $zhp_fail='';if(!is_string($_POST['zhp_nonce']??null)||empty($_SESSION['zhp_form_nonce'])||!hash_equals($_SESSION['zhp_form_nonce'],$_POST['zhp_nonce'])){$zhp_fail='Обновите страницу и повторите отправку.';}
+ if(!is_string($_POST['nc_token']??null)||!hash_equals($nc_core->token->get(),$_POST['nc_token'])){$zhp_fail='Недействительный токен формы.';}
+ $zhp_type=is_string($f_form_type??null)?$f_form_type:'';
+ foreach(array('name','phone','email','contact','message','page_url','answers','request_key') as $zhp_key){$zhp_var='f_'.$zhp_key;$$zhp_var=is_string($$zhp_var??null)?trim($$zhp_var):'';}
+ if(!empty($_POST['zhp_website'])){$zhp_fail='Отправка отклонена.';}
+ if(!in_array($zhp_type,array('contact','consult','subscribe','quiz','calc'),true)){$zhp_fail='Неизвестная форма.';}
+ if(empty($f_consent)){$zhp_fail='Необходимо согласие на обработку данных.';}
+ if(mb_strlen($f_message)>5000||mb_strlen($f_answers)>6000||mb_strlen($f_name)>150||mb_strlen($f_page_url)>2000){$zhp_fail='Слишком длинные данные.';}
+ if(!preg_match('/^[a-f0-9]{32}$/',$f_request_key)){$zhp_fail='Неверный ключ отправки.';}
+ if($zhp_type==='subscribe'){if(!filter_var($f_email,FILTER_VALIDATE_EMAIL)){$zhp_fail='Укажите корректный email.';}}
+ else{$zhp_contact=$f_contact?:($f_phone?:$f_email);if(!filter_var($zhp_contact,FILTER_VALIDATE_EMAIL)&&strlen(preg_replace('/\D/','',$zhp_contact))<10){$zhp_fail='Укажите email или телефон (не менее 10 цифр).';}}
+ if($zhp_type==='quiz'){
+ $zhp_qclass=(int)$db->get_var("SELECT Class_ID FROM Class WHERE Keyword='zhp_quiz' AND ClassTemplate=0");$zhp_answers=array();
+ $zhp_questions=$zhp_qclass?(array)$db->get_results("SELECT a.Message_ID,a.question,a.answers FROM Message".$zhp_qclass." a JOIN Sub_Class c ON c.Sub_Class_ID=a.Sub_Class_ID WHERE c.Catalogue_ID=".(int)$catalogue." AND c.Checked=1 AND a.Checked=1 ORDER BY a.Priority,a.Message_ID",ARRAY_A):array();
+ if(!$zhp_questions){$zhp_fail='Квиз временно недоступен.';}
+ foreach($zhp_questions as $zhp_q){$zhp_answer=$_POST['quiz_'.$zhp_q['Message_ID']]??null;$zhp_options=array_map('trim',preg_split('/\\R/u',trim($zhp_q['answers'])));if(!is_string($zhp_answer)||!in_array($zhp_answer,$zhp_options,true)){$zhp_fail='Ответьте на все вопросы квиза.';}else{$zhp_answers[]=$zhp_q['question'].': '.$zhp_answer;}}
+ $f_answers=implode("\n",$zhp_answers);
+ }
+ if($f_email!==''&&!filter_var($f_email,FILTER_VALIDATE_EMAIL)){$zhp_fail='Проверьте email.';}
+ if(!empty($_SESSION['zhp_sent'])&&count(array_filter($_SESSION['zhp_sent'],function($t){return $t>time()-600;}))>=10){$zhp_fail='Слишком много отправок. Попробуйте позже.';}
+ $zhp_duplicate=(int)$db->get_var("SELECT Message_ID FROM Message".(int)$classID." WHERE request_key='".$db->escape($f_request_key)."'");
+ if($zhp_duplicate){$posting=0;$zhp_already_saved=true;}
+ if($zhp_fail){$posting=0;$warnText=$zhp_fail;$zhp_already_saved=false;}
+ $f_name=strip_tags($f_name);$f_form_type=$zhp_type;$f_domain=strtolower(preg_replace('/:\d+$/','',$_SERVER['HTTP_HOST']));$f_utm=get_utm();$f_delivery='Сохранено в Netcat';$f_consent=1;
+}
+?>

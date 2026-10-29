@@ -1,0 +1,58 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<?php $GLOBALS['reasons_cnt'] = 0; ?>
+<div class="reasons">
+	<div class="wrap">
+		<h2 class="reasons__name">Лечим <span>причины</span>, <br/> а не симптомы</h2>
+		<div class="reasons__top-text">Первая клиника в <?=shortcode_component('[inCity]')?>, где возвращают человека к нормальной жизни передовыми методами. Врачебная помощь и психологическая поддержка по актуальным программам.</div>
+		<div class="actions__top-text">Основные направления</div>
+		<div class="reasons__list"><!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+<?php
+$__links = '';
+if (preg_match_all('#<a\b[^>]*>.*?</a>#is', (string)$f_linksblock, $__m)) {
+    foreach ($__m[0] as $__a) $__links .= '<li>' . $__a . '</li>';
+}
+$__txt = trim(strip_tags(str_replace('&nbsp;', ' ', (string)$f_maintitle . (string)$f_comment . (string)$f_buttonname)));
+if ($__links !== '' || $__txt !== ''):
+    $GLOBALS['reasons_cnt'] = (int)$GLOBALS['reasons_cnt'] + 1;
+?>
+<div class="reasons__item">
+	<h3><?=shortcode_component($f_maintitle)?></h3>
+<?php if ($__links !== '') echo '<ul>' . $__links . '</ul>'; ?>
+	<div class="reasons__item-text"><?=shortcode_component($f_comment)?></div>
+	<button data-fancybox="popup-<?=rand(0,999999)?>" data-src="#popup"><?=shortcode_component($f_buttonname)?></button>
+</div>
+<?php endif; ?><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><?php if (empty($GLOBALS['reasons_cnt'])): ?>
+			<div class="reasons__item">
+				<h3>Вывод из запоя</h3>
+                <?
+                 echo nc_browse_sub(50, $h_block_menu, $ignore_check = 0);
+                 ?>
+				<div class="reasons__item-text">Передовые методы и препараты</div>
+				<button data-fancybox="popup-<?=rand(0,999999)?>" data-src="#popup">Вызов нарколога</button>
+			</div>
+			<div class="reasons__item">
+				<h3>Лечение зависимостей</h3>
+				<ul>
+					<li><a href="/uslugi/lechenie-alkogolizma/">Лечение алкоголизма</a></li>
+					<li><a href="/uslugi/lechenie-narkomanii/">Лечение наркомании</a></li>
+					<li><a href="/uslugi/narkologicheskaya-pomosch/">Наркологическая помощь</a></li>
+				</ul>
+				<div class="reasons__item-text">Работаем со всеми видами зависимостей</div>
+				<button data-fancybox="popup-<?=rand(0,999999)?>" data-src="#popup">Консультация психиатра</button>
+			</div>
+			<div class="reasons__item">
+				<h3>Кодирование</h3>
+				 <?
+                 echo nc_browse_sub(60, $h_block_menu, $ignore_check = 0);
+                 ?>
+				<div class="reasons__item-text">Индивидуальный подход к каждому</div>
+				<button data-fancybox="popup-<?=rand(0,999999)?>" data-src="#popup">консультация</button>
+			</div>
+<?php endif; ?>
+		</div>
+	</div>
+</div><!-- /FormSuffix -->

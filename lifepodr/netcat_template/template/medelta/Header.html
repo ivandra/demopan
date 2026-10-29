@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<?
+		$pageHederTitle = (($nc_core->page->get_title()) ? $nc_core->page->get_title() : $f_title); 
+		 /* Обработка SHORT CODE */        
+        $pageHederTitle = shortcode($pageHederTitle);
+        /* Обработка SHORT CODE */		
+	?>	
+    <title><?=$pageHederTitle?></title>
+    
+    <?=($nc_core->page->get_keywords() ? "<meta name='keywords' content='".$nc_core->page->get_keywords()."'>" : NULL );?>
+    <?      $pageDesc = $nc_core->page->get_description(); 
+		  /* Обработка SHORT CODE */ 
+              $pageDesc = shortcode($pageDesc); 
+              $pageDesc = trim($pageDesc);
+             ?>
+	<meta name='description' content='<?=$pageDesc?>'>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="<?=$nc_parent_template_folder_path;?>css/style.css?v=<?=date('YmdHis')?>">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <script src="<?=$nc_parent_template_folder_path;?>js/jquery.maskedinput.min.js"></script>
+	<script src="<?=$nc_parent_template_folder_path;?>js/common.js?v=<?=date('YmdHis')?>"></script>
+    
+      <link rel="icon" href="/favicon/favicon.ico" sizes="any">
+      <link rel="icon" type="image/svg+xml" href="<?=$nc_parent_template_folder_path;?>img/favicon/favicon.svg">
+      <link rel="icon" type="image/png" sizes="32x32" href="<?=$nc_parent_template_folder_path;?>img/favicon/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="<?=$nc_parent_template_folder_path;?>img/favicon/favicon-16x16.png">
+      <link rel="apple-touch-icon" sizes="180x180" href="<?=$nc_parent_template_folder_path;?>img/favicon/apple-touch-icon.png">
+      <link rel="manifest" href="<?=$nc_parent_template_folder_path;?>img/favicon/site.webmanifest">
+      <link rel="mask-icon" href="<?=$nc_parent_template_folder_path;?>img/favicon/safari-pinned-tab.svg" color="#FE4E5B">
+      <meta name="theme-color" content="#FE4E5B">
+      <meta name="msapplication-TileColor" content="#ffffff">
+      <meta name="msapplication-config" content="<?=$nc_parent_template_folder_path;?>img/favicon/browserconfig.xml">
+
+
+     <?=$nc_core->widget->generate('regions', array('yandexwebmaster'))?>
+     
+      <?php
+        print_open_graph_tags();
+        print_website_schema();
+        print_organization_schema();
+        print_medicalorganization_schema();
+    ?>
+</head>
+<body>
+	 <?=$nc_core->widget->generate('regions', array('gtag'))?>
+	<nav class="mobile-menu">
+		<div class="mobile-menu__logo">
+			<a href="/"><img src="<?=$nc_parent_template_folder_path;?>img/logo.svg"></a>
+		</div>
+		<div class="mobile-menu__phone">
+			<div class="mobile-menu__tel">
+				<a href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone]'))?>"><?=shortcode('[phone]')?></a>
+				Круглосуточно 24/7
+			</div>
+		</div>
+		<?= nc_browse_level(0, $mobile_menu) ?>
+		<div class="mobile-menu__bottom">
+			<a class="mobile-menu__close">Меню</a>
+			<div class="mobile-menu__mess">
+                <?/*
+				<a href="<?=shortcode('[telegram]')?>">
+					<img src="<?=$nc_parent_template_folder_path;?>img/mess1.svg">
+					Telegram
+				</a>
+				<a href="<?=shortcode('[whatsapp]')?>">
+					<img src="<?=$nc_parent_template_folder_path;?>img/mess2.svg">
+					Whatssapp
+				</a>
+                */?>
+				<a href="<?=shortcode('[max]')?>">
+					<img src="<?=$nc_parent_template_folder_path;?>img/mess3.svg">
+					Max
+				</a>
+			</div>
+		</div>
+	</nav>
+	<div class="site-header">
+	<div class="top-page-line">
+		<div class="wrap">
+			<div class="top-page-line__adress">
+				<?=shortcode('[city]')?>, <?=shortcode('[address]')?>
+			</div>
+			<div class="top-page-line__contacts">
+				<a class="top-page-line__link" href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone]'))?>"><?=shortcode('[phone]')?></a>
+				<a class="top-page-line__link" href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone2]'))?>"><?=shortcode('[phone2]')?></a>
+				<a class="top-page-line__link" href="mailto:<?=$nc_core->widget->generate('regions', array('email'))?>"><?=$nc_core->widget->generate('regions', array('email'))?></a>
+				<div class="top-page-line__mess">
+					<a href="<?=shortcode('[max]')?>">
+						<svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M7.23976 0.0105827C2.77154 0.244864 -0.178006 3.76123 0.00834868 8.19537C0.0897449 10.1362 0.867293 11.8063 1.05151 13.6483C1.09863 14.1255 0.961542 14.7144 1.5099 14.9229C2.18463 15.1787 3.21922 14.7488 3.78471 14.3555C3.97749 14.2243 4.1617 14.0717 4.30307 13.8826C4.88784 14.2716 5.44262 14.6478 6.13877 14.8154C9.20398 15.5526 12.5626 13.8654 14.0556 11.155C16.8617 6.0632 13.0682 -0.294627 7.23976 0.0105827ZM5.50474 10.637C5.26269 10.8262 5.02921 11.0841 4.76146 11.2324C4.37376 11.4409 4.25381 11.2238 4.10815 10.8799C3.64976 9.7859 3.59407 7.9224 3.86182 6.77679C4.22168 5.2185 5.42334 3.8472 7.07483 3.70104C8.74559 3.55274 10.2964 4.40389 10.9968 5.94068C12.5477 9.36032 8.57852 12.737 5.50474 10.6392V10.637Z" fill="#F2F5F9"/>
+						</svg>
+					</a>
+                      <?/*
+					<a href="<?=shortcode('[telegram]')?>">
+						<svg width="15" height="12" viewBox="0 0 15 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path fill-rule="evenodd" clip-rule="evenodd" d="M1.03117 5.16592C5.0577 3.47245 7.74268 2.356 9.08611 1.81659C12.9219 0.276465 13.7189 0.00892841 14.2384 9.41924e-05C14.3527 -0.00184879 14.6082 0.0254864 14.7737 0.155112C14.9134 0.264566 14.9518 0.412421 14.9702 0.516195C14.9886 0.619969 15.0115 0.856369 14.9933 1.04108C14.7855 3.1494 13.8861 8.26573 13.4285 10.6271C13.2349 11.6262 12.8536 11.9613 12.4845 11.9941C11.6825 12.0653 11.0734 11.4823 10.2965 10.9908C9.08085 10.2215 8.39409 9.74265 7.21409 8.992C5.8504 8.1245 6.73442 7.64771 7.51159 6.86849C7.71498 6.66457 11.249 3.56151 11.3174 3.28001C11.326 3.2448 11.3339 3.11357 11.2532 3.04428C11.1724 2.97498 11.0532 2.99868 10.9672 3.01753C10.8453 3.04424 8.90325 4.28334 5.14115 6.73483C4.58991 7.10023 4.09062 7.27826 3.64327 7.26893C3.15011 7.25865 2.20146 6.99976 1.49623 6.77846C0.631245 6.50704 -0.0562297 6.36353 0.00363389 5.90257C0.0348146 5.66247 0.377327 5.41692 1.03117 5.16592Z" fill="#F2F5F9"/>
+						</svg>
+					</a>
+					<a href="<?=shortcode('[whatsapp]')?>">
+						<svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M7.50002 0C3.3646 0 4.83988e-05 3.36457 4.83988e-05 7.5C4.83988e-05 8.7913 0.333634 10.0611 0.966241 11.1815L0.0121136 14.5859C-0.0191907 14.6977 0.0111353 14.8177 0.0920046 14.9009C0.154287 14.9651 0.239069 15 0.326134 15C0.352221 15 0.378634 14.9967 0.404395 14.9905L3.95743 14.1104C5.04231 14.6928 6.26416 15 7.50002 15C11.6354 15 15 11.6354 15 7.5C15 3.36457 11.6354 0 7.50002 0ZM11.2728 10.1465C11.1124 10.5907 10.3428 10.996 9.97306 11.0504C9.6411 11.099 9.22111 11.1199 8.76002 10.9751C8.48056 10.8871 8.12187 10.7703 7.66241 10.5743C5.73101 9.75065 4.46971 7.83033 4.37319 7.70348C4.27699 7.57663 3.58699 6.67272 3.58699 5.73717C3.58699 4.80163 4.08427 4.34152 4.26101 4.15109C4.43775 3.96065 4.64612 3.91304 4.7746 3.91304C4.90308 3.91304 5.03123 3.91467 5.14373 3.91989C5.2621 3.92576 5.4209 3.87522 5.5771 4.2463C5.73753 4.62717 6.12264 5.56272 6.17025 5.65826C6.21851 5.75348 6.25046 5.86467 6.18655 5.99152C6.12264 6.11837 6.09068 6.19761 5.99416 6.3088C5.89764 6.42 5.79199 6.55663 5.70525 6.64207C5.60873 6.73696 5.50862 6.83967 5.62079 7.03011C5.73296 7.22054 6.11938 7.84304 6.69198 8.34717C7.42731 8.99478 8.04785 9.19565 8.24024 9.29087C8.43263 9.38609 8.54513 9.37011 8.6573 9.24326C8.76948 9.11609 9.13861 8.68793 9.26676 8.49783C9.39491 8.30772 9.52339 8.33902 9.70013 8.40261C9.87686 8.46587 10.8235 8.92565 11.0159 9.02087C11.2083 9.11609 11.3368 9.1637 11.385 9.24294C11.4333 9.32185 11.4333 9.70272 11.2728 10.1465Z" fill="#F2F5F9"/>
+						</svg>
+					</a>
+                    */?>
+				</div>
+			</div>
+		</div>
+	</div>
+	<header class="header">
+		<div class="wrap">
+			<div class="header__logo">
+				<a href="/"><img src="<?=$nc_parent_template_folder_path;?>img/logo.svg"></a>
+			</div>
+			<?=nc_browse_level(0, $h_menu)?>
+			<button class="header__button" data-fancybox="popup" data-src="#popup" >Консультация</button>
+			<a class="header__burger"></a>
+		</div>
+	</header>
+	</div><!-- /.site-header -->
+	<div class="site-header-spacer"></div>

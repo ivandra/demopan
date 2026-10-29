@@ -1,0 +1,73 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+<?
+	/* Разбираем таблицу цен: <tr><td>Название</td><td>Цена</td></tr> */
+	$pr_rows = array();
+
+	if ($f_price) {
+		preg_match_all('#<tr[^>]*>(.*?)</tr>#is', shortcode_component($f_price), $pr_trs);
+
+		foreach ($pr_trs[1] as $pr_tr) {
+			if (stripos($pr_tr, '<th') !== false) continue;          /* строка-шапка */
+
+			preg_match_all('#<td[^>]*>(.*?)</td>#is', $pr_tr, $pr_tds);
+			if (count($pr_tds[1]) < 2) continue;
+
+			/* чистим ячейки от <strong>, <br>, &nbsp; и лишних пробелов */
+			$pr_cells = array();
+			foreach (array_slice($pr_tds[1], 0, 2) as $pr_td) {
+				$pr_td = preg_replace('#<br\s*/?>#i', ' ', $pr_td);
+				$pr_td = html_entity_decode(strip_tags($pr_td), ENT_QUOTES, 'UTF-8');
+				$pr_td = str_replace("\xC2\xA0", ' ', $pr_td);
+				$pr_cells[] = trim(preg_replace('/\s+/u', ' ', $pr_td));
+			}
+
+			if ($pr_cells[0] === '' || $pr_cells[1] === '') continue;
+
+			/* в ячейке только число -> дописываем «рублей» */
+			if (preg_match('/^[\d\s]+$/u', $pr_cells[1])) {
+				$pr_cells[1] = $pr_cells[1] . ' рублей';
+			}
+
+			$pr_rows[] = $pr_cells;
+		}
+
+		/* первая строка — шапка («Услуга | Цена»), если в колонке цены нет цифр */
+		if ($pr_rows && !preg_match('/\d/', $pr_rows[0][1])) {
+			array_shift($pr_rows);
+		}
+	}
+?>
+<?if($pr_rows){?>
+	<div class="prices">
+		<div class="wrap">
+
+			<?if($f_maintitle){?>
+				<h2 class="actions__name"><?=shortcode_component($f_maintitle)?></h2>
+			<?}?>
+
+			<?if($f_desc){?>
+				<div class="actions__desc">
+					<?=shortcode_component($f_desc)?>
+				</div>
+			<?}?>
+
+			<?foreach($pr_rows as $pr_row){?>
+				<div class="prices__item">
+					<div class="prices__name">
+						<?=$pr_row[0]?>
+					</div>
+					<div class="prices__price">
+						<?=$pr_row[1]?>
+						<button data-fancybox="popup-<?=rand(0,999999)?>" data-src="#popup"  data-name="<?=htmlspecialchars($pr_row[0], ENT_QUOTES, 'UTF-8')?>">заказать</button>
+					</div>
+				</div>
+			<?}?>
+
+		</div>
+	</div>
+<?}?><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><!-- /FormSuffix -->

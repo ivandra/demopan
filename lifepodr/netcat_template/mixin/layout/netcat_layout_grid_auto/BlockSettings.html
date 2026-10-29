@@ -1,0 +1,78 @@
+<div class="nc-mixins-mixin-settings-netcat-layout-grid-auto">
+    <table class="nc-mixins-layout-table">
+        <tr>
+            <td>Режим заполнения:</td>
+            <td>
+                <select name="mixin.settings.auto_mode">
+                    <option value="auto-fill" selected>auto-fill (создавать пустые колонки)</option>
+                    <option value="auto-fit">auto-fit (растягивать существующие)</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Минимальная ширина колонки:</td>
+            <td>
+                <input type="number" class="nc--small" min="50" value="280" name="mixin.settings.column_min_width">
+                <select name="mixin.settings.column_min_width_unit">
+                    <option value="px" selected>px</option>
+                    <option value="rem">rem</option>
+                    <option value="%">%</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Максимальная ширина колонки:</td>
+            <td>
+                <select name="mixin.settings.column_max_width">
+                    <option value="1fr" selected>свободное пространство (1fr)</option>
+                    <option value="auto">по содержимому (auto)</option>
+                    <option value="max-content">максимальная (max-content)</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Отступ между колонками:</td>
+            <td>
+                <input type="number" class="nc--small" min="0" value="24" name="mixin.settings.column_gap">
+                <select name="mixin.settings.column_gap_unit">
+                    <option value="px" selected>px</option>
+                    <option value="rem">rem</option>
+                    <option value="%">%</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Отступ между строками:</td>
+            <td>
+                <input type="number" class="nc--small" min="0" value="24" name="mixin.settings.row_gap">
+                <select name="mixin.settings.row_gap_unit">
+                    <option value="px" selected>px</option>
+                    <option value="rem">rem</option>
+                    <option value="%">%</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Выравнивание по вертикали:</td>
+            <td>
+                <select name="mixin.settings.align_items">
+                    <option value="stretch" selected>растянуть (stretch)</option>
+                    <option value="start">по верхнему краю (start)</option>
+                    <option value="center">по центру (center)</option>
+                    <option value="end">по нижнему краю (end)</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Выравнивание по горизонтали:</td>
+            <td>
+                <select name="mixin.settings.justify_items">
+                    <option value="stretch" selected>растянуть (stretch)</option>
+                    <option value="start">по левому краю (start)</option>
+                    <option value="center">по центру (center)</option>
+                    <option value="end">по правому краю (end)</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+</div>

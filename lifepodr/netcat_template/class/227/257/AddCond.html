@@ -1,0 +1,58 @@
+<?php
+
+/*
+  $posting = 0;
+  $warnText = "<h1>Извините, заявки временно не принимаются. </h1><p><b>Позвоните по телефону, указанному в шапке сайта</b></p><br>";
+  
+*/
+
+/*проверяем текст письма на ссылку*/
+if( 
+(substr_count($f_message, "http")  != 0) OR 
+(substr_count($f_message, ".рф")   != 0) OR
+(substr_count($f_message, ".ru")   != 0) OR 
+(substr_count($f_message, ".com")  != 0) OR
+(substr_count($f_message, ".de")   != 0) OR
+(substr_count($f_message, ".net")  != 0) OR
+(substr_count($f_message, ".uk")   != 0) OR
+(substr_count($f_message, ".org")  != 0) OR
+(substr_count($f_message, ".cn")   != 0) OR
+(substr_count($f_message, ".info") != 0) OR
+(substr_count($f_message, ".eu")   != 0) OR
+(substr_count($f_message, "ftp")   != 0) OR
+(substr_count($f_message, "www")   != 0)
+){
+    $posting=0;
+    $warnText.="<p style='color: red;'>Ссылки запрещены!</p>";
+}
+if($f_name=='JimmiNu' OR $f_name=='Таня червякова' OR $f_name=='Amileweito' OR $f_name=='rodimir' OR $f_name=='sElenacep' OR $f_name=='Normandam' OR $f_name=='Gregorycip' OR $f_name=='Bennyhill' OR $f_name=='Barbarahog' OR $f_name=='XRumer'){
+    $posting=0;
+    echo "<p style='color:red;margin-bottom: 10px;'>Вам запрещено отправлять заявки, позвоните!</p> $addform";
+}
+if($f_email == 'onalogah@bk.ru' OR $f_email == 'nalogovie-shemi@mail.ru'){
+    $posting=0;
+    echo "<p style='color:red;margin-bottom: 10px;'>Вам запрещено отправлять заявки, позвоните!</p> $addform";
+}
+
+$form_phone = $f_phone;
+	$form_phone = str_replace(array('+', ' ', '(' , ')', '-'), '', $form_phone);
+	if (strlen($form_phone)==11)
+	{$form_phone = substr($form_phone, 1);}
+	if (strlen($form_phone)==10){$form_phone="8".$form_phone;}
+
+
+if($f_message!='' AND !preg_match('/[а-яё]/iu',$f_message)){
+    $posting=0;
+    echo "<p style='color:red;margin-bottom: 10px;'>Введите корректный текст сообщения!</p> $addform";
+}
+
+if($f_name!='' AND !preg_match('/[а-яё]/iu',$f_name)){
+    $posting=0;
+    echo "<p style='color:red;margin-bottom: 10px;'>Введите корректное имя!</p> $addform";
+}
+
+if($f_phone == ""){
+    $posting=0;
+    $warnText.="<p style='color: red;'>Не указан ваш телефон!</p>";
+}
+?>

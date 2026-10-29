@@ -1,0 +1,19 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<div class="cases">
+	<div class="wrap">
+		<div class="cases__list"><!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+<div class="cases__item">
+	<h3><?=shortcode_component($f_maintitle)?></h3>
+	<h4>Проблема:</h4>
+	<p><?=shortcode_component($f_problem)?></p>
+	<h4>Результат терапии:</h4>
+	<p><?=shortcode_component($f_result)?></p>
+	<a href="<?= $fullLink ?>">подробнее →</a>
+</div><!-- /RecordTemplate -->
+
+<!-- FormSuffix -->		</div>
+	</div>
+</div>
+<!-- /FormSuffix -->

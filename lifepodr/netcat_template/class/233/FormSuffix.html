@@ -1,0 +1,12 @@
+</div>
+
+	</div>
+</div>
+<?php
+	if (!empty($GLOBALS['svc_ld'])) {
+		echo '<script type="application/ld+json">' . json_encode(array(
+			'@context' => 'https://schema.org', '@type' => 'ItemList',
+			'itemListElement' => $GLOBALS['svc_ld'],
+		), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
+	}
+?>

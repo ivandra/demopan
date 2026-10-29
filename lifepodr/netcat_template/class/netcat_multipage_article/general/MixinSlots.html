@@ -1,0 +1,28 @@
+<?php
+/**
+ * Слоты миксинов для компонента "Статьи"
+ */
+return array(
+    // Слоты для списка
+    'list_image' => array(
+        'name' => 'Изображение (список)',
+        'selector' => '.item-image-wrapper',
+        'scopes' => array('border', 'border_radius', 'shadow', 'effect'),
+    ),
+    'list_content' => array(
+        'name' => 'Текстовая часть (список)',
+        'selector' => '.item-info',
+        'scopes' => array('color', 'padding', 'margin', 'background', 'border', 'border_radius', 'shadow'),
+    ),
+
+    // Слоты для страницы полного вывода
+    'full_block' => array(
+        'name' => 'Страница статьи (весь блок)',
+        'selector' => '',
+    ),
+    'full_image' => array(
+        'name' => 'Изображение (страница)',
+        'selector' => '.item-image-wrapper',
+        'scopes' => array('border', 'border_radius', 'shadow', 'effect'),
+    ),
+);

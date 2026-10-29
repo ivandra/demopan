@@ -1,0 +1,499 @@
+{
+  "collections": {
+    "specialists": {
+      "class": "lp_specialist",
+      "page": "/o-nas/spetsialisty/",
+      "name": "Специалисты",
+      "records": [
+        {
+          "name": "Голуб Ирина Александровна",
+          "role": "Психолог, психотерапевт",
+          "image": "/netcat_template/template/lifepodrostka/img/specialists1.png",
+          "intro": "Работает с самооценкой, страхами, паническими атаками и сложными переживаниями.",
+          "bio": "<div class=\"specialist-page__about\">\n<div class=\"wrap\">\n<div class=\"specialist-page__about-text\">\n<h2 class=\"specialist-page__about-title\">О специалисте</h2>\n<div class=\"specialist-page__about-content\">\n<p>\n\t\t\t                Я работаю с подростками и их родителями, помогая справляться с трудностями в отношениях, тревожностью, низкой самооценкой и поиском своего пути.\n\t\t\t            </p>\n<p>\n\t\t\t                Для меня важно видеть в каждом подростке уникальность, поддерживать его интересы и помогать находить решения, которые действительно работают в его жизни.\n\t\t\t            </p>\n</div>\n</div>\n<div class=\"specialist-page__quote-bubble\">\n<p>«Подростковый возраст — это не проблема, которую нужно решить, а важный этап, который нужно пройти вместе»</p>\n</div>\n</div>\n</div>",
+          "quote": "«Верю, что в каждом подростке есть сила для счастливого будущего. Моя задача — помочь ее увидеть и раскрыть»",
+          "methods": "<div class=\"specialist-page__methods\">\n<div class=\"wrap\">\n<h2 class=\"specialist-page__about-title\">Методы и подходы</h2>\n<p class=\"hero__description\">\n\t\t            Используем современные подходы, которые работают и учитывают особенности каждого.\n\t\t        </p>\n<div class=\"specialist-page__methods-list\">\n<article class=\"specialist-page__method-card\">\n<div class=\"specialist-page__method-icon\"><img alt=\"\" decoding=\"async\" loading=\"lazy\" src=\"/netcat_template/template/lifepodrostka/img/method1.png\"/></div>\n<h3 class=\"specialist-page__method-title\">Интерактивный подход</h3>\n<p class=\"specialist-page__method-desc\">\n\t\t                    Живые занятия, обсуждения и практические задания\n\t\t                </p>\n</article>\n<article class=\"specialist-page__method-card\">\n<div class=\"specialist-page__method-icon\"><img alt=\"\" decoding=\"async\" loading=\"lazy\" src=\"/netcat_template/template/lifepodrostka/img/method2.png\"/></div>\n<h3 class=\"specialist-page__method-title\">Поддержка и принятие</h3>\n<p class=\"specialist-page__method-desc\">\n\t\t                    Создаем безопасное пространство\n\t\t                </p>\n</article>\n<article class=\"specialist-page__method-card\">\n<div class=\"specialist-page__method-icon\"><img alt=\"\" decoding=\"async\" loading=\"lazy\" src=\"/netcat_template/template/lifepodrostka/img/method3.png\"/></div>\n<h3 class=\"specialist-page__method-title\">Работа с подростками и родителями</h3>\n<p class=\"specialist-page__method-desc\">\n\t\t                    Учитываем мнение обеих сторон, помогаем лучше понимать друг друга\n\t\t                </p>\n</article>\n<article class=\"specialist-page__method-card\">\n<div class=\"specialist-page__method-icon\"><img alt=\"\" decoding=\"async\" loading=\"lazy\" src=\"/netcat_template/template/lifepodrostka/img/method4.png\"/></div>\n<h3 class=\"specialist-page__method-title\">Практические инструменты</h3>\n<p class=\"specialist-page__method-desc\">\n\t\t                    Даем понятные и эффективные техники, которые легко применять\n\t\t                </p>\n</article>\n</div>\n</div>\n</div>",
+          "education": "<div class=\"specialist-page__education\">\n<div class=\"wrap\">\n<h2 class=\"specialist-page__about-title\">Образование и сертификаты</h2>\n<div class=\"specialist-page__education-list\">\n<div class=\"specialist-page__education-item\">\n<div class=\"specialist-page__education-icon\"><img alt=\"\" src=\"/netcat_template/template/lifepodrostka/img/education1.svg\"/></div>\n<div class=\"specialist-page__education-text\">\n<h3 class=\"specialist-page__education-name\">\n\t\t                        Московский государственный психолого-педагогический университет\n\t\t                    </h3>\n<p class=\"specialist-page__education-desc\">\n\t\t                        Специальность: Психология<br/>\n\t\t                        2016 — 2021\n\t\t                    </p>\n</div>\n</div>\n<div class=\"specialist-page__education-item\">\n<div class=\"specialist-page__education-icon\"><img alt=\"\" src=\"/netcat_template/template/lifepodrostka/img/education2.svg\"/></div>\n<div class=\"specialist-page__education-text\">\n<h3 class=\"specialist-page__education-name\">\n\t\t                        Сертификат КПТ\n\t\t                    </h3>\n<p class=\"specialist-page__education-desc\">\n\t\t                        Институт когнитивно-поведенческой терапии<br/>\n\t\t                        2022\n\t\t                    </p>\n</div>\n</div>\n<div class=\"specialist-page__education-item\">\n<div class=\"specialist-page__education-icon\"><img alt=\"\" src=\"/netcat_template/template/lifepodrostka/img/education2.svg\"/></div>\n<div class=\"specialist-page__education-text\">\n<h3 class=\"specialist-page__education-name\">\n\t\t                        Сертификат КПТ\n\t\t                    </h3>\n<p class=\"specialist-page__education-desc\">\n\t\t                        Институт когнитивно-поведенческой терапии<br/>\n\t\t                        2022\n\t\t                    </p>\n</div>\n</div>\n</div>\n</div>\n</div>",
+          "portrait": "/netcat_template/template/lifepodrostka/img/specialist2.png",
+          "stats": "\n<div class=\"specialist-page__stat\">\n<strong class=\"specialist-page__stat-value\">{{region:city}}</strong>\n<span class=\"specialist-page__stat-label\">Очно и онлайн</span>\n</div>\n<div class=\"specialist-page__stat\">\n<strong class=\"specialist-page__stat-value\">8 лет</strong>\n<span class=\"specialist-page__stat-label\">опыта</span>\n</div>\n<div class=\"specialist-page__stat\">\n<strong class=\"specialist-page__stat-value\">Более 300</strong>\n<span class=\"specialist-page__stat-label\">подростков и семей</span>\n</div>\n",
+          "top": "\n<div class=\"specialist-page__detail-row\">\n<span class=\"specialist-page__detail-icon\"><img alt=\"\" src=\"/netcat_template/template/lifepodrostka/img/specialist-details1.svg\"/></span>\n<span class=\"specialist-page__detail-text\">\n<span>Очные консультации:</span> {{region:city}}, {{region:address}}\n\t\t\t                </span>\n</div>\n<div class=\"specialist-page__detail-row\">\n<span class=\"specialist-page__detail-icon\"><img alt=\"\" src=\"/netcat_template/template/lifepodrostka/img/specialist-details2.svg\"/></span>\n<span class=\"specialist-page__detail-text\">\n<span>Онлайн по всей России</span> (Google Meet, Zoom)\n\t\t\t                </span>\n</div>\n<div class=\"specialist-page__detail-row\">\n<span class=\"specialist-page__detail-icon\"><img alt=\"\" src=\"/netcat_template/template/lifepodrostka/img/specialist-details3.svg\"/></span>\n<span class=\"specialist-page__detail-text\">\n<span>Сеанс:</span> 50 минут / 4 000 ₽\n\t\t\t                </span>\n</div>\n<a class=\"first-step__link\" data-lp-consult=\"\" data-lp-subject=\"Задать вопрос специалисту\" href=\"#lp-consult\">\n\t\t\t                Задать вопрос специалисту →\n\t\t\t            </a>\n",
+          "category": "psychologist psychotherapist",
+          "Keyword": "golub-irina-aleksandrovna"
+        },
+        {
+          "name": "Вербицкий Станислав Владимирович",
+          "role": "Телесно‑ориентированный психолог",
+          "image": "/netcat_template/template/lifepodrostka/img/specialists2.png",
+          "intro": "",
+          "bio": "",
+          "quote": "",
+          "methods": "",
+          "education": "",
+          "portrait": "/netcat_template/template/lifepodrostka/img/specialists2.png",
+          "stats": "",
+          "top": "",
+          "category": "psychologist",
+          "Keyword": "verbitskiy-stanislav-vladimirovich"
+        },
+        {
+          "name": "Лихсая Яна Анатольевна",
+          "role": "Семейный психолог",
+          "image": "/netcat_template/template/lifepodrostka/img/specialists3.png",
+          "intro": "",
+          "bio": "",
+          "quote": "",
+          "methods": "",
+          "education": "",
+          "portrait": "/netcat_template/template/lifepodrostka/img/specialists3.png",
+          "stats": "",
+          "top": "",
+          "category": "family",
+          "Keyword": "lihsaya-yana-anatolevna"
+        },
+        {
+          "name": "Макаров Олег Крылович",
+          "role": "Врач‑психиатр",
+          "image": "/netcat_template/template/lifepodrostka/img/specialists4.png",
+          "intro": "",
+          "bio": "",
+          "quote": "",
+          "methods": "",
+          "education": "",
+          "portrait": "/netcat_template/template/lifepodrostka/img/specialists4.png",
+          "stats": "",
+          "top": "",
+          "category": "psychiatrist",
+          "Keyword": "makarov-oleg-krylovich"
+        },
+        {
+          "name": "Евангелиди Савелий Федорович",
+          "role": "Инструктор йоги, мастер кундалини‑йоги",
+          "image": "/netcat_template/template/lifepodrostka/img/specialists5.png",
+          "intro": "",
+          "bio": "",
+          "quote": "",
+          "methods": "",
+          "education": "",
+          "portrait": "/netcat_template/template/lifepodrostka/img/specialists5.png",
+          "stats": "",
+          "top": "",
+          "category": "other",
+          "Keyword": "evangelidi-saveliy-fedorovich"
+        }
+      ]
+    },
+    "articles": {
+      "class": "lp_article",
+      "page": "/blog/",
+      "name": "Статьи",
+      "records": [
+        {
+          "title": "Как справляться с тревогой перед экзаменами",
+          "intro": "Практические советы, которые помогут сохранить спокойствие и уверенность.",
+          "category": "teens",
+          "published": "2026-08-08 00:00:00",
+          "readtime": "6 мин",
+          "image": "/netcat_template/template/lifepodrostka/img/blog1.png",
+          "body": "\n\n<div class=\"article-page__text\">\n<p>\n\t\t\t\t\t\tЭкзамены — важный этап, и неудивительно, что они могут вызывать тревогу. Волнение перед ними испытывают почти все. Главное — помнить: тревога не враг, а сигнал, который можно услышать и научиться с ним работать.\n\t\t\t\t\t</p>\n<h2 class=\"article-page__section-title\">Почему появляется тревога</h2>\n<p>Тревога перед экзаменами часто связана со страхом неудачи, высокими ожиданиями (своими или чужими), нехваткой уверенности в знаниях и давлением со стороны окружения. Важно понять, что такие чувства — нормальная реакция, и ты не один(а) в этом.</p>\n</div>\n<h2 class=\"article-page__section-title\">Практические советы</h2>\n<ol class=\"article-page__tips-list\">\n<li class=\"article-page__tip-item\">\n<div class=\"article-page__tip-number\"><img alt=\"\" src=\"/netcat_template/template/lifepodrostka/img/article-number1.svg\"/></div>\n<h3 class=\"article-page__tip-title\">Планируй подготовку</h3>\n<p class=\"article-page__tip-text\">\n\t\t\t\t\t\t\tРаздели материал на небольшие части и составь реалистичный график. Это поможет избежать ощущения хаоса и даст чувство контроля.\n\t\t\t\t\t\t</p>\n</li>\n<li class=\"article-page__tip-item\">\n<div class=\"article-page__tip-number\"><img alt=\"\" src=\"/netcat_template/template/lifepodrostka/img/article-number2.svg\"/></div>\n<h3 class=\"article-page__tip-title\">Делай перерывы</h3>\n<p class=\"article-page__tip-text\">\n\t\t\t\t\t\t\tРегулярный отдых помогает мозгу лучше запоминать информацию. Используй технику «25/5» — 25 минут учёбы и 5 минут отдыха.\n\t\t\t\t\t\t</p>\n</li>\n<li class=\"article-page__tip-item\">\n<div class=\"article-page__tip-number\"><img alt=\"\" src=\"/netcat_template/template/lifepodrostka/img/article-number3.svg\"/></div>\n<h3 class=\"article-page__tip-title\">Поддерживай себя</h3>\n<p class=\"article-page__tip-text\">\n\t\t\t\t\t\t\tРазговаривай с близкими, делись переживаниями. Поддержка друзей и семьи значительно снижает уровень тревоги.\n\t\t\t\t\t\t</p>\n</li>\n<li class=\"article-page__tip-item\">\n<div class=\"article-page__tip-number\"><img alt=\"\" src=\"/netcat_template/template/lifepodrostka/img/article-number4.svg\"/></div>\n<h3 class=\"article-page__tip-title\">Используй техники расслабления</h3>\n<p class=\"article-page__tip-text\">\n\t\t\t\t\t\t\tДыхательные упражнения, медитация или короткие прогулки помогут снизить напряжение и вернуть спокойствие.\n\t\t\t\t\t\t</p>\n</li>\n</ol>\n\n",
+          "Keyword": "kak-spravlyatsya-s-trevogoy-pered-ekzamenami"
+        },
+        {
+          "title": "Разговоры, которые сближают: что важно знать родителям",
+          "intro": "Как говорить с подростком, чтобы он слышал и доверял.",
+          "category": "parents",
+          "published": "2026-08-08 00:00:00",
+          "readtime": "6 мин",
+          "image": "/netcat_template/template/lifepodrostka/img/blog2.png",
+          "body": "<p>Как говорить с подростком, чтобы он слышал и доверял.</p>",
+          "Keyword": "razgovory-kotorye-sblizhayut-chto-vazhno-znat-roditelyam"
+        },
+        {
+          "title": "Как найти своё дело и не бояться ошибаться",
+          "intro": "Путь к себе через интересы и маленькие шаги.",
+          "category": "teens",
+          "published": "2026-08-08 00:00:00",
+          "readtime": "6 мин",
+          "image": "/netcat_template/template/lifepodrostka/img/blog3.png",
+          "body": "<p>Путь к себе через интересы и маленькие шаги.</p>",
+          "Keyword": "kak-nayti-svoe-delo-i-ne-boyatsya-oshibatsya"
+        }
+      ]
+    },
+    "reviews": {
+      "class": "lp_review",
+      "page": "/o-nas/otzyvy/",
+      "name": "Отзывы",
+      "records": [
+        {
+          "text": "Сын стал спокойнее, а мы — ближе.\nСпасибо за поддержку и понимание!",
+          "name": "Анна",
+          "detail": "мама подростка",
+          "image": "/netcat_template/template/lifepodrostka/img/avatar5.png"
+        },
+        {
+          "text": "Теперь я понимаю себя лучше и знаю, как справляться со сложными эмоциями",
+          "name": "Илья, 16 лет",
+          "detail": "подросток",
+          "image": "/netcat_template/template/lifepodrostka/img/avatar6.png"
+        },
+        {
+          "text": "Отличные материалы для работы! Всё понятно, структурно и по делу",
+          "name": "Мария",
+          "detail": "психолог",
+          "image": "/netcat_template/template/lifepodrostka/img/avatar7.png"
+        }
+      ]
+    },
+    "faq": {
+      "class": "lp_faq",
+      "page": "/o-nas/voprosy-i-otvety/",
+      "name": "Вопросы и ответы",
+      "records": [
+        {
+          "question": "Как получить консультацию специалиста?",
+          "answer": "\n<p>\n\t\t\t\t\t\t\t\tВы можете оставить заявку через форму на сайте, позвонить по телефону 8 (800) 123-45-67 или написать в мессенджеры. Менеджер свяжется с вами в течение 24 часов, чтобы подобрать подходящего специалиста и удобное время.\n\t\t\t\t\t\t\t</p>\n"
+        },
+        {
+          "question": "Как записаться на очную встречу?",
+          "answer": "\n<p>\n\t\t\t\t\t\t\t\tПосле первичной консультации (онлайн или по телефону) координатор предложит вам варианты дат и времени для очного приема в нашем центре в Москве. Запись осуществляется по предварительной договоренности.\n\t\t\t\t\t\t\t</p>\n"
+        },
+        {
+          "question": "Можно ли обратиться анонимно?",
+          "answer": "\n<p>\n\t\t\t\t\t\t\t\tНа этапе первичного обращения вы можете не указывать личные данные — достаточно оставить контактный номер или email. Полная идентификация происходит только при заключении договора на оказание услуг.\n\t\t\t\t\t\t\t</p>\n"
+        },
+        {
+          "question": "Какие документы нужны для консультации?",
+          "answer": "\n<p>\n\t\t\t\t\t\t\t\tДля заключения договора потребуется паспорт (или свидетельство о рождении, если консультация для ребенка). Для несовершеннолетних также необходимо согласие законного представителя.\n\t\t\t\t\t\t\t</p>\n"
+        },
+        {
+          "question": "Сколько стоит помощь?",
+          "answer": "\n<p>\n\t\t\t\t\t\t\t\tСтоимость консультации зависит от специалиста и формата (очно/онлайн). Средняя цена одной сессии — от 3500 ₽. Для подростков и студентов действуют льготные тарифы и бесплатные групповые встречи.\n\t\t\t\t\t\t\t</p>\n"
+        },
+        {
+          "question": "Как вы обеспечиваете конфиденциальность?",
+          "answer": "\n<p>\n\t\t\t\t\t\t\t\tВсе данные клиентов защищены в соответствии с ФЗ-152 «О персональных данных». Информация о консультациях не передается третьим лицам. Исключение — ситуации, угрожающие жизни и здоровью клиента или окружающих.\n\t\t\t\t\t\t\t</p>\n"
+        }
+      ]
+    },
+    "gallery": {
+      "class": "lp_photo",
+      "page": "/o-nas/foto/",
+      "name": "Фотографии",
+      "records": [
+        {
+          "image": "/netcat_template/template/lifepodrostka/img/gallery1.png",
+          "caption": "Жизнь подростка — фото 1",
+          "category": "classes"
+        },
+        {
+          "image": "/netcat_template/template/lifepodrostka/img/gallery2.png",
+          "caption": "Жизнь подростка — фото 2",
+          "category": "events"
+        },
+        {
+          "image": "/netcat_template/template/lifepodrostka/img/gallery3.png",
+          "caption": "Жизнь подростка — фото 3",
+          "category": "team"
+        },
+        {
+          "image": "/netcat_template/template/lifepodrostka/img/gallery1.png",
+          "caption": "Жизнь подростка — фото 4",
+          "category": "classes"
+        },
+        {
+          "image": "/netcat_template/template/lifepodrostka/img/gallery2.png",
+          "caption": "Жизнь подростка — фото 5",
+          "category": "events"
+        },
+        {
+          "image": "/netcat_template/template/lifepodrostka/img/gallery3.png",
+          "caption": "Жизнь подростка — фото 6",
+          "category": "team"
+        },
+        {
+          "image": "/netcat_template/template/lifepodrostka/img/gallery1.png",
+          "caption": "Жизнь подростка — фото 7",
+          "category": "classes"
+        },
+        {
+          "image": "/netcat_template/template/lifepodrostka/img/gallery2.png",
+          "caption": "Жизнь подростка — фото 8",
+          "category": "events"
+        },
+        {
+          "image": "/netcat_template/template/lifepodrostka/img/gallery3.png",
+          "caption": "Жизнь подростка — фото 9",
+          "category": "team"
+        },
+        {
+          "image": "/netcat_template/template/lifepodrostka/img/gallery1.png",
+          "caption": "Жизнь подростка — фото 10",
+          "category": "classes"
+        },
+        {
+          "image": "/netcat_template/template/lifepodrostka/img/gallery2.png",
+          "caption": "Жизнь подростка — фото 11",
+          "category": "events"
+        },
+        {
+          "image": "/netcat_template/template/lifepodrostka/img/gallery3.png",
+          "caption": "Жизнь подростка — фото 12",
+          "category": "team"
+        }
+      ]
+    },
+    "regions": {
+      "class": "lp_region",
+      "page": "/regions/",
+      "name": "Регионы",
+      "records": [
+        {
+          "domain": "dev.lifepodrostka.ru",
+          "city": "Москва",
+          "in_city": "Москве",
+          "city_rp": "Москвы",
+          "address": "ул. Примерная, 15",
+          "phone": "8 (800) 123-45-67",
+          "email": "info@life-podrostka.ru",
+          "email_to": "",
+          "email_from": "",
+          "hours": "Пн-Пт: 10:00 — 20:00",
+          "max": "",
+          "telegram": "",
+          "vk": "",
+          "youtube": "",
+          "instagram": "",
+          "whatsapp": "",
+          "map": "",
+          "email_enabled": 0,
+          "demo": 1
+        }
+      ]
+    }
+  },
+  "pages": [
+    {
+      "url": "/",
+      "title": "Жизнь подростка",
+      "old_id": 12,
+      "nav": false
+    },
+    {
+      "url": "/o-nas/",
+      "title": "О проекте",
+      "old_id": 5,
+      "nav": true
+    },
+    {
+      "url": "/blog/",
+      "title": "Блог",
+      "old_id": 1,
+      "nav": true
+    },
+    {
+      "url": "/kontakty/",
+      "title": "Контакты",
+      "old_id": 4,
+      "nav": true
+    },
+    {
+      "url": "/o-nas/spetsialisty/",
+      "title": "Специалисты",
+      "old_id": 21,
+      "nav": false
+    },
+    {
+      "url": "/o-nas/foto/",
+      "title": "Фотогалерея",
+      "old_id": 22,
+      "nav": false
+    },
+    {
+      "url": "/o-nas/otzyvy/",
+      "title": "Отзывы",
+      "old_id": 23,
+      "nav": false
+    },
+    {
+      "url": "/o-nas/voprosy-i-otvety/",
+      "title": "Вопросы и ответы",
+      "old_id": 25,
+      "nav": false
+    },
+    {
+      "url": "/o-nas/sertifikaty/",
+      "title": "Дипломы и сертификаты",
+      "old_id": null,
+      "nav": false
+    },
+    {
+      "url": "/regions/",
+      "title": "Регионы",
+      "old_id": 8,
+      "nav": false
+    },
+    {
+      "url": "/zayavki/",
+      "title": "Заявки",
+      "old_id": 15,
+      "nav": false
+    },
+    {
+      "url": "/nastroiki-proekta/",
+      "title": "Настройки проекта",
+      "old_id": null,
+      "nav": false
+    },
+    {
+      "url": "/politika-konfidentsialnosti/",
+      "title": "Политика конфиденциальности",
+      "old_id": 7,
+      "nav": false
+    },
+    {
+      "url": "/policy/",
+      "title": "Согласие на обработку персональных данных",
+      "old_id": 6,
+      "nav": false
+    },
+    {
+      "url": "/404/",
+      "title": "Страница не найдена",
+      "old_id": 11,
+      "nav": false
+    },
+    {
+      "url": "/podrostkam/",
+      "title": "Подросткам",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/trevoga-i-perezhivaniya/",
+      "title": "Тревога и переживания",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/trevoga-i-perezhivaniya/trevozhnye-mysli-i-strahi/",
+      "title": "Тревожные мысли и страхи",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/trevoga-i-perezhivaniya/stress-i-silnye-perezhivaniya/",
+      "title": "Стресс и сильные переживания",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/neuverennost-v-sebe/",
+      "title": "Неуверенность в себе",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/neuverennost-v-sebe/sravnenie-sebya-s-drugimi/",
+      "title": "Сравнение себя с другими",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/neuverennost-v-sebe/strah-neudachi-i-oshibok/",
+      "title": "Страх неудачи и ошибок",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/neuverennost-v-sebe/rabota-nad-samootsenkoy/",
+      "title": "Работа над самооценкой",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/otnosheniya-s-roditelyami/",
+      "title": "Отношения с родителями",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/otnosheniya-s-roditelyami/konflikty-i-sposoby-ih-resheniya/",
+      "title": "Конфликты и способы их решения",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/otnosheniya-s-roditelyami/kak-govorit-o-slozhnom/",
+      "title": "Как говорить о сложном",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/",
+      "title": "Эмоциональные перепады и трудности с управлением эмоциями",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/raspoznavanie-svoih-emotsiy/",
+      "title": "Распознавание своих эмоций",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/tehniki-samoregulyatsii/",
+      "title": "Техники саморегуляции",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/kogda-stoit-obratitsya-za-podderzhkoy/",
+      "title": "Когда стоит обратиться за поддержкой",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/ucheba-i-motivatsiya/",
+      "title": "Учёба и мотивация",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/podrostkam/poisk-sebya/",
+      "title": "Поиск себя",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/roditelyam/",
+      "title": "Родителям",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/spetsialistam/",
+      "title": "Специалистам",
+      "old_id": null,
+      "nav": true
+    },
+    {
+      "url": "/materialy/",
+      "title": "Полезные материалы",
+      "old_id": null,
+      "nav": false
+    },
+    {
+      "url": "/testy/",
+      "title": "Тесты и упражнения",
+      "old_id": null,
+      "nav": false
+    },
+    {
+      "url": "/vebinary/",
+      "title": "Вебинары и лекции",
+      "old_id": null,
+      "nav": false
+    }
+  ],
+  "service_url": "/podrostkam/trevoga-i-perezhivaniya/"
+}

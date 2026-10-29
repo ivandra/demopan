@@ -1,0 +1,10 @@
+<?php
+
+$styles = array();
+if (!empty($cc_settings["image_ratio"])) {
+    $styles[] = "--tpl-object--image-ratio: " . str_replace(":", "/", $cc_settings["image_ratio"]) . ";";
+}
+if (!empty($cc_settings["date_color"]) && $cc_settings["date_color"] !== "inherit") {
+    $styles[] = "--tpl-object-item--date-color: var(--tpl-color-" . $cc_settings["date_color"] . ");";
+}
+$styles = !empty($styles) ? " style='" . implode(";", $styles) . "'" : "";

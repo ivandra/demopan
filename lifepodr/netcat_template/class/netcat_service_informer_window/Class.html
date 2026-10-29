@@ -1,0 +1,194 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<?php if ($admin_mode) { ?>
+<!-- Заглушка для режима редактирования -->
+<div style="padding: 40px; background: #e3f2fd; border: 2px dashed #2196f3; text-align: center; border-radius: 8px; margin: 10px 0;">
+    <div style="font-size: 14px; color: #1565c0;">
+        <strong>Окно согласия/информирования</strong><br>
+        <span style="font-size: 12px; color: #666;">Появляется при загрузке страницы (если пользователь ещё не дал согласие)</span>
+    </div>
+</div>
+<?php } ?>
+
+<?php if (!$admin_mode) { ?>
+    <div id="<?= $nc_block_id ?>-overlay" class="cookie-consent-overlay"></div>
+
+    <!-- Окно согласия с cookie -->
+    <div id="cookie-consent" class="cookie-consent">
+        <div class="cookie-consent-text">
+            <?= $cc_settings["Text"] ?>
+        </div>
+        <div class="cookie-consent-buttons">
+            <button id="cookie-consent-button" class="tpl-button tpl-button-primary cookie-consent-button">
+                <?= $cc_settings["Button"] ?>
+            </button>
+            <?php if (!empty($cc_settings["Button2"]) && !empty($cc_settings["Button2Link"])): ?>
+                <button id="cookie-consent-button2" class="tpl-button tpl-button-secondary cookie-consent-button" onclick="window.open('<?= $cc_settings["Button2Link"] ?>','_self');">
+                    <?= $cc_settings["Button2"] ?>
+                </button>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1, c.length);
+                }
+                if (c.indexOf(nameEQ) === 0) {
+                    return c.substring(nameEQ.length, c.length);
+                }
+            }
+            return null;
+        }
+
+        function initCookieConsent(options = {}) {
+            // Настройки по умолчанию
+            const settings = {
+                positionV: options.positionV || 'bottom',
+                positionH: options.positionH || 'left',
+                align: options.align || 'left',
+                modal: options.modal || false,
+                persistence: options.persistence || 'permanent',
+                text: options.text || null,
+                buttonText: options.buttonText || null,
+                button2Text: options.button2Text || null,
+                button2Link: options.button2Link || null,
+                cookieName: 'cookie_consent',
+                cookieValue: 'accepted'
+            };
+
+            // Получаем элементы из DOM
+            const consentDiv = document.getElementById('cookie-consent');
+            const overlay = document.getElementById('<?= $nc_block_id ?>-overlay');
+            const button = document.getElementById('cookie-consent-button');
+            const button2 = document.getElementById('cookie-consent-button2');
+            const textDiv = consentDiv.querySelector('.cookie-consent-text');
+
+            if (!consentDiv || !button) {
+                console.error('Cookie consent elements not found in DOM');
+                return;
+            }
+
+            // Проверяем, есть ли уже согласие
+            if (getCookie(settings.cookieName)) {
+                return; // Согласие уже дано
+            }
+
+            // Настраиваем позицию
+            let positionClasses = '';
+
+            // Добавляем класс для вертикального позиционирования
+            if (settings.positionV === 'center') {
+                positionClasses += 'centerv ';
+            } else {
+                positionClasses += settings.positionV + ' ';
+            }
+
+            // Добавляем класс для горизонтального позиционирования
+            if (settings.positionH === 'center') {
+                positionClasses += 'centerh ';
+            } else {
+                positionClasses += settings.positionH + ' ';
+            }
+
+            if (settings.align === 'center') {
+                positionClasses += 'in-center ';
+            }
+
+            if (settings.align === 'left') {
+                positionClasses += 'in-left ';
+            }
+
+            if (settings.align === 'right') {
+                positionClasses += 'in-right ';
+            }
+
+            consentDiv.className = `cookie-consent ${positionClasses.trim()}`;
+
+            if (settings.modal) {
+                consentDiv.classList.add('modal');
+            }
+
+            // Настраиваем кастомный текст, если передан
+            if (settings.text) {
+                textDiv.textContent = settings.text;
+            }
+
+            // Настраиваем кастомный текст кнопки, если передан
+            if (settings.buttonText) {
+                button.textContent = settings.buttonText;
+            }
+
+            // Показываем окно
+            if (settings.modal) {
+                overlay.classList.add('show');
+                document.body.classList.add('modal-open');
+            }
+
+            // Показываем окно с небольшой задержкой для плавной анимации
+            setTimeout(() => {
+                consentDiv.classList.add('show');
+            }, 10);
+
+            // Обработчик клика по основной кнопке
+            button.addEventListener('click', function () {
+                acceptCookies();
+            });
+
+            function acceptCookies() {
+                // Устанавливаем cookie
+                if (settings.persistence === 'permanent') {
+                    // Cookie на 1 год
+                    setCookie(settings.cookieName, settings.cookieValue, 365);
+                } else {
+                    // Session cookie
+                    setCookie(settings.cookieName, settings.cookieValue);
+                }
+
+                // Скрываем окно с анимацией
+                consentDiv.classList.remove('show');
+                if (settings.modal) {
+                    overlay.classList.remove('show');
+                    document.body.classList.remove('modal-open');
+                }
+            }
+        }
+
+        // Инициализация при загрузке страницы
+            document.addEventListener('DOMContentLoaded', function () {
+                initCookieConsent({
+                    positionV: <?= nc_array_json($cc_settings["PositionV"]) ?>,    // 'top', 'bottom', 'center'
+                    positionH: <?= nc_array_json($cc_settings["PositionH"]) ?>,    // 'left', 'right', 'center'
+                    align: <?= nc_array_json($cc_settings["Align"]) ?>,    // 'left', 'right', 'center'
+                    text: <?= nc_array_json($cc_settings["Text"]) ?>,
+                    buttonText: <?= nc_array_json($cc_settings["Button"]) ?>,
+                    button2Text: <?= nc_array_json($cc_settings["Button2"]) ?>,
+                    button2Link: <?= nc_array_json($cc_settings["Button2Link"]) ?>,
+                    modal: <?= $cc_settings["IsModal"] ?: "false" ?>,           // true/false
+                    persistence: <?= nc_array_json($cc_settings["Persistence"]) ?> // 'permanent', 'session'
+                });
+            });
+        })();
+
+    </script>
+<?php } ?><!-- /FormPrefix -->
+
+<!-- RecordTemplate --><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><!-- /FormSuffix -->

@@ -1,0 +1,102 @@
+<?= $f_AdminCommon; ?>
+<?php
+/**
+ * Компонент «Запись/бронирование» (netcat_service_booking), группа «Сервисные».
+ * Показывает код виджета онлайн-записи/бронирования, который владелец сайта
+ * скопировал из личного кабинета сервиса (настройка Code). Компонент ничего не
+ * собирает и не проверяет: адрес виджета невозможно восстановить из номера
+ * аккаунта (у части сервисов он вообще зависит от аккаунта), поэтому
+ * единственный надёжный источник кода — сам сервис (ТЗ §0).
+ * Пока кода нет — деградирует до штатной формы заявок (модуль requests):
+ * рабочий сбор лидов с первого дня, не заглушка.
+ *
+ * Вывод живёт в FormPrefix, а не в RecordTemplate: у инфоблока может не быть ни
+ * одной записи (в режиме редактирования блок добавляют без объектов), и тогда
+ * RecordTemplate не выполняется вовсе. FormPrefix выполняется всегда — так же
+ * устроены соседи по группе (netcat_service_cookie_consent, netcat_service_informer_window).
+ *
+ * Безопасность (ТЗ §4): поле принимает произвольный HTML/JS осознанно. Менять
+ * его может только тот, у кого есть права на настройки блока, — администратор
+ * сайта, которому в том же дистрибутиве доступен модуль «Внешние скрипты» с
+ * четырьмя слотами произвольного кода без всякой санитизации. Фронтового ввода
+ * в это поле нет.
+ *
+ * ТЗ: netcat/modules/saas_management/docs/handoff/netcat-booking-component.md
+ */
+if (!function_exists('nc_booking_form')) {
+
+    /**
+     * Деградация: штатная форма заявок модуля requests (ТЗ §2).
+     * Модуль может отсутствовать — тогда мягко ничего не выводим.
+     */
+    function nc_booking_form($infoblock_id) {
+        if (!function_exists('nc_module_check_by_keyword') || !nc_module_check_by_keyword('requests')) {
+            return '';
+        }
+        if (!class_exists('nc_requests')) {
+            return '';
+        }
+        return nc_requests::make_form((int)$infoblock_id, 'default');
+    }
+
+    /**
+     * Подсказка редактору. Показывается ТОЛЬКО в режиме редактирования и в админке:
+     * на фронте никаких служебных надписей быть не должно (ТЗ §2).
+     */
+    function nc_booking_notice($text, $type = 'warning') {
+        $style = $type === 'info'
+               ? 'border:1px dashed #2196f3;background:#e3f2fd;color:#1565c0;'
+               : 'border:1px dashed #f0ad4e;background:#fff8e6;color:#8a6116;';
+        return '<div class="nc-booking-notice" style="padding:12px 16px;margin:8px 0;border-radius:8px;'
+             . 'font-size:13px;line-height:1.45;' . $style . '">'
+             . $text . '</div>';
+    }
+
+    /**
+     * Кода нет: блок работает в режиме деградации, объясняем, как это изменить (ТЗ §3.2).
+     */
+    function nc_booking_setup_hint() {
+        return '<strong>Запись/бронирование:</strong> пока показывается стандартная форма заявки.<br>'
+             . 'Чтобы посетители записывались через ваш сервис (YCLIENTS, DIKIDI, Bnovo и т. п.), '
+             . 'откройте настройки блока и вставьте код виджета из личного кабинета сервиса.';
+    }
+
+    /**
+     * Код есть: подтверждаем редактору, что на фронте стоит виджет сервиса.
+     */
+    function nc_booking_widget_hint() {
+        return '<strong>Запись/бронирование:</strong> на сайте показывается виджет сервиса.<br>'
+             . 'Чтобы заменить его или вернуть обычную форму заявки, откройте настройки блока '
+             . 'и отредактируйте код виджета.';
+    }
+}
+
+$nc_booking_code = isset($cc_settings['Code']) ? trim((string)$cc_settings['Code']) : '';
+
+if ($inside_admin) {
+    // Админка (модерация объектов): ни виджета сервиса, ни формы — только справка о состоянии блока.
+    echo $nc_booking_code !== ''
+        ? nc_booking_notice(nc_booking_widget_hint(), 'info')
+        : nc_booking_notice(nc_booking_setup_hint());
+}
+elseif ($nc_booking_code !== '') {
+    // В режиме редактирования подпись идёт НАД виджетом — иначе её не замечают.
+    if ($admin_mode) {
+        echo nc_booking_notice(nc_booking_widget_hint(), 'info');
+    }
+
+    // Код выводится как есть, без экранирования: что дал сервис, то и ставим (ТЗ §3.3).
+    echo '<div class="nc-booking">', $nc_booking_code, '</div>';
+}
+else {
+    // Кода нет — показываем рабочую форму заявки, а в режиме редактирования
+    // дополнительно объясняем редактору, что сюда можно вставить код.
+    if ($admin_mode) {
+        echo nc_booking_notice(nc_booking_setup_hint());
+    }
+
+    $nc_booking_form_html = nc_booking_form($cc);
+    if ($nc_booking_form_html !== '') {
+        echo '<div class="nc-booking nc-booking--form">', $nc_booking_form_html, '</div>';
+    }
+}

@@ -1,0 +1,7 @@
+<?php
+require $nc_parent_field_path;
+
+$placeholder_src = "";
+if (method_exists($nc_core->component, "get_relative_path")) {
+    $placeholder_src = $nc_core->component->get_relative_path($classID) . "images/placeholder.png";
+} 

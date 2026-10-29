@@ -1,0 +1,113 @@
+<?php
+
+/** @var string $selector */
+/** @var string $list_selector */
+/** @var array $settings */
+
+$grid_data = nc_array_value($settings, 'grid_data', '');
+$column_gap = (int)nc_array_value($settings, 'column_gap', 0);
+$column_gap_unit = nc_array_value($settings, 'column_gap_unit', 'px');
+$row_gap = (int)nc_array_value($settings, 'row_gap', 0);
+$row_gap_unit = nc_array_value($settings, 'row_gap_unit', 'px');
+$align_items = nc_array_value($settings, 'align_items', 'stretch');
+$justify_items = nc_array_value($settings, 'justify_items', 'stretch');
+
+// Parse grid_data JSON
+$data = array();
+if (is_string($grid_data) && $grid_data) {
+    $data = json_decode($grid_data, true) ?: array();
+}
+
+$cols = isset($data['cols']) ? (int)$data['cols'] : 3;
+$rows = isset($data['rows']) ? (int)$data['rows'] : 3;
+$column_sizes = isset($data['columnSizes']) && is_array($data['columnSizes']) ? $data['columnSizes'] : array_fill(0, $cols, '1fr');
+$row_sizes = isset($data['rowSizes']) && is_array($data['rowSizes']) ? $data['rowSizes'] : array_fill(0, $rows, 'auto');
+$elements = isset($data['elements']) && is_array($data['elements']) ? $data['elements'] : array();
+$parked = isset($data['parked']) && is_array($data['parked']) ? $data['parked'] : array();
+
+$rules = array();
+$rules[$list_selector] = array('display: grid');
+
+// Grid template columns
+if (!empty($column_sizes)) {
+    $rules[$list_selector][] = "grid-template-columns: " . implode(' ', $column_sizes);
+}
+
+// Grid template rows
+if (!empty($row_sizes)) {
+    $rules[$list_selector][] = "grid-template-rows: " . implode(' ', $row_sizes);
+}
+
+// Gap
+if ($column_gap && $row_gap && $column_gap === $row_gap && $column_gap_unit === $row_gap_unit) {
+    $rules[$list_selector][] = "gap: {$column_gap}{$column_gap_unit}";
+} else {
+    if ($row_gap) {
+        $rules[$list_selector][] = "row-gap: {$row_gap}{$row_gap_unit}";
+    }
+    if ($column_gap) {
+        $rules[$list_selector][] = "column-gap: {$column_gap}{$column_gap_unit}";
+    }
+}
+
+// Alignment
+if ($align_items && $align_items !== 'stretch') {
+    $rules[$list_selector][] = "align-items: $align_items";
+}
+if ($justify_items && $justify_items !== 'stretch') {
+    $rules[$list_selector][] = "justify-items: $justify_items";
+}
+
+// Generate nth-child rules for each element
+// Element ID corresponds to nth-child position
+foreach ($elements as $elem) {
+    if (!isset($elem['id'], $elem['col'], $elem['row'])) {
+        continue;
+    }
+
+    $id = (int)$elem['id'];
+    $col = (int)$elem['col'];
+    $row = (int)$elem['row'];
+    $colspan = isset($elem['colspan']) ? (int)$elem['colspan'] : 1;
+    $rowspan = isset($elem['rowspan']) ? (int)$elem['rowspan'] : 1;
+
+    $elem_rules = array();
+
+    // grid-column: start / end
+    $col_end = $col + $colspan;
+    if ($colspan > 1) {
+        $elem_rules[] = "grid-column: {$col} / {$col_end}";
+    } else {
+        $elem_rules[] = "grid-column: {$col}";
+    }
+
+    // grid-row: start / end
+    $row_end = $row + $rowspan;
+    if ($rowspan > 1) {
+        $elem_rules[] = "grid-row: {$row} / {$row_end}";
+    } else {
+        $elem_rules[] = "grid-row: {$row}";
+    }
+
+    $rules["$list_selector > *:nth-child($id)"] = $elem_rules;
+}
+
+// Hide parked elements
+if (!empty($parked)) {
+    $parked_selectors = array();
+    foreach ($parked as $id) {
+        $id = (int)$id;
+        $parked_selectors[] = "$list_selector > *:nth-child($id)";
+    }
+    $rules[implode(",\n", $parked_selectors)] = array('display: none');
+}
+
+// Generate CSS
+$css = '';
+foreach ($rules as $rule_selector => $properties) {
+    if ($properties) {
+        $css .= "$rule_selector {\n  " . implode(";\n  ", $properties) . ";\n}\n";
+    }
+}
+
+return $css;

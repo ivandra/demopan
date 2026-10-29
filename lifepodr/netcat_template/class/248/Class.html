@@ -1,0 +1,19 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+<div class="hero shero onas-hero"><div class="wrap">
+  <div class="hero__text shero__text">
+    <div class="hero__top-text">О клинике</div>
+    <h1 class="hero__name"><?=shortcode_component($f_maintitle)?></h1>
+	<?if($f_descr){?>
+		<ul class="hero__data">
+		  <?=shortcode_component($f_descr)?>
+		</ul>
+	<?}?>
+    <div class="hero__button"><button type="button">Оставить заявку</button><a href="tel:<?=str_replace(array(' ','(',')','-'),'',shortcode('[phone]'))?>">Позвонить →</a></div>
+  </div>
+  <div class="shero__media"><img src="/netcat_template/template/medelta/img/onas/clinic-facade.jpg" alt="Клиника МедЭльта"></div>
+</div></div><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><!-- /FormSuffix -->

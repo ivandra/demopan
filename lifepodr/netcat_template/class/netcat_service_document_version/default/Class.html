@@ -1,0 +1,153 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?><!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?php
+/**
+ * Компонент «Документ с временными версиями» (netcat_service_document_version).
+ * Публично выводит действующую редакцию документа (max StartDate <= сегодня/?docdate) и
+ * список остальных редакций с периодами действия. В режиме редактирования — построчный
+ * список версий со штатными админ-кнопками. См. docs/proposals/152fz_consent_log.md §2.
+ */
+if (!function_exists('nc_docver_render_public')) {
+
+    function nc_docver_file_link($class_id, $message_id, $field, $file_value) {
+        $parts = explode(':', (string)$file_value);
+        $filename = trim($parts[0]);
+        if ($filename === '' || !function_exists('nc_file_path')) {
+            return '';
+        }
+        // штатный API: возвращает корректный URL файла поля (учитывает реальную схему
+        // хранения — каталог по Subdivision_ID и хешированное имя на диске)
+        $url = nc_file_path((int)$class_id, (int)$message_id, $field);
+        if (!$url) {
+            return '';
+        }
+        return "<div class='tpl-docver-file'><a href='" . htmlspecialchars($url) . "' target='_blank' rel='noopener'>" . htmlspecialchars($filename) . "</a></div>";
+    }
+
+    // дата ISO (ГГГГ-ММ-ДД) → российский формат ДД.ММ.ГГГГ
+    function nc_docver_fmt($iso) {
+        if (!preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', (string)$iso, $m)) {
+            return (string)$iso;
+        }
+        return $m[3] . '.' . $m[2] . '.' . $m[1];
+    }
+
+    // период действия редакции: будущая — «вступает в силу с …»;
+    // открытая (последняя, уже действующая) — «… — по настоящее время»
+    function nc_docver_period($from_iso, $to_iso, $today) {
+        $from = nc_docver_fmt($from_iso);
+        if ($from_iso > $today) {
+            return 'вступает в силу с ' . $from;
+        }
+        return $to_iso ? ($from . ' — ' . nc_docver_fmt($to_iso)) : ($from . ' — по настоящее время');
+    }
+
+    function nc_docver_render_public($cc, $classID, $catalogue) {
+        $nc_core = nc_core::get_object();
+        $table = 'Message' . (int)$classID;
+
+        $rows = (array)$nc_core->db->get_results(
+            "SELECT `Message_ID`, `Title`, `Content`, `File`, DATE(`StartDate`) AS `D`
+               FROM `" . $table . "`
+              WHERE `Sub_Class_ID` = " . (int)$cc . " AND `Checked` = 1 AND `StartDate` IS NOT NULL",
+            ARRAY_A
+        );
+
+        $versions = array();
+        foreach ($rows as $r) {
+            if (empty($r['D']) || $r['D'] === '0000-00-00') {
+                continue;
+            }
+            $versions[] = $r;
+        }
+        if (!$versions) {
+            return '';
+        }
+        usort($versions, function ($a, $b) { return strcmp($a['D'], $b['D']); }); // по дате, ASC
+        $n = count($versions);
+
+        // целевая дата: ?docdate=ГГГГ-ММ-ДД (имя параметра НЕ `date` — иначе штатный date-архив
+        // netcat отфильтрует список объектов инфоблока по Created и компонент станет пустым),
+        // иначе сегодня
+        $today = date('Y-m-d');
+        $date = preg_replace('/[^0-9-]/', '', (string)$nc_core->input->fetch_get('docdate'));
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+            $date = $today;
+        }
+
+        // действующая на дату редакция = максимальная StartDate <= date
+        $eff = -1;
+        foreach ($versions as $i => $v) {
+            if ($v['D'] <= $date) {
+                $eff = $i;
+            }
+        }
+
+        // конец периода каждой редакции = день перед началом следующей; у последней — «по настоящее время»
+        $period_to = array();
+        for ($i = 0; $i < $n; $i++) {
+            $period_to[$i] = ($i + 1 < $n) ? date('Y-m-d', strtotime($versions[$i + 1]['D'] . ' -1 day')) : null;
+        }
+
+        $is_dated = ($date !== $today);
+        $out = "<div class='tpl-docver'>";
+
+        if ($eff < 0) {
+            $out .= "<div class='tpl-docver-empty'>На указанную дату документ не действовал.</div>";
+        } else {
+            $v = $versions[$eff];
+            $out .= "<div class='tpl-docver-current'>";
+            if ($is_dated) {
+                $verb = ($date > $today) ? 'действующая на' : 'действовавшая на';
+                $period = nc_docver_period($versions[$eff]['D'], $period_to[$eff], $today);
+                $out .= "<div class='tpl-docver-asof'>Редакция, " . $verb . " " . htmlspecialchars(nc_docver_fmt($date)) . " (" . htmlspecialchars($period) . ")</div>";
+            }
+            if (trim((string)$v['Content']) !== '') {
+                $out .= "<div class='tpl-docver-content'>" . $v['Content'] . "</div>";
+            }
+            if (trim((string)$v['File']) !== '') {
+                $out .= nc_docver_file_link($classID, (int)$v['Message_ID'], 'File', $v['File']);
+            }
+            $out .= "</div>";
+        }
+
+        // остальные редакции (от новых к старым) с периодами и ?docdate-ссылками
+        $items = '';
+        for ($i = $n - 1; $i >= 0; $i--) {
+            if ($i === $eff) {
+                continue;
+            }
+            $from = $versions[$i]['D'];
+            $period = nc_docver_period($from, $period_to[$i], $today);
+            $name = trim((string)$versions[$i]['Title']);
+            $items .= "<li><a href='?docdate=" . $from . "'>" . htmlspecialchars($period) . "</a>"
+                . ($name !== '' ? " <span class='tpl-docver-title'>(" . htmlspecialchars($name) . ")</span>" : '')
+                . "</li>";
+        }
+        if ($items !== '') {
+            $out .= "<div class='tpl-docver-history'><div class='tpl-docver-history-caption'>Другие редакции</div><ul>" . $items . "</ul></div>";
+        }
+
+        if ($is_dated) {
+            $out .= "<div class='tpl-docver-reset'><a href='?'>← к действующей редакции</a></div>";
+        }
+
+        $out .= "</div>";
+        return $out;
+    }
+}
+?><?php if ($inside_admin || $admin_mode): ?>
+<div class="tpl-docver-admin-row">
+    <span class="tpl-docver-admin-date"><?= $f_StartDate ?></span>
+    <b class="tpl-docver-admin-title"><?= htmlspecialchars((string)$f_Title) ?></b>
+    <?= $f_AdminButtons; ?>
+</div>
+<?php else:
+    static $nc_docver_done = array();
+    if (!isset($nc_docver_done[(int)$cc])) {
+        $nc_docver_done[(int)$cc] = true;
+        echo nc_docver_render_public($cc, $classID, $catalogue);
+    }
+endif; ?><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><!-- /FormSuffix -->

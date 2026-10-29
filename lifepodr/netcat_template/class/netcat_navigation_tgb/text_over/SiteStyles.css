@@ -1,0 +1,63 @@
+/* Базовые стили — текст поверх изображения */
+.object-item { text-decoration: none; display: block; position: relative; }
+.object-item .item-image { position: relative; overflow: hidden; }
+.object-item .item-image::before { display: block; content: ""; width: 100%; padding-top: var(--tpl-object-item--image-padding-top); }
+.object-item .item-image .image { position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; }
+.object-item .item-image .image img { max-width: 100%; width: 100%; height: 100%; object-fit: cover; }
+
+/* Затемнение / осветление */
+.object-item .item-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--tpl-object-item--overlay-color, transparent);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Текстовый блок поверх изображения */
+.object-item .item-info {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    color: var(--tpl-object-item--text-color, inherit);
+    gap: 0;
+}
+
+/* Кнопка */
+.object-item .item-button { margin-top: 20px; }
+
+/* Позиция: слева снизу (по умолчанию) */
+.object-item.text-position-left-bottom .item-info {
+    bottom: var(--tpl-object-item--offset-y, 20px);
+    left: var(--tpl-object-item--offset-x, 20px);
+}
+
+/* Позиция: слева сверху */
+.object-item.text-position-left-top .item-info {
+    top: var(--tpl-object-item--offset-y, 20px);
+    left: var(--tpl-object-item--offset-x, 20px);
+}
+
+/* Позиция: справа сверху */
+.object-item.text-position-right-top .item-info {
+    top: var(--tpl-object-item--offset-y, 20px);
+    right: var(--tpl-object-item--offset-x, 20px);
+    text-align: right;
+}
+
+/* Позиция: справа снизу */
+.object-item.text-position-right-bottom .item-info {
+    bottom: var(--tpl-object-item--offset-y, 20px);
+    right: var(--tpl-object-item--offset-x, 20px);
+    text-align: right;
+}
+
+/* Позиция: по центру */
+.object-item.text-position-center .item-info {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    align-items: center;
+}

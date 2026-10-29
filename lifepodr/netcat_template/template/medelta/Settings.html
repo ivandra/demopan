@@ -1,0 +1,50 @@
+<?php
+
+$mobile_menu = [];
+
+/* --- Уровень 0 --- */
+$mobile_menu[0]['prefix'] = "<ul class='mobile-menu__menu'>";
+$mobile_menu[0]['suffix'] = "</ul>";
+$mobile_menu[0]['active']   = "<li><a href='%URL' class='mobile-menu__menu-item'>%NAME</a>%NEXT_LEVEL</li>";
+$mobile_menu[0]['unactive'] = $mobile_menu[0]['active'];
+
+/* --- Уровень 1 --- */
+$mobile_menu[1]['prefix'] = "<a class='mobile-menu__arrow'></a><ul>";
+$mobile_menu[1]['suffix'] = "</ul>";
+$mobile_menu[1]['active']   = "<li><a href='%URL' class='mobile-menu__sub-item'>%NAME</a>%NEXT_LEVEL</li>";
+$mobile_menu[1]['unactive'] = $mobile_menu[1]['active'];
+
+/* --- Уровень 2 --- */
+$mobile_menu[2]['prefix'] = "<a class='mobile-menu__arrow'></a><ul>";
+$mobile_menu[2]['suffix'] = "</ul>";
+$mobile_menu[2]['active']   = "<li><a href='%URL' class='mobile-menu__sub-sub-item'>%NAME</a>%NEXT_LEVEL</li>";
+$mobile_menu[2]['unactive'] = $mobile_menu[2]['active'];
+
+
+
+$h_menu[0]['prefix'] = "<ul class='header__menu'>";
+$h_menu[0]['suffix'] = "</ul>";
+$h_menu[0]['active'] = "<li><a href='%URL' class='with_sub'>%NAME</a> %NEXT_LEVEL</li>";
+$h_menu[0]['unactive'] = "<li><a href='%URL' class='with_sub'>%NAME</a> %NEXT_LEVEL</li>";
+
+$h_menu[1]['prefix'] = "<ul>";
+$h_menu[1]['suffix'] = "</ul>";
+$h_menu[1]['active'] = "<li><a href='%URL' >%NAME </a> %NEXT_LEVEL</li>";
+$h_menu[1]['unactive'] = "<li><a href='%URL'>%NAME </a> %NEXT_LEVEL</li>";
+
+$h_menu[2]['prefix'] = "<ul>";
+$h_menu[2]['suffix'] = "</ul>";
+$h_menu[2]['active'] = "<li><a href='%URL' >%NAME</a> %NEXT_LEVEL</li>";
+$h_menu[2]['unactive'] = "<li><a href='%URL'>%NAME</a> %NEXT_LEVEL</li>";
+
+// Хлебные крошки
+$breadcrumbs_template['prefix'] = '<a href="/">Главная</a> <span></span> ';
+$breadcrumbs_template['active'] = "%NAME";
+$breadcrumbs_template['active_link'] = "%NAME";
+$breadcrumbs_template['unactive'] = "<a href='%URL'>%NAME</a>";
+$breadcrumbs_template['divider'] = " <span></span> ";
+$breadcrumbs_template['suffix'] = "";
+
+
+
+?>

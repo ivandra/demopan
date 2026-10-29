@@ -1,0 +1,48 @@
+<?php
+// Автогенерация поля Keyword из Name + проверка на уникальность
+
+$nc_core = nc_Core::get_object();
+
+if (!$f_Keyword && $f_Name) {
+
+    // сначала делаем базовый "человекопонятный" слаг
+    $search1 = array("--");
+    $search2 = array("'", "(", ")", "«", "»", "!", "?", ",", ".", ":", ";");
+
+    $urlstr = $f_Name;
+
+    // если в имени есть не латиница/цифры/дефис — транслитерируем
+    if (preg_match('/[^A-Za-z0-9_\-]/u', $urlstr)) {
+        $urlstr = nc_transliterate($f_Name);          // Netcat сам транслитерирует 
+        $urlstr = str_replace($search2, "", $urlstr); // убираем лишние символы
+        $urlstr = preg_replace('/[^A-Za-z0-9_\-]/u', '-', $urlstr);
+    }
+
+    $urlstr    = mb_strtolower($urlstr);
+    $urlstr    = preg_replace('/-+/', '-', $urlstr);  // схлопываем несколько дефисов
+    $urlstr    = trim($urlstr, '-');
+    $f_Keyword = $urlstr;
+
+    // проверяем на дубликаты и при необходимости добавляем -1, -2, -3...
+    $base_keyword = $f_Keyword;
+    $suffix       = 0;
+
+    do {
+        $test_keyword = $suffix ? $base_keyword . '-' . $suffix : $base_keyword;
+
+        $sql = "SELECT `Message_ID`
+                  FROM `Message{$classID}`
+                 WHERE `Keyword` = '" . $nc_core->db->escape($test_keyword) . "'";
+
+        // при редактировании не считаем текущий объект дубликатом
+        if (!empty($message)) {
+            $sql .= " AND `Message_ID` != " . (int)$message;
+        }
+
+        $exists = $nc_core->db->get_var($sql);
+        $suffix++;
+
+    } while ($exists);
+
+    $f_Keyword = $test_keyword;
+}

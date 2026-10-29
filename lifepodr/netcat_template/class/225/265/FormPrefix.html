@@ -1,0 +1,303 @@
+<?= $f_AdminCommon; ?>
+
+<style>
+.medelta-reviews {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 12px;
+    font-family: Arial, sans-serif;
+    color: #111;
+}
+
+.medelta-reviews,
+.medelta-reviews * {
+    box-sizing: border-box;
+}
+
+.medelta-reviews__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.medelta-reviews__name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111;
+    text-decoration: none;
+}
+
+.medelta-reviews__source {
+    font-size: 13px;
+    color: #888;
+    text-decoration: none;
+}
+
+.medelta-reviews__rating {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.medelta-reviews__score {
+    font-size: 48px;
+    line-height: 1.1;
+    font-weight: 400;
+}
+
+.medelta-reviews__stars {
+    color: #ffb900;
+    font-size: 22px;
+    letter-spacing: 1px;
+    line-height: 1.2;
+}
+
+.medelta-reviews__count {
+    color: #999;
+    font-size: 14px;
+}
+
+.medelta-reviews__form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: #f6f6f6;
+    border-radius: 6px;
+}
+
+.medelta-reviews__button {
+    display: inline-block;
+    padding: 12px 18px;
+    background: #258ffb;
+    color: #fff !important;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.medelta-reviews__button:hover {
+    background: #1a6df2;
+}
+
+.medelta-reviews__comments {
+    max-height: 380px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.medelta-reviews__comment {
+    padding: 22px 0;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.medelta-reviews__author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.medelta-reviews__avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #edf3fa;
+    font-size: 22px;
+}
+
+.medelta-reviews__author-name {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.medelta-reviews__date {
+    margin-top: 4px;
+    color: #999;
+    font-size: 13px;
+}
+
+.medelta-reviews__comment-stars {
+    color: #ffb900;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.medelta-reviews__text {
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.medelta-reviews__bottom {
+    display: block;
+    margin-top: 20px;
+    padding: 12px;
+    text-align: center;
+    color: #198cff;
+    background: #f5f7fa;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+@media (max-width: 600px) {
+    .medelta-reviews {
+        padding: 15px;
+    }
+
+    .medelta-reviews__score {
+        font-size: 40px;
+    }
+
+    .medelta-reviews__name {
+        font-size: 18px;
+    }
+
+    .medelta-reviews__text {
+        font-size: 14px;
+    }
+
+    .medelta-reviews__comments {
+        max-height: 450px;
+    }
+}
+</style>
+
+<div class="wrap">
+<div class="medelta-reviews">
+
+    <div class="medelta-reviews__top">
+        <a class="medelta-reviews__name"
+           href="https://yandex.ru/maps/org/medelta/227555220191/"
+           target="_blank" rel="noopener noreferrer">
+            МедЭльта
+        </a>
+        <a class="medelta-reviews__source"
+           href="https://yandex.ru/maps/org/medelta/227555220191/"
+           target="_blank" rel="noopener noreferrer">
+            Яндекс Карты
+        </a>
+    </div>
+
+    <div class="medelta-reviews__rating">
+        <div class="medelta-reviews__score">4,8</div>
+        <div>
+            <div class="medelta-reviews__stars">★★★★★</div>
+            <div class="medelta-reviews__count">
+                3 отзыва · 7 оценок
+            </div>
+        </div>
+    </div>
+
+    <div class="medelta-reviews__form">
+        <span>Поставьте нам оценку</span>
+        <a class="medelta-reviews__button"
+           href="https://yandex.ru/maps/org/medelta/227555220191/reviews/?add-review"
+           target="_blank" rel="noopener noreferrer">
+            Оставить отзыв
+        </a>
+    </div>
+
+    <div class="medelta-reviews__comments">
+
+        <div class="medelta-reviews__comment">
+            <div class="medelta-reviews__author">
+                <div class="medelta-reviews__avatar">🎓</div>
+                <div>
+                    <div class="medelta-reviews__author-name">
+                        Елена Филипьева
+                    </div>
+                    <div class="medelta-reviews__date">
+                        9 сентября
+                    </div>
+                </div>
+            </div>
+            <div class="medelta-reviews__comment-stars">
+                ★★★★★
+            </div>
+            <p class="medelta-reviews__text">
+                Спасибо докторам помогли мужу, не смотря на
+                очень тяжелое состояние и повторное обращение
+                за один год, они сделали все возможное для
+                максимально быстрой стабилизации состояния.
+                Очень внимательно относятся к всем проявлениям
+                " болезни" , понятно объясняют что и когда
+                делать в их отсутствие. И самое главное это
+                скорость приезда с момента вызова.
+                Спасибо большое за помощь.и за анонимность!
+            </p>
+        </div>
+
+        <div class="medelta-reviews__comment">
+            <div class="medelta-reviews__author">
+                <div class="medelta-reviews__avatar">😺</div>
+                <div>
+                    <div class="medelta-reviews__author-name">
+                        Ольга Умрихина
+                    </div>
+                    <div class="medelta-reviews__date">
+                        9 сентября
+                    </div>
+                </div>
+            </div>
+            <div class="medelta-reviews__comment-stars">
+                ★★★★★
+            </div>
+            <p class="medelta-reviews__text">
+                Спасибо большое ребятам докторам! Два года
+                я уже пользуюсь их услугами! В каком бы не
+                был муж состояние, и чтобы он ребятам не
+                говорил, им всегда получается уговорить
+                пролечиться мужа, ребята знают свою работу!
+                Всегда приезжают вовремя, и главное
+                Анонимность! Большое ребятам спасибо!
+                советую всем!
+            </p>
+        </div>
+
+        <div class="medelta-reviews__comment">
+            <div class="medelta-reviews__author">
+                <div class="medelta-reviews__avatar">А</div>
+                <div>
+                    <div class="medelta-reviews__author-name">
+                        Александра Сановская
+                    </div>
+                    <div class="medelta-reviews__date">
+                        3 сентября
+                    </div>
+                </div>
+            </div>
+            <div class="medelta-reviews__comment-stars">
+                ★★★★★
+            </div>
+            <p class="medelta-reviews__text">
+                Рекомнедую всем знакомым.
+            </p>
+        </div>
+
+    </div>
+
+    <a class="medelta-reviews__bottom"
+       href="https://yandex.ru/maps/org/medelta/227555220191/reviews/"
+       target="_blank" rel="noopener noreferrer">
+        Смотреть все отзывы на Яндекс Картах →
+    </a>
+
+</div></div>

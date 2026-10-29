@@ -1,0 +1,318 @@
+[
+  {
+    "name": "anonymous installer denied",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native admin opens installer",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "wrong CSRF denied",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "v1 reset through browser",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "installation chunked",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "44 native components and templates",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native page /",
+    "ok": true,
+    "detail": {
+      "status": 200,
+      "h1": 1
+    }
+  },
+  {
+    "name": "no abandoned renderer or clinic copy /",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native page /o-nas/",
+    "ok": true,
+    "detail": {
+      "status": 200,
+      "h1": 1
+    }
+  },
+  {
+    "name": "no abandoned renderer or clinic copy /o-nas/",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native page /blog/",
+    "ok": true,
+    "detail": {
+      "status": 200,
+      "h1": 1
+    }
+  },
+  {
+    "name": "no abandoned renderer or clinic copy /blog/",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native page /kontakty/",
+    "ok": true,
+    "detail": {
+      "status": 200,
+      "h1": 1
+    }
+  },
+  {
+    "name": "no abandoned renderer or clinic copy /kontakty/",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native page /o-nas/spetsialisty/",
+    "ok": true,
+    "detail": {
+      "status": 200,
+      "h1": 1
+    }
+  },
+  {
+    "name": "no abandoned renderer or clinic copy /o-nas/spetsialisty/",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native page /o-nas/foto/",
+    "ok": true,
+    "detail": {
+      "status": 200,
+      "h1": 1
+    }
+  },
+  {
+    "name": "no abandoned renderer or clinic copy /o-nas/foto/",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native page /podrostkam/trevoga-i-perezhivaniya/",
+    "ok": true,
+    "detail": {
+      "status": 200,
+      "h1": 1
+    }
+  },
+  {
+    "name": "no abandoned renderer or clinic copy /podrostkam/trevoga-i-perezhivaniya/",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "founder single FIO",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "shared specialist records on home",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native specialist FIO string field",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "semantic field captions",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "no content-derived captions",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native edit submitted",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native edit updates list",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native edit updates full page",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "same edit updates home slider",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native photo upload changes image",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "main editor has no clinic record",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native priority changes order",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native unchecked record leaves home",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native unchecked record leaves list",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native add creates specialist",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native contact saves lead",
+    "ok": true,
+    "detail": "Спасибо! Заявка сохранена."
+  },
+  {
+    "name": "duplicate submission is acknowledged",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "invalid form rejected: consent",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "invalid form rejected: invalid contact",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "invalid form rejected: honeypot",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "invalid form rejected: CSRF",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "invalid form rejected: session nonce",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "anonymous visitors cannot read leads",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native subscription saves lead",
+    "ok": true,
+    "detail": "Спасибо! Заявка сохранена."
+  },
+  {
+    "name": "card images preserve source variants",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native quiz saves validated answers",
+    "ok": true,
+    "detail": "Спасибо! Заявка сохранена."
+  },
+  {
+    "name": "calculator uses editable numeric settings",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "consultation dialog opens",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "native dialog form saves lead",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "home viewport 360",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "home viewport 390",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "home viewport 768",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "home viewport 1024",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "home viewport 1440",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "404 HTTP status",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "second subdomain has its own contacts",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "rollback through browser",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "reactivate through browser",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "no public JS errors",
+    "ok": true,
+    "detail": []
+  }
+]

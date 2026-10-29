@@ -1,0 +1,46 @@
+<?= $f_AdminButtons ?><section class="calc" data-zhp-calc="">
+<div class="wrap">
+<div class="calc__content">
+<p class="hero__label">ПРЕДВАРИТЕЛЬНЫЙ РАСЧЁТ</p>
+<h2 class="hero__title"><?= shortcode_component((string)$f_name) ?></h2>
+<p class="hero__description"><?= shortcode_component((string)$f_text) ?></p>
+<div class="calc__image">
+<img alt="" decoding="async" src="/netcat_template/template/zhizn_podrostka/img/calc.png"/>
+</div>
+<div class="calc__mob-image">
+<img alt="" decoding="async" src="/netcat_template/template/zhizn_podrostka/img/calc2.png"/>
+</div>
+</div>
+<div class="calc__panel">
+<div class="calc__row">
+<div class="calc__label-group">
+<span class="calc__label-text">Продолжительность пребывания</span>
+<input class="calc__input" id="amount" readonly="" type="text"/>
+</div>
+<div class="calc__range">
+<input aria-label="Количество суток" class="zhp-range" data-calc-value="days" id="slider-range-max" max="<?= htmlspecialchars(shortcode((string)$f_days_max),ENT_QUOTES,'UTF-8') ?>" min="<?= htmlspecialchars(shortcode((string)$f_days_min),ENT_QUOTES,'UTF-8') ?>" step="1" type="range" value="<?= htmlspecialchars(shortcode((string)$f_days),ENT_QUOTES,'UTF-8') ?>"></input>
+</div>
+
+</div>
+<div class="calc__row">
+<div class="calc__label-group">
+<span class="calc__label-text">Стоимость за сутки</span>
+<input class="calc__input" id="amount2" readonly="" type="text"/>
+</div>
+<div class="calc__range">
+<input aria-label="Стоимость за сутки" class="zhp-range" data-calc-value="rate" id="slider-range-max2" max="<?= htmlspecialchars(shortcode((string)$f_rate_max),ENT_QUOTES,'UTF-8') ?>" min="<?= htmlspecialchars(shortcode((string)$f_rate_min),ENT_QUOTES,'UTF-8') ?>" step="100" type="range" value="<?= htmlspecialchars(shortcode((string)$f_rate),ENT_QUOTES,'UTF-8') ?>"></input>
+</div>
+
+
+</div>
+<div class="calc__result">
+<p class="calc__result-label">Ориентировочная стоимость</p>
+<p class="calc__result-value">135 000 ₽</p>
+<p class="calc__result-formula">30 суток × 4 500 ₽</p>
+<a class="header__button" data-zhp-consult="" href="#consult">
+						Получить точный расчёт →
+					</a>
+</div>
+</div>
+</div>
+</section>

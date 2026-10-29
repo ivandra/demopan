@@ -1,0 +1,75 @@
+{
+  "pass": true,
+  "main_blocks": [
+    [
+      292,
+      "zhp_founder"
+    ],
+    [
+      291,
+      "zhp_banner"
+    ],
+    [
+      293,
+      "zhp_video"
+    ],
+    [
+      294,
+      "zhp_program"
+    ],
+    [
+      295,
+      "zhp_parent_group"
+    ],
+    [
+      296,
+      "zhp_calculator"
+    ],
+    [
+      297,
+      "zhp_quiz"
+    ],
+    [
+      298,
+      "zhp_first_step"
+    ],
+    [
+      299,
+      "zhp_cards"
+    ],
+    [
+      300,
+      "zhp_cards"
+    ],
+    [
+      301,
+      "zhp_cards"
+    ],
+    [
+      302,
+      "zhp_specialists"
+    ],
+    [
+      303,
+      "zhp_reviews"
+    ],
+    [
+      304,
+      "zhp_certificates"
+    ],
+    [
+      305,
+      "zhp_articles"
+    ],
+    [
+      306,
+      "zhp_socials"
+    ],
+    [
+      307,
+      "zhp_subscription"
+    ]
+  ],
+  "leads": 4,
+  "upgrade": true
+}

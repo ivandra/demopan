@@ -1,0 +1,442 @@
+<?php
+
+/** @var string $selector */
+/** @var string $list_selector */
+/** @var array $settings */
+
+// Размеры стрелок
+$arrows_sizes = array(
+    'small' => '32px',
+    'medium' => '44px',
+    'large' => '60px',
+);
+$arrows_size = $arrows_sizes[$settings['arrows_size'] ?? 'medium'] ?? '44px';
+$arrows_size_num = (int)$arrows_size;
+
+// Размеры пагинации
+$pagination_sizes = array(
+    'small' => array('bullet' => '6px', 'line_width' => '16px', 'line_height' => '3px', 'progressbar_height' => '3px', 'fraction_font' => '14px'),
+    'medium' => array('bullet' => '8px', 'line_width' => '24px', 'line_height' => '4px', 'progressbar_height' => '4px', 'fraction_font' => '16px'),
+    'large' => array('bullet' => '12px', 'line_width' => '32px', 'line_height' => '5px', 'progressbar_height' => '6px', 'fraction_font' => '20px'),
+);
+$pag_size = $pagination_sizes[$settings['pagination_size'] ?? 'medium'] ?? $pagination_sizes['medium'];
+
+$arrows_position = $settings['arrows_position'] ?? 'inside';
+$pagination_position = $settings['pagination_position'] ?? 'inside';
+$bullets_style = $settings['bullets_style'] ?? 'circle';
+
+// Цвета
+$arrows_color = $settings['arrows_color'] ?? '';
+$bullets_color = $settings['bullets_color'] ?? '';
+$bullets_active_color = $settings['bullets_active_color'] ?? '';
+$progressbar_bg_color = $settings['progressbar_bg_color'] ?? '';
+$progressbar_fill_color = $settings['progressbar_fill_color'] ?? '';
+$fraction_color = $settings['fraction_color'] ?? '';
+$pagination_type = $settings['pagination_type'] ?? '';
+
+// Новые настройки стрелок
+$arrows_style = $settings['arrows_style'] ?? 'default';
+$arrows_opacity = $settings['arrows_opacity'] ?? '';
+$arrows_bg_shape = $settings['arrows_bg_shape'] ?? '';
+$arrows_bg_color = $settings['arrows_bg_color'] ?? '';
+$arrows_border_width = $settings['arrows_border_width'] ?? '';
+$arrows_border_color = $settings['arrows_border_color'] ?? '';
+$arrows_offset_y = $settings['arrows_offset_y'] ?? '';
+$arrows_auto_hide = !empty($settings['arrows_auto_hide']);
+$show_arrows = !empty($settings['show_arrows']);
+
+// SVG-иконки для разных стилей стрелок (URL-encoded)
+$arrow_icons = array(
+    'default' => array(
+        'prev' => "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 44'%3E%3Cpath d='M0,22L22,0l2.1,2.1L4.2,22l19.9,19.9L22,44L0,22L0,22L0,22z' fill='currentColor'/%3E%3C/svg%3E\")",
+        'next' => "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 44'%3E%3Cpath d='M27,22L5,44l-2.1-2.1L22.8,22L2.9,2.1L5,0L27,22L27,22L27,22z' fill='currentColor'/%3E%3C/svg%3E\")",
+    ),
+    'arrow' => array(
+        'prev' => "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z' fill='currentColor'/%3E%3C/svg%3E\")",
+        'next' => "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z' fill='currentColor'/%3E%3C/svg%3E\")",
+    ),
+    'arrow_long' => array(
+        'prev' => "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7.83 11L11.41 7.41 10 6 4 12 10 18 11.41 16.59 7.83 13H20V11H7.83Z' fill='currentColor'/%3E%3C/svg%3E\")",
+        'next' => "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16.17 13L12.59 16.59 14 18 20 12 14 6 12.59 7.41 16.17 11H4V13H16.17Z' fill='currentColor'/%3E%3C/svg%3E\")",
+    ),
+    'angle' => array(
+        'prev' => "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z' fill='currentColor'/%3E%3C/svg%3E\")",
+        'next' => "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z' fill='currentColor'/%3E%3C/svg%3E\")",
+    ),
+    'caret' => array(
+        'prev' => "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M15 19l-7-7 7-7z' fill='currentColor'/%3E%3C/svg%3E\")",
+        'next' => "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 5l7 7-7 7z' fill='currentColor'/%3E%3C/svg%3E\")",
+    ),
+);
+
+$css = <<<CSS
+
+$list_selector:not(.swiper-wrapper) > *:not(:first-child) {
+    display: none;
+}
+
+$selector {
+    --swiper-theme-color: var(--tpl-color-foreground-accent, #007aff);
+    --swiper-navigation-size: $arrows_size;
+}
+
+$selector > .tpl-block-list {
+    display: block;
+}
+
+/* Стили пагинации */
+$selector .swiper .swiper-pagination-bullet {
+    background-color: var(--tpl-color-foreground-main-lightest, #000);
+    opacity: 0.3;
+}
+
+$selector .swiper .swiper-pagination-bullet-active,
+$selector .swiper .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+    background-color: var(--tpl-color-foreground-accent, #007aff);
+    opacity: 1;
+}
+
+CSS;
+
+// Пользовательские цвета для буллетов
+if ($pagination_type === 'bullets') {
+    if ($bullets_color) {
+        $css .= <<<CSS
+
+$selector .swiper .swiper-pagination-bullet {
+    background-color: $bullets_color;
+}
+
+CSS;
+    }
+
+    if ($bullets_active_color) {
+        $css .= <<<CSS
+
+$selector .swiper .swiper-pagination-bullet-active {
+    background-color: $bullets_active_color;
+}
+
+CSS;
+    }
+}
+
+// Пользовательские цвета для прогресс-бара
+if ($pagination_type === 'progressbar') {
+    if ($progressbar_bg_color) {
+        $css .= <<<CSS
+
+$selector .swiper .swiper-pagination-progressbar {
+    background-color: $progressbar_bg_color;
+}
+
+CSS;
+    }
+
+    if ($progressbar_fill_color) {
+        $css .= <<<CSS
+
+$selector .swiper .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+    background-color: $progressbar_fill_color;
+}
+
+CSS;
+    }
+}
+
+// Пользовательский цвет для номера слайда (fraction)
+if ($pagination_type === 'fraction' && $fraction_color) {
+    $css .= <<<CSS
+
+$selector .swiper .swiper-pagination-fraction {
+    color: $fraction_color;
+}
+
+CSS;
+}
+
+$css .= <<<CSS
+
+$selector .swiper .swiper-scrollbar {
+    background-color: var(--tpl-color-foreground-main-lightest, rgba(0,0,0,0.1));
+}
+
+$selector .swiper .swiper-scrollbar-drag {
+    background-color: var(--tpl-color-foreground-accent, rgba(0,0,0,0.5));
+}
+
+.swiper-nc-auto-slides-per-view > .swiper-slide {
+    width: auto;
+    min-width: 100px;
+}
+
+/* Базовые стили стрелок */
+$selector .swiper-button-prev,
+$selector .swiper-button-next {
+    color: var(--tpl-color-foreground-accent, #007aff);
+    background-color: transparent;
+    border: none;
+}
+
+CSS;
+
+// Пользовательский цвет стрелок
+if ($arrows_color) {
+    $css .= <<<CSS
+
+$selector .swiper-button-prev,
+$selector .swiper-button-next {
+    color: $arrows_color;
+}
+
+CSS;
+}
+
+// Стиль стрелок (иконки)
+if ($arrows_style !== 'default' && isset($arrow_icons[$arrows_style])) {
+    $icon_prev = $arrow_icons[$arrows_style]['prev'];
+    $icon_next = $arrow_icons[$arrows_style]['next'];
+    $css .= <<<CSS
+
+/* Стиль иконок стрелок: $arrows_style */
+$selector .swiper-button-prev::after,
+$selector .swiper-button-next::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: currentColor;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+}
+
+$selector .swiper-button-prev::after {
+    -webkit-mask-image: $icon_prev;
+    mask-image: $icon_prev;
+}
+
+$selector .swiper-button-next::after {
+    -webkit-mask-image: $icon_next;
+    mask-image: $icon_next;
+}
+
+CSS;
+}
+
+// Прозрачность стрелок
+if ($arrows_opacity !== '' && $arrows_opacity !== '100') {
+    $opacity_val = ((int)$arrows_opacity) / 100;
+    $css .= <<<CSS
+
+$selector .swiper-button-prev,
+$selector .swiper-button-next {
+    opacity: $opacity_val;
+}
+
+CSS;
+}
+
+// Фон стрелок
+if ($arrows_bg_shape) {
+    $bg_color = $arrows_bg_color ?: 'transparent';
+    $border_radius = '0';
+    $padding = round($arrows_size_num * 0.3) . 'px';
+
+    if ($arrows_bg_shape === 'circle') {
+        $border_radius = '50%';
+    } elseif ($arrows_bg_shape === 'rounded') {
+        $border_radius = '8px';
+    }
+
+    $css .= <<<CSS
+
+/* Фон стрелок */
+$selector .swiper-button-prev,
+$selector .swiper-button-next {
+    background-color: $bg_color;
+    border-radius: $border_radius;
+    width: $arrows_size;
+    height: $arrows_size;
+    padding: $padding;
+    box-sizing: border-box;
+}
+
+$selector .swiper-button-prev::after,
+$selector .swiper-button-next::after {
+    font-size: calc($arrows_size * 0.5);
+}
+
+CSS;
+}
+
+// Рамка стрелок
+if ($arrows_border_width && (int)$arrows_border_width > 0) {
+    $border_width = (int)$arrows_border_width . 'px';
+    $border_color = $arrows_border_color ?: 'currentColor';
+    $css .= <<<CSS
+
+/* Рамка стрелок */
+$selector .swiper-button-prev,
+$selector .swiper-button-next {
+    border: $border_width solid $border_color;
+}
+
+CSS;
+}
+
+// Вертикальное смещение
+if ($arrows_offset_y !== '' && (int)$arrows_offset_y !== 0) {
+    $offset = (int)$arrows_offset_y . 'px';
+    $css .= <<<CSS
+
+/* Вертикальное смещение стрелок */
+$selector .swiper-button-prev,
+$selector .swiper-button-next {
+    margin-top: $offset;
+}
+
+CSS;
+}
+
+// Автоскрытие неактивных стрелок
+if ($arrows_auto_hide) {
+    $css .= <<<CSS
+
+/* Скрытие неактивных стрелок */
+$selector .swiper-button-disabled {
+    opacity: 0;
+    pointer-events: none;
+}
+
+CSS;
+}
+
+// Стрелки снаружи (создаются как сиблинги .swiper в JS)
+if ($show_arrows && $arrows_position === 'outside') {
+    // Если есть фон — используем равные размеры, иначе — пропорции стандартной стрелки
+    $arrow_width = $arrows_bg_shape ? $arrows_size : "calc($arrows_size / 44 * 27)";
+    $css .= <<<CSS
+
+/* Стрелки снаружи */
+$selector > .tpl-block-list {
+    position: relative;
+}
+
+$selector .swiper {
+    margin-left: calc($arrows_size + 10px);
+    margin-right: calc($arrows_size + 10px);
+}
+
+$selector > .tpl-block-list > .swiper-button-prev,
+$selector > .tpl-block-list > .swiper-button-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: $arrow_width;
+    height: $arrows_size;
+    margin-top: 0;
+}
+
+$selector > .tpl-block-list > .swiper-button-prev {
+    left: 0;
+}
+
+$selector > .tpl-block-list > .swiper-button-next {
+    right: 0;
+}
+
+CSS;
+
+    // Если есть вертикальное смещение при внешних стрелках
+    if ($arrows_offset_y !== '' && (int)$arrows_offset_y !== 0) {
+        $offset = (int)$arrows_offset_y . 'px';
+        $css .= <<<CSS
+
+$selector > .tpl-block-list > .swiper-button-prev,
+$selector > .tpl-block-list > .swiper-button-next {
+    transform: translateY(calc(-50% + $offset));
+}
+
+CSS;
+    }
+}
+
+// Пагинация снаружи
+if ($pagination_position === 'outside') {
+    $css .= <<<CSS
+
+/* Пагинация снаружи */
+$selector .swiper .swiper-pagination {
+    position: relative;
+    bottom: auto;
+    margin-top: 16px;
+}
+
+CSS;
+}
+
+// Размер буллетов
+$css .= <<<CSS
+
+/* Размер пагинации */
+$selector .swiper .swiper-pagination-bullet {
+    width: {$pag_size['bullet']};
+    height: {$pag_size['bullet']};
+}
+
+CSS;
+
+// Стиль буллетов
+if ($pagination_type === 'bullets') {
+    if ($bullets_style === 'square') {
+        $css .= <<<CSS
+
+/* Квадратные буллеты */
+$selector .swiper .swiper-pagination-bullet {
+    border-radius: 2px;
+}
+
+CSS;
+    } elseif ($bullets_style === 'line') {
+        $css .= <<<CSS
+
+/* Линейные буллеты */
+$selector .swiper .swiper-pagination-bullet {
+    width: {$pag_size['line_width']};
+    height: {$pag_size['line_height']};
+    border-radius: {$pag_size['line_height']};
+}
+
+CSS;
+    }
+}
+
+// Размер прогресс-бара
+if ($pagination_type === 'progressbar') {
+    $css .= <<<CSS
+
+/* Размер прогресс-бара */
+$selector .swiper .swiper-pagination-progressbar {
+    height: {$pag_size['progressbar_height']};
+}
+
+CSS;
+}
+
+// Размер номера слайда (fraction)
+if ($pagination_type === 'fraction') {
+    $css .= <<<CSS
+
+/* Размер номера слайда */
+$selector .swiper .swiper-pagination-fraction {
+    font-size: {$pag_size['fraction_font']};
+}
+
+CSS;
+}
+
+return $css;

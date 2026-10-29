@@ -1,0 +1,747 @@
+<div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-areas-editor">
+
+    <!-- Grid size controls -->
+    <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-controls">
+        <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-control">
+            <label>Колонки:</label>
+            <input type="number" class="nc-mixins-mixin-settings-netcat-layout-grid-areas-cols-input nc--small" min="1" max="12" value="3">
+        </div>
+        <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-control">
+            <label>Строки:</label>
+            <input type="number" class="nc-mixins-mixin-settings-netcat-layout-grid-areas-rows-input nc--small" min="1" max="12" value="3">
+        </div>
+        <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-control">
+            <a href="#" class="nc-mixins-mixin-settings-netcat-layout-grid-areas-reset-link">сбросить</a>
+        </div>
+    </div>
+
+    <!-- Main grid area - unified grid layout -->
+    <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-main">
+        <!-- Top-left corner: height label -->
+        <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-corner">Высота:</div>
+        <!-- Column sizes row -->
+        <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-column-sizes">
+            <!-- Column size inputs will be rendered here -->
+        </div>
+        <!-- Row sizes column -->
+        <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-row-sizes">
+            <!-- Row size inputs will be rendered here -->
+        </div>
+        <!-- Grid canvas -->
+        <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-canvas">
+            <!-- Grid cells and elements will be rendered here -->
+        </div>
+    </div>
+
+    <!-- Parking area (unused elements) -->
+    <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-parking">
+        <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-parking-label">Вне сетки:</div>
+        <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-parking-items">
+            <!-- Parked elements will be rendered here -->
+        </div>
+    </div>
+
+    <!-- Gap and alignment settings -->
+    <div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-settings">
+        <table class="nc-mixins-layout-table">
+            <tr>
+                <td>Отступ между колонками:</td>
+                <td>
+                    <input type="number" class="nc--small" min="0" value="24" name="mixin.settings.column_gap">
+                    <select name="mixin.settings.column_gap_unit">
+                        <option value="px" selected>px</option>
+                        <option value="rem">rem</option>
+                        <option value="%">%</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Отступ между строками:</td>
+                <td>
+                    <input type="number" class="nc--small" min="0" value="24" name="mixin.settings.row_gap">
+                    <select name="mixin.settings.row_gap_unit">
+                        <option value="px" selected>px</option>
+                        <option value="rem">rem</option>
+                        <option value="%">%</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Выравнивание по вертикали:</td>
+                <td>
+                    <select name="mixin.settings.align_items">
+                        <option value="stretch" selected>растянуть (stretch)</option>
+                        <option value="start">по верхнему краю (start)</option>
+                        <option value="center">по центру (center)</option>
+                        <option value="end">по нижнему краю (end)</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Выравнивание по горизонтали:</td>
+                <td>
+                    <select name="mixin.settings.justify_items">
+                        <option value="stretch" selected>растянуть (stretch)</option>
+                        <option value="start">по левому краю (start)</option>
+                        <option value="center">по центру (center)</option>
+                        <option value="end">по правому краю (end)</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Hidden field for storing grid data -->
+    <input type="hidden" name="mixin.settings.grid_data" value="">
+
+</div>
+
+<script>
+(function() {
+    var EDITOR_CLASS = 'nc-mixins-mixin-settings-netcat-layout-grid-areas-areas-editor';
+    var ELEMENT_COLORS = [
+        '#4a90d9', '#5cb85c', '#f0ad4e', '#d9534f', '#9b59b6',
+        '#1abc9c', '#e74c3c', '#3498db', '#2ecc71', '#e67e22',
+        '#9c88ff', '#00cec9'
+    ];
+    var SIZE_UNITS_WIDTH = ['fr', 'px', '%', 'vw', 'auto'];
+    var SIZE_UNITS_HEIGHT = ['fr', 'px', '%', 'vh', 'auto'];
+
+    // Parse size string like "1fr", "200px", "50vh", "auto" into {value, unit}
+    function parseSize(str) {
+        str = (str || '').trim();
+        if (!str || str === 'auto') {
+            return { value: '', unit: 'auto' };
+        }
+        var match = str.match(/^([\d.]+)\s*(fr|px|%|vh|vw|em|rem)?$/);
+        if (match) {
+            return { value: match[1], unit: match[2] || 'fr' };
+        }
+        return { value: '1', unit: 'fr' };
+    }
+
+    // Build size string from {value, unit}
+    function buildSize(parsed) {
+        if (parsed.unit === 'auto') {
+            return 'auto';
+        }
+        return (parsed.value || '1') + parsed.unit;
+    }
+
+    function GridAreasEditor(container) {
+        this.container = container;
+        this.canvas = container.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-canvas');
+        this.columnSizesContainer = container.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-column-sizes');
+        this.rowSizesContainer = container.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-row-sizes');
+        this.parkingContainer = container.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-parking-items');
+
+        // Grid state
+        this.cols = 3;
+        this.rows = 3;
+        this.columnSizes = ['1fr', '1fr', '1fr'];
+        this.rowSizes = ['auto', 'auto', 'auto'];
+        this.elements = [];
+        this.parked = [];
+        this.nextId = 1;
+
+        // Drag state
+        this.dragging = null;
+        this.resizing = null;
+
+        this.init();
+    }
+
+    GridAreasEditor.prototype = {
+        init: function() {
+            var self = this;
+
+            // Column count input
+            this.container.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-cols-input').on('change', function() {
+                var val = Math.max(1, Math.min(12, parseInt($nc(this).val()) || 3));
+                $nc(this).val(val);
+                self.setCols(val);
+            });
+
+            // Row count input
+            this.container.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-rows-input').on('change', function() {
+                var val = Math.max(1, Math.min(12, parseInt($nc(this).val()) || 3));
+                $nc(this).val(val);
+                self.setRows(val);
+            });
+
+            // Reset link
+            this.container.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-reset-link').on('click', function(e) {
+                e.preventDefault();
+                self.reset();
+            });
+
+            // Cell click to add element
+            this.canvas.on('click', '.nc-mixins-mixin-settings-netcat-layout-grid-areas-cell', function(e) {
+                if (self.dragging || self.resizing) return;
+                var col = parseInt($nc(this).data('col'));
+                var row = parseInt($nc(this).data('row'));
+                if (!self.isCellOccupied(col, row)) {
+                    self.addElement(col, row);
+                }
+            });
+
+            // Element drag start
+            this.canvas.on('mousedown', '.nc-mixins-mixin-settings-netcat-layout-grid-areas-element', function(e) {
+                if ($nc(e.target).hasClass('nc-mixins-mixin-settings-netcat-layout-grid-areas-element-resize') ||
+                    $nc(e.target).hasClass('nc-mixins-mixin-settings-netcat-layout-grid-areas-element-remove')) return;
+                e.preventDefault();
+                var el = $nc(this);
+                var id = parseInt(el.data('element-id'));
+                var elem = self.getElementById(id);
+                if (!elem) return;
+
+                self.dragging = {
+                    id: id,
+                    element: el,
+                    startCol: elem.col,
+                    startRow: elem.row,
+                    offsetX: e.pageX - el.offset().left,
+                    offsetY: e.pageY - el.offset().top
+                };
+                el.addClass('nc--dragging');
+            });
+
+            // Resize start
+            this.canvas.on('mousedown', '.nc-mixins-mixin-settings-netcat-layout-grid-areas-element-resize', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var el = $nc(this).closest('.nc-mixins-mixin-settings-netcat-layout-grid-areas-element');
+                var id = parseInt(el.data('element-id'));
+                var elem = self.getElementById(id);
+                if (!elem) return;
+
+                self.resizing = {
+                    id: id,
+                    element: el,
+                    startColspan: elem.colspan,
+                    startRowspan: elem.rowspan,
+                    startX: e.pageX,
+                    startY: e.pageY
+                };
+                el.addClass('nc--dragging');
+            });
+
+            // Remove element
+            this.canvas.on('click', '.nc-mixins-mixin-settings-netcat-layout-grid-areas-element-remove', function(e) {
+                e.stopPropagation();
+                var id = parseInt($nc(this).closest('.nc-mixins-mixin-settings-netcat-layout-grid-areas-element').data('element-id'));
+                self.parkElement(id);
+            });
+
+            // Mouse move (drag/resize)
+            $nc(document).on('mousemove.grideditor', function(e) {
+                if (self.dragging) {
+                    self.handleDrag(e);
+                } else if (self.resizing) {
+                    self.handleResize(e);
+                }
+            });
+
+            // Mouse up (end drag/resize)
+            $nc(document).on('mouseup.grideditor', function(e) {
+                if (self.dragging) {
+                    self.endDrag(e);
+                } else if (self.resizing) {
+                    self.endResize(e);
+                }
+            });
+
+            // Parking item drag
+            this.parkingContainer.on('mousedown', '.nc-mixins-mixin-settings-netcat-layout-grid-areas-parking-item', function(e) {
+                e.preventDefault();
+                var id = parseInt($nc(this).data('element-id'));
+                self.dragging = {
+                    id: id,
+                    fromParking: true,
+                    element: $nc(this),
+                    offsetX: e.pageX - $nc(this).offset().left,
+                    offsetY: e.pageY - $nc(this).offset().top
+                };
+                $nc(this).addClass('nc--dragging');
+            });
+
+            this.render();
+        },
+
+        setCols: function(newCols) {
+            var self = this;
+            this.elements = this.elements.filter(function(elem) {
+                if (elem.col > newCols || elem.col + elem.colspan - 1 > newCols) {
+                    self.parked.push(elem.id);
+                    return false;
+                }
+                return true;
+            });
+
+            this.cols = newCols;
+            while (this.columnSizes.length < newCols) {
+                this.columnSizes.push('1fr');
+            }
+            this.columnSizes = this.columnSizes.slice(0, newCols);
+            this.render();
+            this.saveState();
+        },
+
+        setRows: function(newRows) {
+            var self = this;
+            this.elements = this.elements.filter(function(elem) {
+                if (elem.row > newRows || elem.row + elem.rowspan - 1 > newRows) {
+                    self.parked.push(elem.id);
+                    return false;
+                }
+                return true;
+            });
+
+            this.rows = newRows;
+            while (this.rowSizes.length < newRows) {
+                this.rowSizes.push('auto');
+            }
+            this.rowSizes = this.rowSizes.slice(0, newRows);
+            this.render();
+            this.saveState();
+        },
+
+        reset: function() {
+            this.cols = 3;
+            this.rows = 3;
+            this.columnSizes = ['1fr', '1fr', '1fr'];
+            this.rowSizes = ['auto', 'auto', 'auto'];
+            this.elements = [];
+            this.parked = [];
+            this.nextId = 1;
+
+            this.container.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-cols-input').val(3);
+            this.container.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-rows-input').val(3);
+
+            this.render();
+            this.saveState();
+        },
+
+        isCellOccupied: function(col, row) {
+            for (var i = 0; i < this.elements.length; i++) {
+                var e = this.elements[i];
+                if (col >= e.col && col < e.col + e.colspan &&
+                    row >= e.row && row < e.row + e.rowspan) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        canPlaceElement: function(col, row, colspan, rowspan, excludeId) {
+            if (col < 1 || row < 1 || col + colspan - 1 > this.cols || row + rowspan - 1 > this.rows) {
+                return false;
+            }
+            for (var i = 0; i < this.elements.length; i++) {
+                var e = this.elements[i];
+                if (excludeId && e.id === excludeId) continue;
+                if (!(col + colspan - 1 < e.col || col > e.col + e.colspan - 1 ||
+                      row + rowspan - 1 < e.row || row > e.row + e.rowspan - 1)) {
+                    return false;
+                }
+            }
+            return true;
+        },
+
+        addElement: function(col, row) {
+            var id = this.nextId++;
+            this.elements.push({
+                id: id,
+                col: col,
+                row: row,
+                colspan: 1,
+                rowspan: 1
+            });
+            this.render();
+            this.saveState();
+        },
+
+        getElementById: function(id) {
+            for (var i = 0; i < this.elements.length; i++) {
+                if (this.elements[i].id === id) return this.elements[i];
+            }
+            return null;
+        },
+
+        parkElement: function(id) {
+            this.elements = this.elements.filter(function(e) { return e.id !== id; });
+            if (this.parked.indexOf(id) === -1) {
+                this.parked.push(id);
+            }
+            this.render();
+            this.saveState();
+        },
+
+        unparkElement: function(id, col, row) {
+            this.parked = this.parked.filter(function(pid) { return pid !== id; });
+            this.elements.push({
+                id: id,
+                col: col,
+                row: row,
+                colspan: 1,
+                rowspan: 1
+            });
+            this.render();
+            this.saveState();
+        },
+
+        handleDrag: function(e) {
+            if (!this.dragging) return;
+
+            var cell = this.getCellAt(e.pageX, e.pageY);
+            this.canvas.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-cell').removeClass('nc--highlight nc--highlight-invalid');
+
+            if (cell) {
+                var elem = this.dragging.fromParking ?
+                    { colspan: 1, rowspan: 1 } :
+                    this.getElementById(this.dragging.id);
+                var canPlace = this.canPlaceElement(cell.col, cell.row,
+                    elem.colspan, elem.rowspan, this.dragging.fromParking ? null : this.dragging.id);
+
+                for (var c = cell.col; c < cell.col + elem.colspan && c <= this.cols; c++) {
+                    for (var r = cell.row; r < cell.row + elem.rowspan && r <= this.rows; r++) {
+                        this.canvas.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-cell[data-col="' + c + '"][data-row="' + r + '"]')
+                            .addClass(canPlace ? 'nc--highlight' : 'nc--highlight-invalid');
+                    }
+                }
+            }
+        },
+
+        endDrag: function(e) {
+            if (!this.dragging) return;
+
+            var cell = this.getCellAt(e.pageX, e.pageY);
+            this.canvas.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-cell').removeClass('nc--highlight nc--highlight-invalid');
+            this.dragging.element.removeClass('nc--dragging');
+
+            if (cell) {
+                if (this.dragging.fromParking) {
+                    if (this.canPlaceElement(cell.col, cell.row, 1, 1)) {
+                        this.unparkElement(this.dragging.id, cell.col, cell.row);
+                    }
+                } else {
+                    var elem = this.getElementById(this.dragging.id);
+                    if (elem && this.canPlaceElement(cell.col, cell.row, elem.colspan, elem.rowspan, elem.id)) {
+                        elem.col = cell.col;
+                        elem.row = cell.row;
+                        this.render();
+                        this.saveState();
+                    }
+                }
+            }
+
+            this.dragging = null;
+        },
+
+        handleResize: function(e) {
+            if (!this.resizing) return;
+
+            var elem = this.getElementById(this.resizing.id);
+            if (!elem) return;
+
+            var cellWidth = this.canvas.width() / this.cols;
+            var cellHeight = this.canvas.height() / this.rows;
+
+            var deltaX = e.pageX - this.resizing.startX;
+            var deltaY = e.pageY - this.resizing.startY;
+
+            var newColspan = Math.max(1, Math.round(this.resizing.startColspan + deltaX / cellWidth));
+            var newRowspan = Math.max(1, Math.round(this.resizing.startRowspan + deltaY / cellHeight));
+
+            newColspan = Math.min(newColspan, this.cols - elem.col + 1);
+            newRowspan = Math.min(newRowspan, this.rows - elem.row + 1);
+
+            if (this.canPlaceElement(elem.col, elem.row, newColspan, newRowspan, elem.id)) {
+                elem.colspan = newColspan;
+                elem.rowspan = newRowspan;
+                this.positionElement(this.resizing.element, elem);
+            }
+        },
+
+        endResize: function(e) {
+            if (!this.resizing) return;
+            this.resizing.element.removeClass('nc--dragging');
+            this.resizing = null;
+            this.render();
+            this.saveState();
+        },
+
+        getCellAt: function(pageX, pageY) {
+            var canvasOffset = this.canvas.offset();
+            var x = pageX - canvasOffset.left;
+            var y = pageY - canvasOffset.top;
+
+            if (x < 0 || y < 0 || x > this.canvas.width() || y > this.canvas.height()) {
+                return null;
+            }
+
+            var cellWidth = this.canvas.width() / this.cols;
+            var cellHeight = this.canvas.height() / this.rows;
+
+            return {
+                col: Math.floor(x / cellWidth) + 1,
+                row: Math.floor(y / cellHeight) + 1
+            };
+        },
+
+        positionElement: function(el, elem) {
+            var cellWidth = this.canvas.width() / this.cols;
+            var cellHeight = this.canvas.height() / this.rows;
+            var gap = 2;
+
+            el.css({
+                left: (elem.col - 1) * cellWidth + gap + 'px',
+                top: (elem.row - 1) * cellHeight + gap + 'px',
+                width: elem.colspan * cellWidth - gap * 2 + 'px',
+                height: elem.rowspan * cellHeight - gap * 2 + 'px'
+            });
+        },
+
+        render: function() {
+            this.renderColumnSizes();
+            this.renderRowSizes();
+            this.renderGrid();
+            this.renderParking();
+        },
+
+        renderColumnSizes: function() {
+            var self = this;
+            var html = '';
+            for (var i = 0; i < this.cols; i++) {
+                var parsed = parseSize(this.columnSizes[i]);
+                var isAuto = parsed.unit === 'auto';
+                html += '<div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-col-size" data-index="' + i + '">';
+                html += '<div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-col-size-inner' + (isAuto ? ' nc--auto' : '') + '">';
+                html += '<input type="number" value="' + (parsed.value || '') + '" min="0" step="1">';
+                html += '<select>';
+                for (var j = 0; j < SIZE_UNITS_WIDTH.length; j++) {
+                    var unit = SIZE_UNITS_WIDTH[j];
+                    html += '<option value="' + unit + '"' + (parsed.unit === unit ? ' selected' : '') + '>' + unit + '</option>';
+                }
+                html += '</select>';
+                html += '</div>';
+                html += '</div>';
+            }
+            this.columnSizesContainer.html(html);
+
+            this.columnSizesContainer.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-col-size').each(function() {
+                var colSize = $nc(this);
+                var index = colSize.data('index');
+                var inner = colSize.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-col-size-inner');
+                var input = inner.find('input');
+                var select = inner.find('select');
+
+                // Force width via JS
+                input.css({'width': '60px', 'min-width': '60px'});
+                select.css({'width': '70px', 'min-width': '70px'});
+
+                function updateValue() {
+                    var unit = select.val();
+                    var isAuto = unit === 'auto';
+                    inner.toggleClass('nc--auto', isAuto);
+                    input.prop('disabled', isAuto);
+                    self.columnSizes[index] = buildSize({ value: input.val(), unit: unit });
+                    self.saveState();
+                }
+
+                input.on('change', updateValue);
+                select.on('change', updateValue);
+                // Apply initial disabled state
+                input.prop('disabled', select.val() === 'auto');
+            });
+        },
+
+        renderRowSizes: function() {
+            var self = this;
+            var html = '';
+            for (var i = 0; i < this.rows; i++) {
+                var parsed = parseSize(this.rowSizes[i]);
+                var isAuto = parsed.unit === 'auto';
+                html += '<div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-row-size' + (isAuto ? ' nc--auto' : '') + '" data-index="' + i + '">';
+                html += '<input type="number" value="' + (parsed.value || '') + '" min="0" step="1">';
+                html += '<select>';
+                for (var j = 0; j < SIZE_UNITS_HEIGHT.length; j++) {
+                    var unit = SIZE_UNITS_HEIGHT[j];
+                    html += '<option value="' + unit + '"' + (parsed.unit === unit ? ' selected' : '') + '>' + unit + '</option>';
+                }
+                html += '</select>';
+                html += '</div>';
+            }
+            this.rowSizesContainer.html(html);
+
+            this.rowSizesContainer.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-row-size').each(function() {
+                var rowSize = $nc(this);
+                var index = rowSize.data('index');
+                var input = rowSize.find('input');
+                var select = rowSize.find('select');
+
+                function updateValue() {
+                    var unit = select.val();
+                    var isAuto = unit === 'auto';
+                    rowSize.toggleClass('nc--auto', isAuto);
+                    input.prop('disabled', isAuto);
+                    self.rowSizes[index] = buildSize({ value: input.val(), unit: unit });
+                    self.saveState();
+                }
+
+                input.on('change', updateValue);
+                select.on('change', updateValue);
+                // Apply initial disabled state
+                input.prop('disabled', select.val() === 'auto');
+            });
+        },
+
+        renderGrid: function() {
+            var self = this;
+
+            var gridRows = 'repeat(' + this.rows + ', 1fr)';
+            this.canvas.css({
+                'grid-template-columns': 'repeat(' + this.cols + ', 1fr)',
+                'grid-template-rows': gridRows
+            });
+            // Sync row sizes container with canvas grid
+            this.rowSizesContainer.css({
+                'grid-template-rows': gridRows
+            });
+
+            var cellsHtml = '';
+            for (var row = 1; row <= this.rows; row++) {
+                for (var col = 1; col <= this.cols; col++) {
+                    cellsHtml += '<div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-cell" data-col="' + col + '" data-row="' + row + '"></div>';
+                }
+            }
+
+            var elementsHtml = '';
+            for (var i = 0; i < this.elements.length; i++) {
+                var e = this.elements[i];
+                elementsHtml += '<div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-element" data-element-id="' + e.id + '">';
+                elementsHtml += '<span>' + e.id + '</span>';
+                elementsHtml += '<div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-element-resize"></div>';
+                elementsHtml += '<div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-element-remove">×</div>';
+                elementsHtml += '</div>';
+            }
+
+            this.canvas.html(cellsHtml + elementsHtml);
+
+            this.elements.forEach(function(e) {
+                var el = self.canvas.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-element[data-element-id="' + e.id + '"]');
+                self.positionElement(el, e);
+            });
+        },
+
+        renderParking: function() {
+            var html = '';
+            for (var i = 0; i < this.parked.length; i++) {
+                var id = this.parked[i];
+                var colorIndex = (id - 1) % ELEMENT_COLORS.length;
+                html += '<div class="nc-mixins-mixin-settings-netcat-layout-grid-areas-parking-item" data-element-id="' + id + '" ';
+                html += 'style="background: ' + ELEMENT_COLORS[colorIndex] + '">';
+                html += id;
+                html += '</div>';
+            }
+            this.parkingContainer.html(html);
+        },
+
+        saveState: function() {
+            var data = {
+                cols: this.cols,
+                rows: this.rows,
+                columnSizes: this.columnSizes,
+                rowSizes: this.rowSizes,
+                elements: this.elements,
+                parked: this.parked,
+                nextId: this.nextId
+            };
+            this.container.find('input[name="mixin.settings.grid_data"]')
+                .val(JSON.stringify(data))
+                .trigger('change');
+        },
+
+        loadState: function() {
+            var self = this;
+            var dataStr = this.container.find('input[name="mixin.settings.grid_data"]').val();
+            if (!dataStr) return;
+
+            try {
+                var data = JSON.parse(dataStr);
+                this.cols = data.cols || 3;
+                this.rows = data.rows || 3;
+                this.columnSizes = data.columnSizes || ['1fr', '1fr', '1fr'];
+                this.rowSizes = data.rowSizes || ['auto', 'auto', 'auto'];
+                this.elements = data.elements || [];
+                this.parked = data.parked || [];
+                this.nextId = data.nextId || 1;
+
+                this.container.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-cols-input').val(this.cols);
+                this.container.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-rows-input').val(this.rows);
+
+                this.render();
+
+                setTimeout(function() {
+                    self.repositionElements();
+                }, 50);
+            } catch (e) {
+                console.error('Failed to load grid state:', e);
+            }
+        },
+
+        repositionElements: function() {
+            var self = this;
+            if (this.canvas.width() === 0) {
+                setTimeout(function() {
+                    self.repositionElements();
+                }, 100);
+                return;
+            }
+            this.elements.forEach(function(e) {
+                var el = self.canvas.find('.nc-mixins-mixin-settings-netcat-layout-grid-areas-element[data-element-id="' + e.id + '"]');
+                if (el.length) {
+                    self.positionElement(el, e);
+                }
+            });
+        }
+    };
+
+    function initEditor(container) {
+        if (container.data('gridAreasEditor')) return;
+        var editor = new GridAreasEditor(container);
+        container.data('gridAreasEditor', editor);
+        editor.loadState();
+    }
+
+    $nc(document)
+        .off(nc_mixin_settings_editor.mixin_settings_set_values_event + '.gridareas')
+        .on(nc_mixin_settings_editor.mixin_settings_set_values_event + '.gridareas', '.nc-mixins-mixin-settings', function() {
+            var container = $nc(this).find('.' + EDITOR_CLASS);
+            if (container.length) {
+                var editor = container.data('gridAreasEditor');
+                if (editor) {
+                    editor.loadState();
+                } else {
+                    initEditor(container);
+                }
+            }
+        });
+
+    setTimeout(function() {
+        $nc('.' + EDITOR_CLASS).each(function() {
+            initEditor($nc(this));
+        });
+    }, 100);
+
+    $nc(window).off('resize.gridareas').on('resize.gridareas', function() {
+        $nc('.' + EDITOR_CLASS).each(function() {
+            var editor = $nc(this).data('gridAreasEditor');
+            if (editor) {
+                editor.repositionElements();
+            }
+        });
+    });
+
+})();
+</script>

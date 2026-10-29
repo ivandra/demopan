@@ -1,0 +1,46 @@
+<?= $f_AdminCommon; ?>
+<?php
+// Инициализация зависимостей для универсального шаблона товара
+$netshop = nc_netshop::get_instance();
+$current_catalogue = $nc_core->catalogue->get_current();
+
+// Функция подсчёта комментариев - в поиске не показываем
+$get_comment_count = function() { return 0; };
+
+// Подсчёт уникальных товаров (без вариантов)
+$nc_search_unique_count = 0;
+$nc_search_shown_products = [];
+$nc_search_product_cache = [];
+
+if (!empty($fetch_row)) {
+    foreach ($fetch_row as $row) {
+        $meta = $row instanceof Iterator ? $row->get('meta') : ($row['meta'] ?? []);
+        if (!empty($meta['component_id']) && !empty($meta['message_id'])) {
+            $item = nc_netshop_item::by_id($meta['component_id'], $meta['message_id']);
+            if ($item) {
+                $parent_id = $item['Parent_Message_ID'] ?: $item['Message_ID'];
+                if (!isset($nc_search_shown_products[$parent_id])) {
+                    $nc_search_shown_products[$parent_id] = true;
+                    $nc_search_unique_count++;
+                    // Кэшируем родительский товар для RecordTemplate
+                    if ($item['Parent_Message_ID']) {
+                        $nc_search_product_cache[$meta['message_id']] = nc_netshop_item::by_id($meta['component_id'], $item['Parent_Message_ID']);
+                    } else {
+                        $nc_search_product_cache[$meta['message_id']] = $item;
+                    }
+                }
+            }
+        }
+    }
+}
+// Сбрасываем для использования в RecordTemplate
+$nc_search_shown_products = [];
+?>
+<?php if (($search_query && ($cc_settings['showBlock'] == 'on' && !$nc_search_unique_count) || $nc_search_unique_count) || $admin_mode) { ?>
+    <?php if ($cc_settings['blockTitle']) { ?>
+        <h3><?= $cc_settings['blockTitle']; ?> (<?= $nc_search_unique_count; ?>)</h3>
+    <?php } ?>
+    <?php if (!$nc_search_unique_count) { ?>
+        <p><?= NETCAT_MODULE_SEARCH_NO_RESULTS; ?></p>
+    <?php } ?>
+<?php } ?>

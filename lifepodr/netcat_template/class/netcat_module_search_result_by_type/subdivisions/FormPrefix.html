@@ -1,0 +1,9 @@
+<?= $f_AdminCommon; ?>
+<?php if (($search_query && ($cc_settings['showBlock'] == 'on' && !$totRows) || $totRows) || $admin_mode) { ?>
+    <?php if($cc_settings['blockTitle']) { ?>
+    <h3><?= $cc_settings['blockTitle']; ?> (<?= $totRows; ?>)</h3>
+    <?php } ?>
+    <?php if (!$totRows) { ?>
+        <div class="search-no-result tpl-text-default-paragraph"><?= NETCAT_MODULE_SEARCH_NO_RESULTS; ?></div>
+    <?php } ?>
+<?php } ?>

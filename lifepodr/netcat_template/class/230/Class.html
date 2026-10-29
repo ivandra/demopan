@@ -1,0 +1,48 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+	<div class="doctors2">
+		<div class="wrap">
+			<div class="doctors2__list"><!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+<div class="doctors__item">
+	<div class="flex3">
+		<div class="doctors__photo">
+			<img src="<?=$f_img?>">
+		</div>
+		<div class="doctor__info">
+			<h3><?=$f_fio?></h3>
+			<p><?=$f_position?></p>
+			 <?if($f_skills){?>
+				<ul>
+					<?=$f_skills?>
+				</ul>
+			 <?}?>
+			<button data-fancybox="popup-<?=rand(0,999999)?>" data-src="#popup" class="doctors2__button">записаться на консультацию</button>
+			<a href="<?=$fullLink?>" class="doctors2__link">Подробнее →</a>
+		</div>
+	</div>
+</div>
+<?php
+	if (!isset($GLOBALS['docs_ld'])) $GLOBALS['docs_ld'] = array();
+	$doc_name = trim(strip_tags((string)$f_fio));
+	if ($doc_name !== '') {
+		$sch_base = 'https://' . (nc_core()->widget->generate('regions', array('main_domain')) ?: $_SERVER['HTTP_HOST']);
+		$doc = array('@type' => 'Physician', 'name' => $doc_name,
+			'url' => (strpos($fullLink, 'http') === 0 ? $fullLink : $sch_base . $fullLink));
+		if (trim((string)$f_img) !== '') $doc['image'] = (strpos($f_img, 'http') === 0 ? $f_img : $sch_base . $f_img);
+		$GLOBALS['docs_ld'][] = array('@type' => 'ListItem', 'position' => count($GLOBALS['docs_ld']) + 1, 'item' => $doc);
+	}
+?><!-- /RecordTemplate -->
+
+<!-- FormSuffix -->			</div>
+		</div>
+	</div><?php
+	if (!empty($GLOBALS['docs_ld'])) {
+		echo '<script type="application/ld+json">' . json_encode(array(
+			'@context' => 'https://schema.org', '@type' => 'ItemList',
+			'itemListElement' => $GLOBALS['docs_ld'],
+		), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
+	}
+?>
+
+<!-- /FormSuffix -->

@@ -1,0 +1,45 @@
+<?/* Служебная часть */for ($f_RowNum = 0; $f_RowNum < $rowCount; $f_RowNum++) {    if($fetch_row[$f_RowNum] instanceof Iterator) {        extract($fetch_row[$f_RowNum]->to_array(), EXTR_PREFIX_ALL, "f");    } else {        extract($fetch_row[$f_RowNum], EXTR_PREFIX_ALL, "f");    }    foreach($iteration_RecordTemplate[$f_RowNum] as $value) {        extract($value);    }    !isset($cc_env["convert2txt"]) ? $cc_env["convert2txt"] = null : null;    eval($cc_env["convert2txt"]);    ob_start();/* Конец служебной части */?>
+<?= $f_AdminButtons; ?>
+    <?php
+    $buttonText = nc_edit_inline('Name', $f_RowID, $cc_env['Sub_Class_ID']);
+    $title_class = trim((string)($cc_settings['title_classname'] ?? ''));
+    $description = trim((string)($f_Description ?? ''));
+    ?>
+    <div>
+    <?php switch ($cc_settings['display_as']) {
+        case "li":
+            ?>
+            <li <?= $cc_settings['li_style'] == 'outDots' ? "class='no-bullet'" : ""; ?>>
+                <div  class="<?= $title_class; ?>">
+                    <a href="<?= $f_Link; ?>" <?= $f_NewWindow ? "target='_blank'" : ""; ?>><?= $buttonText; ?></a>
+                </div>    
+                <?php if ($description !== ''): ?>
+                    <div class="tpl-text-default-paragraph"><?= nc_edit_inline('Description', $f_RowID, $cc_env['Sub_Class_ID']); ?></div>
+                <?php endif; ?>
+            </li>
+            <?php
+            break;
+        case "button":
+            ?>
+            <button type="button" title="<?= $description; ?>"
+                    class="tpl-button tpl-button-<?= $f_IsPrimary ? "primary" : "secondary" ?>"
+                    onclick="window.open('<?= $f_Link; ?>','<?= $f_NewWindow ? '_blank' : "_self"; ?>');">
+                <?= $buttonText; ?>
+            </button>
+            <?php
+            break;
+        case "a":
+        default:
+            ?>
+            <div  class="<?= $title_class; ?>">
+                <a href="<?= $f_Link; ?>" <?= $f_NewWindow ?
+                    "target='_blank'" : ""; ?>><?= $buttonText; ?></a>
+            </div>        
+            <?php if ($description !== ''): ?>
+                <div class="tpl-text-default-paragraph"><?= nc_edit_inline('Description', $f_RowID, $cc_env['Sub_Class_ID']); ?></div>
+            <?php endif; ?>
+            <?php
+            break;
+    } ?>
+    </div>
+<?/* Служебная часть */    echo nc_finishing_RecordTemplate(ob_get_clean(), $inside_admin, $classID, $f_RowID, $parent_message, $cc, $cc_env["Class_Name"], $no_cache_marks);}/* Конец служебной части */?>

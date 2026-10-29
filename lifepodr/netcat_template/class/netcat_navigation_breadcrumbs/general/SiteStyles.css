@@ -1,0 +1,66 @@
+.breadcrumbs {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.breadcrumbs li {
+    list-style: none;
+}
+
+.breadcrumbs li svg {
+    height: 1em;
+    width: 1em;
+}
+
+.breadcrumbs li svg path {
+    fill: var(--tpl-object-item--title-color);
+}
+
+.breadcrumbs li.divider {
+    margin-left: var(--divider-space);
+    margin-right: var(--divider-space);
+}
+
+/* Иконка "назад" — скрыта по умолчанию */
+.breadcrumb-back-icon {
+    display: none;
+    align-items: center;
+    margin-right: 0.3em;
+    line-height: 1;
+}
+
+.breadcrumb-back-icon svg {
+    width: 1em;
+    height: 1em;
+    fill: currentColor;
+    vertical-align: middle;
+}
+
+/* Мобильная версия: показываем только родительский элемент со стрелкой */
+@media (max-width: 767px) {
+    .breadcrumbs .breadcrumb-home,
+    .breadcrumbs .breadcrumb-middle,
+    .breadcrumbs .breadcrumb-current,
+    .breadcrumbs .breadcrumb-divider {
+        display: none;
+    }
+
+    .breadcrumbs .breadcrumb-parent {
+        display: flex;
+        align-items: center;
+    }
+
+    .breadcrumbs .breadcrumb-parent a {
+        display: flex;
+        align-items: center;
+    }
+
+    .breadcrumbs .breadcrumb-parent .breadcrumb-back-icon {
+        display: inline-flex;
+        align-items: center;
+    }
+}

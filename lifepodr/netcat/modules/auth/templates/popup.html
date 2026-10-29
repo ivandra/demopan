@@ -1,0 +1,169 @@
+<!-- NcAuthPopup - Современный попап авторизации -->
+<div class="nc-auth-popup">
+    <div class="nc-auth-popup__container">
+        <button type="button" class="nc-auth-popup__close" aria-label="Закрыть"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18" style="stroke: inherit !important"/></svg></button>
+
+        <div class="nc-auth-popup__content">
+            <!-- Экран 1: Ввод email -->
+            <div class="nc-auth-screen active" data-screen="initial">
+                <h2 class="nc-auth-popup__title">Вход или регистрация</h2>
+                <p class="nc-auth-popup__subtitle">Введите ваш email для продолжения</p>
+
+                <form id="nc-auth-email-form" class="nc-auth-form">
+                    <div class="nc-auth-field">
+                        <label class="nc-auth-field__label" for="nc-auth-email">Email</label>
+                        <input type="email" id="nc-auth-email" class="nc-auth-field__input"
+                               placeholder="example@mail.ru" required autocomplete="email">
+                        <div class="nc-auth-error" data-error="email"></div>
+                    </div>
+
+                    <button type="submit" class="nc-auth-btn nc-auth-btn--primary">Продолжить</button>
+                </form>
+
+                <div class="nc-auth-divider"><span>или</span></div>
+
+                <div class="nc-auth-oauth">
+                    <!-- OAuth кнопки будут добавлены динамически если включены -->
+                </div>
+            </div>
+
+            <!-- Экран 2: Ввод пароля (для существующих пользователей) -->
+            <div class="nc-auth-screen" data-screen="login_password">
+                <a href="#" class="nc-auth-back">Назад</a>
+                <h2 class="nc-auth-popup__title">Введите пароль</h2>
+                <p class="nc-auth-popup__subtitle">
+                    для <span class="nc-auth-email-display"></span>
+                </p>
+
+                <form id="nc-auth-password-form" class="nc-auth-form">
+                    <div class="nc-auth-field">
+                        <label class="nc-auth-field__label" for="nc-auth-password">Пароль</label>
+                        <input type="password" id="nc-auth-password" class="nc-auth-field__input"
+                               placeholder="Введите пароль" required autocomplete="current-password">
+                        <div class="nc-auth-error" data-error="password"></div>
+                    </div>
+
+                    <div class="nc-auth-captcha-slot"></div>
+
+                    <button type="submit" class="nc-auth-btn nc-auth-btn--primary">Войти</button>
+                </form>
+
+                <div class="nc-auth-links">
+                    <a href="#" id="nc-auth-forgot-password" class="nc-auth-link">Забыл пароль</a>
+                    <a href="#" id="nc-auth-code-login" class="nc-auth-link">Войти по коду</a>
+                </div>
+            </div>
+
+            <!-- Экран 3: Ввод кода верификации -->
+            <div class="nc-auth-screen" data-screen="code_input">
+                <a href="#" class="nc-auth-back">Назад</a>
+                <h2 class="nc-auth-popup__title">Введите код</h2>
+                <p class="nc-auth-popup__subtitle">
+                    Мы отправили код на <span class="nc-auth-email-display"></span>
+                </p>
+
+                <form id="nc-auth-code-form" class="nc-auth-form">
+                    <div class="nc-auth-code-inputs">
+                        <input type="text" class="nc-auth-code-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                        <input type="text" class="nc-auth-code-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                        <input type="text" class="nc-auth-code-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                        <input type="text" class="nc-auth-code-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                        <input type="text" class="nc-auth-code-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                        <input type="text" class="nc-auth-code-input" maxlength="1" pattern="[0-9]" inputmode="numeric">
+                    </div>
+
+                    <div class="nc-auth-error" data-error="code" style="text-align: center;"></div>
+                    <div class="nc-auth-attempts-left"></div>
+
+                    <div class="nc-auth-captcha-slot"></div>
+
+                    <button type="submit" class="nc-auth-btn nc-auth-btn--primary">Подтвердить</button>
+                </form>
+
+                <div class="nc-auth-resend">
+                    <a href="#" id="nc-auth-resend-code" class="disabled">
+                        Отправить код повторно<span id="nc-auth-resend-timer"></span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Экран 4: Регистрация -->
+            <div class="nc-auth-screen" data-screen="register">
+                <a href="#" class="nc-auth-back">Назад</a>
+                <h2 class="nc-auth-popup__title">Регистрация</h2>
+                <p class="nc-auth-popup__subtitle">
+                    Создание аккаунта для <span class="nc-auth-email-display"></span>
+                </p>
+
+                <form id="nc-auth-register-form" class="nc-auth-form">
+                    <input type="hidden" id="nc-auth-email-verified" value="0">
+
+                    <!-- Контейнер для динамических полей из компонента User -->
+                    <div id="nc-auth-register-fields"></div>
+
+                    <!-- Блок согласия на обработку ПД -->
+                    <div class="nc-auth-consent nc-auth-consent-pd" style="display: none;">
+                        <label class="nc-auth-consent__label">
+                            <input type="checkbox" id="nc-auth-consent-pd-checkbox" class="nc-auth-consent__input">
+                            <span class="nc-auth-consent__checkmark"></span>
+                            <span class="nc-auth-consent__text"></span>
+                        </label>
+                        <div class="nc-auth-error" data-error="consentPD"></div>
+                    </div>
+
+                    <!-- Блок согласия с правилами сайта -->
+                    <div class="nc-auth-consent nc-auth-consent-rules" style="display: none;">
+                        <label class="nc-auth-consent__label">
+                            <input type="checkbox" id="nc-auth-consent-rules-checkbox" class="nc-auth-consent__input">
+                            <span class="nc-auth-consent__checkmark"></span>
+                            <span class="nc-auth-consent__text"></span>
+                        </label>
+                        <div class="nc-auth-error" data-error="consentRules"></div>
+                    </div>
+
+                    <div class="nc-auth-captcha-slot"></div>
+
+                    <div class="nc-auth-error" data-error="register"></div>
+
+                    <button type="submit" class="nc-auth-btn nc-auth-btn--primary">Зарегистрироваться</button>
+                </form>
+            </div>
+
+            <!-- Экран 5: Установка пароля (опционально) -->
+            <div class="nc-auth-screen" data-screen="set_password">
+                <h2 class="nc-auth-popup__title">Установите пароль</h2>
+                <p class="nc-auth-popup__subtitle">Это позволит входить быстрее в будущем</p>
+
+                <form id="nc-auth-set-password-form" class="nc-auth-form">
+                    <div class="nc-auth-field">
+                        <label class="nc-auth-field__label" for="nc-auth-new-password">Пароль</label>
+                        <div class="nc-auth-field__password-wrapper">
+                            <input type="password" id="nc-auth-new-password" class="nc-auth-field__input"
+                                   placeholder="Минимум 6 символов" autocomplete="new-password">
+                            <button type="button" class="nc-auth-field__toggle-password" aria-label="Показать пароль" title="Показать пароль"></button>
+                        </div>
+                        <div class="nc-auth-error" data-error="new_password"></div>
+                    </div>
+
+                    <div class="nc-auth-actions">
+                        <button type="button" id="nc-auth-skip-password" class="nc-auth-btn nc-auth-btn--secondary">
+                            Пропустить
+                        </button>
+                        <button type="submit" class="nc-auth-btn nc-auth-btn--primary">
+                            Сохранить
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Экран 6: Успешная авторизация -->
+            <div class="nc-auth-screen" data-screen="success">
+                <div class="nc-auth-success">
+                    <div class="nc-auth-success__icon">&#10003;</div>
+                    <h3 class="nc-auth-success__title">Добро пожаловать!</h3>
+                    <p class="nc-auth-success__message">Вы успешно авторизованы</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

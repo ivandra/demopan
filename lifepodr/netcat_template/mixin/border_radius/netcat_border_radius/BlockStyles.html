@@ -1,0 +1,88 @@
+<?php
+
+/** @var string $selector */
+/** @var string $list_selector */
+/** @var array $settings */
+
+// Получаем значения углов
+$unit = nc_array_value($settings, 'unit', 'px');
+$lock_mode = nc_array_value($settings, 'lock_mode', 'all');
+
+// Новые поля для отдельных углов
+$top_left = nc_array_value($settings, 'top_left');
+$top_right = nc_array_value($settings, 'top_right');
+$bottom_right = nc_array_value($settings, 'bottom_right');
+$bottom_left = nc_array_value($settings, 'bottom_left');
+
+// Обратная совместимость: если новых полей нет, используем старое поле border_radius
+$legacy_radius = nc_array_value($settings, 'border_radius');
+
+// Проверяем, настроен ли миксин вообще (хотя бы одно значение не null)
+$has_settings = ($top_left !== null || $top_right !== null || $bottom_right !== null || $bottom_left !== null || $legacy_radius !== null);
+
+if ($top_left === null && $top_right === null && $bottom_right === null && $bottom_left === null) {
+    // Старый формат: все углы одинаковые
+    $top_left = $top_right = $bottom_right = $bottom_left = $legacy_radius;
+    $unit = 'px'; // старый формат всегда в пикселях
+}
+
+// Приводим к числам
+$top_left = (int)$top_left;
+$top_right = (int)$top_right;
+$bottom_right = (int)$bottom_right;
+$bottom_left = (int)$bottom_left;
+
+// Если миксин не настроен (все значения были null), не генерируем CSS
+// Но если пользователь явно установил 0, генерируем border-radius: 0
+if (!$has_settings) {
+    return '';
+}
+
+// Формируем значение border-radius
+$all_same = ($top_left === $top_right && $top_right === $bottom_right && $bottom_right === $bottom_left);
+$top_bottom_pairs = ($top_left === $top_right && $bottom_left === $bottom_right);
+$left_right_pairs = ($top_left === $bottom_left && $top_right === $bottom_right);
+
+if ($all_same) {
+    // Все углы одинаковые
+    $border_radius_value = "{$top_left}{$unit}";
+} elseif ($top_bottom_pairs && $left_right_pairs) {
+    // Диагональные пары (tl=br, tr=bl)
+    $border_radius_value = "{$top_left}{$unit} {$top_right}{$unit}";
+} elseif ($top_left === $bottom_right && $top_right === $bottom_left) {
+    // Диагональные пары
+    $border_radius_value = "{$top_left}{$unit} {$top_right}{$unit}";
+} else {
+    // Все углы разные
+    $border_radius_value = "{$top_left}{$unit} {$top_right}{$unit} {$bottom_right}{$unit} {$bottom_left}{$unit}";
+}
+
+// Для аккуратного сочетания с рамкой скругление содержимого блока для списка применяется
+// к .tpl-block-list (класс из стандартной добавляемой разметки); для элементов списка
+// (отсутствует $list_selector) — непосредственно к элементу $selector.
+$overflow_target = $list_selector ? "$selector > .tpl-block-list" : $selector;
+
+$css = '';
+
+if ($list_selector) {
+    // Список объектов - скругление рамки
+    $css .= "$selector { border-radius: $border_radius_value; }\n";
+
+    // Для внутреннего содержимого вычитаем ширину рамки
+    if ($all_same) {
+        $overflow_border_radius = "calc({$top_left}{$unit} - var(--tpl-mixin-border-line-width, 0px))";
+    } else {
+        $tl_calc = "calc({$top_left}{$unit} - var(--tpl-mixin-border-line-width, 0px))";
+        $tr_calc = "calc({$top_right}{$unit} - var(--tpl-mixin-border-line-width, 0px))";
+        $br_calc = "calc({$bottom_right}{$unit} - var(--tpl-mixin-border-line-width, 0px))";
+        $bl_calc = "calc({$bottom_left}{$unit} - var(--tpl-mixin-border-line-width, 0px))";
+        $overflow_border_radius = "$tl_calc $tr_calc $br_calc $bl_calc";
+    }
+} else {
+    // Объект в списке
+    $overflow_border_radius = $border_radius_value;
+}
+
+$css .= "$overflow_target { border-radius: $overflow_border_radius; overflow: hidden; }\n";
+
+return $css;

@@ -1,0 +1,4 @@
+<?php
+$zhp_allowed=array('main_domain','city','inCity','cityRP','cityDP','address','phone','email','regim','max','telegram','whatsapp','vk','youtube','instagram','mapcode','email_to','email_from','email_enabled','demo');$zhp_field=$fields[0]??'';
+if(in_array($zhp_field,$zhp_allowed,true)){static $zhp_rows=array();$zhp_host=strtolower(preg_replace('/:\d+$/','',$_SERVER['HTTP_HOST']??''));if(!array_key_exists($zhp_host,$zhp_rows)){$zhp_class=(int)$nc_core->db->get_var("SELECT Class_ID FROM Class WHERE Keyword='zhp_regions' AND ClassTemplate=0");$zhp_rows[$zhp_host]=$zhp_class?$nc_core->db->get_row("SELECT * FROM Message".$zhp_class." WHERE Checked=1 AND main_domain='".$nc_core->db->escape($zhp_host)."' ORDER BY Priority LIMIT 1",ARRAY_A):array();}echo (string)($zhp_rows[$zhp_host][$zhp_field]??'');}
+?>

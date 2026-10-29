@@ -1,0 +1,5 @@
+<?php
+$zhp_menu=array();$zhp_mobile=array();if(empty($_SESSION['zhp_form_nonce'])){$_SESSION['zhp_form_nonce']=bin2hex(random_bytes(24));}
+foreach(array('zhp_menu'=>'header','zhp_mobile'=>'mobile-menu') as $zhp_var=>$zhp_css){foreach(array(0=>array('list','item','link'),1=>array('sublist','subitem','sublink'),2=>array('subsublist','subsubitem','subsublink')) as $zhp_level=>$zhp_parts){${$zhp_var}[$zhp_level]=array('prefix'=>'<ul class="'.$zhp_css.'__'.$zhp_parts[0].'">','suffix'=>'</ul>','active'=>'<li class="'.$zhp_css.'__'.$zhp_parts[1].'"><a class="'.$zhp_css.'__'.$zhp_parts[2].'" href="%URL">%NAME</a>%NEXT_LEVEL</li>');${$zhp_var}[$zhp_level]['unactive']=${$zhp_var}[$zhp_level]['active'];}}
+if((int)$sub===(int)$current_catalogue['E404_Sub_ID']){nc_set_http_response_code(404);}
+?>

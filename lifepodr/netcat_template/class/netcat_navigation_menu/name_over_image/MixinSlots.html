@@ -1,0 +1,16 @@
+<?php
+/**
+ * Слоты миксинов для компонента "Меню" (название поверх картинки)
+ */
+return array(
+    'list_image' => array(
+        'name' => 'Изображение',
+        'selector' => '.menu-item-image',
+        'scopes' => array('border', 'border_radius', 'shadow', 'effect'),
+    ),
+    'list_content' => array(
+        'name' => 'Текст',
+        'selector' => '.menu-item-text-over-image',
+        'scopes' => array('color', 'padding', 'margin', 'background', 'border', 'border_radius', 'shadow'),
+    ),
+);

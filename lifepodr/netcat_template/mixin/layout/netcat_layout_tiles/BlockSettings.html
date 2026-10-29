@@ -1,0 +1,59 @@
+<div>
+
+    <table class="nc-mixins-layout-table">
+        <tr>
+            <td>Количество плиток в строке:</td>
+            <td><input type="number" class="nc--small" min="2" max="50" value="2" name="mixin.settings.column_number"></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Минимальное количество плиток в строке:</td>
+            <td><input type="number" class="nc--small" min="1" value="" name="mixin.settings.min_column_number"></td>
+            <td>(не обязательно; используется при количестве объектов меньшем, чем количество плиток)</td>
+        </tr>
+        <tr>
+            <td>Ширина плитки:</td>
+            <td colspan="2">
+                <select name="mixin.settings.column_width">
+                    <option value="1fr">равная (1fr)</option>
+                    <option value="auto">по содержимому (auto)</option>
+                    <option value="min-content">минимальная (min-content)</option>
+                    <option value="max-content">максимальная (max-content)</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Горизонтальный отступ между плитками:</td>
+            <td><input type="number" class="nc--small" min="0" name="mixin.settings.horizontal_spacing"></td>
+            <td>пикс.</td>
+        </tr>
+        <tr>
+            <td>Вертикальный отступ между плитками:</td>
+            <td><input type="number" class="nc--small" min="0" name="mixin.settings.vertical_spacing"></td>
+            <td>пикс.</td>
+        </tr>
+        <tr>
+            <td>Выравнивание плитки по вертикали:</td>
+            <td colspan="2">
+                <select name="mixin.settings.align_self">
+                    <option value="stretch">растянуть по высоте</option>
+                    <option value="start">по верхнему краю</option>
+                    <option value="center">по середине</option>
+                    <option value="end">по нижнему краю</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Выравнивание плитки по горизонтали:</td>
+            <td colspan="2">
+                <select name="mixin.settings.justify_items">
+                    <option value="stretch">растянуть по ширине</option>
+                    <option value="start">по левому краю</option>
+                    <option value="center">по центру</option>
+                    <option value="end">по правому краю</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+
+</div>

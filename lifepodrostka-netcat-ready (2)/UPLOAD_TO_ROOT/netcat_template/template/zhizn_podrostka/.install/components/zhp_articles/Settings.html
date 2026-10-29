@@ -1,0 +1,1 @@
+<?php if (!empty($_GET['category'])&&is_string($_GET['category'])&&in_array($_GET['category'],array('teens','parents','specialists'),true)) {$query_where="a.category='".$db->escape($_GET['category'])."'";} ?>

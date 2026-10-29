@@ -1,0 +1,70 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+	<div class="service">
+		<div class="wrap">
+			<div class="service__info">
+				<div class="breadcrumbs">
+					<?=shortcode_component(nc_browse_path_range(-1, $sub_level_count-1, $breadcrumbs_template,0,2))?>
+				</div>
+				
+				<?if($f_h1){?>
+					<h1 class="service__name"> <?=shortcode_component($f_maintitle)?></h1>
+					<?}else{?>
+					<div class="service__name">
+					  <?=shortcode_component($f_maintitle)?>
+					</div>
+				<?}?>
+				
+				<?if($f_price){?>
+					<div class="service__price">
+						 <?=shortcode_component($f_price)?>
+					</div>
+				<?}?>
+				
+				<?if($f_adv){?>
+					<ul class="service__data">
+						 <?=shortcode_component($f_adv)?>
+					</ul>
+				<?}?>
+				
+				<?if($f_quote){?>
+					<div class="service__time">
+						<?=shortcode_component($f_quote)?>
+					</div>
+				<?}?>
+				
+				<div class="service__pre-form">
+					Не обязательно сразу вызывать врача
+					<span>Консультация бесплатна и анонимна</span>
+				</div>
+
+				<form class="service__form" enctype='multipart/form-data' method="post" action='<?= $SUB_FOLDER ?><?= $HTTP_ROOT_PATH ?>add.php'>
+					<input name='catalogue' type='hidden' value='<?= $catalogue ?>' />
+					<input name='cc' type='hidden' value="<?=$current_catalogue['zakaz_cc']?>" />
+					<input name='sub' type='hidden' value="<?=$current_catalogue['zakaz_sub']?>"/>
+					<input name='posting' type='hidden' value='1' />
+					<input name="f_urlMessage" type="hidden" value="<?=$nc_core->url->source_url()?>"> 
+					<input name="f_utm" type="hidden" value="<?=get_utm()?>">
+				
+					<input type="text" name="f_name" placeholder="Имя">
+					<input type="text" name="f_phone" placeholder="Номер телефона" required>
+					<button>перезвоните мне</button>
+					<div class="agree">
+						<input type="checkbox" class="checkbox" id="agree-service" required><label for="agree-service">Я даю свое согласие на <a href="/policy/">обработку персональных данных</a> и соглашаюсь с <a href="/politika-konfidencialnosti/">политикой конфиденциальности</a></label>
+					</div>
+				</form>
+			</div>
+			<?
+			  if($f_docID){
+				/* Проверено специалистом */ 
+				echo nc_objects_list(41,114,"nc_ctpl=248&idObj=$f_docID");
+			  }
+			?>
+		</div>
+	</div>
+    <?php print_service_schema($f_maintitle, $f_adv, $f_price); ?>
+<?php print_breadcrumbs_schema_from_html(nc_browse_path_range(-1, $sub_level_count-1, $breadcrumbs_template, 0, 2)); ?><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><!-- /FormSuffix -->
