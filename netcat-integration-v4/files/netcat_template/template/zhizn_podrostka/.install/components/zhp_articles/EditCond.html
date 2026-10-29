@@ -1,0 +1,8 @@
+<?php
+
+if ($posting && !array_key_exists("f_Keyword", $_POST)) {
+    $f_Keyword = (string) $db->get_var(
+        "SELECT Keyword FROM Message" . (int) $classID . " WHERE Message_ID=" . (int) $message,
+    );
+}
+?>

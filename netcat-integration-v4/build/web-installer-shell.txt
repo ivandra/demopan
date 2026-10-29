@@ -1,0 +1,73 @@
+<?php
+/** Установка «Жизнь подростка». PHP 7.4+, файловый Netcat 7.2. Запускать из корня сайта. */
+$cli=PHP_SAPI==='cli';
+$li_ajax=!$cli && isset($_GET['ajax']) && $_GET['ajax']==='1';
+$li_ajax_done=true;$li_ajax_ok=true;$li_request_started=microtime(true);$li_work_units=0;
+if ($li_ajax) {
+    ob_start();$li_buffer_level=ob_get_level();
+    register_shutdown_function(function() {
+        global $li_buffer_level,$li_ajax_done,$li_ajax_ok,$state;
+        $body='';while (ob_get_level()>=$li_buffer_level) { $body=ob_get_clean().$body; }
+        $err=error_get_last();$fatal=$err && in_array($err['type'],array(E_ERROR,E_PARSE,E_CORE_ERROR,E_COMPILE_ERROR),true);
+        if ($fatal) { $li_ajax_ok=false;$body.=' Ошибка PHP: '.$err['message']; }
+        header('Content-Type: application/json; charset=UTF-8');header('Cache-Control: no-store');
+        $status=$li_ajax_ok?200:(http_response_code()>=400?http_response_code():500);
+        if (function_exists('nc_set_http_response_code')) { nc_set_http_response_code($status); } else { http_response_code($status); }
+        echo json_encode(array('ok'=>$li_ajax_ok,'done'=>$li_ajax_done,'message'=>trim(html_entity_decode(strip_tags($body),ENT_QUOTES,'UTF-8')),'installed'=>!empty($state['installed']),'active'=>!empty($state['active']),'components'=>count($state['component_ready']??array()),'pages'=>count($state['pages']??array()),'records'=>count($state['seeded']??array())),JSON_UNESCAPED_UNICODE|JSON_INVALID_UTF8_SUBSTITUTE);
+    });
+}
+$allowed=array('check','status','install','activate','rollback','reset','verify');$mode='status';
+if ($cli) {
+    foreach (array_slice($argv,1) as $arg) { if (in_array($arg,$allowed,true)) { $mode=$arg; } elseif (strpos($arg,'--host=')===0) { $_SERVER['HTTP_HOST']=substr($arg,7); } else { fwrite(STDERR,"Неизвестный аргумент\n");$li_ajax_ok=false;exit(2); } }
+    $_SERVER['DOCUMENT_ROOT']=__DIR__;putenv('DOCUMENT_ROOT='.__DIR__);$_SERVER['HTTP_HOST']=$_SERVER['HTTP_HOST']??'dev.lifepodrostka.ru';$_SERVER['SERVER_NAME']=$_SERVER['HTTP_HOST'];$_SERVER['REQUEST_URI']='/';$_SERVER['REQUEST_METHOD']='GET';$_SERVER['REMOTE_ADDR']='127.0.0.1';$_SERVER['HTTP_USER_AGENT']='LP installer';
+} else { header('Content-Type: text/html; charset=UTF-8');header('Cache-Control: no-store');header('X-Robots-Tag: noindex,nofollow');$mode=(string)($_POST['mode']??$_GET['mode']??'status'); }
+if (function_exists('set_time_limit')) { @set_time_limit($cli?0:20); }
+function li_fail($s) { throw new RuntimeException($s); }
+function li_checkpoint($label) {
+    global $li_ajax,$li_request_started,$li_work_units,$li_ajax_done;
+    if (!$li_ajax) { return; }
+    $li_work_units++;
+    if ($li_work_units>=8 || microtime(true)-$li_request_started>=3) { $li_ajax_done=false;li_out($label.' Состояние сохранено, следующий шаг…');exit; }
+}
+function li_out($s) { echo (PHP_SAPI==='cli' ? $s."\n" : '<p>'.htmlspecialchars($s,ENT_QUOTES,'UTF-8').'</p>'); }
+if (!ini_get('short_open_tag')) { li_out('Для ядра Netcat требуется short_open_tag=On.');$li_ajax_ok=false;exit(2); }
+if (!is_file(__DIR__.'/vars.inc.php')) { li_out('Положите zhp-install.php в корень сайта рядом с vars.inc.php.');$li_ajax_ok=false;exit(2); }
+require_once __DIR__.'/vars.inc.php';require_once $ROOT_FOLDER.'connect_io.php';$nc_core=nc_Core::get_object();$nc_core->modules->load_env();require_once $nc_core->ADMIN_FOLDER.'lang/'.$nc_core->lang->detect_lang().'.php';$db=$nc_core->db;
+$nc_core->user->attempt_to_authorize();
+if (!$cli && !$nc_core->InsideAdminAccess()) { $li_ajax_ok=false;nc_set_http_response_code(403);li_out('Войдите в админку Netcat как администратор, затем обновите эту страницу.');if (!$li_ajax) { echo '<p><a href="/netcat/admin/" target="_blank" rel="noopener">Открыть админку Netcat</a></p>'; }exit; }
+if (!in_array($mode,$allowed,true)) { $li_ajax_ok=false;li_out('Неизвестный режим');$li_ajax_ok=false;exit(2); }
+if (!$cli) {
+    if (empty($_SESSION['zhp_install_csrf'])) { $_SESSION['zhp_install_csrf']=bin2hex(random_bytes(32)); }
+    if (!in_array($mode,array('check','status','verify'),true) && ($_SERVER['REQUEST_METHOD']!=='POST' || !hash_equals($_SESSION['zhp_install_csrf'],(string)($_POST['token']??'')))) { $li_ajax_ok=false;nc_set_http_response_code(403);li_out('Изменения доступны только кнопками формы установщика.');exit; }
+
+}
+$design=__DIR__.'/netcat_template/template/zhizn_podrostka';$state_dir=rtrim($nc_core->FILES_FOLDER,'/').'/zhizn_podrostka';$state_file=$state_dir.'/state.php';$backup_file=$state_dir.'/backup.php';
+$state=is_file($state_file) ? include $state_file : array();$state=is_array($state)?$state:array();
+if (!$cli && !$li_ajax && !in_array($mode,array('status','check','verify'),true)) { $mode='status'; }
+if (!$cli && !$li_ajax) { li_dashboard(); }
+function li_dashboard() {
+    global $state;
+    $token=htmlspecialchars($_SESSION['zhp_install_csrf'],ENT_QUOTES,'UTF-8');
+    $status=!empty($state['active'])?'Новый сайт включён':(!empty($state['installed'])?'Установка завершена, сайт ещё не включён':'Можно начинать установку');
+    echo '<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Установка — Жизнь подростка</title><style>body{font:16px/1.5 system-ui,sans-serif;margin:0;background:#f6f4fb;color:#242034}main{max-width:900px;margin:40px auto;padding:28px;background:white;border-radius:20px;box-shadow:0 8px 30px #2a174b12}h1{margin-top:0;font-size:30px}button,a{font:inherit}button{border:0;border-radius:9px;padding:12px 16px;margin:5px 4px 5px 0;background:#7858dc;color:white;cursor:pointer}button.secondary{background:#ece7f8;color:#342355}button:disabled{opacity:.45;cursor:wait}#log{white-space:pre-wrap;overflow-wrap:anywhere;background:#f7f5fb;padding:16px;border-radius:12px;max-height:340px;overflow:auto;font-size:14px}progress{width:100%;height:22px}.notice{padding:12px 16px;background:#fff5d8;border-radius:10px}a{color:#6544c6}.result{padding-top:14px}@media(max-width:650px){main{margin:10px;padding:18px}button{width:100%;margin:5px 0}}</style></head><body><main><h1>Жизнь подростка</h1><p>Установка через браузер. Консоль не требуется.</p><p class="notice">Перед установкой сохраните резервную копию файлов и базы данных через панель хостинга.</p><p id="status" role="status">'.htmlspecialchars($status,ENT_QUOTES,'UTF-8').'</p><div><button data-mode="reset" class="secondary">Восстановить исходный сайт</button><button data-mode="check" class="secondary">1. Проверить файлы</button><button data-mode="install">2. Установить / продолжить</button><button data-mode="activate">3. Включить новый сайт</button><button data-mode="verify" class="secondary">Проверить установку</button><button data-mode="rollback" class="secondary">Откатить изменения</button></div><progress id="progress" hidden></progress><p id="counts"></p><pre id="log" aria-live="polite"></pre><div class="result"><a href="/" target="_blank" rel="noopener">Открыть сайт ↗</a> · <a href="/netcat/admin/" target="_blank" rel="noopener">Админка Netcat ↗</a><p>Когда закончите, удалите <b>zhp-install.php</b> через FileZilla. Папку netcat_template оставьте. Старые lp-install.php и lp-request.php отключены новым установщиком.</p></div><script id="zhp-installer-config" type="application/json">'.json_encode(array('token'=>html_entity_decode($token,ENT_QUOTES,'UTF-8')),JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT).'</script><script>
+(function(){
+ const config=JSON.parse(document.getElementById("zhp-installer-config").textContent), buttons=[...document.querySelectorAll("[data-mode]")], log=document.getElementById("log"), status=document.getElementById("status"), progress=document.getElementById("progress");let busy=false;
+ function append(text){if(!text)return;log.textContent+=(log.textContent?"\n":"")+text;log.scrollTop=log.scrollHeight;}
+ async function run(mode){if(busy)return;busy=true;buttons.forEach(b=>b.disabled=true);progress.hidden=false;progress.removeAttribute("value");status.textContent=mode==="install"?"Устанавливаем. Страница выполняет короткие шаги автоматически…":"Выполняем операцию…";
+ try{let done=false;while(!done){const url=new URL(location.href);url.search="?ajax=1";const response=await fetch(url.href,{method:"POST",credentials:"same-origin",cache:"no-store",body:new URLSearchParams({mode,token:config.token})});let result;try{result=await response.json();}catch(e){throw new Error("Сервер прервал ответ. Дождитесь завершения запроса и нажмите «Установить / продолжить». Если ошибка повторяется — проверьте журнал ошибок в панели хостинга.");}if(!response.ok||!result.ok)throw new Error(result.message||"Не удалось выполнить операцию.");append(result.message);document.getElementById("counts").textContent="Готово компонентов: "+result.components+" · Разделов: "+result.pages+" · Записей: "+result.records;done=result.done;if(!done)await new Promise(resolve=>setTimeout(resolve,100));}status.textContent=mode==="install"?"Установка завершена. Теперь нажмите «Включить новый сайт».":mode==="activate"?"Новый сайт включён. Можно открыть сайт и проверить страницы.":(mode==="rollback"||mode==="reset")?"Исходная версия восстановлена.":"Проверка завершена.";
+ }catch(e){status.textContent="Операция остановлена";append(e.message);}finally{busy=false;buttons.forEach(b=>b.disabled=false);progress.hidden=true;}}
+ buttons.forEach(b=>b.addEventListener("click",()=>run(b.dataset.mode)));
+})();
+</script></main></body></html>';
+}
+function li_query($sql) { global $db;$r=$db->query($sql);if ($r===false || $db->last_error) { li_fail('Ошибка БД: '.$db->last_error); }return $r; }
+function li_save() { global $state,$state_file;li_write_php($state_file,$state); }
+function li_write_php($path,$data) {
+    $tmp=$path.'.tmp-'.bin2hex(random_bytes(4));
+    if (file_put_contents($tmp,"<?php\nreturn ".var_export($data,true).";\n",LOCK_EX)===false || !rename($tmp,$path)) { li_fail('Не удалось сохранить служебное состояние.'); }
+    @chmod($path,0600);if (function_exists('opcache_invalidate')) { opcache_invalidate($path,true); }
+}
+function li_update($table,$idfield,$id,array $data) {
+    global $db;$sets=array();foreach ($data as $k=>$v) { $sets[]='`'.$k.'`='.($v===null?'NULL':"'".$db->escape((string)$v)."'"); }
+    li_query('UPDATE `'.$table.'` SET '.implode(',',$sets).' WHERE `'.$idfield.'`='.(int)$id);
+}

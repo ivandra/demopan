@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.2/themes/base/jquery-ui.css">
+</head>
+<body>
+	<header class="header">
+		<div class="wrap">
+			<a href="#" class="header__logo"><img src="img/logo.svg"></a>
+			<nav class="header__nav">
+				<ul class="header__list">
+					<li class="header__item">
+						<a href="#" class="header__link">О проекте</a>
+					</li>
+					<li class="header__item header__item--dropdown">
+						<a href="#" class="header__link">Подросткам</a>
+						<ul class="header__sublist">
+							<li class="header__subitem header__subitem--dropdown">
+								<a href="#" class="header__sublink">Тревога и переживания</a>
+								<ul class="header__subsublist">
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Тревожные мысли и страхи</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Стресс и сильные переживания</a>
+									</li>
+								</ul>
+							</li>
+							<li class="header__subitem header__subitem--dropdown">
+								<a href="#" class="header__sublink">Неуверенность в себе</a>
+								<ul class="header__subsublist">
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Сравнение себя с другими</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Страх неудачи и ошибок</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Работа над самооценкой</a>
+									</li>
+								</ul>
+							</li>
+							<li class="header__subitem header__subitem--dropdown">
+								<a href="#" class="header__sublink">Отношения с родителями</a>
+								<ul class="header__subsublist">
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Конфликты и способы их решения</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Как говорить о сложном</a>
+									</li>
+								</ul>
+							</li>
+							<li class="header__subitem header__subitem--dropdown">
+								<a href="#" class="header__sublink">Эмоциональные перепады и трудности с управлением эмоциями</a>
+								<ul class="header__subsublist">
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Распознавание своих эмоций</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Техники саморегуляции</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Когда стоит обратиться за поддержкой</a>
+									</li>
+								</ul>
+							</li>
+							<li class="header__subitem">
+								<a href="#" class="header__sublink">Учёба и мотивация</a>
+							</li>
+							<li class="header__subitem">
+								<a href="#" class="header__sublink">Поиск себя</a>
+							</li>
+						</ul>
+					</li>
+					<li class="header__item">
+						<a href="#" class="header__link">Родителям</a>
+					</li>
+					<li class="header__item">
+						<a href="#" class="header__link">Специалистам</a>
+					</li>
+					<li class="header__item">
+						<a href="#" class="header__link">Блог</a>
+					</li>
+					<li class="header__item">
+						<a href="#" class="header__link">Контакты</a>
+					</li>
+				</ul>
+			</nav>
+			<a href="#" class="header__button">
+				Нужна помощь? →
+			</a>
+		</div>
+	</header>
+	<div class="breadcrumbs">
+		<div class="wrap">
+			<a href="#">Главная</a>
+			<span>›</span>
+			<a href="#">Подросткам</a>
+			<span>›</span>
+			Тревога и стресс
+		</div>
+	</div>
+	<section class="contacts-page">
+		<div class="wrap">
+			<div class="contacts-page__main contacts-page__main--service">
+				<div class="contacts-page__header">
+					<h1 class="hero__title">
+						Тревога и стресс у <span class="hero__title-accent">подростков</span>
+					</h1>
+					<p class="hero__description">
+						Когда эмоции становятся слишком сильными, важно не оставаться с этим одному. Мы поможем разобраться, что происходит, и найти способы справляться.
+					</p>
+					<a href="#" class="hero__button hero__button--primary">Получить поддержку  →</a>
+				</div>
+				<div class="contacts-page__top-image">
+					<img src="img/service.png">
+				</div>
+				<div class="contacts-page__list">
+					<div class="contacts-page__card">
+						<div class="contacts-page__card-name">
+							<div class="contacts-page__card-icon"><img src="img/service-icon1.svg"></div>
+							<h3 class="contacts-page__card-title">Понимание</h3>
+						</div>
+						<p class="contacts-page__card-note">Мы внимательно слушаем и не осуждаем</p>
+					</div>
+					<div class="contacts-page__card">
+						<div class="contacts-page__card-name">
+							<div class="contacts-page__card-icon"><img src="img/service-icon2.svg"></div>
+							<h3 class="contacts-page__card-title">Профессионально</h3>
+						</div>
+						<p class="contacts-page__card-note">Работаем с опытными психологами</p>
+					</div>
+					<div class="contacts-page__card">
+						<div class="contacts-page__card-name">
+							<div class="contacts-page__card-icon"><img src="img/service-icon3.svg"></div>
+							<h3 class="contacts-page__card-title">Конфиденциально</h3>
+						</div>
+						<p class="contacts-page__card-note">Все что ты расскажешь останется между нами</p>
+					</div>
+					<div class="contacts-page__card">
+						<div class="contacts-page__card-name">
+							<div class="contacts-page__card-icon"><img src="img/service-icon4.svg"></div>
+							<h3 class="contacts-page__card-title">Реальные решения</h3>
+						</div>
+						<p class="contacts-page__card-note">Помогает шаг за шагом вернуть спокойствие</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="program program--inner">
+		<div class="wrap">
+			<div class="program__features">
+				<div class="program__feature">
+					<h3 class="program__subtitle">Как понять, что это тревога?</h3>
+					<div class="hero__description">
+						Тревога может проявляться по-разному <br/>
+						Вот некоторые признаки, на которые стоит обратить внимание!
+					</div>
+					<ul class="program__list">
+						<li class="program__list-item">Постоянное чувство беспокойства</li>
+						<li class="program__list-item">Трудно расслабиться, даже когда всё в порядке</li>
+						<li class="program__list-item">Навязчивые мысли</li>
+						<li class="program__list-item">Проблемы со сном</li>
+						<li class="program__list-item">Раздражительность</li>
+						<li class="program__list-item">Сложно сосредоточиться на учебе</li>
+						<li class="program__list-item">Физические симптомы (головная боль, напряжение)</li>
+					</ul>
+				</div>
+				<div class="program__banner">
+					<img src="img/service2.png">
+					<img src="img/before10.svg" class="program__banner-before">
+					<div class="program__banner-quote">
+						«Тревога не делает тебя слабым. Она просто говорит о том, что сейчас тебе нужна поддержка»
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="steps">
+		<div class="wrap">
+			<h2 class="hero__title">
+				Почему это происходит?
+			</h2>
+			<p class="hero__description">
+				Тревога может быть вызвана разными причинами
+			</p>
+			<div class="steps__content">
+				<div class="steps__image">
+					<img src="img/steps2.jpg">
+				</div>
+				<div class="steps__stages">
+					<div class="steps__stage">
+						<div class="steps__stage-icon">
+							<img src="img/step1.svg">
+						</div>
+						<h3 class="steps__stage-title">Высокая учебная нагрузка</h3>
+						<p class="steps__stage-text">
+							Слишком много дел и ожиданий
+						</p>
+					</div>
+					<div class="steps__stage">
+						<div class="steps__stage-icon">
+							<img src="img/step5.svg">
+						</div>
+						<h3 class="steps__stage-title">Сложности в отношениях</h3>
+						<p class="steps__stage-text">
+							Недопонимание с близкими и друзьями
+						</p>
+					</div>
+					<div class="steps__stage">
+						<div class="steps__stage-icon">
+							<img src="img/step6.svg">
+						</div>
+						<h3 class="steps__stage-title">Страх будущего</h3>
+						<p class="steps__stage-text">
+							Переживание о том, что впереди
+						</p>
+					</div>
+					<div class="steps__stage">
+						<div class="steps__stage-icon">
+							<img src="img/step4.svg">
+						</div>
+						<h3 class="steps__stage-title">Изменения в жизни</h3>
+						<p class="steps__stage-text">
+							Новые обстоятельства и непривычные ситуации
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="help-block">
+		<div class="wrap">
+			<h2 class="hero__title">Как мы можем <span class="hero__title-accent">помочь?</span></h2>
+			<p class="hero__description">
+				Мы подбираем подходящие методы и работаем вместе с тобой
+			</p>
+			<div class="help-block__list">
+				<div class="help-block__item">
+					<div class="help-block__icon">
+						<img src="img/help1.png">
+					</div>
+					<h3 class="help-block__item-title">Поговорим о том, что важно</h3>
+					<p class="help-block__item-text">
+						Выслушаем без осуждения
+					</p>
+				</div>
+				<div class="help-block__item">
+					<div class="help-block__icon">
+						<img src="img/help2.png">
+					</div>
+					<h3 class="help-block__item-title">Разберемся в причинах</h3>
+					<p class="help-block__item-text">
+						Поможем понять, что происходит
+					</p>
+				</div>
+				<div class="help-block__item">
+					<div class="help-block__icon">
+						<img src="img/help3.png">
+					</div>
+					<h3 class="help-block__item-title">Подберем метод</h3>
+					<p class="help-block__item-text">
+						Научим справляться с тревогой
+					</p>
+				</div>
+				<div class="help-block__item">
+					<div class="help-block__icon">
+						<img src="img/help4.png">
+					</div>
+					<h3 class="help-block__item-title">Будем рядом на каждом этапе</h3>
+					<p class="help-block__item-text">
+						Поддержим и поможем найти ресурс
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+		<section class="way">
+		<div class="wrap">
+			<p class="hero__label">КАК МЫ РАБОТАЕМ</p>
+			<h2 class="hero__title">Простой и <span class="hero__title-accent">понятный</span> путь</h2>
+			<div class="steps__stages">
+				<div class="steps__stage">
+					<div class="steps__stage-icon">
+						<img src="img/way1.png">
+						<img src="img/way-number1.svg" class="steps__stage-number">
+					</div>
+					<h3 class="steps__stage-title">Знакомимся</h3>
+					<p class="steps__stage-text">
+						Вы рассказываете о своей ситуации
+					</p>
+				</div>
+				<div class="steps__stage">
+					<div class="steps__stage-icon">
+						<img src="img/way2.png">
+						<img src="img/way-number2.svg" class="steps__stage-number">
+					</div>
+					<h3 class="steps__stage-title">Разбираемся</h3>
+					<p class="steps__stage-text">
+						Вместе ищем причины и решения
+					</p>
+				</div>
+				<div class="steps__stage">
+					<div class="steps__stage-icon">
+						<img src="img/way3.png">
+						<img src="img/way-number3.svg" class="steps__stage-number">
+					</div>
+					<h3 class="steps__stage-title">Находим опору</h3>
+					<p class="steps__stage-text">
+						Подбираем подходящие форматы поддержки
+					</p>
+				</div>
+				<div class="steps__stage">
+					<div class="steps__stage-icon">
+						<img src="img/way4.png">
+						<img src="img/way-number4.svg" class="steps__stage-number">
+					</div>
+					<h3 class="steps__stage-title">Двигаемся дальше</h3>
+					<p class="steps__stage-text">
+						Вы получаете инструменты и уверенность
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="team">
+		<div class="wrap">
+			<div class="team__text">
+				<p class="hero__label">НАША КОМАНДА</p>
+				<h1 class="hero__title">
+					За проектом стоят <span class="hero__title-accent">люди</span>, которые умеют <span class="hero__title-accent">слушать</span>
+				</h1>
+				<p class="hero__description">
+					Психологи, педагоги и специалисты, которые работают с подростками и их родителями.
+				</p>
+				<button class="team__button">Познакомиться со специалистами →</button>
+			</div>
+			<div class="team__list">
+				<div class="team__item">
+					<img src="img/team1.png" class="team__item-photo">
+					<h3 class="team__item-name">Анна Ковалева</h3>
+					<div class="team__item-desc">
+						Психолог, гештальт-терапевт
+					</div>
+				</div>
+				<div class="team__item">
+					<img src="img/team2.png" class="team__item-photo">
+					<h3 class="team__item-name">Вербицкий Станислав</h3>
+					<div class="team__item-desc">
+						Психолог, гештальт-терапевт
+					</div>
+				</div>
+				<div class="team__item">
+					<img src="img/team1.png" class="team__item-photo">
+					<h3 class="team__item-name">Анна Ковалева</h3>
+					<div class="team__item-desc">
+						Психолог, гештальт-терапевт
+					</div>
+				</div>
+				<div class="team__item">
+					<img src="img/team2.png" class="team__item-photo">
+					<h3 class="team__item-name">Вербицкий Станислав</h3>
+					<div class="team__item-desc">
+						Психолог, гештальт-терапевт
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<footer class="footer">
+		<div class="wrap">
+			<div class="footer__col footer__col--logo">
+				<a href="#" class="footer__logo">
+					<img src="img/logo2.svg">
+				</a>
+				<p class="footer__description">
+					Проект о том, как проходить подростковый возраст и оставаться в контакте с собой и близкими.
+				</p>
+			</div>
+			<div class="footer__col">
+				<h4 class="footer__col-title">Навигация</h4>
+				<ul class="footer__list">
+					<li class="footer__list-item"><a href="#" class="footer__link">О проекте</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Подросткам</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Родителям</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Специалистам</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Блог</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Контакты</a></li>
+				</ul>
+			</div>
+			<div class="footer__col">
+				<h4 class="footer__col-title">Подросткам</h4>
+				<ul class="footer__list">
+					<li class="footer__list-item"><a href="#" class="footer__link">Статьи</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Тесты</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Вебинары</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Поддержка</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Вопросы и ответы</a></li>
+				</ul>
+			</div>
+			<div class="footer__col">
+				<h4 class="footer__col-title">Родителям</h4>
+				<ul class="footer__list">
+					<li class="footer__list-item"><a href="#" class="footer__link">Советы психологов</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Тесты</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Вебинары</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Полезные материалы</a></li>
+				</ul>
+			</div>
+			<div class="footer__col footer__col--contacts">
+				<h4 class="footer__col-title">Контакты</h4>
+				<p class="footer__contact-item">info@zhizn-podrostka.ru</p>
+				<p class="footer__contact-item">+7 (800) 123-45-67</p>
+				<p class="footer__contact-item">Россия, г. Краснодар</p>
+				<div class="footer__socials">
+					<a href="#" class="footer__social-link">
+						<img src="img/social1.png">
+					</a>
+					<a href="#" class="footer__social-link">
+						<img src="img/social2.png">
+					</a>
+					<a href="#" class="footer__social-link">
+						<img src="img/social3.png">
+					</a>
+					<a href="#" class="footer__social-link">
+						<img src="img/social4.png">
+					</a>
+				</div>
+			</div>
+			<p class="footer__copy">© 2024 Жизнь подростка. Все права защищены.</p>
+		</div>
+	</footer>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+	<script src="js/common.js"></script>
+	<script src="https://code.jquery.com/ui/1.14.2/jquery-ui.js"></script>
+	<script>
+	  $(function() {
+	      $("#slider-range-max").slider({
+	          range: "max",
+	          min: 1,
+	          max: 90,
+	          value: 30,
+	          slide: function(event, ui) {
+	              $("#amount").val(ui.value + " суток");
+	              updateCalc();
+	          }
+	      });
+	      $("#amount").val($("#slider-range-max").slider("value") + " суток");
+	      $("#slider-range-max2").slider({
+	          range: "max",
+	          min: 3000,
+	          max: 6000,
+	          value: 4500,
+	          step: 100,
+	          slide: function(event, ui) {
+	              $("#amount2").val(ui.value + " ₽");
+	              updateCalc();
+	          }
+	      });
+	      $("#amount2").val($("#slider-range-max2").slider("value") + " ₽");
+	      function updateCalc() {
+	          const val1 = $("#amount").val();
+	          const val2 = $("#amount2").val();
+	          const days = parseInt(val1.match(/\d+/)[0], 10);
+	          const pricePerDay = parseInt(val2.match(/\d+/)[0], 10);
+	          if (isNaN(days) || isNaN(pricePerDay)) return;
+	          const total = days * pricePerDay;
+	          const formattedTotal = total.toLocaleString('ru-RU') + " ₽";
+	          const formattedDays = days.toLocaleString('ru-RU');
+	          const formattedPrice = pricePerDay.toLocaleString('ru-RU') + " ₽";
+	          $(".calc__result-value").text(formattedTotal);
+	          $(".calc__result-formula").text(`${formattedDays} суток × ${formattedPrice}`);
+	      }
+	      updateCalc();
+	  });
+	</script>
+</body>
+</html>

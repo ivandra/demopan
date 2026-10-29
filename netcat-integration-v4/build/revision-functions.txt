@@ -1,0 +1,140 @@
+/** Reuse the original region directory, adding only absent semantic fields. */
+function li_existing_regions($key, array $definition) {
+    global $db, $nc_core, $state, $backup_file;
+    $component = $db->get_row(
+        'SELECT c.Class_ID, c.ClassTemplate, s.Subdivision_ID FROM Sub_Class s JOIN Class c USING(Class_ID) '
+        . 'WHERE s.Sub_Class_ID=57', ARRAY_A
+    );
+    if (!$component || (int)$component['Class_ID'] !== 223 || (int)$component['ClassTemplate']) {
+        li_fail('Не найден исходный компонент регионов 223 / инфоблок 57. Изменения остановлены.');
+    }
+    if ((int)$component['Subdivision_ID'] !== 8) {
+        $nc_core->sub_class->move(57, array('Subdivision_ID'=>8, 'Priority'=>false), false);
+        $backup = include $backup_file;
+        foreach ($backup['blocks'] as $block) {
+            if ((int)$block['Sub_Class_ID'] === 57) { li_update('Sub_Class','Sub_Class_ID',57,$block); }
+        }
+    }
+    $state['classes'][$key] = 223;
+    $existing = (array)$db->get_col('SELECT Field_Name FROM Field WHERE Class_ID=223');
+    foreach ($definition['fields'] as $field) {
+        if (in_array($field['name'], $existing, true)) { continue; }
+        $types = array('string'=>NC_FIELDTYPE_STRING, 'html'=>NC_FIELDTYPE_TEXT, 'bool'=>NC_FIELDTYPE_BOOLEAN);
+        $nc_core->component->add_field(223, array(
+            'Field_Name'=>$field['name'], 'Description'=>$field['label'],
+            'TypeOfData_ID'=>$types[$field['type']], 'NotNull'=>0,
+            'Format'=>$field['type']==='html' ? '12:70;html:1;br:2;fck:1;panel:0;typo:0;bbcode:0;' : '',
+            'DefaultState'=>'', 'DoSearch'=>0,
+        ));
+        $state['added_region_fields'][] = $field['name'];
+        li_save();
+        li_checkpoint('Добавлено поле в существующие регионы: '.$field['label']);
+    }
+    $state['component_ready'][$key] = true;
+    $state['collections']['regions'] = array('class_id'=>223, 'cc_id'=>57, 'sub_id'=>8);
+    li_save();
+    return 223;
+}
+
+/** A resumable migration from the supplied native v2 package. */
+function li_upgrade_revision() {
+    global $state, $state_dir;
+    if (empty($state) || (int)($state['version'] ?? 0) >= 4) { return; }
+    $copy = $state_dir.'/before-v4.php';
+    if (!is_file($copy)) { li_write_php($copy, $state); }
+    $state['previous_region_collection'] = $state['collections']['regions'] ?? null;
+    $state['previous_version'] = $state['version'] ?? 2;
+    $state['version'] = 4;
+    $state['installed'] = false;
+    $state['active'] = false;
+    $state['component_ready'] = array();
+    $state['payload_checked'] = false;
+    $state['checked_files'] = array();
+    unset($state['layouts_ready'], $state['layout_written']);
+    $state['added_fields'] = array();
+    // The old extra directory remains recoverable in the closed archive.
+    $region_id = (int)($state['previous_region_collection']['cc_id'] ?? 0);
+    if ($region_id && $region_id !== 57) {
+        $state['new_blocks'] = array_values(array_diff($state['new_blocks'], array($region_id)));
+        unset($state['block_locations'][$region_id], $state['block_classes'][$region_id]);
+        foreach ($state['blocks'] as $key=>$value) {
+            if ((int)$value === $region_id) { unset($state['blocks'][$key]); }
+        }
+    }
+    li_save();
+}
+
+function li_layouts() {
+    global $db, $nc_core, $state, $manifest, $design;
+    if (!empty($state['layouts_ready'])) { return; }
+    $definitions = array('root'=>'Жизнь подростка — общий макет') + $manifest['layouts'];
+    foreach ($definitions as $key=>$title) {
+        if (!empty($state['layout_written'][$key])) { continue; }
+        $is_root = $key === 'root';
+        $path = '/zhizn_podrostka/'.($is_root ? '' : $key.'/');
+        $id = $is_root ? (int)($state['template_id'] ?? 0) : (int)($state['templates'][$key] ?? 0);
+        if (!$id) {
+            $id = (int)nc_db_table::make('Template')->insert(array(
+                'Description'=>$title, 'Keyword'=>$is_root ? 'zhizn_podrostka' : $key,
+                'Parent_Template_ID'=>$is_root ? 0 : $state['template_id'],
+                'File_Mode'=>1, 'File_Path'=>$path, 'File_Hash'=>'',
+                'Header'=>'', 'Footer'=>'', 'Settings'=>'', 'CustomSettings'=>'', 'Priority'=>10,
+            ));
+            if (!$id) { li_fail('Не создан макет '.$title); }
+            if ($is_root) { $state['template_id'] = $id; }
+            else { $state['templates'][$key] = $id; }
+            li_save();
+        }
+        $folder = $design.($is_root ? '' : '/'.$key);
+        $parts = array();
+        foreach (array('Settings','Header','Footer') as $part) {
+            $parts[$part] = file_get_contents($folder.'/'.$part.'.html');
+        }
+        $custom = $is_root ? '$settings_array='.var_export($manifest['template_settings'],true).';' : '';
+        li_update('Template', 'Template_ID', $id, array(
+            'Description'=>$title, 'Parent_Template_ID'=>$is_root ? 0 : $state['template_id'],
+            'CustomSettings'=>$custom,
+        ));
+        $editor = new nc_tpl_template_editor($nc_core->TEMPLATE_FOLDER, $db);
+        $editor->load_template($id, $path);
+        $editor->save_new_template($parts, false);
+        $state['layout_written'][$key] = true;
+        li_save();
+        li_checkpoint('Готов макет: '.$title);
+    }
+    $state['layouts_ready'] = true;
+    li_save();
+}
+
+/** Fill only fields introduced by this revision, preserving all old editor values. */
+function li_new_field_values($infoblock_id, $key, array $records) {
+    global $db, $nc_core, $state, $manifest;
+    $base = $manifest['classes'][$key]['parent'] ?: $key;
+    $fields = $state['added_fields'][$base] ?? array();
+    if (!$fields) { return; }
+    $table = 'Message'.(int)$state['classes'][$base];
+    foreach ($records as $index=>$record) {
+        $id = (int)($state['seeded'][$infoblock_id.':'.$index] ?? 0);
+        if (!$id) { continue; }
+        foreach ($fields as $name) {
+            if (!array_key_exists($name,$record)) { continue; }
+            $type = null;
+            foreach ($manifest['classes'][$base]['fields'] as $definition) {
+                if ($definition['name'] === $name) { $type = $definition['type']; break; }
+            }
+            if ($type === 'file') {
+                $current = $db->get_row('SELECT `'.$name.'`,LastUpdated FROM `'.$table.'` WHERE Message_ID='.$id,ARRAY_A);
+                if ($current[$name] !== null && $current[$name] !== '') { continue; }
+                if ($record[$name] === '') { continue; }
+                // Netcat stores MIME/size/path metadata, not a plain URL, in FILE fields.
+                $saved = $nc_core->files->field_save_file((int)$state['classes'][$base], $name, $id, $record[$name]);
+                if (!$saved) { li_fail('Не удалось заполнить файловое поле '.$name); }
+                li_query('UPDATE `'.$table."` SET LastUpdated='".$db->escape($current['LastUpdated'])."' WHERE Message_ID=".$id);
+                continue;
+            }
+            li_query('UPDATE `'.$table.'` SET `'.$name."`='".$db->escape((string)$record[$name])."',LastUpdated=LastUpdated "
+                .'WHERE Message_ID='.$id.' AND Sub_Class_ID='.(int)$infoblock_id
+                .' AND (`'.$name.'` IS NULL OR `'.$name."`='')");
+        }
+    }
+}

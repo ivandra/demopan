@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.2/themes/base/jquery-ui.css">
+</head>
+<body>
+	<header class="header">
+		<div class="wrap">
+			<a href="#" class="header__logo"><img src="img/logo.svg"></a>
+			<nav class="header__nav">
+				<ul class="header__list">
+					<li class="header__item">
+						<a href="#" class="header__link">О проекте</a>
+					</li>
+					<li class="header__item header__item--dropdown">
+						<a href="#" class="header__link">Подросткам</a>
+						<ul class="header__sublist">
+							<li class="header__subitem header__subitem--dropdown">
+								<a href="#" class="header__sublink">Тревога и переживания</a>
+								<ul class="header__subsublist">
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Тревожные мысли и страхи</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Стресс и сильные переживания</a>
+									</li>
+								</ul>
+							</li>
+							<li class="header__subitem header__subitem--dropdown">
+								<a href="#" class="header__sublink">Неуверенность в себе</a>
+								<ul class="header__subsublist">
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Сравнение себя с другими</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Страх неудачи и ошибок</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Работа над самооценкой</a>
+									</li>
+								</ul>
+							</li>
+							<li class="header__subitem header__subitem--dropdown">
+								<a href="#" class="header__sublink">Отношения с родителями</a>
+								<ul class="header__subsublist">
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Конфликты и способы их решения</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Как говорить о сложном</a>
+									</li>
+								</ul>
+							</li>
+							<li class="header__subitem header__subitem--dropdown">
+								<a href="#" class="header__sublink">Эмоциональные перепады и трудности с управлением эмоциями</a>
+								<ul class="header__subsublist">
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Распознавание своих эмоций</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Техники саморегуляции</a>
+									</li>
+									<li class="header__subsubitem">
+										<a href="#" class="header__subsublink">Когда стоит обратиться за поддержкой</a>
+									</li>
+								</ul>
+							</li>
+							<li class="header__subitem">
+								<a href="#" class="header__sublink">Учёба и мотивация</a>
+							</li>
+							<li class="header__subitem">
+								<a href="#" class="header__sublink">Поиск себя</a>
+							</li>
+						</ul>
+					</li>
+					<li class="header__item">
+						<a href="#" class="header__link">Родителям</a>
+					</li>
+					<li class="header__item">
+						<a href="#" class="header__link">Специалистам</a>
+					</li>
+					<li class="header__item">
+						<a href="#" class="header__link">Блог</a>
+					</li>
+					<li class="header__item">
+						<a href="#" class="header__link">Контакты</a>
+					</li>
+				</ul>
+			</nav>
+			<a href="#" class="header__button">
+				Нужна помощь? →
+			</a>
+		</div>
+	</header>
+	<div class="breadcrumbs">
+		<div class="wrap">
+			<a href="#">Главная</a>
+			<span>›</span>
+			<a href="#">О проекте</a>
+			<span>›</span>
+			Фотогалерея
+		</div>
+	</div>
+	<section class="gallery-hero">
+		<div class="wrap">
+			<h1 class="hero__title">
+				Фотогалерея
+				<img src="img/line4.svg" class="hero__title-line">
+			</h1>
+			<div class="hero__description">
+				Здесь собраны самые тёплые моменты нашей жизни: <br/>
+				занятия, мероприятия, встречи и просто счастливые улыбки.
+			</div>
+			<div class="gallery-hero__image">
+				<img src="img/gallery.png">
+			</div>
+		</div>
+	</section>
+	<section class="gallery">
+		<div class="wrap">
+			<nav class="specialists-block__filters">
+				<button type="button" class="specialists-block__filter specialists-block__filter--active" data-filter="all">
+					Все фото
+				</button>
+				<button type="button" class="specialists-block__filter" data-filter="classes">
+					Занятия
+				</button>
+				<button type="button" class="specialists-block__filter" data-filter="events">
+					Мероприятия
+				</button>
+				<button type="button" class="specialists-block__filter" data-filter="team">
+					Команда
+				</button>
+				<button type="button" class="specialists-block__filter" data-filter="more">
+					Ещё
+				</button>
+			</nav>
+			<div class="gallery__list gallery__list--all">
+				<div class="gallery__item" style="background: url('img/gallery1.png') center/cover"></div>
+				<div class="gallery__item gallery__item--small" style="background: url('img/gallery2.png') center/cover"></div>
+				<div class="gallery__item" style="background: url('img/gallery3.png') center/cover"></div>
+				<div class="gallery__item gallery__item--small" style="background: url('img/gallery1.png') center/cover"></div>
+				<div class="gallery__item gallery__item--small" style="background: url('img/gallery2.png') center/cover"></div>
+				<div class="gallery__item" style="background: url('img/gallery3.png') center/cover"></div>
+				<div class="gallery__item" style="background: url('img/gallery1.png') center/cover"></div>
+				<div class="gallery__item gallery__item--small" style="background: url('img/gallery2.png') center/cover"></div>
+				<div class="gallery__item" style="background: url('img/gallery3.png') center/cover"></div>
+				<div class="gallery__item gallery__item--small" style="background: url('img/gallery1.png') center/cover"></div>
+				<div class="gallery__item gallery__item--small" style="background: url('img/gallery2.png') center/cover"></div>
+				<div class="gallery__item" style="background: url('img/gallery3.png') center/cover"></div>
+			</div>
+			<div class="gallery__list gallery__list--classes">
+				222
+			</div>
+			<div class="gallery__list gallery__list--events">
+				333
+			</div>
+			<div class="gallery__list gallery__list--team">
+				444
+			</div>
+			<div class="gallery__list gallery__list--more">
+				555
+			</div>
+		</div>
+	</section>
+	<section class="subscription">
+		<div class="wrap">
+			<div class="subscription__left">
+				<h2 class="subscription__title">БУДЕМ НА СВЯЗИ!</h2>
+				<p class="subscription__description">
+					Подпишитесь на нашу рассылку — раз в неделю присылаем только полезное и важное.
+				</p>
+			</div>
+			<div class="subscription__right">
+				<form class="subscription__form">
+					<div class="subscription__input-group">
+						<input type="text" placeholder="Ваш email">
+						<button type="submit" class="header__button">
+							Подписаться →
+						</button>
+					</div>
+					<input type="checkbox" id="privacy-policy">
+					<label for="privacy-policy" class="subscription__label">
+						Я соглашаюсь с политикой конфиденциальности
+					</label>
+				</form>
+			</div>
+		</div>
+	</section>
+	<footer class="footer">
+		<div class="wrap">
+			<div class="footer__col footer__col--logo">
+				<a href="#" class="footer__logo">
+					<img src="img/logo2.svg">
+				</a>
+				<p class="footer__description">
+					Проект о том, как проходить подростковый возраст и оставаться в контакте с собой и близкими.
+				</p>
+			</div>
+			<div class="footer__col">
+				<h4 class="footer__col-title">Навигация</h4>
+				<ul class="footer__list">
+					<li class="footer__list-item"><a href="#" class="footer__link">О проекте</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Подросткам</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Родителям</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Специалистам</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Блог</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Контакты</a></li>
+				</ul>
+			</div>
+			<div class="footer__col">
+				<h4 class="footer__col-title">Подросткам</h4>
+				<ul class="footer__list">
+					<li class="footer__list-item"><a href="#" class="footer__link">Статьи</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Тесты</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Вебинары</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Поддержка</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Вопросы и ответы</a></li>
+				</ul>
+			</div>
+			<div class="footer__col">
+				<h4 class="footer__col-title">Родителям</h4>
+				<ul class="footer__list">
+					<li class="footer__list-item"><a href="#" class="footer__link">Советы психологов</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Тесты</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Вебинары</a></li>
+					<li class="footer__list-item"><a href="#" class="footer__link">Полезные материалы</a></li>
+				</ul>
+			</div>
+			<div class="footer__col footer__col--contacts">
+				<h4 class="footer__col-title">Контакты</h4>
+				<p class="footer__contact-item">info@zhizn-podrostka.ru</p>
+				<p class="footer__contact-item">+7 (800) 123-45-67</p>
+				<p class="footer__contact-item">Россия, г. Краснодар</p>
+				<div class="footer__socials">
+					<a href="#" class="footer__social-link">
+						<img src="img/social1.png">
+					</a>
+					<a href="#" class="footer__social-link">
+						<img src="img/social2.png">
+					</a>
+					<a href="#" class="footer__social-link">
+						<img src="img/social3.png">
+					</a>
+					<a href="#" class="footer__social-link">
+						<img src="img/social4.png">
+					</a>
+				</div>
+			</div>
+			<p class="footer__copy">© 2024 Жизнь подростка. Все права защищены.</p>
+		</div>
+	</footer>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+	<script src="js/common.js"></script>
+	<script src="https://code.jquery.com/ui/1.14.2/jquery-ui.js"></script>
+	<script>
+	  $(function() {
+	      $("#slider-range-max").slider({
+	          range: "max",
+	          min: 1,
+	          max: 90,
+	          value: 30,
+	          slide: function(event, ui) {
+	              $("#amount").val(ui.value + " суток");
+	              updateCalc();
+	          }
+	      });
+	      $("#amount").val($("#slider-range-max").slider("value") + " суток");
+	      $("#slider-range-max2").slider({
+	          range: "max",
+	          min: 3000,
+	          max: 6000,
+	          value: 4500,
+	          step: 100,
+	          slide: function(event, ui) {
+	              $("#amount2").val(ui.value + " ₽");
+	              updateCalc();
+	          }
+	      });
+	      $("#amount2").val($("#slider-range-max2").slider("value") + " ₽");
+	      function updateCalc() {
+	          const val1 = $("#amount").val();
+	          const val2 = $("#amount2").val();
+	          const days = parseInt(val1.match(/\d+/)[0], 10);
+	          const pricePerDay = parseInt(val2.match(/\d+/)[0], 10);
+	          if (isNaN(days) || isNaN(pricePerDay)) return;
+	          const total = days * pricePerDay;
+	          const formattedTotal = total.toLocaleString('ru-RU') + " ₽";
+	          const formattedDays = days.toLocaleString('ru-RU');
+	          const formattedPrice = pricePerDay.toLocaleString('ru-RU') + " ₽";
+	          $(".calc__result-value").text(formattedTotal);
+	          $(".calc__result-formula").text(`${formattedDays} суток × ${formattedPrice}`);
+	      }
+	      updateCalc();
+	  });
+	</script>
+</body>
+</html>
