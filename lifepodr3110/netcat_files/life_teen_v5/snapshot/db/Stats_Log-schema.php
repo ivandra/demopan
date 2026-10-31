@@ -1,0 +1,31 @@
+<?php
+return array (
+  'sql' => 'CREATE TABLE `Stats_Log` (
+  `Log_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `User_ID` int(11) NOT NULL DEFAULT \'0\',
+  `REMOTE_ADDR` varchar(15) NOT NULL DEFAULT \'\',
+  `REMOTE_HOST` varchar(255) NOT NULL DEFAULT \'\',
+  `REMOTE_PORT` int(11) DEFAULT NULL,
+  `HTTP_REFERER` varchar(255) NOT NULL DEFAULT \'\',
+  `HTTP_HOST` varchar(255) NOT NULL DEFAULT \'\',
+  `HTTP_USER_AGENT` varchar(255) NOT NULL DEFAULT \'\',
+  `REQUEST_URI` varchar(255) NOT NULL DEFAULT \'\',
+  `REQUEST_METHOD` varchar(255) NOT NULL DEFAULT \'\',
+  `Country` char(2) DEFAULT NULL,
+  `Cookie_ID` varchar(32) NOT NULL DEFAULT \'\',
+  `Catalogue_ID` int(11) NOT NULL DEFAULT \'0\',
+  `Subdivision_ID` int(11) NOT NULL DEFAULT \'0\',
+  `Sub_Class_ID` int(11) NOT NULL DEFAULT \'0\',
+  `Message_ID` int(11) NOT NULL DEFAULT \'0\',
+  `admin_mode` tinyint(4) NOT NULL DEFAULT \'0\',
+  `Browser` varchar(30) DEFAULT NULL,
+  `OS` varchar(30) DEFAULT NULL,
+  `Action` enum(\'index\',\'full\',\'add\',\'change\',\'search\',\'subscribe\') DEFAULT NULL,
+  PRIMARY KEY (`Log_ID`),
+  KEY `Cookie_ID` (`Cookie_ID`),
+  KEY `Catalogue_ID` (`Catalogue_ID`),
+  KEY `Created` (`Created`),
+  KEY `Browser` (`Browser`(1))
+) ENGINE=MyISAM DEFAULT CHARSET=utf8',
+);

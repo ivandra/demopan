@@ -1,0 +1,1661 @@
+<?php
+/**
+ * Проверка прав на редактирование палитры сайта
+ * Доступно: супервизор, директор или администратор сайта
+ */
+$_nc_palette_can_edit = false;
+$_nc_palette_catalogue_id = isset($GLOBALS['catalogue']) ? (int)$GLOBALS['catalogue'] : 0;
+if (isset($GLOBALS['perm'])) {
+    $perm = $GLOBALS['perm'];
+    if ($perm->isSupervisor()) {
+        // Супервизор или директор — полный доступ
+        $_nc_palette_can_edit = true;
+    } else {
+        // Проверяем права администратора сайта
+        if ($_nc_palette_catalogue_id > 0 && $perm->isCatalogueAdmin($_nc_palette_catalogue_id)) {
+            $_nc_palette_can_edit = true;
+        }
+    }
+}
+?>
+<div class="nc-color-palette-editor" data-palette-editor data-can-edit-palette="<?= $_nc_palette_can_edit ? '1' : '0' ?>" data-site-id="<?= $_nc_palette_catalogue_id ?>">
+    <!-- Скрытые поля для хранения данных -->
+    <input type="hidden" name="mixin.settings.palette" class="nc-palette-data" value="{}">
+    <input type="hidden" name="mixin.settings.roles.foreground_main" class="nc-role-data" data-role="foreground_main">
+    <input type="hidden" name="mixin.settings.roles.foreground_accent" class="nc-role-data" data-role="foreground_accent">
+    <input type="hidden" name="mixin.settings.roles.brand" class="nc-role-data" data-role="brand">
+    <input type="hidden" name="mixin.settings.roles.background_main" class="nc-role-data" data-role="background_main">
+    <input type="hidden" name="mixin.settings.roles.background_accent" class="nc-role-data" data-role="background_accent">
+    <!-- Поле для хранения удалённых цветов (для серверной обработки) -->
+    <input type="hidden" name="mixin.settings.deleted_palette_colors" class="nc-deleted-colors-data" value="[]">
+
+    <!-- === ОСНОВНОЙ БЛОК: превью ролей === -->
+    <div class="nc-palette-main">
+        <div class="nc-palette-roles-preview">
+            <div class="nc-palette-role" data-role="foreground_main" title="Нажмите для выбора цвета">
+                <div class="nc-palette-role-swatch"></div>
+                <div class="nc-palette-role-label">Текст</div>
+                <div class="nc-palette-role-hex"></div>
+            </div>
+            <div class="nc-palette-role" data-role="foreground_accent" title="Нажмите для выбора цвета">
+                <div class="nc-palette-role-swatch"></div>
+                <div class="nc-palette-role-label">Текст доп.</div>
+                <div class="nc-palette-role-hex"></div>
+            </div>
+            <div class="nc-palette-role" data-role="brand" title="Нажмите для выбора цвета">
+                <div class="nc-palette-role-swatch"></div>
+                <div class="nc-palette-role-label">Бренд</div>
+                <div class="nc-palette-role-hex"></div>
+            </div>
+            <div class="nc-palette-role" data-role="background_main" title="Нажмите для выбора цвета">
+                <div class="nc-palette-role-swatch"></div>
+                <div class="nc-palette-role-label">Фон</div>
+                <div class="nc-palette-role-hex"></div>
+            </div>
+            <div class="nc-palette-role" data-role="background_accent" title="Нажмите для выбора цвета">
+                <div class="nc-palette-role-swatch"></div>
+                <div class="nc-palette-role-label">Фон доп.</div>
+                <div class="nc-palette-role-hex"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Кнопка редактирования палитры ПОД квадратиками — показывается только на уровне сайта -->
+    <div class="nc-palette-edit-wrapper" style="display: none; margin-top: 12px;">
+        <button type="button" class="nc-btn nc--small nc-palette-site-edit-btn">Редактировать палитру сайта</button>
+    </div>
+    <!-- Данные пресетов (скрыты, используются в модальном окне) -->
+    <div class="nc-palette-presets-data" style="display: none;">
+        <div data-preset="corporate" data-palette='["#1A1A2E","#4A4A68","#0F4C81","#FFFFFF","#F5F5F7","#E8F4FD","#0A3A5E","#E1E5EB"]' data-roles='{"foreground_main":"#1A1A2E","foreground_accent":"#4A4A68","brand":"#0F4C81","background_main":"#FFFFFF","background_accent":"#F5F5F7"}' data-label="Корпоративная"></div>
+        <div data-preset="minimal" data-palette='["#000000","#666666","#000000","#FFFFFF","#F0F0F0","#E0E0E0","#333333","#FAFAFA"]' data-roles='{"foreground_main":"#000000","foreground_accent":"#666666","brand":"#000000","background_main":"#FFFFFF","background_accent":"#F0F0F0"}' data-label="Минимализм"></div>
+        <div data-preset="warm" data-palette='["#2D3436","#636E72","#E17055","#FFF5E6","#FFEAA7","#FDCB6E","#D63031","#FAF3E0"]' data-roles='{"foreground_main":"#2D3436","foreground_accent":"#636E72","brand":"#E17055","background_main":"#FFF5E6","background_accent":"#FFEAA7"}' data-label="Тёплая"></div>
+        <div data-preset="dark" data-palette='["#FFFFFF","#B2BEC3","#6C5CE7","#1A1A2E","#2D3436","#A29BFE","#00CEC9","#0D0D1A"]' data-roles='{"foreground_main":"#FFFFFF","foreground_accent":"#B2BEC3","brand":"#6C5CE7","background_main":"#1A1A2E","background_accent":"#2D3436"}' data-label="Тёмная"></div>
+        <div data-preset="nature" data-palette='["#1B4332","#52796F","#40916C","#FFFFFF","#D8F3DC","#95D5B2","#2D6A4F","#F0FFF4"]' data-roles='{"foreground_main":"#1B4332","foreground_accent":"#52796F","brand":"#40916C","background_main":"#FFFFFF","background_accent":"#D8F3DC"}' data-label="Природа"></div>
+        <div data-preset="elegant" data-palette='["#2D2D44","#6B6B8D","#7C3AED","#FFFFFF","#F5F3FF","#C4B5FD","#5B21B6","#EDE9FE"]' data-roles='{"foreground_main":"#2D2D44","foreground_accent":"#6B6B8D","brand":"#7C3AED","background_main":"#FFFFFF","background_accent":"#F5F3FF"}' data-label="Элегантная"></div>
+    </div>
+
+    <!-- Dropdown создаётся динамически в JavaScript -->
+
+</div>
+
+<script>
+(function() {
+    var editors = new WeakMap(); // Хранилище экземпляров по DOM-элементам
+
+        /**
+         * Генерация 4-значного уникального ключа для цвета палитры
+         */
+        function generatePaletteKey(existingKeys) {
+            var chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            var key;
+            var attempts = 0;
+            do {
+                key = '';
+                for (var i = 0; i < 4; i++) {
+                    key += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                attempts++;
+            } while (existingKeys && existingKeys.indexOf(key) !== -1 && attempts < 100);
+            return key;
+        }
+
+        /**
+         * Класс редактора палитры
+         */
+        function PaletteEditor($element) {
+            this.$el = $element;
+            this.palette = {}; // Объект {key: color, ...}
+            this.roles = {};
+            this.tempPalette = {}; // Для модального редактирования
+            this.deletedColors = []; // Удалённые цвета [{key: 'xxxx', hex: '#FFFFFF'}, ...]
+            this.currentRole = null; // Роль, для которой открыт slideout
+            // Проверка прав на редактирование палитры (из PHP)
+            this.canEditPalette = $element.attr('data-can-edit-palette') === '1';
+            // ID сайта (из PHP)
+            this.siteId = parseInt($element.attr('data-site-id'), 10) || 0;
+        }
+
+        /**
+         * Получение всех ключей палитры
+         */
+        function getPaletteKeys(palette) {
+            return Object.keys(palette || {});
+        }
+
+        /**
+         * Получение массива цветов из палитры (для совместимости)
+         */
+        function getPaletteColors(palette) {
+            var keys = getPaletteKeys(palette);
+            return keys.map(function(key) { return palette[key]; });
+        }
+
+        /**
+         * Конвертация старого формата (массив) в новый (объект с ключами)
+         */
+        function convertArrayToKeyedPalette(arr) {
+            var result = {};
+            if (Array.isArray(arr)) {
+                arr.forEach(function(color) {
+                    var key = generatePaletteKey(Object.keys(result));
+                    result[key] = normalizeColor(color);
+                });
+            }
+            return result;
+        }
+
+        /**
+         * Нормализация цвета: конвертируем в hex uppercase (с поддержкой альфа-канала)
+         * Это нужно для корректного сравнения цветов
+         */
+        function normalizeColor(color) {
+            if (!color) return '';
+            if (typeof color !== 'string') color = String(color);
+            color = color.trim();
+
+            // Если уже hex
+            if (color.charAt(0) === '#') {
+                // Конвертируем короткий hex в полный (#FFF -> #FFFFFF)
+                if (color.length === 4) {
+                    color = '#' + color[1] + color[1] + color[2] + color[2] + color[3] + color[3];
+                }
+                // Поддержка 8-значного hex
+                if (color.length === 5) {
+                    color = '#' + color[1] + color[1] + color[2] + color[2] + color[3] + color[3] + color[4] + color[4];
+                }
+                return color.toUpperCase();
+            }
+
+            // rgb -> 6-digit hex
+            var matchRgb = color.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+            if (matchRgb) {
+                var r = parseInt(matchRgb[1], 10).toString(16).padStart(2, '0');
+                var g = parseInt(matchRgb[2], 10).toString(16).padStart(2, '0');
+                var b = parseInt(matchRgb[3], 10).toString(16).padStart(2, '0');
+                return ('#' + r + g + b).toUpperCase();
+            }
+
+            // rgba -> 8-digit hex (с альфа-каналом)
+            var matchRgba = color.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)$/i);
+            if (matchRgba) {
+                var r = parseInt(matchRgba[1], 10).toString(16).padStart(2, '0');
+                var g = parseInt(matchRgba[2], 10).toString(16).padStart(2, '0');
+                var b = parseInt(matchRgba[3], 10).toString(16).padStart(2, '0');
+                var a = Math.round(parseFloat(matchRgba[4]) * 255).toString(16).padStart(2, '0');
+                // Если полностью непрозрачный, возвращаем 6-значный hex
+                if (a.toUpperCase() === 'FF') {
+                    return ('#' + r + g + b).toUpperCase();
+                }
+                return ('#' + r + g + b + a).toUpperCase();
+            }
+
+            return color;
+        }
+
+        /**
+         * Сравнение цветов
+         */
+        function colorsEqual(a, b) {
+            return normalizeColor(a) === normalizeColor(b);
+        }
+
+        /**
+         * Конвертация цвета в hex для отображения (с поддержкой альфа-канала)
+         */
+        function colorToHex(color) {
+            if (!color) return '';
+            if (typeof color !== 'string') color = String(color);
+            color = color.trim();
+
+            // Уже hex
+            if (color.charAt(0) === '#') {
+                return color.toUpperCase();
+            }
+
+            // rgb
+            var matchRgb = color.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+            if (matchRgb) {
+                var r = parseInt(matchRgb[1], 10).toString(16).padStart(2, '0');
+                var g = parseInt(matchRgb[2], 10).toString(16).padStart(2, '0');
+                var b = parseInt(matchRgb[3], 10).toString(16).padStart(2, '0');
+                return ('#' + r + g + b).toUpperCase();
+            }
+
+            // rgba
+            var matchRgba = color.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)$/i);
+            if (matchRgba) {
+                var r = parseInt(matchRgba[1], 10).toString(16).padStart(2, '0');
+                var g = parseInt(matchRgba[2], 10).toString(16).padStart(2, '0');
+                var b = parseInt(matchRgba[3], 10).toString(16).padStart(2, '0');
+                var a = Math.round(parseFloat(matchRgba[4]) * 255).toString(16).padStart(2, '0');
+                if (a.toUpperCase() === 'FF') {
+                    return ('#' + r + g + b).toUpperCase();
+                }
+                return ('#' + r + g + b + a).toUpperCase();
+            }
+
+            return color;
+        }
+
+        /**
+         * Конвертация hex (включая 8-значный) в rgba для minicolors
+         */
+        function hexToRgba(color) {
+            if (!color) return color;
+            if (typeof color !== 'string') color = String(color);
+            color = color.trim();
+
+            // Если уже rgb/rgba - возвращаем как есть
+            if (color.match(/^rgba?\s*\(/i)) {
+                return color;
+            }
+
+            // Парсим hex
+            if (color.charAt(0) === '#') {
+                var hex = color.substring(1);
+                // Короткий hex
+                if (hex.length === 3) {
+                    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+                } else if (hex.length === 4) {
+                    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
+                }
+
+                var r = parseInt(hex.substring(0, 2), 16);
+                var g = parseInt(hex.substring(2, 4), 16);
+                var b = parseInt(hex.substring(4, 6), 16);
+
+                // 8-значный hex с альфа-каналом
+                if (hex.length === 8) {
+                    var a = (parseInt(hex.substring(6, 8), 16) / 255).toFixed(2);
+                    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+                }
+
+                return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+            }
+
+            return color;
+        }
+
+        PaletteEditor.prototype = {
+            /**
+             * Инициализация с данными
+             */
+            init: function(settings) {
+                settings = settings || {};
+
+                // Парсинг palette если это JSON-строка
+                var palette = settings.palette;
+                if (typeof palette === 'string') {
+                    try { palette = JSON.parse(palette); } catch(e) { palette = null; }
+                }
+
+                // Роли всегда берём из настроек блока (могут быть пустыми = наследование)
+                this.roles = {};
+                if (settings.roles) {
+                    for (var r in settings.roles) {
+                        this.roles[r] = settings.roles[r] ? normalizeColor(settings.roles[r]) : '';
+                    }
+                }
+
+                // Получаем палитру с уровня сайта (для fallback)
+                var sitePalette = window.ncSitePalette ||
+                    (window.parent && window.parent.ncSitePalette) ||
+                    (window.top && window.top.ncSitePalette);
+
+                // Сохраняем роли с уровня сайта для объединения при публикации
+                this.inheritedRoles = {};
+                if (sitePalette && sitePalette.roles) {
+                    for (var r in sitePalette.roles) {
+                        this.inheritedRoles[r] = sitePalette.roles[r] ? normalizeColor(sitePalette.roles[r]) : '';
+                    }
+                }
+
+                // Сброс списка удалённых цветов
+                this.deletedColors = [];
+
+                // Загрузка палитры
+                if (palette && typeof palette === 'object' && !Array.isArray(palette) && Object.keys(palette).length > 0) {
+                    // Новый формат: объект с ключами
+                    this.palette = {};
+                    for (var key in palette) {
+                        this.palette[key] = normalizeColor(palette[key]);
+                    }
+                } else if (palette && Array.isArray(palette) && palette.length > 0) {
+                    // Старый формат: массив — конвертируем в объект
+                    this.palette = convertArrayToKeyedPalette(palette);
+                } else if (settings.color_foreground_main || settings.color_brand) {
+                    // Миграция старого формата
+                    this.migrateOldFormat(settings);
+                } else {
+                    // Пробуем взять палитру с уровня сайта
+                    var sitePaletteData = sitePalette && sitePalette.palette;
+                    if (sitePaletteData && typeof sitePaletteData === 'object' && !Array.isArray(sitePaletteData) && Object.keys(sitePaletteData).length > 0) {
+                        // Новый формат на уровне сайта
+                        this.palette = {};
+                        for (var key in sitePaletteData) {
+                            this.palette[key] = normalizeColor(sitePaletteData[key]);
+                        }
+                    } else if (sitePaletteData && Array.isArray(sitePaletteData) && sitePaletteData.length > 0) {
+                        // Старый формат на уровне сайта
+                        this.palette = convertArrayToKeyedPalette(sitePaletteData);
+                    } else {
+                        // Дефолтная палитра (если палитра сайта недоступна)
+                        this.palette = convertArrayToKeyedPalette(['#212121', '#757575', '#1976D2', '#FFFFFF', '#F5F5F5', '#E3F2FD', '#0D47A1', '#ECEFF1']);
+                    }
+                }
+
+                this.render();
+                // Bind events only once
+                if (!this.eventsBound) {
+                    this.bindEvents();
+                    this.eventsBound = true;
+                }
+                this.publishPalette();
+
+                // Скрываем кнопку редактирования палитры, если нет прав
+                if (!this.canEditPalette) {
+                    this.$el.find('.nc-palette-edit-btn').hide();
+                }
+            },
+
+            /**
+             * Миграция старого формата color_*
+             */
+            migrateOldFormat: function(settings) {
+                this.palette = {};
+                this.roles = {};
+                var map = {
+                    color_foreground_main: 'foreground_main',
+                    color_foreground_accent: 'foreground_accent',
+                    color_brand: 'brand',
+                    color_background_main: 'background_main',
+                    color_background_accent: 'background_accent'
+                };
+                var existingColors = getPaletteColors(this.palette);
+                for (var k in map) {
+                    if (settings[k]) {
+                        var c = normalizeColor(settings[k]);
+                        var exists = existingColors.some(function(pc) { return colorsEqual(pc, c); });
+                        if (!exists) {
+                            var key = generatePaletteKey(getPaletteKeys(this.palette));
+                            this.palette[key] = c;
+                            existingColors.push(c);
+                        }
+                        this.roles[map[k]] = c;
+                    }
+                }
+            },
+
+            /**
+             * Рендер основного UI
+             */
+            render: function() {
+                this.renderRolesPreview();
+                this.syncHiddenFields();
+            },
+
+            /**
+             * Helper для установки CSS-переменной цвета (jQuery .css() не работает с custom properties)
+             */
+            setSwatchColor: function($el, color) {
+                if ($el.length && $el[0]) {
+                    $el[0].style.setProperty('--swatch-color', color || 'transparent');
+                }
+                return $el;
+            },
+
+            /**
+             * Рендер превью ролей
+             */
+            renderRolesPreview: function() {
+                var self = this;
+                this.$el.find('.nc-palette-role').each(function() {
+                    var $role = $nc(this);
+                    var role = $role.data('role');
+                    var color = self.roles[role] || '';
+
+                    // Разрешаем CSS-переменную в реальный цвет для отображения
+                    var displayColor = self.resolveColorValue(color);
+
+                    // При пустом цвете показываем шахматку (transparent)
+                    self.setSwatchColor($role.find('.nc-palette-role-swatch'), displayColor || 'transparent');
+                    $role.find('.nc-palette-role-hex').text(displayColor ? colorToHex(displayColor) : '');
+                });
+            },
+
+            /**
+             * Разрешение CSS-переменной в реальное значение цвета
+             */
+            resolveColorValue: function(value) {
+                if (!value) return '';
+
+                // Если это CSS-переменная палитры, разрешаем через palette
+                var paletteMatch = value.match(/var\(--tpl-color-list-([a-z0-9]+)\)/i);
+                if (paletteMatch) {
+                    var key = paletteMatch[1];
+
+                    // 1. Пробуем локальную палитру
+                    if (this.palette && this.palette[key]) {
+                        return this.palette[key];
+                    }
+
+                    // 2. Fallback: глобальный кэш ncSiteColorList
+                    try {
+                        var contexts = [window];
+                        if (window.parent && window.parent !== window) contexts.push(window.parent);
+                        if (window.top && window.top !== window && window.top !== window.parent) contexts.push(window.top);
+
+                        for (var i = 0; i < contexts.length; i++) {
+                            var ctx = contexts[i];
+                            if (ctx.ncSiteColorList && ctx.ncSiteColorList.palette && ctx.ncSiteColorList.palette[key]) {
+                                return ctx.ncSiteColorList.palette[key];
+                            }
+                            if (ctx.ncSitePalette && ctx.ncSitePalette.palette && ctx.ncSitePalette.palette[key]) {
+                                return ctx.ncSitePalette.palette[key];
+                            }
+                        }
+                    } catch(e) { /* cross-origin */ }
+
+                    // Если не удалось разрешить, возвращаем пустую строку
+                    return '';
+                }
+
+                return value;
+            },
+
+            /**
+             * Создание dropdown для выбора цвета роли
+             */
+            createRoleDropdown: function($roleEl) {
+                var self = this;
+                var currentColorValue = this.roles[this.currentRole] || '';
+                // Разрешаем CSS-переменную для отображения
+                var resolvedColor = this.resolveColorValue(currentColorValue);
+                var displayColor = resolvedColor || '#FFFFFF';
+
+                // Извлекаем ключ палитры из CSS-переменной (если есть)
+                var currentPaletteKey = null;
+                var paletteMatch = currentColorValue.match(/var\(--tpl-color-list-([a-z0-9]+)\)/i);
+                if (paletteMatch) {
+                    currentPaletteKey = paletteMatch[1];
+                }
+
+                var $dropdown = $nc('<div class="nc-palette-picker-dropdown nc-palette-role-dropdown"></div>');
+
+                // === Секция: все индексные цвета + элемент сброса ===
+                var $colorsSection = $nc('<div class="nc-palette-picker-section nc-palette-picker-colors"></div>');
+                var paletteKeys = getPaletteKeys(this.palette);
+                paletteKeys.forEach(function(key) {
+                    var color = self.palette[key];
+                    // Выделяем по ключу палитры или по совпадению цвета
+                    var isSelected = (currentPaletteKey && key === currentPaletteKey) || (!currentPaletteKey && colorsEqual(color, resolvedColor));
+                    var hexValue = colorToHex(color);
+                    var $item = $nc('<div class="nc-palette-picker-color' + (isSelected ? ' nc--selected' : '') + '"></div>')
+                        .attr({ 'data-color': color, 'data-palette-key': key });
+                    var $swatch = $nc('<div class="nc-palette-picker-color-swatch"></div>');
+                    self.setSwatchColor($swatch, color);
+                    $item.append($swatch);
+                    $item.append($nc('<div class="nc-palette-picker-color-hex"></div>').text(hexValue));
+                    $colorsSection.append($item);
+                });
+                // Элемент сброса
+                var isResetSelected = !currentColorValue;
+                var $resetItem = $nc('<div class="nc-palette-picker-color nc-palette-picker-reset' + (isResetSelected ? ' nc--selected' : '') + '"></div>')
+                    .attr({ 'data-color': '' });
+                var $resetSwatch = $nc('<div class="nc-palette-picker-color-swatch nc--empty"></div>');
+                $resetItem.append($resetSwatch);
+                $resetItem.append($nc('<div class="nc-palette-picker-color-hex"></div>').text('сброс'));
+                $colorsSection.append($resetItem);
+                $dropdown.append($colorsSection);
+
+                // Примечание: кнопка "Редактировать палитру" вынесена из dropdown
+                // и показывается под ролями только на уровне сайта (см. .nc-palette-site-edit-btn)
+
+                // === Секция: колорпикер ===
+                var $pickerSection = $nc('<div class="nc-palette-picker-section nc-palette-picker-custom"></div>');
+                var $pickerInput = $nc('<input type="text" class="nc-palette-picker-custom-input">');
+
+                // Строка 1: hex инпут + rgba надпись
+                var $colorRow = $nc('<div class="nc-palette-picker-color-row"></div>');
+                var $hexInput = $nc('<input type="text" class="nc-palette-picker-hex-input" placeholder="#FFFFFF">')
+                    .val(colorToHex(displayColor));
+                var $rgbaDisplay = $nc('<span class="nc-palette-picker-rgba-display"></span>')
+                    .text(self.formatRgbaDisplay(displayColor));
+                $colorRow.append($hexInput).append($rgbaDisplay);
+
+                // Строка 2: квадратик превью + кнопка "Выбрать" + чекбокс
+                var $applyRow = $nc('<div class="nc-palette-picker-apply-row"></div>');
+                var $previewSwatch = $nc('<div class="nc-palette-picker-preview-swatch"></div>');
+                self.setSwatchColor($previewSwatch, displayColor);
+                var $applyButton = $nc('<button type="button" class="nc-palette-picker-apply-button">Выбрать</button>');
+                $applyRow.append($previewSwatch).append($applyButton);
+
+                // Чекбокс "добавить в палитру" (только если есть права)
+                var $addToPaletteCheckbox = null;
+                if (this.canEditPalette) {
+                    var $checkboxLabel = $nc('<label class="nc-palette-picker-add-checkbox"><input type="checkbox"><span>в палитру</span></label>');
+                    $addToPaletteCheckbox = $checkboxLabel.find('input');
+                    $applyRow.append($checkboxLabel);
+                }
+
+                $pickerSection.append($pickerInput).append($colorRow).append($applyRow);
+                $dropdown.append($pickerSection);
+
+                // Позиционируем dropdown под ролевым квадратиком
+                $roleEl.css('position', 'relative').append($dropdown);
+
+                // Инициализируем minicolors
+                $pickerInput.minicolors({
+                    format: 'rgb',
+                    keywords: 'transparent',
+                    opacity: true,
+                    theme: 'netcat',
+                    inline: true,
+                    change: function(value) {
+                        self.setSwatchColor($previewSwatch, value);
+                        $hexInput.val(self.colorToHex8(value));
+                        $rgbaDisplay.text(self.formatRgbaDisplay(value));
+                    }
+                });
+                // Устанавливаем значение после инициализации (конвертируем hex8 в rgba)
+                $pickerInput.minicolors('value', hexToRgba(displayColor));
+
+                // Ввод hex вручную
+                $hexInput.on('input change', function() {
+                    var val = $nc(this).val().trim();
+                    if (val.match(/^#[0-9a-f]{3,8}$/i)) {
+                        $pickerInput.minicolors('value', val);
+                        $rgbaDisplay.text(self.formatRgbaDisplay(val));
+                    }
+                });
+
+                // Клик по цвету из палитры (включая сброс)
+                $dropdown.on('click', '.nc-palette-picker-color', function(e) {
+                    e.stopPropagation();
+                    var $btn = $nc(this);
+                    var color = $btn.data('color');
+                    var paletteKey = $btn.data('palette-key');
+                    var isReset = $btn.hasClass('nc-palette-picker-reset') || color === '';
+
+                    // Если выбран цвет из палитры — сохраняем ссылку на CSS-переменную
+                    var valueToSave = '';
+                    if (!isReset) {
+                        if (paletteKey) {
+                            valueToSave = 'var(--tpl-color-list-' + paletteKey + ')';
+                        } else {
+                            valueToSave = color;
+                        }
+                    }
+                    self.roles[self.currentRole] = valueToSave;
+                    self.render();
+                    self.closeDropdown();
+                    self.publishPalette();
+                });
+
+                // Функция применения цвета из колорпикера
+                function applyCustomColor(e) {
+                    e.stopPropagation();
+                    var customColor = $pickerInput.minicolors('value');
+                    if (customColor) {
+                        var colorToSave = customColor; // Сохраняем rgba как есть
+
+                        // Добавляем в палитру только если чекбокс включен
+                        if ($addToPaletteCheckbox && $addToPaletteCheckbox.is(':checked')) {
+                            var normalized = self.colorToHex8(customColor);
+                            var existingColors = getPaletteColors(self.palette);
+                            var exists = existingColors.some(function(c) { return colorsEqual(c, normalized); });
+                            if (!exists) {
+                                var newKey = generatePaletteKey(getPaletteKeys(self.palette));
+                                self.palette[newKey] = normalized;
+                            }
+                            colorToSave = normalized; // Если добавляем в палитру, используем hex
+                        }
+
+                        self.roles[self.currentRole] = colorToSave;
+                        self.render();
+                        self.closeDropdown();
+                        self.publishPalette();
+                    }
+                }
+
+                // Клик по превью или кнопке "Выбрать" — применить цвет из колорпикера
+                $previewSwatch.on('click', applyCustomColor);
+                $applyButton.on('click', applyCustomColor);
+
+                // Предотвращаем закрытие dropdown при кликах внутри него
+                $dropdown.on('click', function(e) {
+                    e.stopPropagation();
+                });
+
+                this.$currentDropdown = $dropdown;
+                return $dropdown;
+            },
+
+            /**
+             * Конвертация цвета в 8-значный hex
+             */
+            colorToHex8: function(color) {
+                if (!color) return '#000000';
+                if (color.charAt(0) === '#' && color.length >= 7) {
+                    return color.toUpperCase().substring(0, color.length > 7 ? 9 : 7);
+                }
+                var matchRgb = color.match(/^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i);
+                if (matchRgb) {
+                    var r = parseInt(matchRgb[1]).toString(16).padStart(2, '0');
+                    var g = parseInt(matchRgb[2]).toString(16).padStart(2, '0');
+                    var b = parseInt(matchRgb[3]).toString(16).padStart(2, '0');
+                    return ('#' + r + g + b).toUpperCase();
+                }
+                var matchRgba = color.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)$/i);
+                if (matchRgba) {
+                    var r = parseInt(matchRgba[1]).toString(16).padStart(2, '0');
+                    var g = parseInt(matchRgba[2]).toString(16).padStart(2, '0');
+                    var b = parseInt(matchRgba[3]).toString(16).padStart(2, '0');
+                    var a = Math.round(parseFloat(matchRgba[4]) * 255).toString(16).padStart(2, '0');
+                    if (a.toUpperCase() === 'FF') return ('#' + r + g + b).toUpperCase();
+                    return ('#' + r + g + b + a).toUpperCase();
+                }
+                return color;
+            },
+
+            /**
+             * Форматирование цвета как rgba для отображения (в dropdown ролей)
+             */
+            formatRgbaDisplay: function(color) {
+                if (!color) return 'rgba(0, 0, 0, 1)';
+                // Если уже rgba/rgb
+                var match = color.match(/rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)/i);
+                if (match) {
+                    var r = match[1];
+                    var g = match[2];
+                    var b = match[3];
+                    var a = match[4] !== undefined ? parseFloat(match[4]) : 1;
+                    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+                }
+                // Если hex — конвертируем
+                var hex = color.replace('#', '');
+                if (hex.length === 3) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+                var r = parseInt(hex.substring(0, 2), 16) || 0;
+                var g = parseInt(hex.substring(2, 4), 16) || 0;
+                var b = parseInt(hex.substring(4, 6), 16) || 0;
+                var a = hex.length >= 8 ? (parseInt(hex.substring(6, 8), 16) / 255) : 1;
+                return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a.toFixed(2) + ')';
+            },
+
+            /**
+             * Рендер цветов в модальном окне
+             */
+            renderModalColors: function() {
+                if (!this.$modalDialog || !this.$root) return;
+                var self = this;
+                var $ = this.$root;
+                var $colors = this.$modalDialog.find('.nc-palette-modal-colors');
+                $colors.empty();
+
+                this.tempPaletteOrder.forEach(function(key) {
+                    var color = self.tempPalette[key];
+                    if (!color) return; // Пропускаем удалённые
+                    var hexDisplay = colorToHex(color);
+                    var $c = $(
+                        '<div class="nc-palette-modal-color" data-key="' + key + '" data-color="' + color + '">' +
+                        '<div class="nc-palette-modal-color-swatch"></div>' +
+                        '<div class="nc-palette-modal-color-hex">' + hexDisplay + '</div>' +
+                        '<span class="nc-palette-modal-color-remove">&times;</span>' +
+                        '</div>'
+                    );
+                    // Устанавливаем цвет через CSS-переменную для шахматной подложки
+                    self.setSwatchColor($c.find('.nc-palette-modal-color-swatch'), color);
+                    $colors.append($c);
+                });
+            },
+
+            /**
+             * Синхронизация скрытых полей
+             * На уровне сайта сохраняем и palette, и roles
+             * На других уровнях сохраняем только roles (palette readonly)
+             */
+            syncHiddenFields: function() {
+                var isSiteLevel = this.$el.attr('data-is-site-level') === '1';
+
+                // Palette сохраняем только на уровне сайта
+                if (isSiteLevel) {
+                    this.$el.find('.nc-palette-data').val(JSON.stringify(this.palette)).trigger('change');
+                    // Синхронизация удалённых цветов (тоже только на уровне сайта)
+                    this.syncDeletedColorsField();
+                } else {
+                    // На других уровнях палитра не сохраняется (поле пустое)
+                    this.$el.find('.nc-palette-data').val('{}');
+                    this.$el.find('.nc-deleted-colors-data').val('[]');
+                }
+
+                // Roles сохраняем всегда
+                var self = this;
+                this.$el.find('.nc-role-data').each(function() {
+                    var $inp = $nc(this);
+                    $inp.val(self.roles[$inp.data('role')] || '').trigger('change');
+                });
+            },
+
+            /**
+             * Публикация палитры для других миксинов
+             */
+            publishPalette: function() {
+                var self = this;
+
+                // Объединяем роли: переопределённые + унаследованные
+                var mergedRoles = {};
+                var roleNames = ['foreground_main', 'foreground_accent', 'brand', 'background_main', 'background_accent'];
+                for (var i = 0; i < roleNames.length; i++) {
+                    var r = roleNames[i];
+                    // Используем переопределённое значение, иначе унаследованное
+                    mergedRoles[r] = this.roles[r] || (this.inheritedRoles && this.inheritedRoles[r]) || '';
+                }
+
+                // Проверка, удалён ли цвет
+                function isDeletedColor(key) {
+                    return self.deletedColors && self.deletedColors.some(function(dc) {
+                        return dc.key === key;
+                    });
+                }
+
+                // Создаём палитру для публикации, мержим с существующей ncSitePalette
+                // чтобы не потерять цвета, добавленные через AJAX из других миксинов
+                var publishedPalette = {};
+
+                // Сначала берём существующую палитру из ncSitePalette (чтобы не потерять новые цвета)
+                // но исключаем удалённые цвета
+                var existingSitePalette = window.ncSitePalette && window.ncSitePalette.palette;
+                if (existingSitePalette && typeof existingSitePalette === 'object') {
+                    for (var key in existingSitePalette) {
+                        if (!isDeletedColor(key)) {
+                            publishedPalette[key] = existingSitePalette[key];
+                        }
+                    }
+                }
+
+                // Добавляем/перезаписываем цветами из текущей палитры
+                for (var key in this.palette) {
+                    publishedPalette[key] = this.palette[key];
+                }
+
+                var paletteData = {
+                    palette: publishedPalette,
+                    roles: mergedRoles,
+                    site_id: this.siteId || 0,
+                    deletedColors: this.deletedColors || []
+                };
+                // Сохраняем палитру во всех доступных контекстах для доступа из других миксинов
+                window.ncSitePalette = paletteData;
+                // Также сохраняем в parent (для iframe)
+                try {
+                    if (window.parent && window.parent !== window) {
+                        window.parent.ncSitePalette = paletteData;
+                    }
+                    if (window.top && window.top !== window && window.top !== window.parent) {
+                        window.top.ncSitePalette = paletteData;
+                    }
+                } catch(e) { /* cross-origin */ }
+                // Генерируем событие для обновления color picker'ов
+                $nc(document).trigger('nc-palette-updated', [paletteData]);
+            },
+
+            /**
+             * Привязка событий
+             */
+            bindEvents: function() {
+                var self = this;
+                var $el = this.$el;
+
+                // Клик по роли — открыть dropdown
+                $el.on('click', '.nc-palette-role', function(e) {
+                    e.stopPropagation();
+                    var $roleEl = $nc(this);
+                    var role = $roleEl.data('role');
+                    self.openDropdown(role, $roleEl);
+                });
+
+                // Копирование hex при клике на него
+                $el.on('click', '.nc-palette-role-hex', function(e) {
+                    e.stopPropagation();
+                    var hex = $nc(this).text();
+                    self.copyToClipboard(hex);
+                    $nc(this).css('background', 'rgba(11,123,213,0.3)');
+                    setTimeout(function() {
+                        $nc(e.target).css('background', '');
+                    }, 300);
+                });
+
+                // Кнопка редактирования палитры (уровень сайта)
+                $el.on('click', '.nc-palette-site-edit-btn', function(e) {
+                    e.stopPropagation();
+                    self.openModal();
+                });
+
+                // Закрытие dropdown при клике вне
+                $nc(document).on('click.palette-' + this.uid, function(e) {
+                    if (!$nc(e.target).closest('.nc-palette-role-dropdown, .nc-palette-role, .minicolors').length) {
+                        self.closeDropdown();
+                    }
+                });
+
+                // Подписка на обновление палитры из других мест (например, из дропдауна в миксине фона)
+                $nc(document).on('nc-palette-updated.palette-' + this.uid, function(e, newPaletteData) {
+                    if (newPaletteData && typeof newPaletteData === 'object' && newPaletteData.palette) {
+                        // Мержим палитры: добавляем новые цвета, не удаляя существующие
+                        var hasChanges = false;
+                        for (var key in newPaletteData.palette) {
+                            // Пропускаем удалённые цвета — они не должны возвращаться в палитру
+                            var isDeleted = self.deletedColors && self.deletedColors.some(function(dc) {
+                                return dc.key === key;
+                            });
+                            if (!isDeleted && !self.palette[key]) {
+                                self.palette[key] = newPaletteData.palette[key];
+                                hasChanges = true;
+                            }
+                        }
+                        if (hasChanges) {
+                            self.syncHiddenFields();
+                        }
+                    }
+                });
+            },
+
+            /**
+             * Открытие dropdown для выбора цвета роли
+             */
+            openDropdown: function(role, $roleEl) {
+                // Закрываем предыдущий dropdown
+                this.closeDropdown();
+
+                this.currentRole = role;
+
+                // Подсветка выбранной роли
+                this.$el.find('.nc-palette-role').removeClass('nc--active');
+                $roleEl.addClass('nc--active');
+
+                // Создаём и показываем dropdown
+                var $dropdown = this.createRoleDropdown($roleEl);
+                $dropdown.addClass('nc--open');
+            },
+
+            /**
+             * Закрытие dropdown
+             */
+            closeDropdown: function() {
+                if (this.$currentDropdown) {
+                    this.$currentDropdown.find('.nc-palette-picker-custom-input').minicolors('destroy');
+                    this.$currentDropdown.remove();
+                    this.$currentDropdown = null;
+                }
+                this.$el.find('.nc-palette-role').removeClass('nc--active');
+                this.currentRole = null;
+            },
+
+            /**
+             * Генерация HTML содержимого модального окна
+             */
+            generateModalMarkup: function() {
+                var self = this;
+                var colorsHtml = '';
+                this.tempPaletteOrder.forEach(function(key) {
+                    var color = self.tempPalette[key];
+                    if (!color) return;
+                    var hexDisplay = colorToHex(color);
+                    colorsHtml +=
+                        '<div class="nc-palette-modal-color" data-key="' + key + '" data-color="' + color + '">' +
+                        '<div class="nc-palette-modal-color-swatch" data-init-color="' + color + '"></div>' +
+                        '<div class="nc-palette-modal-color-hex">' + hexDisplay + '</div>' +
+                        '<span class="nc-palette-modal-color-remove">&times;</span>' +
+                        '</div>';
+                });
+
+                // Собираем данные пресетов из HTML
+                var presetsHtml = '<option value="">Своя палитра</option>';
+                this.$el.find('.nc-palette-presets-data [data-preset]').each(function() {
+                    var $item = $nc(this);
+                    presetsHtml += '<option value="' + $item.data('preset') + '" ' +
+                        'data-palette=\'' + JSON.stringify($item.data('palette')) + '\' ' +
+                        'data-roles=\'' + JSON.stringify($item.data('roles')) + '\'>' +
+                        $item.data('label') + '</option>';
+                });
+
+                return '<div class="nc-modal-dialog nc-palette-modal-dialog" data-width="650" data-confirm-close="no">' +
+                    '<div class="nc-modal-dialog-header"><h2>Редактирование палитры</h2></div>' +
+                    '<div class="nc-modal-dialog-body">' +
+                    '<div class="nc-palette-modal-body">' +
+                    '<div class="nc-palette-modal-content">' +
+                    '<div class="nc-palette-modal-colors">' + colorsHtml + '</div>' +
+                    '<button type="button" class="nc-btn nc--blue nc--small nc-palette-modal-add-btn">+ Добавить цвет</button>' +
+                    '</div>' +
+                    '<div class="nc-palette-modal-editor nc--disabled">' +
+                    '<div class="nc-palette-modal-editor-header">' +
+                    '<span class="nc-palette-modal-editor-title">Выбор цвета</span>' +
+                    '<span class="nc-palette-modal-editor-cancel" style="display:none;">отменить</span>' +
+                    '</div>' +
+                    '<input type="text" class="nc-palette-modal-editor-input">' +
+                    '<div class="nc-palette-modal-editor-hex-row">' +
+                    '<input type="text" class="nc-palette-modal-editor-hex" placeholder="#FFFFFF" value="">' +
+                    '<span class="nc-palette-modal-editor-rgba"></span>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="nc-modal-dialog-footer nc-palette-modal-footer">' +
+                    '<div class="nc-palette-modal-footer-left">' +
+                    '<select class="nc-palette-modal-preset-select">' + presetsHtml + '</select>' +
+                    '</div>' +
+                    '<div class="nc-palette-modal-footer-right">' +
+                    '<button data-action="submit">Сохранить</button>' +
+                    '<button data-action="close">Отмена</button>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+            },
+
+            /**
+             * Открытие модального окна редактирования палитры
+             */
+            openModal: function() {
+                // Проверка прав на редактирование
+                if (!this.canEditPalette) {
+                    console.warn('[PaletteEditor] Недостаточно прав для редактирования палитры');
+                    return;
+                }
+
+                var self = this;
+                this.closeDropdown();
+                // Копируем объект палитры
+                this.tempPalette = {};
+                for (var key in this.palette) {
+                    this.tempPalette[key] = this.palette[key];
+                }
+                this.tempPaletteOrder = getPaletteKeys(this.palette); // Сохраняем порядок ключей
+                this.originalPaletteSnapshot = JSON.stringify(this.palette);
+                this.editingKey = null; // Изменили editingIndex на editingKey
+                // Очищаем список удалённых цветов при открытии модала
+                // (каждая сессия редактирования начинается с чистого листа)
+                this.deletedColors = [];
+                this.syncDeletedColorsField();
+
+                // Используем jQuery из родительского окна (где создаётся модалка)
+                var rootWindow = (typeof nc !== 'undefined' && nc.root) ? nc.root : window;
+                this.$root = rootWindow.$;
+
+                // Создаём системное модальное окно
+                this.dialog = nc.ui.modal_dialog({
+                    full_markup: this.generateModalMarkup(),
+                    confirm_close: false,
+                    on_show: function() {
+                        // this внутри on_show - это объект dialog
+                        self.$modalDialog = self.$root('.nc-palette-modal-dialog:visible');
+                        self.bindModalEvents();
+                        self.initModalColorpicker(); // Инициализируем колорпикер сразу
+                        // Инициализируем цвета свотчей через CSS-переменную
+                        self.$modalDialog.find('.nc-palette-modal-color-swatch[data-init-color]').each(function() {
+                            var color = self.$root(this).attr('data-init-color');
+                            self.setSwatchColor(self.$root(this), color);
+                        });
+                        // Останавливаем индикатор загрузки, если он был запущен при открытии
+                        self.stopLoadingIndicator();
+                    }
+                });
+                this.dialog.open();
+            },
+
+            /**
+             * Привязка событий внутри модального окна
+             */
+            bindModalEvents: function() {
+                var self = this;
+                var $dialog = this.$modalDialog;
+                var $ = this.$root; // jQuery из родительского окна
+
+                // Редактирование цвета (сбрасываем пресет на "Своя палитра")
+                $dialog.on('click', '.nc-palette-modal-color', function(e) {
+                    if ($(e.target).hasClass('nc-palette-modal-color-remove')) return;
+                    var key = $(this).data('key');
+                    self.editColorInModal(key);
+                    self.resetPresetSelect();
+                });
+
+                // Удаление цвета (сбрасываем пресет на "Своя палитра")
+                $dialog.on('click', '.nc-palette-modal-color-remove', function(e) {
+                    e.stopPropagation();
+                    var key = $(this).closest('.nc-palette-modal-color').data('key');
+                    self.removeColorInModal(key);
+                    self.resetPresetSelect();
+                });
+
+                // Добавление цвета (сбрасываем пресет на "Своя палитра")
+                $dialog.on('click', '.nc-palette-modal-add-btn', function() {
+                    self.addColorInModal();
+                    self.resetPresetSelect();
+                });
+
+                // Применение пресета при выборе из списка
+                $dialog.on('change', '.nc-palette-modal-preset-select', function() {
+                    var $select = $(this);
+                    var $opt = $select.find('option:selected');
+                    var presetValue = $opt.val();
+                    if (!presetValue) return; // "Своя палитра" - ничего не делаем
+
+                    var paletteData = $opt.data('palette');
+                    var rolesData = $opt.data('roles');
+
+                    if (paletteData && (Array.isArray(paletteData) ? paletteData.length : Object.keys(paletteData).length)) {
+                        // Добавляем все старые цвета в список удалённых
+                        // (только те, которые были в оригинальной палитре)
+                        for (var oldKey in self.palette) {
+                            if (self.palette[oldKey]) {
+                                self.deletedColors.push({
+                                    key: oldKey,
+                                    hex: colorToHex(self.palette[oldKey])
+                                });
+                            }
+                        }
+
+                        // Конвертируем массив в объект с ключами
+                        self.tempPalette = Array.isArray(paletteData) ? convertArrayToKeyedPalette(paletteData) : paletteData;
+                        self.tempPaletteOrder = getPaletteKeys(self.tempPalette);
+
+                        // Обновляем роли (они применятся при сохранении)
+                        if (rolesData) {
+                            for (var k in rolesData) {
+                                self.roles[k] = rolesData[k] ? normalizeColor(rolesData[k]) : '';
+                            }
+                        }
+
+                        // Перерисовываем список цветов в модалке
+                        self.renderModalColors();
+                        // Закрываем редактор цвета, если открыт
+                        self.hideModalEditor();
+                    }
+                });
+
+                // Отмена редактирования цвета
+                $dialog.on('click', '.nc-palette-modal-editor-cancel', function() {
+                    self.cancelModalEditor();
+                });
+
+                // Клик по пустому месту - закрыть редактор
+                $dialog.on('click', '.nc-palette-modal-content', function(e) {
+                    if (!$(e.target).closest('.nc-palette-modal-color').length &&
+                        !$(e.target).closest('.nc-palette-modal-add-btn').length &&
+                        self.editingKey !== null) {
+                        self.hideModalEditor();
+                    }
+                });
+
+                // Ввод hex (сбрасываем пресет на "Своя палитра")
+                $dialog.on('input change', '.nc-palette-modal-editor-hex', function() {
+                    var value = $(this).val().trim();
+                    if (value) {
+                        self.setColorFromHex(value);
+                        self.resetPresetSelect();
+                    }
+                });
+
+                // Кнопка сохранения - отключаем стандартный обработчик
+                $dialog.find('[data-action="submit"]').off('click').on('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    self.saveModal();
+                });
+
+                // Перехват закрытия - отключаем стандартные обработчики и добавляем свои
+                $dialog.find('[data-action="close"]').off('click').on('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    self.confirmAndClose();
+                });
+
+                $dialog.find('.nc-modal-dialog-header-close-button').off('click').on('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    self.confirmAndClose();
+                });
+            },
+
+            /**
+             * Проверка наличия несохранённых изменений
+             */
+            hasUnsavedChanges: function() {
+                var currentSnapshot = JSON.stringify(this.tempPalette);
+                return currentSnapshot !== this.originalPaletteSnapshot;
+            },
+
+            /**
+             * Подтверждение и закрытие модалки
+             */
+            confirmAndClose: function() {
+                // Останавливаем индикатор загрузки (на случай если был запущен)
+                this.stopLoadingIndicator();
+
+                if (this.hasUnsavedChanges()) {
+                    if (!confirm('Изменения не сохранены. Закрыть без сохранения?')) {
+                        return;
+                    }
+                }
+                this.closeModalWithoutConfirm();
+            },
+
+            /**
+             * Инициализация колорпикера при открытии модалки (один раз)
+             */
+            initModalColorpicker: function() {
+                var self = this;
+                var $dialog = this.$modalDialog;
+                var $ = this.$root;
+                if (!$dialog || !$) return;
+
+                var $editor = $dialog.find('.nc-palette-modal-editor');
+                var $input = $editor.find('.nc-palette-modal-editor-input');
+                var $hexInput = $editor.find('.nc-palette-modal-editor-hex');
+                var $rgbaDisplay = $editor.find('.nc-palette-modal-editor-rgba');
+
+                // Инициализируем minicolors
+                $input.minicolors({
+                    theme: 'netcat',
+                    format: 'rgb',
+                    opacity: true,
+                    inline: true,
+                    defaultValue: '#CCCCCC',
+                    change: function(value) {
+                        // Если редактирование не активно — игнорируем
+                        if (self.editingKey === null) return;
+
+                        // Обновляем hex инпут и rgba display
+                        $hexInput.val(self.formatColorDisplay(value));
+                        $rgbaDisplay.text(self.formatRgbaDisplay(value));
+
+                        // Live preview в списке цветов
+                        var $swatch = $dialog.find('.nc-palette-modal-color[data-key="' + self.editingKey + '"] .nc-palette-modal-color-swatch');
+                        self.setSwatchColor($swatch, value);
+                        $dialog.find('.nc-palette-modal-color[data-key="' + self.editingKey + '"] .nc-palette-modal-color-hex')
+                            .text(self.formatColorDisplay(value));
+
+                        // Автоматически применяем изменения
+                        self.applyColorChange(value);
+
+                        // Сбрасываем пресет на "Своя палитра"
+                        self.resetPresetSelect();
+                    }
+                });
+            },
+
+            /**
+             * Показать встроенный редактор для цвета (активировать)
+             * @param {string} key - ключ цвета или null для нового цвета
+             * @param {string} color - значение цвета
+             */
+            showModalEditor: function(key, color) {
+                var self = this;
+                var $dialog = this.$modalDialog;
+                var $ = this.$root;
+                if (!$dialog || !$) return;
+
+                // Сохраняем оригинальный цвет для возможности отмены
+                this.originalColor = color;
+                this.editingKey = key;
+                this.isNewColor = !key || !this.tempPalette[key];
+
+                // Подсветка редактируемого цвета
+                $dialog.find('.nc-palette-modal-color').removeClass('nc--editing');
+                if (key) {
+                    $dialog.find('.nc-palette-modal-color[data-key="' + key + '"]').addClass('nc--editing');
+                }
+
+                var $editor = $dialog.find('.nc-palette-modal-editor');
+                var $input = $editor.find('.nc-palette-modal-editor-input');
+                var $hexInput = $editor.find('.nc-palette-modal-editor-hex');
+                var $rgbaDisplay = $editor.find('.nc-palette-modal-editor-rgba');
+
+                // Устанавливаем значение в колорпикер (конвертируем hex8 в rgba для minicolors)
+                var colorForPicker = hexToRgba(color);
+                $input.minicolors('value', colorForPicker);
+                $hexInput.val(this.formatColorDisplay(color));
+                $rgbaDisplay.text(this.formatRgbaDisplay(color));
+
+                // Активируем редактор
+                $editor.removeClass('nc--disabled');
+                $editor.find('.nc-palette-modal-editor-cancel').show();
+            },
+
+            /**
+             * Форматирование цвета для отображения (конвертируем в hex)
+             */
+            formatColorDisplay: function(color) {
+                return colorToHex(color);
+            },
+
+            /**
+             * Форматирование цвета как rgba для отображения
+             */
+            formatRgbaDisplay: function(color) {
+                if (!color) return 'rgba(0, 0, 0, 1)';
+                // Если уже rgba/rgb
+                var match = color.match(/rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)/i);
+                if (match) {
+                    var r = match[1];
+                    var g = match[2];
+                    var b = match[3];
+                    var a = match[4] !== undefined ? parseFloat(match[4]) : 1;
+                    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+                }
+                // Если hex — конвертируем
+                var hex = color.replace('#', '');
+                if (hex.length === 3) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+                var r = parseInt(hex.substring(0, 2), 16) || 0;
+                var g = parseInt(hex.substring(2, 4), 16) || 0;
+                var b = parseInt(hex.substring(4, 6), 16) || 0;
+                var a = hex.length >= 8 ? (parseInt(hex.substring(6, 8), 16) / 255) : 1;
+                return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a.toFixed(2) + ')';
+            },
+
+            /**
+             * Применить изменение цвета (вызывается при каждом изменении)
+             */
+            applyColorChange: function(color) {
+                if (this.editingKey === null) return;
+
+                var newColor = normalizeColor(color);
+
+                if (this.isNewColor) {
+                    // Для нового цвета - добавляем в объект если ещё нет
+                    if (!this.tempPalette[this.editingKey]) {
+                        this.tempPalette[this.editingKey] = newColor;
+                        this.tempPaletteOrder.push(this.editingKey);
+                        this.isNewColor = false;
+                        this.renderModalColors();
+                        // Восстанавливаем подсветку
+                        if (this.$modalDialog && this.$root) {
+                            this.$modalDialog.find('.nc-palette-modal-color[data-key="' + this.editingKey + '"]').addClass('nc--editing');
+                        }
+                    } else {
+                        this.tempPalette[this.editingKey] = newColor;
+                    }
+                } else {
+                    // Редактирование существующего
+                    this.tempPalette[this.editingKey] = newColor;
+                }
+            },
+
+            /**
+             * Установить цвет из hex инпута
+             */
+            setColorFromHex: function(value) {
+                if (this.editingKey === null || !this.$modalDialog) return;
+
+                var $input = this.$modalDialog.find('.nc-palette-modal-editor-input');
+
+                // Проверяем, что это валидный цвет
+                if (value.match(/^#[0-9a-f]{3,8}$/i) || value.match(/^rgba?\s*\(/i)) {
+                    $input.minicolors('value', value);
+                }
+            },
+
+            /**
+             * Деактивировать редактор (применяя изменения)
+             */
+            hideModalEditor: function() {
+                if (!this.$modalDialog) return;
+                var $editor = this.$modalDialog.find('.nc-palette-modal-editor');
+                // Деактивируем редактор
+                $editor.addClass('nc--disabled');
+                $editor.find('.nc-palette-modal-editor-cancel').hide();
+                this.$modalDialog.find('.nc-palette-modal-color').removeClass('nc--editing');
+                this.editingKey = null;
+                this.isNewColor = false;
+                this.originalColor = null;
+                // Перерисовываем цвета чтобы обновить hex подписи
+                this.renderModalColors();
+            },
+
+            /**
+             * Сброс выпадающего списка пресетов на "Своя палитра"
+             */
+            resetPresetSelect: function() {
+                if (!this.$modalDialog) return;
+                this.$modalDialog.find('.nc-palette-modal-preset-select').val('');
+            },
+
+            /**
+             * Отменить редактирование и восстановить оригинальный цвет
+             */
+            cancelModalEditor: function() {
+                // Восстанавливаем оригинальный цвет
+                if (this.editingKey !== null && this.originalColor) {
+                    if (this.isNewColor) {
+                        // Если это был новый цвет, удаляем его из палитры
+                        if (this.tempPalette[this.editingKey]) {
+                            delete this.tempPalette[this.editingKey];
+                            var idx = this.tempPaletteOrder.indexOf(this.editingKey);
+                            if (idx > -1) this.tempPaletteOrder.splice(idx, 1);
+                        }
+                    } else {
+                        // Восстанавливаем оригинальное значение
+                        this.tempPalette[this.editingKey] = this.originalColor;
+                    }
+                }
+
+                if (this.$modalDialog) {
+                    var $editor = this.$modalDialog.find('.nc-palette-modal-editor');
+                    // Деактивируем редактор
+                    $editor.addClass('nc--disabled');
+                    $editor.find('.nc-palette-modal-editor-cancel').hide();
+                    this.$modalDialog.find('.nc-palette-modal-color').removeClass('nc--editing');
+                }
+                this.editingKey = null;
+                this.isNewColor = false;
+                this.originalColor = null;
+                // Перерисовываем цвета с восстановленными значениями
+                this.renderModalColors();
+            },
+
+            /**
+             * Уничтожить minicolors в редакторе (при закрытии модалки)
+             */
+            destroyModalEditor: function() {
+                if (!this.$modalDialog) return;
+                var $input = this.$modalDialog.find('.nc-palette-modal-editor-input');
+                if ($input.data('minicolors-initialized')) {
+                    $input.minicolors('destroy');
+                }
+                this.$modalDialog.find('.nc-palette-modal-color').removeClass('nc--editing');
+                this.editingKey = null;
+            },
+
+            /**
+             * Редактирование цвета в модале
+             * @param {string} key - ключ цвета
+             */
+            editColorInModal: function(key) {
+                var color = this.tempPalette[key];
+                this.showModalEditor(key, color);
+            },
+
+            /**
+             * Удаление цвета в модале
+             * @param {string} key - ключ цвета
+             */
+            removeColorInModal: function(key) {
+                // Проверяем использование в ролях
+                var color = this.tempPalette[key];
+                var roleNames = {
+                    foreground_main: 'Текст основной',
+                    foreground_accent: 'Текст дополнительный',
+                    brand: 'Фирменный',
+                    background_main: 'Фон основной',
+                    background_accent: 'Фон дополнительный'
+                };
+                var usedIn = [];
+                for (var r in this.roles) {
+                    if (this.roles[r] && colorsEqual(this.roles[r], color)) {
+                        usedIn.push(roleNames[r] || r);
+                    }
+                }
+                if (usedIn.length && !confirm('Цвет используется в ролях: ' + usedIn.join(', ') + '. Удалить?')) {
+                    return;
+                }
+                // Сохраняем удалённый цвет для передачи на сервер
+                // (только если это был существующий цвет из оригинальной палитры)
+                if (this.palette[key]) {
+                    this.deletedColors.push({
+                        key: key,
+                        hex: colorToHex(color)
+                    });
+                }
+                // Удаляем из временной палитры
+                delete this.tempPalette[key];
+                var idx = this.tempPaletteOrder.indexOf(key);
+                if (idx > -1) this.tempPaletteOrder.splice(idx, 1);
+
+                this.hideModalEditor();
+                this.renderModalColors();
+            },
+
+            /**
+             * Добавление цвета в модале
+             */
+            addColorInModal: function() {
+                // Генерируем новый уникальный ключ
+                var newKey = generatePaletteKey(this.tempPaletteOrder);
+                // Показываем редактор для нового цвета
+                this.showModalEditor(newKey, '#CCCCCC');
+            },
+
+            /**
+             * Сохранение изменений из модала
+             */
+            saveModal: function() {
+                var self = this;
+
+                // Сразу останавливаем индикатор загрузки (если был запущен системой)
+                this.stopLoadingIndicator();
+
+                // Обновляем роли, если цвета изменились
+                this.updateRolesAfterPaletteChange();
+
+                // Применяем изменения палитры
+                this.palette = {};
+                for (var key in this.tempPalette) {
+                    this.palette[key] = this.tempPalette[key];
+                }
+
+                // Получаем siteId из data-атрибута (установлен PHP)
+                var siteId = this.siteId;
+
+                // Сохраняем палитру в БД через AJAX
+                if (siteId && typeof NETCAT_PATH !== 'undefined') {
+                    $nc.ajax({
+                        url: NETCAT_PATH + 'action.php?ctrl=admin.site_color_list&action=save&isNaked=1',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            site_id: siteId,
+                            palette: JSON.stringify(this.palette),
+                            deleted_colors: JSON.stringify(this.deletedColors || [])
+                        },
+                        success: function(response) {
+                            if (response.result === 'ok' && response.palette) {
+                                // Обновляем глобальный кэш
+                                if (window.ncSitePalette) window.ncSitePalette.palette = response.palette;
+                                try {
+                                    if (window.parent && window.parent.ncSitePalette) {
+                                        window.parent.ncSitePalette.palette = response.palette;
+                                    }
+                                } catch(e) {}
+                                // Очищаем список удалённых цветов после успешного сохранения
+                                self.deletedColors = [];
+                                self.syncDeletedColorsField();
+                                // Публикуем обновление
+                                $nc(document).trigger('nc-palette-updated', [{palette: response.palette}]);
+                            }
+                        }
+                    });
+                }
+
+                // Сбрасываем snapshot, чтобы closeModal не спрашивал подтверждение
+                this.originalPaletteSnapshot = JSON.stringify(this.tempPalette);
+                this.render();
+                this.closeModalWithoutConfirm();
+                this.publishPalette();
+                // Обновляем скрытое поле с удалёнными цветами
+                this.syncDeletedColorsField();
+            },
+
+            /**
+             * Остановка индикатора загрузки
+             */
+            stopLoadingIndicator: function() {
+                if (typeof nc !== 'undefined' && nc.process_end) {
+                    // Пробуем остановить все возможные процессы
+                    var processes = [
+                        'nc.ui.modal_dialog.submit_form()',
+                        'nc.ui.modal_dialog',
+                        'modal_dialog'
+                    ];
+                    for (var i = 0; i < processes.length; i++) {
+                        try { nc.process_end(processes[i]); } catch(e) {}
+                    }
+                }
+            },
+
+            /**
+             * Обновление ролей после изменения палитры
+             * Если цвет в палитре изменился, обновляем все роли, которые его использовали
+             */
+            updateRolesAfterPaletteChange: function() {
+                var oldPalette = this.palette;
+                var newPalette = this.tempPalette;
+
+                // Для каждого ключа в старой палитре проверяем, изменился ли цвет
+                for (var key in oldPalette) {
+                    if (!newPalette[key]) continue; // Цвет удалён
+                    var oldColor = oldPalette[key];
+                    var newColor = newPalette[key];
+
+                    if (!colorsEqual(oldColor, newColor)) {
+                        // Цвет изменился - обновляем все роли, которые использовали старый цвет
+                        for (var role in this.roles) {
+                            if (this.roles[role] && colorsEqual(this.roles[role], oldColor)) {
+                                this.roles[role] = newColor;
+                            }
+                        }
+                    }
+                }
+            },
+
+            /**
+             * Синхронизация скрытого поля с удалёнными цветами
+             */
+            syncDeletedColorsField: function() {
+                var $field = this.$el.find('.nc-deleted-colors-data');
+                if ($field.length) {
+                    $field.val(JSON.stringify(this.deletedColors));
+                    // Генерируем событие change, чтобы mixin_editor включил данные в JSON
+                    $field.trigger('change');
+                }
+            },
+
+            /**
+             * Закрытие модального окна без подтверждения (после сохранения)
+             */
+            closeModalWithoutConfirm: function() {
+                this.destroyModalEditor();
+                if (this.dialog) {
+                    this.dialog.destroy();
+                    this.dialog = null;
+                    this.$modalDialog = null;
+                    this.$root = null;
+                }
+                // Останавливаем индикатор загрузки
+                this.stopLoadingIndicator();
+            },
+
+            /**
+             * Копирование в буфер обмена
+             */
+            copyToClipboard: function(text) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text);
+                } else {
+                    var $temp = $nc('<input>').val(text).appendTo('body').select();
+                    document.execCommand('copy');
+                    $temp.remove();
+                }
+            },
+
+            /**
+             * Уникальный ID для этого экземпляра
+             */
+            uid: Math.random().toString(36).substr(2, 9)
+        };
+
+        /**
+         * Инициализация при загрузке настроек миксина
+         */
+        function initPaletteEditor(event, data) {
+            var $form = $nc(this);
+            var $editor = $form.find('[data-palette-editor]');
+            if (!$editor.length) return;
+
+            // Определяем уровень редактирования
+            // Уровень сайта: scope='MainArea', нет subdivision_id, нет infoblock_id
+            var editorData = data && data.editor;
+            var isSiteLevel = editorData &&
+                editorData.scope === 'MainArea' &&
+                !editorData.subdivision_id &&
+                !editorData.infoblock_id;
+
+            // Сохраняем флаг уровня сайта в data-атрибуте
+            $editor.attr('data-is-site-level', isSiteLevel ? '1' : '0');
+
+            // Показываем кнопку редактирования палитры только на уровне сайта
+            if (isSiteLevel) {
+                $editor.find('.nc-palette-edit-wrapper').show();
+            } else {
+                $editor.find('.nc-palette-edit-wrapper').hide();
+            }
+
+            // Собираем настройки
+            var settings = {};
+
+            // Палитра берётся из ncSiteColorList (актуальные данные из Catalogue.ncColorList),
+            // а НЕ из hidden input mixin.settings.palette (устаревший подход)
+            var siteColorList = window.ncSiteColorList ||
+                (window.parent && window.parent.ncSiteColorList) ||
+                (window.top && window.top.ncSiteColorList);
+            if (siteColorList && siteColorList.palette) {
+                settings.palette = siteColorList.palette;
+            }
+
+            // Роли берём из hidden inputs (они специфичны для текущего уровня)
+            settings.roles = {};
+            $editor.find('.nc-role-data').each(function() {
+                var $inp = $nc(this);
+                var roleValue = $inp.val();
+                if (roleValue) {
+                    settings.roles[$inp.data('role')] = roleValue;
+                }
+            });
+
+            // === Обратная совместимость со старым форматом данных (color_*) ===
+            var hasRoles = Object.keys(settings.roles).some(function(k) { return settings.roles[k]; });
+            if (!hasRoles && data && data.editor) {
+                var $settingsCell = $form.closest('.nc-mixins-settings-cell');
+                var $row = $settingsCell.closest('tr');
+                var mixinType = $row.data('mixinType');
+                var breakpoint = $settingsCell.data('breakpoint');
+
+                if (mixinType && breakpoint !== undefined) {
+                    var rawSettings = data.editor.get_mixin_settings_values(mixinType, breakpoint);
+                    if (rawSettings['settings.color_foreground_main'] || rawSettings['settings.color_brand']) {
+                        settings.color_foreground_main = rawSettings['settings.color_foreground_main'] || '';
+                        settings.color_foreground_accent = rawSettings['settings.color_foreground_accent'] || '';
+                        settings.color_brand = rawSettings['settings.color_brand'] || '';
+                        settings.color_background_main = rawSettings['settings.color_background_main'] || '';
+                        settings.color_background_accent = rawSettings['settings.color_background_accent'] || '';
+                    }
+                }
+            }
+            // === Конец обратной совместимости ===
+
+            // Проверяем, не инициализирован ли уже
+            var existing = editors.get($editor[0]);
+            if (existing) {
+                existing.init(settings);
+                return;
+            }
+
+            var editor = new PaletteEditor($editor);
+            editors.set($editor[0], editor);
+            editor.init(settings);
+        }
+
+        // Инициализация
+        $nc('[data-palette-editor]').closest('.nc-mixins-mixin-settings')
+            .off(nc_mixin_settings_editor.mixin_settings_set_values_event + '.palette')
+            .on(nc_mixin_settings_editor.mixin_settings_set_values_event + '.palette', initPaletteEditor);
+
+    })();
+</script>

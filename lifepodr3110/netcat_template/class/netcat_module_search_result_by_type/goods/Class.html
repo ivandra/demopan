@@ -1,0 +1,343 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<?php
+// Инициализация зависимостей для универсального шаблона товара
+$netshop = nc_netshop::get_instance();
+$current_catalogue = $nc_core->catalogue->get_current();
+
+// Функция подсчёта комментариев - в поиске не показываем
+$get_comment_count = function() { return 0; };
+
+// Подсчёт уникальных товаров (без вариантов)
+$nc_search_unique_count = 0;
+$nc_search_shown_products = [];
+$nc_search_product_cache = [];
+
+if (!empty($fetch_row)) {
+    foreach ($fetch_row as $row) {
+        $meta = $row instanceof Iterator ? $row->get('meta') : ($row['meta'] ?? []);
+        if (!empty($meta['component_id']) && !empty($meta['message_id'])) {
+            $item = nc_netshop_item::by_id($meta['component_id'], $meta['message_id']);
+            if ($item) {
+                $parent_id = $item['Parent_Message_ID'] ?: $item['Message_ID'];
+                if (!isset($nc_search_shown_products[$parent_id])) {
+                    $nc_search_shown_products[$parent_id] = true;
+                    $nc_search_unique_count++;
+                    // Кэшируем родительский товар для RecordTemplate
+                    if ($item['Parent_Message_ID']) {
+                        $nc_search_product_cache[$meta['message_id']] = nc_netshop_item::by_id($meta['component_id'], $item['Parent_Message_ID']);
+                    } else {
+                        $nc_search_product_cache[$meta['message_id']] = $item;
+                    }
+                }
+            }
+        }
+    }
+}
+// Сбрасываем для использования в RecordTemplate
+$nc_search_shown_products = [];
+?>
+<?php if (($search_query && ($cc_settings['showBlock'] == 'on' && !$nc_search_unique_count) || $nc_search_unique_count) || $admin_mode) { ?>
+    <?php if ($cc_settings['blockTitle']) { ?>
+        <h3><?= $cc_settings['blockTitle']; ?> (<?= $nc_search_unique_count; ?>)</h3>
+    <?php } ?>
+    <?php if (!$nc_search_unique_count) { ?>
+        <p><?= NETCAT_MODULE_SEARCH_NO_RESULTS; ?></p>
+    <?php } ?>
+<?php } ?>
+<!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?php
+$item = null;
+if ($f_meta['component_id'] && $f_meta['message_id']) {
+    // Используем кэш из FormPrefix, если доступен
+    if (isset($nc_search_product_cache[$f_meta['message_id']])) {
+        $item = $nc_search_product_cache[$f_meta['message_id']];
+        $parent_id = $item['Parent_Message_ID'] ?: $item['Message_ID'];
+        // Проверяем, не показан ли уже этот товар
+        if (isset($nc_search_shown_products[$parent_id])) {
+            $item = null;
+        } else {
+            $nc_search_shown_products[$parent_id] = true;
+        }
+    }
+}
+
+if ($item):
+    $is_in_stock = $item['Checked'] && ($netshop->get_setting('IgnoreStockUnitsValue') || $item['StockUnits'] > 0);
+    $is_in_cart = $netshop->cart->has_item($item);
+    $is_in_compare_list = $netshop->goodslist_compare->check($item['Message_ID'], $item['Class_ID']);
+    $is_in_fav_list = $netshop->goodslist_favorite->check($item['Message_ID'], $item['Class_ID']);
+    $has_discount = (bool)$item['ItemDiscount'];
+
+    $compare_url = !$is_in_compare_list ?
+        $netshop->goodslist_compare->get_add_action_url($item['Message_ID'], $item['Class_ID']) :
+        $netshop->goodslist_compare->get_remove_action_url($item['Message_ID'], $item['Class_ID']);
+
+    $favorite_url = !$is_in_fav_list ?
+        $netshop->goodslist_favorite->get_add_action_url($item['Message_ID'], $item['Class_ID']) :
+        $netshop->goodslist_favorite->get_remove_action_url($item['Message_ID'], $item['Class_ID']);
+
+    $comment_count = $get_comment_count($item['Message_ID']);
+
+    // Настройки отображения
+    $show_rating = true;
+    $show_compare = true;
+    $show_favorite = true;
+
+    // Рейтинг
+    $has_rating = $item['RateCount'] && $item['RateTotal'];
+    $rating_value = $has_rating ? round($item['RateTotal'] / $item['RateCount'], 1) : 0;
+
+    // Варианты товара
+    $variants = $item['_Variants'];
+    $variants_count = $variants->count();
+    $show_variants = $variants_count > 1;
+
+    // Проверяем, различаются ли цены у вариантов
+    $has_price_range = !$item['Parent_Message_ID'] && $item['ItemPriceMin'] != $item['ItemPriceMax'];
+
+    // Галерея изображений для hover/swipe
+    $gallery_images = array();
+    $max_gallery_images = 5;
+
+    if ($item['Image']) {
+        $gallery_images[] = $item['Image'];
+    }
+
+    if ($item['Slider'] && $item['Slider']->count()) {
+        foreach ($item['Slider']->records as $slide) {
+            if (count($gallery_images) < $max_gallery_images) {
+                $gallery_images[] = $slide;
+            }
+        }
+    }
+
+    $ignore_stock = $netshop->get_setting('IgnoreStockUnitsValue');
+    if (count($gallery_images) < 2 && $variants_count > 1) {
+        foreach ($variants as $variant) {
+            if (!$variant['Parent_Message_ID']) continue;
+            $variant_available = $variant['Checked'] && ($ignore_stock || $variant['StockUnits'] > 0);
+            if (!$variant_available) continue;
+            if ($variant['Image'] && count($gallery_images) < $max_gallery_images) {
+                $img_path = (string)$variant['Image'];
+                $is_unique = true;
+                foreach ($gallery_images as $gi) {
+                    if ((string)$gi === $img_path) {
+                        $is_unique = false;
+                        break;
+                    }
+                }
+                if ($is_unique) {
+                    $gallery_images[] = $variant['Image'];
+                }
+            }
+        }
+    }
+    $has_gallery = count($gallery_images) > 1;
+?>
+
+<article class="item-card" itemscope itemtype="https://schema.org/Product">
+    <div class="item-card__media">
+        <a href="<?= $item['URL'] ?>" class="item-card__image-link" itemprop="url">
+            <div class="item-card__image<?= $has_gallery ? ' item-card__image--gallery' : '' ?>" data-gallery-count="<?= count($gallery_images) ?>">
+                <?php if ($has_gallery): ?>
+                    <div class="item-card__gallery">
+                        <?php foreach ($gallery_images as $gi_index => $gi): ?>
+                        <div class="item-card__gallery-slide<?= $gi_index === 0 ? ' is-active' : '' ?>" data-index="<?= $gi_index ?>">
+                            <?= $gi->as_img(array(
+                                'alt' => $item['Name'],
+                                'loading' => $gi_index === 0 ? 'eager' : 'lazy',
+                                'itemprop' => $gi_index === 0 ? 'image' : null
+                            )) ?>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="item-card__gallery-dots">
+                        <?php foreach ($gallery_images as $gi_index => $gi): ?>
+                        <span class="item-card__gallery-dot<?= $gi_index === 0 ? ' is-active' : '' ?>" data-index="<?= $gi_index ?>"></span>
+                        <?php endforeach; ?>
+                    </div>
+                <?php elseif ($item['Image']): ?>
+                    <?= $item['Image']->as_img(array(
+                        'alt' => $item['Name'],
+                        'loading' => 'lazy',
+                        'itemprop' => 'image'
+                    )) ?>
+                <?php endif; ?>
+            </div>
+        </a>
+
+        <?php if ($has_discount): ?>
+        <a href="<?= $item['URL'] ?>" class="item-card__badge item-card__badge--discount" aria-label="Скидка <?= $item['DiscountPercent'] ?>%">
+            <span class="item-card__badge-value">&minus;<?= $item['DiscountPercent'] ?>%</span>
+        </a>
+        <?php endif; ?>
+
+        <div class="item-card__actions">
+            <?php if ($show_compare): ?>
+            <a href="#"
+               class="item-card__action item-card__action--compare<?= $is_in_compare_list ? ' is-active' : '' ?>"
+               data-action="<?= $is_in_compare_list ? 'remove' : 'add' ?>"
+               data-item-id="<?= $item['Message_ID'] ?>"
+               data-class-id="<?= $item['Class_ID'] ?>"
+               onclick="nc_netshop_goodslist('compare', this.dataset.action, this.dataset.itemId, this.dataset.classId, this); return false;"
+               rel="nofollow"
+               aria-label="<?= $is_in_compare_list ? 'Убрать из сравнения' : 'Добавить в сравнение' ?>">
+                <span class="item-card__action-icon item-card__action-icon--compare"></span>
+            </a>
+            <?php endif; ?>
+            <?php if ($show_favorite): ?>
+            <a href="#"
+               class="item-card__action item-card__action--favorite<?= $is_in_fav_list ? ' is-active' : '' ?>"
+               data-action="<?= $is_in_fav_list ? 'remove' : 'add' ?>"
+               data-item-id="<?= $item['Message_ID'] ?>"
+               data-class-id="<?= $item['Class_ID'] ?>"
+               onclick="nc_netshop_goodslist('favorite', this.dataset.action, this.dataset.itemId, this.dataset.classId, this); return false;"
+               rel="nofollow"
+               aria-label="<?= $is_in_fav_list ? 'Убрать из избранного' : 'Добавить в избранное' ?>">
+                <span class="item-card__action-icon item-card__action-icon--favorite"></span>
+            </a>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="item-description-wrapper">
+        <div class="item-card__content">
+            <a href="<?= $item['URL'] ?>" class="item-card__title-link">
+                <h3 class="item-card__title tpl-text-default-paragraph" itemprop="name"><?= $item['Name'] ?></h3>
+            </a>
+
+            <?php if ($has_rating || $comment_count || $show_variants): ?>
+            <div class="item-card__meta tpl-text-alt">
+                <?php if ($has_rating): ?>
+                <span class="item-card__rating" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
+                    <span class="item-card__rating-star"></span>
+                    <span itemprop="ratingValue"><?= number_format($rating_value, 1, ',', '') ?></span>
+                    <meta itemprop="bestRating" content="5">
+                    <meta itemprop="ratingCount" content="<?= $item['RateCount'] ?>">
+                </span>
+                <?php endif; ?>
+                <?php if ($comment_count): ?>
+                <span class="item-card__reviews">
+                    <?= $comment_count ?>
+                    <?= $nc_core->lang->get_ru_numerical_inclination($comment_count, array('отзыв', 'отзыва', 'отзывов')) ?>
+                </span>
+                <?php endif; ?>
+                <?php if ($show_variants): ?>
+                <span class="item-card__variants">
+                    <?= $variants_count ?>
+                    <?= $nc_core->lang->get_ru_numerical_inclination($variants_count, array('вариант', 'варианта', 'вариантов')) ?>
+                </span>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+
+            <div class="item-card__price tpl-text-header5" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+                <meta itemprop="priceCurrency" content="<?= $netshop->get_currency_code() ?>">
+                <?php if ($has_price_range): ?>
+                    <span class="item-card__price-current" itemprop="price" content="<?= $item['ItemPriceMin'] ?>"><?= $item['ItemPriceFrom'] ?></span>
+                    <?php if ($item['ItemPriceMin'] != $item['OriginalPriceMin']): ?>
+                        <span class="item-card__price-old"><?= $item['OriginalPriceFrom'] ?></span>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <span class="item-card__price-current" itemprop="price" content="<?= $item['ItemPriceRaw'] ?>"><?= $item['ItemPriceF'] ?></span>
+                    <?php if ($has_discount): ?>
+                        <span class="item-card__price-old"><?= $item['OriginalPriceF'] ?></span>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <link itemprop="availability" href="https://schema.org/<?= $is_in_stock ? 'InStock' : 'OutOfStock' ?>">
+            </div>
+        </div>
+
+        <div class="item-card__footer">
+            <?php if ($is_in_stock): ?>
+                <?php if ($is_in_cart): ?>
+                    <a href="<?= nc_folder_path($current_catalogue['Netshop_Cart_Sub_ID']) ?>" class="item-card__cart-btn tpl-button-secondary is-in-cart">В корзине</a>
+                <?php else: ?>
+                    <form action="<?= $netshop->get_add_to_cart_url() ?>" method="post" class="item-card__cart-form">
+                        <input type="hidden" name="redirect_url" value="<?= $_SERVER["REQUEST_URI"] ?>">
+                        <input type="hidden" name="cart_mode" value="add">
+                        <input type="hidden" name="items[]" value="<?= $item['_ItemKey'] ?>">
+                        <input type="hidden" name="qty" value="1">
+                        <button type="submit" class="item-card__cart-btn tpl-button-primary" onclick="return nc_netshop_cart(this)">В корзину</button>
+                    </form>
+                <?php endif; ?>
+            <?php elseif ($item['_Children']->where('StockUnits', 0, '>')->count()): ?>
+                <form action="<?= $item['URL'] ?>" method="get" class="item-card__cart-form">
+                    <button type="submit" class="item-card__cart-btn tpl-button-primary">Выбрать</button>
+                </form>
+            <?php else: ?>
+                <button type="button" class="item-card__cart-btn tpl-button-secondary" disabled>Нет в наличии</button>
+            <?php endif; ?>
+        </div>
+    </div>
+</article>
+<?php endif; ?><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><?php if ($nc_search_unique_count > $recNum): ?>
+    <?= nc_browse_messages($cc_env, 10); ?>
+<?php endif; ?>
+<script>
+(function() {
+    // Галерея при наведении
+    document.querySelectorAll('.item-card__image--gallery').forEach(function(container) {
+        var slides = container.querySelectorAll('.item-card__gallery-slide');
+        var dots = container.querySelectorAll('.item-card__gallery-dot');
+        var count = slides.length;
+        if (count < 2) return;
+
+        var currentIndex = 0;
+        var isSwiping = false;
+        var startX = 0;
+
+        function showSlide(index) {
+            if (index < 0) index = count - 1;
+            if (index >= count) index = 0;
+            currentIndex = index;
+            slides.forEach(function(s, i) { s.classList.toggle('is-active', i === index); });
+            dots.forEach(function(d, i) { d.classList.toggle('is-active', i === index); });
+        }
+
+        // Mouse hover для desktop
+        container.addEventListener('mousemove', function(e) {
+            if (isSwiping) return;
+            var rect = container.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var segment = rect.width / count;
+            var index = Math.floor(x / segment);
+            showSlide(index);
+        });
+
+        // Touch swipe для mobile
+        container.addEventListener('touchstart', function(e) {
+            isSwiping = true;
+            container.classList.add('is-swiping');
+            startX = e.touches[0].clientX;
+        }, {passive: true});
+
+        container.addEventListener('touchmove', function(e) {
+            if (!isSwiping) return;
+            var diff = startX - e.touches[0].clientX;
+            if (Math.abs(diff) > 30) {
+                showSlide(currentIndex + (diff > 0 ? 1 : -1));
+                startX = e.touches[0].clientX;
+            }
+        }, {passive: true});
+
+        container.addEventListener('touchend', function() {
+            isSwiping = false;
+            container.classList.remove('is-swiping');
+        });
+
+        // Клик по точкам
+        dots.forEach(function(dot, i) {
+            dot.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                showSlide(i);
+            });
+        });
+    });
+})();
+</script>
+<!-- /FormSuffix -->

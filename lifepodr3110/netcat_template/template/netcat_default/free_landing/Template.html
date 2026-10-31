@@ -1,0 +1,83 @@
+<!-- Header --><!DOCTYPE html>
+<html lang="<?= $current_sub['Language']; ?>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <?= $nc_core->page->get_metatags(); ?>
+    <title><?= $nc_core->page->get_title(); ?></title>
+    <?php if ($nc_core->admin_mode) { echo nc_js(); } ?>
+<?php
+
+// CSS reset и отмена ограничений mixins
+$mixin_override_css = <<<'CSS'
+/* Free Landing: CSS reset */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Free Landing: отмена ограничений mixins */
+.tpl-area-main-list > * {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+.tpl-area-main-list {
+    display: block !important;
+}
+
+/* Free Landing: выравнивание стандартных блоков CMS (добавленных вручную) */
+/* Применяется к обёрткам инфоблоков, НЕ содержащим и не являющимся AI-сгенерированными FL-секциями */
+.tpl-area-main-list > *:not(:has([class*="fl-"])) {
+    max-width: var(--fl-max-width, 1200px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Free Landing: стили для CMS-контейнеров (секции-контейнеры из AI) */
+/* Контейнер заменяет <div class="fl-container"> из AI-разметки, который теряется при парсинге */
+.tpl-area-main-list > .tpl-container {
+    padding: 4rem 1rem;
+}
+.tpl-area-main-list > .tpl-container > .tpl-block-list {
+    max-width: var(--fl-max-width, 1200px);
+    margin: 0 auto;
+}
+
+/* Free Landing: fallback стили для изображений (если классы потеряны при трансформации) */
+.testimonial-header img {
+    max-width: 120px;
+    height: auto;
+    object-fit: contain;
+}
+.testimonial-author img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--fl-bg-alt, #f9fafb);
+}
+.hero-image img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+}
+CSS;
+
+// Добавляем CSS через add_styles(), чтобы они выводились ПОСЛЕ mixins.css и components.css
+// Это гарантирует, что AI-сгенерированные стили будут иметь приоритет
+$nc_core->page->add_styles($mixin_override_css);
+if (!empty($template_settings["css"])) {
+    $nc_core->page->add_styles($template_settings["css"]);
+}
+?>
+</head>
+<body>
+<div class="tpl-block-list tpl-area-main-list"><!-- /Header -->
+
+<!-- Footer --></div>
+</body>
+</html><!-- /Footer -->

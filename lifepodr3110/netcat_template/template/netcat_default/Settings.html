@@ -1,0 +1,17 @@
+<?php
+
+// Навигация по страницам
+$browse_msg = array();
+$browse_msg['prefix'] = "<nav class='pagination'>";
+$browse_msg['first'] = "<a class='pagination-item pagination-control pagination-control-first' href='%URL' title='в начало'>⟸</a>"; // если есть ссылка на первую
+$browse_msg['first_none'] = ""; // если нет ссылки на первую
+$browse_msg['prev'] = "<a class='pagination-item pagination-control pagination-control-prev' href='%URL' title='предыдущая страница'>⟵</a>";  // если есть ссылка Назад
+$browse_msg['prev_none'] = "";  // если нет ссылки Назад
+$browse_msg['active'] = "<a class='pagination-item pagination-page active' href='%URL' title='текущая страница %PAGE'>%PAGE</a>";
+$browse_msg['unactive'] = "<a class='pagination-item pagination-page' href='%URL' title='страница %PAGE'>%PAGE</a>";
+$browse_msg['divider'] = "";
+$browse_msg['next'] = "<a class='pagination-item pagination-control pagination-control-next' href='%URL' title='следующая страница'>⟶</a>";  // если есть ссылка Вперед
+$browse_msg['next_none']  = "";  // если нет ссылки Вперед
+$browse_msg['last'] = "<a class='pagination-item pagination-control pagination-control-last' href='%URL' title='в конец'>⟹</a>"; // если есть ссылка на последнюю
+$browse_msg['last_none'] = ""; // если нет ссылки на последнюю
+$browse_msg['suffix'] = "</nav>";

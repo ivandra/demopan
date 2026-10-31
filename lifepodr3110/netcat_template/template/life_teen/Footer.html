@@ -1,0 +1,111 @@
+<footer class="footer">
+    <div class="wrap">
+        <div class="footer__col footer__col--logo">
+            <a class="footer__logo" href="/">
+                <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/logo2.svg" />
+            </a>
+            <p class="footer__description"> Проект о том, как проходить подростковый возраст и оставаться в контакте с собой и близкими. </p>
+        </div>
+        <div class="footer__col">
+            <h4 class="footer__col-title">Навигация</h4>
+            <ul class="footer__list">
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/o-nas/">О проекте</a>
+                </li>
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/podrostkam/trevoga-i-perezhivaniya/">Подросткам</a>
+                </li>
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/blog/?category=parents">Родителям</a>
+                </li>
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/blog/?category=specialists">Специалистам</a>
+                </li>
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/blog/">Блог</a>
+                </li>
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/kontakty/">Контакты</a>
+                </li>
+            </ul>
+        </div>
+        <div class="footer__col">
+            <h4 class="footer__col-title">Подросткам</h4>
+            <ul class="footer__list">
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/blog/">Статьи</a>
+                </li>
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/#quiz">Тесты</a>
+                </li>
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/#video">Вебинары</a>
+                </li>
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/kontakty/">Поддержка</a>
+                </li>
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/o-nas/voprosy-i-otvety/">Вопросы и ответы</a>
+                </li>
+            </ul>
+        </div>
+        <div class="footer__col">
+            <h4 class="footer__col-title">Родителям</h4>
+            <ul class="footer__list">
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/blog/?category=parents">Советы психологов</a>
+                </li>
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/#quiz">Тесты</a>
+                </li>
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/#video">Вебинары</a>
+                </li>
+                <li class="footer__list-item">
+                    <a class="footer__link" href="/blog/">Полезные материалы</a>
+                </li>
+            </ul>
+        </div>
+        <div class="footer__col footer__col--contacts">
+            <h4 class="footer__col-title">Контакты</h4>
+            <p class="footer__contact-item">
+                <?= htmlspecialchars(shortcode('[email]'),ENT_QUOTES,'UTF-8') ?>
+            </p>
+            <p class="footer__contact-item">
+                <?= htmlspecialchars(shortcode('[phone]'),ENT_QUOTES,'UTF-8') ?>
+            </p>
+            <p class="footer__contact-item">
+                <?= htmlspecialchars(shortcode('[city]'),ENT_QUOTES,'UTF-8') ?>
+            </p>
+            <div class="footer__socials">
+                <a class="footer__social-link" href="<?= htmlspecialchars(shortcode('[instagram]'),ENT_QUOTES,'UTF-8') ?>">
+                    <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/social1.png" />
+                </a>
+                <a class="footer__social-link" href="<?= htmlspecialchars(shortcode('[vk]'),ENT_QUOTES,'UTF-8') ?>">
+                    <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/social2.png" />
+                </a>
+                <a class="footer__social-link" href="<?= htmlspecialchars(shortcode('[telegram]'),ENT_QUOTES,'UTF-8') ?>">
+                    <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/social3.png" />
+                </a>
+                <a class="footer__social-link" href="<?= htmlspecialchars(shortcode('[youtube]'),ENT_QUOTES,'UTF-8') ?>">
+                    <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/social4.png" />
+                </a>
+            </div>
+        </div>
+        <p class="footer__copy">©
+            <?= date('Y') ?> Жизнь подростка. Все права защищены.
+        </p>
+    </div>
+</footer>
+<?php if ((int) $sub !== (int) $current_catalogue["Title_Sub_ID"]) {
+    echo project_shared_block("life_popup");
+} ?>
+<script src="/netcat_template/template/life_teen/js/jquery.min.js"></script>
+<script src="/netcat_template/template/life_teen/js/swiper-bundle.min.js"></script>
+<script src="/netcat_template/template/life_teen/js/jquery.fancybox.min.js"></script>
+<script src="/netcat_template/template/life_teen/js/jquery-ui.min.js"></script>
+<script src="/netcat_template/template/life_teen/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/netcat_template/template/life_teen/js/common.js"></script>
+<script src="/netcat_template/template/life_teen/js/forms.js"></script>
+</body>
+</html>

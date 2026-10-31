@@ -1,0 +1,30 @@
+<?php
+return array (
+  'sql' => 'CREATE TABLE `User` (
+  `User_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Password` varchar(255) NOT NULL DEFAULT \'\',
+  `PermissionGroup_ID` int(11) NOT NULL,
+  `Checked` tinyint(4) NOT NULL DEFAULT \'0\',
+  `Language` varchar(255) NOT NULL DEFAULT \'Russian\',
+  `Created` datetime NOT NULL DEFAULT \'0000-00-00 00:00:00\',
+  `LastUpdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Confirmed` tinyint(4) NOT NULL DEFAULT \'0\',
+  `RegistrationCode` varchar(255) NOT NULL DEFAULT \'\',
+  `Keyword` varchar(255) DEFAULT NULL,
+  `Catalogue_ID` int(11) NOT NULL DEFAULT \'0\',
+  `InsideAdminAccess` tinyint(4) NOT NULL DEFAULT \'0\',
+  `Auth_Hash` text,
+  `UserType` enum(\'normal\',\'pseudo\',\'vk\',\'fb\',\'twitter\',\'openid\',\'oauth\') NOT NULL DEFAULT \'normal\',
+  `Email` char(255) NOT NULL,
+  `Name` varchar(255) DEFAULT NULL,
+  `ncAttemptAuth` int(11) DEFAULT \'0\',
+  `ncBlockedPermanently` tinyint(1) DEFAULT NULL,
+  `ncBlockedTimestamp` int(10) unsigned DEFAULT \'0\',
+  `ncOtpSecret` varchar(255) DEFAULT \'\',
+  `Account` int(11) DEFAULT NULL,
+  PRIMARY KEY (`User_ID`),
+  KEY `PermissionGroup_ID` (`PermissionGroup_ID`),
+  KEY `Checked` (`Checked`),
+  KEY `Confirmed` (`Confirmed`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8',
+);

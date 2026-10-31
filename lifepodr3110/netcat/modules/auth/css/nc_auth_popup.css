@@ -1,0 +1,924 @@
+/**
+ * NcAuthPopup - Стили для попапа авторизации
+ *
+ * Поддержка миксинов:
+ * - Попап получает классы tpl-block-XXX для применения слотов миксинов
+ * - CSS-переменные наследуются из палитры сайта
+ * - Миксины text, buttons, form_fields применяются через соответствующие селекторы
+ */
+
+/* CSS-переменные для попапа (можно переопределить через миксины) */
+/* Используем :where() для низкой специфичности, позволяя палитре переопределять */
+:where(.nc-auth-popup) {
+    --nc-auth-popup-bg: #fff;
+    --nc-auth-popup-text: #1a1a1a;
+    --nc-auth-popup-text-muted: #666;
+    --nc-auth-popup-brand: #2563eb;
+    --nc-auth-popup-brand-hover: #1d4ed8;
+    --nc-auth-popup-border: #ddd;
+    --nc-auth-popup-radius: 16px;
+    --nc-auth-popup-radius-small: 8px;
+    --nc-auth-popup-error: #dc2626;
+    --nc-auth-popup-success: #22c55e;
+    --nc-auth-popup-padding: 40px 32px;
+}
+
+/* Переопределение из палитры сайта (наследуется от body.tpl-body-site-X) */
+.nc-auth-popup[class*="tpl-body-site-"] {
+    --nc-auth-popup-bg: var(--tpl-color-background-main);
+    --nc-auth-popup-text: var(--tpl-color-foreground-main);
+    --nc-auth-popup-text-muted: var(--tpl-color-foreground-accent);
+    --nc-auth-popup-brand: var(--tpl-color-brand);
+    --nc-auth-popup-brand-hover: var(--tpl-color-brand-dark);
+    --nc-auth-popup-border: var(--tpl-color-background-accent);
+}
+
+/* Переопределение из миксинов блока (переменные определяются на контейнере через слот full_popup) */
+/* ВАЖНО: запасное значение НЕ должно ссылаться на саму переменную (--x: var(--y, var(--x))).
+   Такая самоссылка — цикл в графе зависимостей: по спецификации ребро добавляется и из
+   fallback'а, поэтому свойство становится invalid at computed-value time даже когда --y
+   определена. Chrome короткозамыкает неиспользованный fallback и цикла не видит, Safari —
+   видит, и тогда `background: var(--nc-auth-popup-bg)` схлопывается в transparent:
+   окно авторизации становится прозрачным, сквозь него виден hero. Только литералы. */
+.nc-auth-popup__container {
+    --nc-auth-popup-bg: var(--tpl-color-background-main, #fff);
+    --nc-auth-popup-text: var(--tpl-color-foreground-main, #1a1a1a);
+    --nc-auth-popup-text-muted: var(--tpl-color-foreground-accent, #666);
+    --nc-auth-popup-brand: var(--tpl-color-brand, #2563eb);
+    --nc-auth-popup-brand-hover: var(--tpl-color-brand-dark, #1d4ed8);
+    --nc-auth-popup-border: var(--tpl-color-background-accent, #ddd);
+}
+
+/* Предотвращение прокрутки при открытом попапе */
+body.nc-auth-popup-open {
+    overflow: hidden;
+}
+
+/* Overlay */
+.nc-auth-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: var(--nc-auth-popup-text);
+}
+
+.nc-auth-popup.active {
+    display: flex;
+}
+
+/* Контейнер попапа */
+.nc-auth-popup__container {
+    /* Литерал в fallback — страховка: непрозрачность окна не должна зависеть от того,
+       доехала ли переменная палитры. */
+    background: var(--nc-auth-popup-bg, #fff);
+    border-radius: var(--nc-auth-popup-radius);
+    width: 100%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: ncAuthSlideIn 0.3s ease;
+    padding: var(--nc-auth-popup-padding);
+}
+
+@keyframes ncAuthSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Кнопка закрытия - защищена от переопределения миксинами buttons */
+.nc-auth-popup__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    border: none;
+    background: var(--nc-auth-popup-border, #f5f5f5);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    color: var(--nc-auth-popup-text-muted);
+    transition: background 0.2s, color 0.2s;
+    z-index: 10;
+    font-size: 16px; /* Базовый размер для SVG */
+    line-height: 1;
+    text-decoration: none;
+    border-style: none;
+    box-sizing: border-box;
+}
+
+.nc-auth-popup__close svg {
+    width: 16px;
+    min-width: 16px;
+    height: 16px;
+    min-height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    flex-shrink: 0;
+}
+
+.nc-auth-popup__close:hover {
+    background: var(--nc-auth-popup-text-muted);
+    color: var(--nc-auth-popup-bg);
+    text-decoration: none;
+}
+
+/* Повышенная специфичность для защиты от миксинов buttons блока
+   Миксины используют: .tpl-block-full-XXX .nc-auth-popup__container button (специфичность 0,3,1)
+   Наш селектор должен быть выше */
+.nc-auth-popup .nc-auth-popup__container button.nc-auth-popup__close,
+.nc-auth-popup .nc-auth-popup__container button.nc-auth-popup__close:hover,
+.nc-auth-popup .nc-auth-popup__container button.nc-auth-popup__close:focus,
+[class*="tpl-block-"] .nc-auth-popup__container button.nc-auth-popup__close {
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-width: 0;
+    border-style: none;
+    border-radius: 50%;
+    background: var(--nc-auth-popup-border, #f5f5f5);
+    color: var(--nc-auth-popup-text-muted);
+    font-size: 16px;
+    line-height: 1;
+    text-decoration: none;
+    box-shadow: none;
+}
+
+.nc-auth-popup .nc-auth-popup__container button.nc-auth-popup__close:hover,
+[class*="tpl-block-"] .nc-auth-popup__container button.nc-auth-popup__close:hover {
+    background: var(--nc-auth-popup-text-muted);
+    color: var(--nc-auth-popup-bg);
+    text-decoration: none;
+}
+
+.nc-auth-popup .nc-auth-popup__container .nc-auth-popup__close svg,
+[class*="tpl-block-"] .nc-auth-popup__container .nc-auth-popup__close svg {
+    width: 16px;
+    min-width: 16px;
+    height: 16px;
+    min-height: 16px;
+    display: block;
+    flex-shrink: 0;
+}
+
+/* Контент попапа: padding перенесён на __container для работы миксинов */
+
+/* Заголовок */
+.nc-auth-popup__title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: var(--nc-auth-popup-text);
+}
+
+.nc-auth-popup__subtitle {
+    font-size: 14px;
+    color: var(--nc-auth-popup-text-muted);
+    margin: 0 0 24px;
+}
+
+.nc-auth-email-display {
+    font-weight: 500;
+    color: var(--nc-auth-popup-text);
+}
+
+/* Экраны */
+.nc-auth-screen {
+    display: none;
+}
+
+.nc-auth-screen.active {
+    display: block;
+}
+
+/* Формы */
+.nc-auth-form {
+    margin: 0;
+}
+
+/* Группа полей */
+.nc-auth-field {
+    margin-bottom: 16px;
+}
+
+.nc-auth-field__label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: var(--nc-auth-popup-text);
+}
+
+.nc-auth-field__input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    border: 1px solid var(--nc-auth-popup-border);
+    border-radius: var(--nc-auth-popup-radius-small);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+    background: var(--nc-auth-popup-bg);
+    color: var(--nc-auth-popup-text);
+}
+
+.nc-auth-field__input:focus {
+    outline: none;
+    border-color: var(--nc-auth-popup-brand);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.nc-auth-field__input::placeholder {
+    color: var(--nc-auth-popup-text-muted);
+}
+
+/* Обёртка для поля пароля с кнопкой показа */
+.nc-auth-field__password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.nc-auth-field__password-wrapper .nc-auth-field__input {
+    padding-right: 44px;
+}
+
+.nc-auth-field__toggle-password {
+    position: absolute;
+    right: 4px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.nc-auth-field__toggle-password:hover {
+    color: #333;
+}
+
+.nc-auth-field__toggle-password::before {
+    content: 'Aa';
+}
+
+.nc-auth-field__toggle-password.is-visible::before {
+    content: '••';
+    letter-spacing: 1px;
+}
+
+/* Ошибки */
+.nc-auth-error {
+    display: none;
+    font-size: 13px;
+    color: var(--nc-auth-popup-error);
+    margin-top: 6px;
+}
+
+/* Кнопки */
+.nc-auth-btn {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: var(--nc-auth-popup-radius-small);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.nc-auth-btn:active {
+    transform: scale(0.98);
+}
+
+.nc-auth-btn--primary {
+    background: var(--nc-auth-popup-brand);
+    color: var(--nc-auth-popup-bg);
+}
+
+.nc-auth-btn--primary:hover {
+    background: var(--nc-auth-popup-brand-hover);
+}
+
+.nc-auth-btn--primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.nc-auth-btn--secondary {
+    background: var(--nc-auth-popup-border, #f5f5f5);
+    color: var(--nc-auth-popup-text);
+}
+
+.nc-auth-btn--secondary:hover {
+    background: var(--nc-auth-popup-text-muted);
+    color: var(--nc-auth-popup-bg);
+}
+
+.nc-auth-btn--link {
+    background: none;
+    padding: 8px 0;
+    color: var(--nc-auth-popup-brand);
+    font-size: 14px;
+}
+
+.nc-auth-btn--link:hover {
+    color: var(--nc-auth-popup-brand-hover);
+    text-decoration: underline;
+}
+
+/* Ввод кода */
+.nc-auth-code-inputs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 24px 0;
+}
+
+.nc-auth-code-input {
+    width: 48px;
+    height: 56px;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    border: 2px solid var(--nc-auth-popup-border);
+    border-radius: var(--nc-auth-popup-radius-small);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: var(--nc-auth-popup-bg);
+    color: var(--nc-auth-popup-text);
+}
+
+.nc-auth-code-input:focus {
+    outline: none;
+    border-color: var(--nc-auth-popup-brand);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Повторная отправка */
+.nc-auth-resend {
+    text-align: center;
+    margin-top: 16px;
+}
+
+.nc-auth-resend a {
+    color: var(--nc-auth-popup-brand);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nc-auth-resend a:hover {
+    text-decoration: underline;
+}
+
+.nc-auth-resend a.disabled {
+    color: var(--nc-auth-popup-text-muted);
+    pointer-events: none;
+}
+
+/* Попытки */
+.nc-auth-attempts-left {
+    display: none;
+    text-align: center;
+    font-size: 13px;
+    color: var(--nc-auth-popup-error);
+    margin-top: 8px;
+}
+
+/* Разделитель */
+.nc-auth-divider {
+    display: flex;
+    align-items: center;
+    margin: 24px 0;
+    color: var(--nc-auth-popup-text-muted);
+    font-size: 13px;
+}
+
+.nc-auth-divider::before,
+.nc-auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--nc-auth-popup-border);
+}
+
+.nc-auth-divider span {
+    padding: 0 16px;
+}
+
+/* OAuth кнопки */
+.nc-auth-oauth {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.nc-auth-oauth__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.nc-auth-oauth__btn:hover {
+    border-color: #bbb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nc-auth-oauth__btn svg,
+.nc-auth-oauth__btn img {
+    width: 24px;
+    height: 24px;
+}
+
+/* Чекбокс */
+.nc-auth-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.nc-auth-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.nc-auth-checkbox label {
+    font-size: 14px;
+    color: var(--nc-auth-popup-text-muted);
+    line-height: 1.4;
+}
+
+.nc-auth-checkbox label a {
+    color: var(--nc-auth-popup-brand);
+}
+
+/* Блок согласия (настраиваемый через $cc_settings) */
+.nc-auth-consent {
+    margin: 16px 0;
+}
+
+.nc-auth-consent__label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--nc-auth-popup-text-muted);
+}
+
+.nc-auth-consent__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.nc-auth-consent__checkmark {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--nc-auth-popup-border);
+    border-radius: 4px;
+    background: var(--nc-auth-popup-bg);
+    position: relative;
+    transition: all 0.2s;
+}
+
+.nc-auth-consent__input:checked + .nc-auth-consent__checkmark {
+    background: var(--nc-auth-popup-brand);
+    border-color: var(--nc-auth-popup-brand);
+}
+
+.nc-auth-consent__checkmark::after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--nc-auth-popup-bg);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.nc-auth-consent__input:checked + .nc-auth-consent__checkmark::after {
+    display: block;
+}
+
+.nc-auth-consent__label:hover .nc-auth-consent__checkmark {
+    border-color: var(--nc-auth-popup-brand);
+}
+
+.nc-auth-consent__text {
+    flex: 1;
+}
+
+.nc-auth-consent__text a {
+    color: var(--nc-auth-popup-brand);
+    text-decoration: none;
+}
+
+.nc-auth-consent__text a:hover {
+    text-decoration: underline;
+}
+
+/* Кнопка назад */
+.nc-auth-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--nc-auth-popup-text-muted);
+    font-size: 14px;
+    text-decoration: none;
+    margin-bottom: 16px;
+}
+
+.nc-auth-back:hover {
+    color: var(--nc-auth-popup-text);
+}
+
+.nc-auth-back::before {
+    content: '\2190';
+}
+
+/* Экран успеха */
+.nc-auth-success {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.nc-auth-success__icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    background: var(--nc-auth-popup-success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--nc-auth-popup-bg);
+    font-size: 32px;
+}
+
+.nc-auth-success__title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--nc-auth-popup-text);
+    margin: 0 0 8px;
+}
+
+.nc-auth-success__message {
+    font-size: 14px;
+    color: var(--nc-auth-popup-text-muted);
+    margin: 0;
+}
+
+/* Состояние загрузки */
+.nc-auth-popup.loading .nc-auth-btn--primary::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    border: 2px solid #fff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: ncAuthSpin 0.8s linear infinite;
+}
+
+@keyframes ncAuthSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Ссылки внутри форм */
+.nc-auth-link {
+    color: var(--nc-auth-popup-brand);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nc-auth-link:hover {
+    text-decoration: underline;
+}
+
+/* Блок ссылок под формой */
+.nc-auth-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 16px;
+    text-align: center;
+}
+
+/* Дополнительные действия */
+.nc-auth-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.nc-auth-actions .nc-auth-btn {
+    flex: 1;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 480px) {
+    .nc-auth-popup {
+        padding: 0;
+        align-items: flex-end;
+    }
+
+    .nc-auth-popup__container {
+        max-width: 100%;
+        border-radius: 16px 16px 0 0;
+        max-height: 95vh;
+    }
+
+    .nc-auth-popup__container {
+        padding: 32px 20px 40px;
+    }
+
+    .nc-auth-code-input {
+        width: 44px;
+        height: 52px;
+        font-size: 20px;
+    }
+}
+
+/* Темная тема (опционально) */
+@media (prefers-color-scheme: dark) {
+    .nc-auth-popup--auto-theme .nc-auth-popup__container {
+        background: #1a1a1a;
+    }
+
+    .nc-auth-popup--auto-theme .nc-auth-popup__title,
+    .nc-auth-popup--auto-theme .nc-auth-field__label {
+        color: #fff;
+    }
+
+    .nc-auth-popup--auto-theme .nc-auth-popup__subtitle {
+        color: #999;
+    }
+
+    .nc-auth-popup--auto-theme .nc-auth-field__input {
+        background: #2a2a2a;
+        border-color: #444;
+        color: #fff;
+    }
+
+    .nc-auth-popup--auto-theme .nc-auth-code-input {
+        background: #2a2a2a;
+        border-color: #444;
+        color: #fff;
+    }
+
+    .nc-auth-popup--auto-theme .nc-auth-popup__close {
+        background: #333;
+        color: #ccc;
+    }
+
+    .nc-auth-popup--auto-theme .nc-auth-oauth__btn {
+        background: #2a2a2a;
+        border-color: #444;
+    }
+}
+
+/* Динамические поля регистрации */
+#nc-auth-register-fields {
+    margin-bottom: 16px;
+}
+
+#nc-auth-register-fields .nc-auth-field {
+    margin-bottom: 16px;
+}
+
+/* Маркер обязательного поля */
+.nc-auth-required {
+    color: var(--nc-auth-popup-error);
+    font-weight: 500;
+}
+
+/* Textarea в форме */
+.nc-auth-field__textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* Select в форме */
+.nc-auth-field__select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+.nc-auth-field__select[multiple] {
+    background-image: none;
+    padding-right: 16px;
+    min-height: 80px;
+}
+
+/* Блок согласия */
+.nc-auth-agreement-block {
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--nc-auth-popup-border);
+}
+
+/* ============================================
+   OAuth кнопки
+   ============================================ */
+
+.nc-auth-oauth {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nc-auth-oauth-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid var(--nc-auth-popup-border);
+    border-radius: var(--nc-auth-popup-radius-small);
+    background: var(--nc-auth-popup-bg);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--nc-auth-popup-text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.nc-auth-oauth-btn:hover {
+    background: var(--nc-auth-popup-border);
+}
+
+.nc-auth-oauth-btn:active {
+    transform: scale(0.98);
+}
+
+.nc-auth-oauth-btn__icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nc-auth-oauth-btn__icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Яндекс */
+.nc-auth-oauth-btn--yandex {
+    border-color: #fc3f1d;
+    color: #fc3f1d;
+}
+
+.nc-auth-oauth-btn--yandex:hover {
+    background: #fff5f3;
+    border-color: #fc3f1d;
+}
+
+/* VK ID */
+.nc-auth-oauth-btn--vkid {
+    border-color: #0077ff;
+    color: #0077ff;
+}
+
+.nc-auth-oauth-btn--vkid:hover {
+    background: #f0f7ff;
+    border-color: #0077ff;
+}
+
+/* Google */
+.nc-auth-oauth-btn--google {
+    border-color: #ddd;
+    color: #333;
+}
+
+.nc-auth-oauth-btn--google:hover {
+    background: #f8f8f8;
+}
+
+/* Telegram */
+.nc-auth-oauth-btn--telegram {
+    border-color: #0088cc;
+    color: #0088cc;
+}
+
+.nc-auth-oauth-btn--telegram:hover {
+    background: #f0f8ff;
+    border-color: #0088cc;
+}
+
+/* ===== Капча ===== */
+.nc-auth-captcha-slot:empty {
+    display: none;
+}
+
+.nc-auth-captcha {
+    margin: 16px 0 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+}
+
+.nc-auth-captcha__widget {
+    display: block;
+    width: 100%;
+    min-height: 0;
+}
+
+/* Сторонние виджеты (SmartCaptcha / reCAPTCHA) тянем на всю ширину формы,
+   выравнивая по левому краю, как остальные поля */
+.nc-auth-captcha__widget .smart-captcha {
+    width: 100% !important;
+    max-width: 100%;
+    margin: 0;
+}
+
+.nc-auth-captcha__widget .smart-captcha iframe,
+.nc-auth-captcha__widget .g-recaptcha iframe {
+    width: 100% !important;
+}
+
+.nc-auth-captcha__widget .g-recaptcha {
+    margin: 0;
+}
+
+/* Капча-картинка (встроенная) и кнопки обновления/аудио */
+.nc-auth-captcha__widget img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--nc-auth-popup-radius-small);
+    border: 1px solid var(--nc-auth-popup-border);
+}
+
+/* Поле ввода символов для встроенной капчи: разрядка — для введённого кода,
+   не для текста плейсхолдера (тот заметно длиннее самого кода). */
+.nc-auth-captcha__input {
+    width: 100%;
+    letter-spacing: 0.15em;
+}
+.nc-auth-captcha__input::placeholder {
+    letter-spacing: normal;
+}

@@ -1,0 +1,49 @@
+<?php
+
+$template_settings = $nc_core->subdivision->get_template_settings($sub);
+$mobile_menu = [];
+$h_menu = [];
+
+$mobile_menu[0]["prefix"] = "<ul class='mobile-menu__list'>";
+$mobile_menu[0]["suffix"] = "</ul>";
+$mobile_menu[0]["active"] =
+    "<li class='mobile-menu__item'><a href='%URL' class='mobile-menu__link'>%NAME</a>%NEXT_LEVEL</li>";
+$mobile_menu[0]["unactive"] = $mobile_menu[0]["active"];
+
+$mobile_menu[1]["prefix"] = "<ul class='mobile-menu__sublist'>";
+$mobile_menu[1]["suffix"] = "</ul>";
+$mobile_menu[1]["active"] =
+    "<li class='mobile-menu__subitem'><a href='%URL' class='mobile-menu__sublink'>%NAME</a>%NEXT_LEVEL</li>";
+$mobile_menu[1]["unactive"] = $mobile_menu[1]["active"];
+
+$mobile_menu[2]["prefix"] = "<ul class='mobile-menu__subsublist'>";
+$mobile_menu[2]["suffix"] = "</ul>";
+$mobile_menu[2]["active"] =
+    "<li class='mobile-menu__subsubitem'><a href='%URL' class='mobile-menu__subsublink'>%NAME</a>%NEXT_LEVEL</li>";
+$mobile_menu[2]["unactive"] = $mobile_menu[2]["active"];
+
+$h_menu[0]["prefix"] = "<ul class='header__list'>";
+$h_menu[0]["suffix"] = "</ul>";
+$h_menu[0]["active"] =
+    "<li class='header__item'><a href='%URL' class='header__link'>%NAME</a>%NEXT_LEVEL</li>";
+$h_menu[0]["unactive"] = $h_menu[0]["active"];
+
+$h_menu[1]["prefix"] = "<ul class='header__sublist'>";
+$h_menu[1]["suffix"] = "</ul>";
+$h_menu[1]["active"] =
+    "<li class='header__subitem'><a href='%URL' class='header__sublink'>%NAME</a>%NEXT_LEVEL</li>";
+$h_menu[1]["unactive"] = $h_menu[1]["active"];
+
+$h_menu[2]["prefix"] = "<ul class='header__subsublist'>";
+$h_menu[2]["suffix"] = "</ul>";
+$h_menu[2]["active"] =
+    "<li class='header__subsubitem'><a href='%URL' class='header__subsublink'>%NAME</a>%NEXT_LEVEL</li>";
+$h_menu[2]["unactive"] = $h_menu[2]["active"];
+
+if (empty($_SESSION["life_form_nonce"])) {
+    $_SESSION["life_form_nonce"] = bin2hex(random_bytes(24));
+}
+if ((int) $sub === (int) $current_catalogue["E404_Sub_ID"]) {
+    nc_set_http_response_code(404);
+}
+?>

@@ -1,0 +1,178 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<div class="map-in-prefix">
+    <div class="map-container" style="--map-margin: <?= (int)nc_array_value($cc_settings, 'map_margin', 20) ?>px"></div>
+    <div class="big-popup">
+        <div class="popup-close">✖</div>
+        <div class="popup-container"></div>
+    </div>
+</div>
+<!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?php
+$phones = null;
+if ($f_Phones) {
+    $phones = explode(',', $f_Phones);
+    if (count($phones) > 0) {
+        foreach ($phones as $i => $phone) {
+            $phone = trim($phone);
+            $phones[$i] = '<a href="tel:' . nc_normalize_phone_number($phone) . '">' . $phone . '</a>';
+        }
+        $phones = implode('<span class="divider">,</span> ', $phones);
+    }
+}
+?>
+<div class="point" data-coordinates="<?= htmlspecialchars($f_Coordinates) ?>">
+    <?= $f_AdminButtons; ?>
+    <div class="name-and-address">
+        <div class="name tpl-text-header3"><?= $f_Name ?></div>
+        <div><?= $f_Address ?></div>
+    </div>
+    <div class="contacts">
+        <?php if ($f_WorkingTime): ?>
+            <div class="time"><?= $f_WorkingTime ?></div>
+        <?php endif; ?>
+        <?php if ($f_Phones): ?>
+            <div class="phone"><?= $phones ?></div>
+        <?php endif; ?>
+    </div>
+</div><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><div class="map-in-suffix">
+</div>
+<?php if ($totRows): ?>
+<?php $map_namespace = preg_replace("/\d/", "", nc_generate_random_string(6)); ?>
+<script type="text/javascript">
+(function () {
+    if (window.$) {
+        $(init);
+    } else {
+        document.addEventListener("DOMContentLoaded", init);
+    }
+
+    function init() {
+        const blockId = '<?= $nc_block_id ?>';
+        const mapPosition = '<?= $cc_settings['map_position'] ?>';
+        const apiKey = '<?= htmlspecialchars($cc_settings['yandex_map_api_key'] ?? '') ?>';
+        const scriptUrl = "https://api-maps.yandex.ru/2.1/?" + (apiKey ? "apikey=" + apiKey + "&" : "") + "lang=ru_RU&ns=<?= $map_namespace ?>";
+
+        let namespace;
+        const mapContainer = document.querySelector('#' + blockId + ' .map-container');
+        const bigPopup = document.querySelector('#' + blockId + ' .big-popup');
+        const bigPopupMaxWidth = 450;
+
+        if (bigPopup) {
+            bigPopup.querySelector('.popup-close').addEventListener('click', closeAllPopups);
+        }
+
+        // Перемещение карты в suffix если нужно
+        if (mapPosition === 'suffix') {
+            const suffix = document.querySelector('#' + blockId + ' .map-in-suffix');
+            if (suffix) {
+                suffix.append(mapContainer);
+                if (bigPopup) suffix.append(bigPopup);
+            }
+        }
+
+        loadScript(scriptUrl).then(() => {
+            namespace = <?= $map_namespace ?>;
+            namespace.ready(() => initMap());
+        });
+
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                if (typeof <?= $map_namespace ?> !== "undefined") {
+                    return resolve();
+                }
+                const script = document.createElement("script");
+                script.src = src;
+                script.onload = () => resolve();
+                script.onerror = () => reject(new Error("Failed to load script " + src));
+                document.body.appendChild(script);
+            });
+        }
+
+        function initMap() {
+            const yandexMap = new namespace.Map(mapContainer, {
+                center: [55.76, 37.64],
+                zoom: 10,
+                controls: ["zoomControl"]
+            });
+
+            // Подгонка высоты карты
+            const parentContainer = mapContainer.closest('.tpl-block-<?= $cc ?>');
+            if (parentContainer) {
+                function fillHeight() {
+                    const minHeight = parseInt(getComputedStyle(parentContainer).minHeight) || 400;
+                    mapContainer.style.height = Math.max(minHeight, parentContainer.offsetHeight) + 'px';
+                    yandexMap.container.fitToViewport();
+                }
+                fillHeight();
+                if (window.ResizeObserver) {
+                    new ResizeObserver(fillHeight).observe(parentContainer);
+                } else {
+                    window.addEventListener('resize', fillHeight);
+                }
+            }
+
+            // Собираем точки из DOM
+            const clusterer = new namespace.Clusterer();
+            const points = document.querySelectorAll('#' + blockId + ' .point');
+
+            points.forEach(el => {
+                const coordsStr = el.dataset.coordinates;
+                if (!coordsStr) return;
+
+                const [lat, lng] = coordsStr.split(/\s*,\s*/).map(Number);
+                if (isNaN(lat) || isNaN(lng)) return;
+
+                const popupHTML = el.innerHTML;
+
+                const placemark = new namespace.Placemark([lat, lng], {
+                    balloonContent: '<div class="popup-container point">' + popupHTML + '</div>'
+                }, {
+                    preset: 'islands#redDotIcon'
+                });
+
+                placemark.events.add('click', function(e) {
+                    // Для узких экранов показываем большой попап
+                    if (mapContainer.offsetWidth < bigPopupMaxWidth && bigPopup) {
+                        closeAllPopups();
+                        const popup = bigPopup.querySelector('.popup-container');
+                        popup.classList.add('point');
+                        popup.innerHTML = popupHTML.replace('tpl-text-header3', 'tpl-text-header1');
+                        bigPopup.style.display = 'block';
+                        e.preventDefault();
+                    }
+                });
+
+                clusterer.add(placemark);
+            });
+
+            yandexMap.geoObjects.add(clusterer);
+
+            // Автоматическое позиционирование
+            if (clusterer.getBounds()) {
+                yandexMap.setBounds(clusterer.getBounds(), { checkZoomRange: true }).then(() => {
+                    if (points.length === 1) {
+                        yandexMap.setZoom(15);
+                    }
+                });
+            }
+        }
+
+        function closeAllPopups() {
+            if (bigPopup) {
+                bigPopup.style.display = 'none';
+            }
+        }
+    }
+})();
+</script>
+
+<?php endif; ?>
+
+<?php if ($totRows > $recNum): ?>
+    <?= nc_browse_messages($cc_env, 10); ?>
+<?php endif; ?>
+
+<!-- /FormSuffix -->

@@ -1,0 +1,99 @@
+<?php
+
+/** @var string $list_selector */
+/** @var array $settings */
+
+// (1) Чтение настроек с поддержкой старых и новых имён
+
+$default_column_count = (int)nc_array_value($settings, 'column_number', 0) ?: 1;
+$min_column_count = (int)nc_array_value($settings, 'min_column_number', 0) ?: $default_column_count;
+$has_variable_column_count = $min_column_count && $default_column_count > 1 && $min_column_count !== $default_column_count;
+
+$column_width = nc_array_value($settings, 'column_width', '1fr');
+$horizontal_spacing = (int)nc_array_value($settings, 'horizontal_spacing', 0);
+$vertical_spacing = (int)nc_array_value($settings, 'vertical_spacing', 0);
+
+// align_self используется для обратной совместимости, маппинг flex-start/flex-end → start/end
+$align_items = nc_array_value($settings, 'align_self', 'stretch');
+$align_items = str_replace(['flex-start', 'flex-end'], ['start', 'end'], $align_items);
+$justify_items = nc_array_value($settings, 'justify_items', 'stretch');
+
+// (2) Формирование CSS-правил для Grid
+
+$column_count_var = '--tpl-mixin-layout-tiles-columns';
+$column_count_value = $has_variable_column_count ? "var($column_count_var)" : $default_column_count;
+
+$rules = [];
+if ($has_variable_column_count) {
+    $rules[] = "$column_count_var: $default_column_count";
+}
+$rules[] = 'display: grid';
+$rules[] = "grid-template-columns: repeat($column_count_value, $column_width)";
+
+// Gap
+if ($horizontal_spacing && $vertical_spacing && $horizontal_spacing === $vertical_spacing) {
+    $rules[] = "gap: {$horizontal_spacing}px";
+} else {
+    if ($horizontal_spacing) {
+        $rules[] = "column-gap: {$horizontal_spacing}px";
+    }
+    if ($vertical_spacing) {
+        $rules[] = "row-gap: {$vertical_spacing}px";
+    }
+}
+
+// Alignment
+if ($align_items && $align_items !== 'stretch') {
+    $rules[] = "align-items: $align_items";
+}
+if ($justify_items && $justify_items !== 'stretch') {
+    $rules[] = "justify-items: $justify_items";
+}
+
+$css = "{$list_selector}[data-object-count] {\n  " . implode(";\n  ", $rules) . ";\n}\n";
+
+// (3) Подбор количества колонок в зависимости от минимального их количества и количества объектов
+// (первые $tested_rows_count строк)
+
+if ($has_variable_column_count) {
+    $additional_rules = [];
+    $candidates = [];
+    $tested_rows_count = 3;
+
+    for ($object_count = 1; $object_count < $default_column_count * $tested_rows_count; $object_count++) {
+        if ($object_count < $default_column_count) {
+            $column_count = max($object_count, $min_column_count);
+        } else if ($object_count > $default_column_count) {
+            $column_count = $default_column_count;
+            $candidates = [];
+            for ($tested_column_count = max(2, $min_column_count); $tested_column_count <= $default_column_count; $tested_column_count++) {
+                $remainder = $object_count % $tested_column_count;
+                if ($remainder) {
+                    $remainder = $tested_column_count - $remainder;
+                }
+                $candidates[$remainder][] = (int)$tested_column_count;
+            }
+        } else {
+            continue;
+        }
+
+        if ($candidates) {
+            $best = min(array_keys($candidates));
+            $column_count = max($candidates[$best]);
+        }
+
+        if ($column_count !== $default_column_count) {
+            $additional_rules[$column_count][] = "&[data-object-count='$object_count']";
+        }
+    }
+
+    if ($additional_rules) {
+        $css .= "$list_selector {\n";
+        foreach ($additional_rules as $column_count => $selectors) {
+            $css .= implode(',', $selectors) . " { $column_count_var: $column_count; }\n";
+        }
+        $css .= "}\n";
+    }
+}
+
+return $css;

@@ -1,0 +1,49 @@
+        <?= $f_AdminButtons ?>
+        <div class="program__info">
+            <div class="program__header">
+                <p class="hero__label">СИСТЕМА СОПРОВОЖДЕНИЯ</p>
+                <h2 class="hero__title">
+                    <?= project_title($f_name) ?>
+                </h2>
+                <p class="hero__description">
+                    <?= shortcode_component((string)$f_text) ?>
+                </p>
+                <div class="program__benefits">
+                    <div class="program__benefit-item">
+                        <span class="program__benefit-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/program-icon1.svg" />
+                        </span>
+                        <span class="program__benefit-text">Практический опыт команды</span>
+                    </div>
+                    <div class="program__benefit-item">
+                        <span class="program__benefit-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/program-icon2.svg" />
+                        </span>
+                        <span class="program__benefit-text">Единая методология</span>
+                    </div>
+                    <div class="program__benefit-item">
+                        <span class="program__benefit-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/program-icon3.svg" />
+                        </span>
+                        <span class="program__benefit-text">Реальные результаты</span>
+                    </div>
+                </div>
+            </div>
+            <div class="program__image">
+                <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/program.png" />
+            </div>
+        </div>
+        <div class="program__features">
+            <div class="program__feature">
+                <h3 class="program__subtitle">Основные направления программы</h3>
+                <ul class="program__list">
+                    <?= shortcode_component((string)$f_directions) ?>
+                </ul>
+            </div>
+            <div class="program__feature">
+                <h3 class="program__subtitle">Что входит в сопровождение</h3>
+                <ul class="program__list">
+                    <?= shortcode_component((string)$f_support) ?>
+                </ul>
+            </div>
+        </div>

@@ -1,0 +1,74 @@
+<?= $f_AdminCommon; ?>
+
+<div class="contacts">
+	<div class="wrap">
+		<div class="contacts__content">
+			<div class="flex">
+				<div class="contacts__left">
+					<h3>Контакты и адрес клиники</h3>
+					<div class="contacts__phones">
+						Круглосуточно 24/7
+						<a href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone]'))?>"><?=shortcode('[phone]')?></a>
+						<a href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone2]'))?>"><?=shortcode('[phone2]')?></a>
+					</div>
+					<div class="contacts__adress">
+						Адрес клиники
+						<p><?=shortcode('[city]')?>, <?=shortcode('[address]')?></p>
+					</div>
+					<div class="contacts__mail">
+						Электронная почта
+						<a href="mailto:<?=$nc_core->widget->generate('regions', array('email'))?>"><?=$nc_core->widget->generate('regions', array('email'))?></a>
+					</div>
+					<div class="contacts__hours">
+						График работы
+						<p>24/7, без выходных</p>
+					</div>
+				</div>
+				<div class="contacts__right">
+					<h3>Реквизиты компании</h3>
+					<div class="contacts__item">
+						Полное наименование
+						<p>ООО "Центр медицины и психологии"</p>
+					</div>
+					<div class="contacts__item">
+						Юридический адрес
+						<p>283045, ДНР, г. Донецк, ул. Профессоров Богословских, д. 5А, офис 5/11</p>
+					</div>
+					<div class="contacts__item">
+						Лицензия
+						<p><a class="contacts__license-link" href="/#license" title="Посмотреть лицензию на главной"><?=$nc_core->widget->generate('regions', array('licinfo'))?></a></p>
+					</div>
+					<div class="contacts__item">
+						Руководитель
+						<p>Алексей Вячеславович Аксенов</p>
+					</div>
+					<div class="contacts__list">
+						<div class="contacts__item">
+							ИНН
+							<p>9308026463</p>
+						</div>
+						<div class="contacts__item">
+							Банк
+							<p>ПАО «ПРОМСВЯЗЬБАНК»</p>
+						</div>
+						<div class="contacts__item">
+							КПП
+							<p>930801001</p>
+						</div>
+						<div class="contacts__item">
+							БИК
+							<p>044525555</p>
+						</div>
+						<div class="contacts__item">
+							Кор. счёт
+							<p>30101810400000000555</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="contacts__map">
+				<?=shortcode_component('[mapcode]');?>
+			</div>
+		</div>
+	</div>
+</div>

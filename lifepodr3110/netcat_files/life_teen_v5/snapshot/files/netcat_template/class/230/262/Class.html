@@ -1,0 +1,65 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<?
+$num=0;
+?>
+<div class="doctors"><div class="wrap">
+  <div class="actions__top-text">Команда специалистов «МедЭльта»</div>
+  <h2 class="actions__name">Многолетний опыт<br>в лицах</h2>
+  <div class="actions__desc">Качество лечения зависит не только от применяемых методов, но и от согласованной работы специалистов. В процессе восстановления могут участвовать врачи, психологи-аддиктологи, медицинские сёстры и другие сотрудники в пределах своей профессиональной компетенции.</div>
+  <div class="doctors__list"><!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+<?
+$activeClass="";
+if(!$num){
+    $activeClass = "--active";
+}
+$num++;
+?>
+  <div class="doctors__item doctors__item<?=$activeClass?>">
+	
+		<div class="flex3">
+		  <div class="doctors__photo">
+			<img src="<?=$f_img?>" alt="<?=$f_fio_short?>">
+			<div class="doctor__name"><h3><?=$f_fio_short?></h3><p><?=$f_position?></p></div>
+		  </div>
+		  
+		  
+		  <div class="doctor__info">
+			  <h3><?=$f_fio?></h3>
+			  <p><?=$f_position?></p>
+			 <?=$f_skills?>
+		  
+			<button type="button">Записаться на консультацию</button>
+		  </div>
+		</div>
+	
+	
+	</div>
+<?php
+	if (!isset($GLOBALS['docs_ld'])) $GLOBALS['docs_ld'] = array();
+	$doc_name = trim(strip_tags((string)$f_fio));
+	if ($doc_name !== '') {
+		$sch_base = 'https://' . (nc_core()->widget->generate('regions', array('main_domain')) ?: $_SERVER['HTTP_HOST']);
+		$doc = array('@type' => 'Physician', 'name' => $doc_name,
+			'url' => (strpos($fullLink, 'http') === 0 ? $fullLink : $sch_base . $fullLink));
+		if (trim((string)$f_img) !== '') $doc['image'] = (strpos($f_img, 'http') === 0 ? $f_img : $sch_base . $f_img);
+		$GLOBALS['docs_ld'][] = array('@type' => 'ListItem', 'position' => count($GLOBALS['docs_ld']) + 1, 'item' => $doc);
+	}
+?><!-- /RecordTemplate -->
+
+<!-- FormSuffix --> </div>
+  <div class="actions__desc doctors__note">
+    <p>Врач оценивает состояние пациента, определяет показания и противопоказания, назначает терапию и контролирует её эффективность. Психологическая работа направлена на формирование мотивации, понимание механизмов зависимого поведения и развитие навыков, необходимых для сохранения трезвости. Медицинский персонал обеспечивает выполнение назначений, уход и наблюдение.</p>
+    <p>Такой подход позволяет рассматривать пациента не как совокупность отдельных симптомов, а учитывать медицинские, психологические и социальные аспекты заболевания.</p>
+  </div>
+</div></div>
+<?php
+	if (!empty($GLOBALS['docs_ld'])) {
+		echo '<script type="application/ld+json">' . json_encode(array(
+			'@context' => 'https://schema.org', '@type' => 'ItemList',
+			'itemListElement' => $GLOBALS['docs_ld'],
+		), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . '</script>';
+	}
+?>
+<!-- /FormSuffix -->

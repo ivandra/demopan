@@ -1,0 +1,28 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+<div class="pagesimpletitle">
+	<div class="wrap">
+		<?if(!$f_hide){?>
+          <div class="breadcrumbs">
+               <?=shortcode_component(nc_browse_path_range(-1, $sub_level_count-1, $breadcrumbs_template,0,2))?>
+          </div>
+          <?php if(function_exists("print_breadcrumbs_schema_from_html") && empty($GLOBALS['medelta_bc_done'])){ $GLOBALS['medelta_bc_done']=true; print_breadcrumbs_schema_from_html(nc_browse_path_range(-1, $sub_level_count-1, $breadcrumbs_template, 0, 2)); } ?>
+        <?}?>
+
+		<?if($f_h1){?>
+            <h1 class="article__name"> <?=shortcode_component($f_maintitle)?></h1>
+            <?}else{?>
+            <div class="article__name">
+              <?=shortcode_component($f_maintitle)?>
+            </div>
+        <?}?>
+		  
+		<div class="doctors2__top-text">
+			<?=shortcode_component($f_subtitle)?>
+		</div>
+	</div>
+</div><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><!-- /FormSuffix -->

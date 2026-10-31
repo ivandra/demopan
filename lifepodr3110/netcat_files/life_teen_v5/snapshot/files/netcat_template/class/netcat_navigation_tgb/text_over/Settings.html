@@ -1,0 +1,53 @@
+<?php
+$cc_settings = nc_get_visual_settings($cc_env['Sub_Class_ID']);
+
+$size = $cc_settings['objectSize'];
+if ($cc_settings['objectSize'] === 'custom') {
+    $size = $cc_settings['customSize'];
+}
+list($w, $h) = explode(":", str_replace(",", ".", $size));
+if ((float)$w > 0) {
+    $padding_top = str_replace(",", ".", ($h / $w) * 100) . "%";
+} else {
+    $padding_top = '100%';
+}
+
+$text_position = $cc_settings['textPosition'] ?: 'left-bottom';
+$position_class = 'text-position-' . $text_position;
+
+$styles = array();
+$styles[] = "--tpl-object-item--image-padding-top: " . $padding_top;
+
+// Отступы от краёв
+if ($text_position !== 'center') {
+    $offset_x = str_replace(",", ".", (float)($cc_settings['offsetX'] ?: 20));
+    $offset_x_unit = $cc_settings['offsetXUnit'] ?: 'px';
+    $offset_y = str_replace(",", ".", (float)($cc_settings['offsetY'] ?: 20));
+    $offset_y_unit = $cc_settings['offsetYUnit'] ?: 'px';
+    $styles[] = "--tpl-object-item--offset-x: " . $offset_x . $offset_x_unit;
+    $styles[] = "--tpl-object-item--offset-y: " . $offset_y . $offset_y_unit;
+}
+
+// Цвет надписей
+$text_color = $cc_settings['textColor'] ?: 'inherit';
+if ($text_color !== 'inherit') {
+    $styles[] = "--tpl-object-item--text-color: var(--tpl-color-" . $text_color . ")";
+}
+
+// Осветление/затемнение
+$overlay = $cc_settings['imageOverlay'] ?: 'none';
+$overlay_percent = (int)($cc_settings['overlayPercent'] ?: 15);
+if ($overlay !== 'none') {
+    $overlay_color = $overlay === 'darken' ? '0,0,0' : '255,255,255';
+    $overlay_opacity = str_replace(",", ".", $overlay_percent / 100);
+    $styles[] = "--tpl-object-item--overlay-color: rgba(" . $overlay_color . "," . $overlay_opacity . ")";
+}
+
+$styles = " style='" . implode("; ", $styles) . "'";
+
+// Шрифт заголовка
+$title_classname = $cc_settings['title_classname'] ?: 'tpl-text-header2';
+
+// Тип кнопки
+$button_classname = 'tpl-button tpl-button-' . ($cc_settings['buttonType'] === 'secondary' ? 'secondary' : 'primary');
+?>

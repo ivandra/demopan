@@ -1,0 +1,57 @@
+<?php
+/**
+ * Виджет «Окно cookie-согласия» (netcat_cookie_consent).
+ *
+ * Минимальный cookie-баннер. Единственная настройка — поле $f_Text.
+ * Всё остальное берётся не из виджета:
+ *   - режим (notice/accept-all/categories) — из настройки сайта ConsentMode
+ *     (nc_consent::get_mode());
+ *   - подписи кнопок — из i18n (фронтовый рантайм nc-consent-banner.js);
+ *   - ссылка «Подробнее» — из подраздела «Политика» сайта (Rules_Sub_ID).
+ *
+ * Сама логика показа/активации — в общих ассетах nc-consent(.js/.css) и
+ * nc-consent-banner.js. Серверный хелпер — nc_consent.class.php.
+ *
+ * Вставка в макет:
+ *   <?= $nc_core->widget->generate('netcat_cookie_consent') ?>
+ *
+ * @see docs/proposals/cookie-consent.md
+ */
+
+$nc_core = nc_core::get_object();
+
+$mode = nc_consent::get_mode();
+
+// Текст не задан — берём дефолт под текущий режим (notice/accept-all/categories).
+$text = (isset($f_Text) && trim($f_Text) !== '')
+    ? $f_Text
+    : nc_consent::default_banner_text($mode);
+
+// Ссылка «Подробнее» — на «Политику обработки персональных данных» сайта
+// (PrivacyPolicy_Sub_ID), а не на «Соглашение об использовании» (Rules_Sub_ID).
+$privacy_sub_id = (int)$nc_core->catalogue->get_current('PrivacyPolicy_Sub_ID');
+
+$iw_config = array(
+    'mode'       => $mode,
+    'text'       => $text,
+    'policyUrl'  => $privacy_sub_id ? nc_folder_url($privacy_sub_id) : null,
+    'daysAccept' => nc_consent::ttl_accept(),
+    'daysReject' => nc_consent::ttl_reject(),
+);
+
+// Журнал выбора: подпись текста — по ней журнал сохраняет текст, откуда бы он
+// ни пришёл (в т.ч. из кода макета). Подпись привязана к текущему сайту — точка
+// приёма проверяет её для сайта, определённого по хосту.
+// @see docs/proposals/cookie-consent-log.md
+if (nc_consent::is_log_enabled()) {
+    $iw_config['textSig'] = nc_consent::text_signature($text, $nc_core->catalogue->id());
+}
+
+$iw_base = $nc_core->SUB_FOLDER . $nc_core->HTTP_TEMPLATE_PATH;
+?>
+<?php if (empty($GLOBALS['nc_cookie_consent_widget'])): $GLOBALS['nc_cookie_consent_widget'] = true; ?>
+<script>window.ncConsentConfig = <?= nc_array_json($iw_config) ?>;</script>
+<link rel="stylesheet" href="<?= $iw_base ?>asset/consent/nc-consent.css">
+<?= nc_consent::runtime_script_tag() ?>
+<script src="<?= $iw_base ?>asset/consent/nc-consent-banner.js" defer></script>
+<?php endif; ?>

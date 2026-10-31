@@ -1,0 +1,42 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+	<div class="license" id="license">
+		<div class="wrap">
+			<h2 class="license__name">Работаем официально <br/>и ответственно</h2>
+			<div class="license__top-text">
+				Все необходимые государственные лицензии и сертификаты
+			</div>
+			<div class="flex3">
+				<div class="license__text">
+					<h3>Лицензия на медицинскую деятельность</h3>
+					<?=shortcode_component($f_text)?> 	
+				</div>
+				<div class="license__image">
+					<img src="<?=$f_main_img?>">
+					<div class="license__buttons">
+						<button data-fancybox href="<?=$f_main_img?>"><span></span> Увеличить</button>
+						<button type="button" class="download-button" onclick="downloadFile()"><span></span> Скачать PDF</button>
+					</div>
+				</div>
+			</div>
+			<div class="license__list">
+				<?=$f_img?>
+			</div>
+		</div>
+	</div>
+    <script>
+function downloadFile() {
+    const link = document.createElement('a');
+
+    link.href = '<?=$f_pdf?>';
+    link.download = 'Документ.pdf';
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+}
+</script><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><!-- /FormSuffix -->

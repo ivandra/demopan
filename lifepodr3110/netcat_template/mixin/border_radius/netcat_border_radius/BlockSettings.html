@@ -1,0 +1,241 @@
+<div class="nc-mixins-mixin-settings-netcat-border-radius">
+
+    <!-- Режим блокировки -->
+    <div class="nc-border-radius-mode">
+        <div class="nc-border-radius-mode-options">
+            <label title="Все углы одинаковые">
+                <input type="radio" name="mixin.settings.lock_mode" value="all" checked>
+                <span class="nc-border-radius-mode-icon">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </span>
+                Все углы
+            </label>
+            <label title="Верхние и нижние попарно">
+                <input type="radio" name="mixin.settings.lock_mode" value="pairs_horizontal">
+                <span class="nc-border-radius-mode-icon">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <!-- Скруглённый прямоугольник -->
+                        <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <!-- Горизонтальная разделительная линия -->
+                        <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2,2"/>
+                    </svg>
+                </span>
+                Верх/низ
+            </label>
+            <label title="Левые и правые попарно">
+                <input type="radio" name="mixin.settings.lock_mode" value="pairs_vertical">
+                <span class="nc-border-radius-mode-icon">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <!-- Скруглённый прямоугольник -->
+                        <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <!-- Вертикальная разделительная линия -->
+                        <line x1="12" y1="3" x2="12" y2="21" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2,2"/>
+                    </svg>
+                </span>
+                Лево/право
+            </label>
+            <label title="Каждый угол независимо">
+                <input type="radio" name="mixin.settings.lock_mode" value="none">
+                <span class="nc-border-radius-mode-icon">
+                    <svg viewBox="0 0 24 24" width="20" height="20">
+                        <rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2,2"/>
+                        <line x1="12" y1="3" x2="12" y2="21" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2,2"/>
+                    </svg>
+                </span>
+                Независимо
+            </label>
+        </div>
+    </div>
+
+    <!-- Визуальный редактор углов -->
+    <div class="nc-border-radius-editor">
+        <div class="nc-border-radius-preview">
+            <!-- Верхние углы -->
+            <div class="nc-border-radius-corner nc-border-radius-corner-tl">
+                <input type="number" class="nc--small" min="0" value="0"
+                       name="mixin.settings.top_left" data-corner="tl">
+            </div>
+            <div class="nc-border-radius-corner nc-border-radius-corner-tr">
+                <input type="number" class="nc--small" min="0" value="0"
+                       name="mixin.settings.top_right" data-corner="tr">
+            </div>
+
+            <!-- Превью блока -->
+            <div class="nc-border-radius-preview-box"></div>
+
+            <!-- Нижние углы -->
+            <div class="nc-border-radius-corner nc-border-radius-corner-bl">
+                <input type="number" class="nc--small" min="0" value="0"
+                       name="mixin.settings.bottom_left" data-corner="bl">
+            </div>
+            <div class="nc-border-radius-corner nc-border-radius-corner-br">
+                <input type="number" class="nc--small" min="0" value="0"
+                       name="mixin.settings.bottom_right" data-corner="br">
+            </div>
+            <!-- Единицы измерения -->
+            <div class="nc-border-radius-unit">
+                <label>
+                    Единицы:
+                    <select name="mixin.settings.unit">
+                        <option value="px" selected>px</option>
+                        <option value="%">%</option>
+                        <option value="rem">rem</option>
+                        <option value="em">em</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- Скрытое поле для обратной совместимости -->
+    <input type="hidden" name="mixin.settings.border_radius" value="0">
+
+</div>
+
+<script>
+(function() {
+    var prefix = 'nc-mixins-mixin-settings-netcat-border-radius';
+
+    function init(event, data) {
+        var settingsContainer = $nc(this).find('.' + prefix);
+        if (!settingsContainer.length || settingsContainer.data('nc-border-radius-initialized')) {
+            return;
+        }
+
+        var editor = settingsContainer.find('.nc-border-radius-editor');
+        var previewBox = settingsContainer.find('.nc-border-radius-preview-box');
+        var modeInputs = settingsContainer.find('input[name="mixin.settings.lock_mode"]');
+        var unitSelect = settingsContainer.find('select[name="mixin.settings.unit"]');
+        var cornerInputs = {
+            tl: settingsContainer.find('input[name="mixin.settings.top_left"]'),
+            tr: settingsContainer.find('input[name="mixin.settings.top_right"]'),
+            bl: settingsContainer.find('input[name="mixin.settings.bottom_left"]'),
+            br: settingsContainer.find('input[name="mixin.settings.bottom_right"]')
+        };
+        var legacyInput = settingsContainer.find('input[name="mixin.settings.border_radius"]');
+
+        function getMode() {
+            return modeInputs.filter(':checked').val() || 'all';
+        }
+
+        function getUnit() {
+            return unitSelect.val() || 'px';
+        }
+
+        function updatePreview() {
+            var unit = getUnit();
+            var tl = (cornerInputs.tl.val() || 0) + unit;
+            var tr = (cornerInputs.tr.val() || 0) + unit;
+            var br = (cornerInputs.br.val() || 0) + unit;
+            var bl = (cornerInputs.bl.val() || 0) + unit;
+            previewBox.css('border-radius', tl + ' ' + tr + ' ' + br + ' ' + bl);
+        }
+
+        function syncCorners(changedCorner) {
+            var mode = getMode();
+            var value = cornerInputs[changedCorner].val();
+
+            switch (mode) {
+                case 'all':
+                    // Все углы одинаковые
+                    cornerInputs.tl.val(value);
+                    cornerInputs.tr.val(value);
+                    cornerInputs.bl.val(value);
+                    cornerInputs.br.val(value);
+                    // Обновить legacy поле
+                    legacyInput.val(value);
+                    break;
+
+                case 'pairs_horizontal':
+                    // Верх/низ попарно
+                    if (changedCorner === 'tl' || changedCorner === 'tr') {
+                        cornerInputs.tl.val(value);
+                        cornerInputs.tr.val(value);
+                    } else {
+                        cornerInputs.bl.val(value);
+                        cornerInputs.br.val(value);
+                    }
+                    break;
+
+                case 'pairs_vertical':
+                    // Лево/право попарно
+                    if (changedCorner === 'tl' || changedCorner === 'bl') {
+                        cornerInputs.tl.val(value);
+                        cornerInputs.bl.val(value);
+                    } else {
+                        cornerInputs.tr.val(value);
+                        cornerInputs.br.val(value);
+                    }
+                    break;
+
+                case 'none':
+                    // Независимые углы - ничего не синхронизируем
+                    break;
+            }
+
+            updatePreview();
+        }
+
+        function updateEditorMode() {
+            var mode = getMode();
+            editor.attr('data-mode', mode);
+
+            // При переключении на "all" - синхронизировать все углы
+            if (mode === 'all') {
+                var value = cornerInputs.tl.val() || 0;
+                cornerInputs.tr.val(value);
+                cornerInputs.bl.val(value);
+                cornerInputs.br.val(value);
+                legacyInput.val(value);
+            }
+
+            updatePreview();
+        }
+
+        // Обработчики событий
+        modeInputs.on('change', updateEditorMode);
+
+        $nc.each(cornerInputs, function(corner, input) {
+            input.on('input change', function() {
+                syncCorners(corner);
+            });
+        });
+
+        unitSelect.on('change', updatePreview);
+
+        // Инициализация: загрузить значения из legacy поля если новых нет
+        var legacyValue = legacyInput.val();
+        if (legacyValue && legacyValue !== '0') {
+            var tlValue = cornerInputs.tl.val();
+            if (!tlValue || tlValue === '0') {
+                cornerInputs.tl.val(legacyValue);
+                cornerInputs.tr.val(legacyValue);
+                cornerInputs.bl.val(legacyValue);
+                cornerInputs.br.val(legacyValue);
+            }
+        }
+
+        updateEditorMode();
+        settingsContainer.data('nc-border-radius-initialized', true);
+    }
+
+    // Инициализация при загрузке настроек миксина
+    $nc('.' + prefix).closest('.nc-mixins-mixin-settings')
+        .off(nc_mixin_settings_editor.mixin_settings_set_values_event + '.border-radius')
+        .on(nc_mixin_settings_editor.mixin_settings_set_values_event + '.border-radius', init);
+
+    // Также инициализировать сразу если уже есть
+    $nc('.' + prefix).each(function() {
+        var container = $nc(this).closest('.nc-mixins-mixin-settings');
+        if (container.length) {
+            init.call(container[0], null, {});
+        }
+    });
+
+})();
+</script>
