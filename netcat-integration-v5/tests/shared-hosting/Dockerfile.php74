@@ -1,0 +1,10 @@
+FROM php:7.4.33-cli-bullseye
+RUN --mount=type=secret,id=proxy_ca,required=true,mode=0444 \
+    sed -i '/bullseye-security/d; s|http://deb.debian.org/debian|https://deb.debian.org/debian|g' /etc/apt/sources.list \
+    && apt-get -o Acquire::https::CaInfo=/run/secrets/proxy_ca update \
+    && apt-get -o Acquire::https::CaInfo=/run/secrets/proxy_ca install -y --no-install-recommends \
+       libpng-dev libjpeg62-turbo-dev libfreetype6-dev libonig-dev libzip-dev libxml2-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j2 mysqli pdo_mysql gd mbstring zip exif dom \
+    && rm -rf /var/lib/apt/lists/*
+RUN printf 'short_open_tag=On\nmemory_limit=512M\nmax_execution_time=120\ndisplay_errors=Off\nlog_errors=On\nerror_reporting=E_ALL\nsendmail_path=/bin/true\n' > /usr/local/etc/php/conf.d/netcat-test.ini

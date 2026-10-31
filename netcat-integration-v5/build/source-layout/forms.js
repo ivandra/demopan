@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     selectAll('a,button').forEach(control => {
         if (control.type === 'submit' || !/Нужна помощь|Записаться|Задать вопрос|Связаться с нами/.test(control.textContent)) return;
-        control.setAttribute('data-fancybox', 'consult');
+        control.setAttribute('data-fancybox', '');
         control.setAttribute('data-src', '#popup');
     });
     selectAll('.team__button').forEach(button => {

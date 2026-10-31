@@ -1,14 +1,16 @@
-# «Жизнь подростка» — чистый патч v5
+# «Жизнь подростка» — чистый патч v5.1
 
 ## Скачать
 
-- **[Полный архив v5](https://raw.githubusercontent.com/ivandra/demopan/main/deliverables/lifepodrostka-netcat-v5.zip)**
-- [Часть 1](https://raw.githubusercontent.com/ivandra/demopan/main/deliverables/lifepodrostka-netcat-v5-part1.zip)
-- [Часть 2](https://raw.githubusercontent.com/ivandra/demopan/main/deliverables/lifepodrostka-netcat-v5-part2.zip)
+- **[Полный архив v5.1](https://raw.githubusercontent.com/ivandra/demopan/fix/netcat-v5-mysql-restore/deliverables/lifepodrostka-netcat-v5.1.zip)**
+- [Часть 1](https://raw.githubusercontent.com/ivandra/demopan/fix/netcat-v5-mysql-restore/deliverables/lifepodrostka-netcat-v5.1-part1.zip)
+- [Часть 2](https://raw.githubusercontent.com/ivandra/demopan/fix/netcat-v5-mysql-restore/deliverables/lifepodrostka-netcat-v5.1-part2.zip)
 
 Скачайте полный ZIP либо обе части. Части — самостоятельные ZIP:
 распакуйте обе в одну папку, склеивать их не нужно. Набор файлов совпадает
 с полным архивом. Контрольные суммы — [SHA256SUMS.txt](SHA256SUMS.txt).
+
+Прежний хостинговый сбой `nc_page.class.php` не воспроизведён, его причина не установлена. v5.1 исправляет подтверждённые ошибки MySQL-отката, региональных подстановок и Fancybox; включает приватную диагностику.
 
 ## Что делает патч
 
@@ -40,9 +42,8 @@
    `netcat_files/life_teen_v5` оставьте.
 
 SSH и ручной импорт SQL не нужны. Резервная копия и очистка выполняются
-короткими возобновляемыми запросами через браузер. Восстановление и
-повторная установка проверены для исходного сайта, v4 и отката v3.
+короткими возобновляемыми запросами через браузер. v5.1 проверен на свежем бэкапе с PHP 7.4.33 и 8.3.36 / MySQL 5.7.27. Проверки после v4 и отката v3 относятся к историческому v5.
 На хостинг переносится только `UPLOAD_TO_ROOT`.
 
 Предыдущие архивы сохранены в этой папке для истории. Для новой установки
-используйте v5.
+используйте v5.1.

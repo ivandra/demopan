@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-01",
+  "source_commit": "8bb86d6497d9a4e414d7bebb682d4e12059f33ac",
+  "source_folder": "lifepodr3110",
+  "sql_zip_sha256": "4d70bb4ab0fb57aebe58923139119d253fcdd221323c3b20bdbe8dd62f909a4b",
+  "sql_sha256": "6ada9023df3fc7cfd2752e88ba8f6cffa2c1c4aa6c7e0150483c91117168fe57",
+  "cases": [
+    {
+      "php": "7.4.33",
+      "browser_checks": 76,
+      "database_content_tables": 133,
+      "files": 5666,
+      "passed": true
+    },
+    {
+      "php": "8.3.36",
+      "browser_checks": 76,
+      "database_content_tables": 133,
+      "files": 5666,
+      "passed": true
+    }
+  ],
+  "smoke_checks": 240,
+  "ready_section_urls": 13,
+  "local_assets": 150,
+  "mobile_navigation_checks": 6,
+  "original_nc_page_failure_reproduced": false,
+  "original_nc_page_failure_cause_confirmed": false,
+  "confirmed_fixed_defects": [
+    "MySQL numeric restoration of X hex literals",
+    "missing optional regions widget dependency",
+    "Fancybox groups referencing one inline form"
+  ],
+  "production_host_modified": false,
+  "email_delivery_tested": false
+}

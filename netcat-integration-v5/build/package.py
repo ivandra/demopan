@@ -2,7 +2,7 @@ from pathlib import Path
 from zipfile import ZipFile,ZipInfo,ZIP_DEFLATED
 import hashlib,copy
 
-R=Path(__file__).resolve().parents[1];out=R.parent/'deliverables/lifepodrostka-netcat-v5.zip'
+R=Path(__file__).resolve().parents[1];out=R.parent/'deliverables/lifepodrostka-netcat-v5.1.zip'
 entries=[]
 for file in sorted((R/'files').rglob('*')):
  if file.is_file():entries.append((file,'UPLOAD_TO_ROOT/'+file.relative_to(R/'files').as_posix()))
@@ -11,7 +11,7 @@ for file in sorted((R/'docs').rglob('*')):
  if file.is_file():entries.append((file,'docs/'+file.relative_to(R/'docs').as_posix()))
 for file in sorted((R/'tests').glob('*.json')):entries.append((file,'TEST_RESULTS/'+file.name))
 def info(name):
- value=ZipInfo(name,(2026,10,30,0,0,0));value.compress_type=ZIP_DEFLATED;value.external_attr=0o644<<16;return value
+ value=ZipInfo(name,(2026,11,1,0,0,0));value.compress_type=ZIP_DEFLATED;value.external_attr=0o644<<16;return value
 checksums=''.join(hashlib.sha256(file.read_bytes()).hexdigest()+'  '+name+'\n' for file,name in entries)
 with ZipFile(out,'w',ZIP_DEFLATED,compresslevel=9) as z:
  for file,name in entries:z.writestr(info(name),file.read_bytes())

@@ -9,9 +9,10 @@ try {
     if (!$catalogue) { li_fail('Исходный сайт №1 не найден.'); }
     if ((int)$db->get_var('SELECT Class_ID FROM Sub_Class WHERE Sub_Class_ID=57')!==223) { li_fail('Нет исходного компонента регионов №223 / инфоблока №57.'); }
     if (!is_writable($nc_core->CLASS_TEMPLATE_FOLDER) || !is_writable($nc_core->TEMPLATE_FOLDER) || !is_writable($nc_core->FILES_FOLDER)) { li_fail('Папки шаблонов и файлов Netcat недоступны для записи.'); }
-    li_out('Netcat '.$nc_core->get_settings('VersionNumber').'; PHP '.PHP_VERSION.'; чистый патч v5');
+    li_out('Netcat '.$nc_core->get_settings('VersionNumber').'; PHP '.PHP_VERSION.'; чистый патч v5.1');
     if ($mode==='check') {
         li_payload_check(false);
+        li_region_notice();
         li_out('Проверены файлы. В пакете '.count($manifest['pages']).' разделов и '.(count($manifest['layouts'])+1).' макетов. Старые разделы, инфоблоки, макеты и компоненты переноса будут удалены после полной резервной копии.');
         exit;
     }
@@ -85,9 +86,12 @@ try {
                 li_update('Subdivision','Subdivision_ID',$id,$props);
             }
             foreach ($state['new_blocks'] as $id) { li_update('Sub_Class','Sub_Class_ID',$id,array('Checked'=>1,'Read_Access_ID'=>$state['block_classes'][$id]==='life_leads'?3:1)); }
-            file_put_contents(__DIR__.'/netcat/modules/default/function.inc.php',file_get_contents($design.'/function.inc.php.txt'),LOCK_EX);
-            file_put_contents(__DIR__.'/netcat_template/widget/regions/Template.html',file_get_contents($design.'/regions-widget.html'),LOCK_EX);
-            if (function_exists('opcache_invalidate')) { opcache_invalidate(__DIR__.'/netcat/modules/default/function.inc.php',true);opcache_invalidate(__DIR__.'/netcat_template/widget/regions/Template.html',true); }
+            $runtime_functions=__DIR__.'/netcat/modules/default/function.inc.php';
+            $functions=file_get_contents($design.'/function.inc.php.txt');
+            if ($functions===false || file_put_contents($runtime_functions,$functions,LOCK_EX)!==strlen($functions) || !hash_equals(hash('sha256',$functions),hash_file('sha256',$runtime_functions))) {
+                li_fail('Не удалось записать и проверить функции проекта. Активация остановлена.');
+            }
+            if (function_exists('opcache_invalidate')) { opcache_invalidate($runtime_functions,true); }
             $lead=$state['collections']['leads'];
             li_update('Catalogue','Catalogue_ID',1,array('Catalogue_Name'=>'Жизнь подростка','Template_ID'=>$state['template_id'],'Title_Sub_ID'=>$state['home_id'],'E404_Sub_ID'=>$state['pages']['/404/'],'PrivacyPolicy_Sub_ID'=>$state['pages']['/politika-konfidentsialnosti/'],'Consent_Sub_ID'=>$state['pages']['/policy/'],'zakaz_sub'=>$lead['sub_id'],'zakaz_cc'=>$lead['cc_id'],'mail_admin'=>'','Checked'=>1));
             $state['switched']=true;li_save();

@@ -1,0 +1,69 @@
+function li_diagnostic($kind, array $error, array $trace = [])
+{
+    static $writing = false;
+    if ($writing) {
+        return;
+    }
+    $writing = true;
+    foreach ($trace as &$frame) {
+        $frame = array_intersect_key($frame, array_fill_keys(["file", "line", "class", "type", "function"], true));
+    }
+    unset($frame);
+    $folder = __DIR__ . "/netcat_files/life_teen_v5";
+    if (!is_dir($folder) && !@mkdir($folder, 0700, true)) {
+        $writing = false;
+        return;
+    }
+    $path = $folder . "/diagnostics.php";
+    $handle = @fopen($path, "c+b");
+    if ($handle && @flock($handle, LOCK_EX)) {
+        $size = @fstat($handle);
+        if (!$size["size"] || $size["size"] > 2097152) {
+            @ftruncate($handle, 0);
+            @rewind($handle);
+            @fwrite($handle, "<?php\nhttp_response_code(404);\nexit;\n__halt_compiler();\n");
+        }
+        @fseek($handle, 0, SEEK_END);
+        $core = __DIR__ . "/netcat/system/nc_page.class.php";
+        @fwrite($handle, json_encode([
+            "time_utc" => gmdate("c"),
+            "kind" => $kind,
+            "php" => PHP_VERSION,
+            "sapi" => PHP_SAPI,
+            "error" => $error,
+            "trace_without_arguments" => $trace,
+            "memory_limit" => ini_get("memory_limit"),
+            "memory_peak" => memory_get_peak_usage(true),
+            "max_execution_time" => ini_get("max_execution_time"),
+            "open_basedir" => ini_get("open_basedir"),
+            "include_path" => get_include_path(),
+            "cwd" => getcwd(),
+            "nc_page_exists" => is_file($core),
+            "nc_page_readable" => is_readable($core),
+        ], JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE) . "\n");
+        @chmod($path, 0600);
+        @flock($handle, LOCK_UN);
+    }
+    if ($handle) {
+        @fclose($handle);
+    }
+    $writing = false;
+}
+set_error_handler(function ($type, $message, $file, $line) {
+    if ((error_reporting() & $type) && preg_match('/require|include/i', $message)) {
+        li_diagnostic("include_warning", [
+            "type" => $type, "message" => $message, "file" => $file, "line" => $line,
+        ], debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 25));
+    }
+    return false;
+});
+register_shutdown_function(function () {
+    $error = error_get_last();
+    if ($error && in_array($error["type"], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
+        $message = explode("\n", $error["message"], 2)[0];
+        $error["message"] = preg_match('/require|include|nc_page|Allowed memory size|Maximum execution time/i', $message)
+            ? $message
+            : "Фатальная ошибка PHP; подробности доступны в журнале хостинга.";
+        li_diagnostic("fatal", $error);
+    }
+});

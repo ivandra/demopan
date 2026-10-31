@@ -1,5 +1,6 @@
 from pathlib import Path
 R=Path(__file__).resolve().parents[1];s=(R/'build/web-installer-shell.txt').read_text()
+s=s.replace('<?php\n','<?php\n\n'+(R/'build/diagnostics.txt').read_text(),1)
 s+='\n'+(R/'build/installer-functions.txt').read_text()+'\n'+(R/'build/revision-functions.txt').read_text()+'\n'+(R/'build/clean-functions.txt').read_text()+'\n'+(R/'build/installer-driver.txt').read_text();(R/'installer/zhp-install.php').write_text(s);(R/'files/zhp-install.php').write_text(s)
 
 import hashlib,json

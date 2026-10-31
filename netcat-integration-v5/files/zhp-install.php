@@ -1,5 +1,97 @@
 <?php
 
+function li_diagnostic($kind, array $error, array $trace = [])
+{
+    static $writing = false;
+    if ($writing) {
+        return;
+    }
+    $writing = true;
+    foreach ($trace as &$frame) {
+        $frame = array_intersect_key(
+            $frame,
+            array_fill_keys(["file", "line", "class", "type", "function"], true),
+        );
+    }
+    unset($frame);
+    $folder = __DIR__ . "/netcat_files/life_teen_v5";
+    if (!is_dir($folder) && !@mkdir($folder, 0700, true)) {
+        $writing = false;
+        return;
+    }
+    $path = $folder . "/diagnostics.php";
+    $handle = @fopen($path, "c+b");
+    if ($handle && @flock($handle, LOCK_EX)) {
+        $size = @fstat($handle);
+        if (!$size["size"] || $size["size"] > 2097152) {
+            @ftruncate($handle, 0);
+            @rewind($handle);
+            @fwrite($handle, "<?php\nhttp_response_code(404);\nexit;\n__halt_compiler();\n");
+        }
+        @fseek($handle, 0, SEEK_END);
+        $core = __DIR__ . "/netcat/system/nc_page.class.php";
+        @fwrite(
+            $handle,
+            json_encode(
+                [
+                    "time_utc" => gmdate("c"),
+                    "kind" => $kind,
+                    "php" => PHP_VERSION,
+                    "sapi" => PHP_SAPI,
+                    "error" => $error,
+                    "trace_without_arguments" => $trace,
+                    "memory_limit" => ini_get("memory_limit"),
+                    "memory_peak" => memory_get_peak_usage(true),
+                    "max_execution_time" => ini_get("max_execution_time"),
+                    "open_basedir" => ini_get("open_basedir"),
+                    "include_path" => get_include_path(),
+                    "cwd" => getcwd(),
+                    "nc_page_exists" => is_file($core),
+                    "nc_page_readable" => is_readable($core),
+                ],
+                JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE,
+            ) . "\n",
+        );
+        @chmod($path, 0600);
+        @flock($handle, LOCK_UN);
+    }
+    if ($handle) {
+        @fclose($handle);
+    }
+    $writing = false;
+}
+set_error_handler(function ($type, $message, $file, $line) {
+    if (error_reporting() & $type && preg_match("/require|include/i", $message)) {
+        li_diagnostic(
+            "include_warning",
+            [
+                "type" => $type,
+                "message" => $message,
+                "file" => $file,
+                "line" => $line,
+            ],
+            debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 25),
+        );
+    }
+    return false;
+});
+register_shutdown_function(function () {
+    $error = error_get_last();
+    if (
+        $error &&
+        in_array($error["type"], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)
+    ) {
+        $message = explode("\n", $error["message"], 2)[0];
+        $error["message"] = preg_match(
+            "/require|include|nc_page|Allowed memory size|Maximum execution time/i",
+            $message,
+        )
+            ? $message
+            : "Фатальная ошибка PHP; подробности доступны в журнале хостинга.";
+        li_diagnostic("fatal", $error);
+    }
+});
+
 $cli = PHP_SAPI === "cli";
 $li_ajax = !$cli && isset($_GET["ajax"]) && $_GET["ajax"] === "1";
 $li_ajax_done = true;
@@ -293,7 +385,6 @@ function li_component($key, $def)
         li_save();
         li_checkpoint("Создан компонент: " . $def["name"]);
     }
-
     li_update("Class", "Class_ID", $id, [
         "CustomSettingsTemplate" => $def["settings"]
             ? '$settings_array=' . var_export($def["settings"], true) . ";"
@@ -677,7 +768,6 @@ function li_new_field_values($infoblock_id, $key, array $records)
                 if ($record[$name] === "") {
                     continue;
                 }
-
                 $saved = $nc_core->files->field_save_file(
                     (int) $state["classes"][$base],
                     $name,
@@ -719,12 +809,57 @@ function li_new_field_values($infoblock_id, $key, array $records)
     }
 }
 
+function li_prepare_snapshot()
+{
+    global $state, $state_dir;
+    if ((int) ($state["snapshot_format"] ?? 0) >= 2) {
+        return;
+    }
+    if (
+        (!empty($state["snapshot_complete"]) && empty($state["restored"])) ||
+        !empty($state["installed"]) ||
+        !empty($state["active"]) ||
+        !empty($state["classes"]) ||
+        !empty($state["pages"]) ||
+        !empty($state["new_blocks"]) ||
+        !empty($state["seeded"])
+    ) {
+        li_fail(
+            "Найден снимок прежней версии после изменения сайта. Он сохранён. Не начинайте новый снимок поверх установленного сайта: сначала восстановите исходный бэкап хостинга.",
+        );
+    }
+    if (is_dir($state_dir . "/snapshot")) {
+        $archive =
+            $state_dir .
+            "/previous-incomplete-" .
+            gmdate("Ymd-His") .
+            "-" .
+            bin2hex(random_bytes(3));
+        if (!mkdir($archive, 0700) || !rename($state_dir . "/snapshot", $archive . "/snapshot")) {
+            li_fail("Не удалось сохранить незавершённый снимок прежней версии.");
+        }
+        li_write_php($archive . "/state.php", $state);
+        li_out(
+            "Незавершённый снимок v5 сохранён отдельно. Создаётся новый снимок текущих файлов и базы для v5.1.",
+        );
+    }
+    foreach (array_keys($state) as $key) {
+        if (strpos($key, "snapshot_") === 0) {
+            unset($state[$key]);
+        }
+    }
+    $state["snapshot_format"] = 2;
+    unset($state["payload_checked"]);
+    li_save();
+}
 function li_snapshot($site_id)
 {
     global $state, $state_dir, $db, $nc_core;
+    li_prepare_snapshot();
     if (!empty($state["snapshot_complete"])) {
         return;
     }
+    li_query("SET time_zone='+00:00'");
     $folder = $state_dir . "/snapshot";
     if (!is_dir($folder . "/db")) {
         mkdir($folder . "/db", 0700, true);
@@ -817,6 +952,8 @@ function li_snapshot($site_id)
         li_checkpoint("Сохранены файлы: " . $state["snapshot_file_index"]);
     }
     li_write_php($folder . "/manifest.php", [
+        "format" => 2,
+        "time_zone" => "+00:00",
         "tables" => $state["snapshot_tables"],
         "files" => $state["snapshot_files"],
         "created" => date("c"),
@@ -832,6 +969,12 @@ function li_restore()
         li_fail("Полная резервная копия ещё не завершена.");
     }
     $backup = include $folder . "/manifest.php";
+    if (isset($backup["time_zone"])) {
+        if ($backup["time_zone"] !== "+00:00") {
+            li_fail("Неизвестный часовой пояс снимка. Откат остановлен.");
+        }
+        li_query("SET time_zone='+00:00'");
+    }
     if (!isset($state["restore_table_index"])) {
         $state["restore_table_index"] = 0;
         $state["restore_row_offset"] = 0;
@@ -874,7 +1017,8 @@ function li_restore()
                 $values = [];
                 foreach ($row as $name => $value) {
                     $columns[] = "`" . str_replace("`", "``", $name) . "`";
-                    $values[] = $value === null ? "NULL" : "X'" . bin2hex((string) $value) . "'";
+                    $values[] =
+                        $value === null ? "NULL" : "UNHEX('" . bin2hex((string) $value) . "')";
                 }
                 li_query(
                     "INSERT INTO `" .
@@ -933,6 +1077,7 @@ function li_restore()
     $state = [
         "version" => 5,
         "site_id" => 1,
+        "snapshot_format" => $backup["format"] ?? 1,
         "snapshot_complete" => true,
         "snapshot_tables" => $backup["tables"],
         "snapshot_files" => $backup["files"],
@@ -1063,9 +1208,34 @@ function li_verify_clean()
     ) {
         li_fail("Остались компоненты прежнего переноса.");
     }
+    $functions = __DIR__ . "/netcat/modules/default/function.inc.php";
+    $expected = __DIR__ . "/netcat_template/template/life_teen/function.inc.php.txt";
+    if (
+        !is_file($functions) ||
+        !hash_equals(hash_file("sha256", $expected), hash_file("sha256", $functions))
+    ) {
+        li_fail("Функции проекта не совпадают с проверенным пакетом.");
+    }
+    li_region_notice();
     li_out(
         "В дереве сайта готовые страницы, запрошенные пустые черновики и существующий справочник регионов. Прежние макеты и компоненты удалены.",
     );
+}
+function li_region_notice()
+{
+    global $db;
+    $domain = (string) $db->get_var("SELECT Domain FROM Catalogue WHERE Catalogue_ID=1");
+    if (
+        !$db->get_var(
+            "SELECT Message_ID FROM Message223 WHERE Sub_Class_ID=57 AND Checked=1 AND main_domain='" .
+                $db->escape($domain) .
+                "' LIMIT 1",
+        )
+    ) {
+        li_out(
+            "ВНИМАНИЕ: для домена сайта нет включённой региональной записи. В существующем инфоблоке регионов №57 проверьте поле main_domain. Контакты и прежние доменные привязки автоматически не изменялись.",
+        );
+    }
 }
 
 try {
@@ -1100,10 +1270,11 @@ try {
             $nc_core->get_settings("VersionNumber") .
             "; PHP " .
             PHP_VERSION .
-            "; чистый патч v5",
+            "; чистый патч v5.1",
     );
     if ($mode === "check") {
         li_payload_check(false);
+        li_region_notice();
         li_out(
             "Проверены файлы. В пакете " .
                 count($manifest["pages"]) .
@@ -1324,19 +1495,17 @@ try {
                     "Read_Access_ID" => $state["block_classes"][$id] === "life_leads" ? 3 : 1,
                 ]);
             }
-            file_put_contents(
-                __DIR__ . "/netcat/modules/default/function.inc.php",
-                file_get_contents($design . "/function.inc.php.txt"),
-                LOCK_EX,
-            );
-            file_put_contents(
-                __DIR__ . "/netcat_template/widget/regions/Template.html",
-                file_get_contents($design . "/regions-widget.html"),
-                LOCK_EX,
-            );
+            $runtime_functions = __DIR__ . "/netcat/modules/default/function.inc.php";
+            $functions = file_get_contents($design . "/function.inc.php.txt");
+            if (
+                $functions === false ||
+                file_put_contents($runtime_functions, $functions, LOCK_EX) !== strlen($functions) ||
+                !hash_equals(hash("sha256", $functions), hash_file("sha256", $runtime_functions))
+            ) {
+                li_fail("Не удалось записать и проверить функции проекта. Активация остановлена.");
+            }
             if (function_exists("opcache_invalidate")) {
-                opcache_invalidate(__DIR__ . "/netcat/modules/default/function.inc.php", true);
-                opcache_invalidate(__DIR__ . "/netcat_template/widget/regions/Template.html", true);
+                opcache_invalidate($runtime_functions, true);
             }
             $lead = $state["collections"]["leads"];
             li_update("Catalogue", "Catalogue_ID", 1, [

@@ -1,6 +1,25 @@
+function li_prepare_snapshot() {
+    global $state,$state_dir;
+    if ((int)($state['snapshot_format']??0)>=2) { return; }
+    if ((!empty($state['snapshot_complete']) && empty($state['restored'])) || !empty($state['installed']) || !empty($state['active']) || !empty($state['classes']) || !empty($state['pages']) || !empty($state['new_blocks']) || !empty($state['seeded'])) {
+        li_fail('Найден снимок прежней версии после изменения сайта. Он сохранён. Не начинайте новый снимок поверх установленного сайта: сначала восстановите исходный бэкап хостинга.');
+    }
+    if (is_dir($state_dir.'/snapshot')) {
+        $archive=$state_dir.'/previous-incomplete-'.gmdate('Ymd-His').'-'.bin2hex(random_bytes(3));
+        if (!mkdir($archive,0700) || !rename($state_dir.'/snapshot',$archive.'/snapshot')) { li_fail('Не удалось сохранить незавершённый снимок прежней версии.'); }
+        li_write_php($archive.'/state.php',$state);
+        li_out('Незавершённый снимок v5 сохранён отдельно. Создаётся новый снимок текущих файлов и базы для v5.1.');
+    }
+    foreach (array_keys($state) as $key) { if (strpos($key,'snapshot_')===0) { unset($state[$key]); } }
+    $state['snapshot_format']=2;
+    unset($state['payload_checked']);
+    li_save();
+}
 function li_snapshot($site_id) {
     global $state,$state_dir,$db,$nc_core;
+    li_prepare_snapshot();
     if (!empty($state['snapshot_complete'])) { return; }
+    li_query("SET time_zone='+00:00'");
     $folder=$state_dir.'/snapshot';
     if (!is_dir($folder.'/db')) { mkdir($folder.'/db',0700,true); }
     file_put_contents($state_dir.'/.htaccess',"Require all denied\nDeny from all\n");
@@ -55,7 +74,7 @@ function li_snapshot($site_id) {
         $state['snapshot_file_index']++;
         li_save();li_checkpoint('Сохранены файлы: '.$state['snapshot_file_index']);
     }
-    li_write_php($folder.'/manifest.php',array('tables'=>$state['snapshot_tables'],'files'=>$state['snapshot_files'],'created'=>date('c')));
+    li_write_php($folder.'/manifest.php',array('format'=>2,'time_zone'=>'+00:00','tables'=>$state['snapshot_tables'],'files'=>$state['snapshot_files'],'created'=>date('c')));
     $state['snapshot_complete']=true;li_save();
 }
 function li_restore() {
@@ -63,6 +82,10 @@ function li_restore() {
     $folder=$state_dir.'/snapshot';
     if (empty($state['snapshot_complete']) || !is_file($folder.'/manifest.php')) { li_fail('Полная резервная копия ещё не завершена.'); }
     $backup=include $folder.'/manifest.php';
+    if (isset($backup['time_zone'])) {
+        if ($backup['time_zone']!=='+00:00') { li_fail('Неизвестный часовой пояс снимка. Откат остановлен.'); }
+        li_query("SET time_zone='+00:00'");
+    }
     if (!isset($state['restore_table_index'])) {
         $state['restore_table_index']=0;$state['restore_row_offset']=0;$state['restore_file_index']=0;$state['restore_admin_id']=(int)($GLOBALS['AUTH_USER_ID']??0);
         $state['restore_class_dirs']=array();
@@ -92,7 +115,7 @@ function li_restore() {
                 $columns=array();$values=array();
                 foreach ($row as $name=>$value) {
                     $columns[]='`'.str_replace('`','``',$name).'`';
-                    $values[]=$value===null?'NULL':"X'".bin2hex((string)$value)."'";
+                    $values[]=$value===null?'NULL':"UNHEX('".bin2hex((string)$value)."')";
                 }
                 li_query('INSERT INTO `'.$safe.'` ('.implode(',',$columns).') VALUES ('.implode(',',$values).')');
             }
@@ -121,7 +144,7 @@ function li_restore() {
         if (function_exists('opcache_invalidate')) { opcache_invalidate($target,true); }
         $state['restore_file_index']++;li_save();li_checkpoint('Восстановлены файлы: '.$state['restore_file_index']);
     }
-    $state=array('version'=>5,'site_id'=>1,'snapshot_complete'=>true,'snapshot_tables'=>$backup['tables'],'snapshot_files'=>$backup['files'],'active'=>false,'restored'=>true);
+    $state=array('version'=>5,'site_id'=>1,'snapshot_format'=>$backup['format']??1,'snapshot_complete'=>true,'snapshot_tables'=>$backup['tables'],'snapshot_files'=>$backup['files'],'active'=>false,'restored'=>true);
     li_save();
 }
 function li_cleanup() {
@@ -174,5 +197,16 @@ function li_verify_clean() {
     if ($db->get_var('SELECT COUNT(*) FROM Subdivision WHERE Catalogue_ID='.(int)$state['site_id'].' AND Subdivision_ID NOT IN ('.implode(',',$keep).')')) { li_fail('Остались прежние разделы.'); }
     if ($db->get_var("SELECT COUNT(*) FROM Template WHERE File_Path LIKE '/medelta/%' OR File_Path LIKE '/lifepodrostka/%' OR File_Path LIKE '/zhizn_podrostka/%'")) { li_fail('Остались прежние макеты.'); }
     if ($db->get_var("SELECT COUNT(*) FROM Class WHERE Keyword LIKE 'zhp\\_%' OR Keyword LIKE 'lp\\_%'")) { li_fail('Остались компоненты прежнего переноса.'); }
+    $functions=__DIR__.'/netcat/modules/default/function.inc.php';
+    $expected=__DIR__.'/netcat_template/template/life_teen/function.inc.php.txt';
+    if (!is_file($functions) || !hash_equals(hash_file('sha256',$expected),hash_file('sha256',$functions))) { li_fail('Функции проекта не совпадают с проверенным пакетом.'); }
+    li_region_notice();
     li_out('В дереве сайта готовые страницы, запрошенные пустые черновики и существующий справочник регионов. Прежние макеты и компоненты удалены.');
+}
+function li_region_notice() {
+    global $db;
+    $domain=(string)$db->get_var('SELECT Domain FROM Catalogue WHERE Catalogue_ID=1');
+    if (!$db->get_var("SELECT Message_ID FROM Message223 WHERE Sub_Class_ID=57 AND Checked=1 AND main_domain='".$db->escape($domain)."' LIMIT 1")) {
+        li_out('ВНИМАНИЕ: для домена сайта нет включённой региональной записи. В существующем инфоблоке регионов №57 проверьте поле main_domain. Контакты и прежние доменные привязки автоматически не изменялись.');
+    }
 }
