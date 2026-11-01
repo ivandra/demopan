@@ -1,0 +1,63 @@
+{
+  "version": "5.1.1",
+  "php": "7.4.33",
+  "sapi": "cli",
+  "mysql": "5.7.27",
+  "nofile_soft": 64,
+  "nofile_hard": 64,
+  "http_checkpoint_files": 3564,
+  "cli_modes": [
+    {
+      "mode": "check",
+      "exit_code": 0,
+      "elapsed_seconds": 0.4
+    },
+    {
+      "mode": "install",
+      "exit_code": 0,
+      "elapsed_seconds": 6.67
+    },
+    {
+      "mode": "install",
+      "exit_code": 0,
+      "elapsed_seconds": 0.13
+    },
+    {
+      "mode": "activate",
+      "exit_code": 0,
+      "elapsed_seconds": 2.66
+    },
+    {
+      "mode": "verify",
+      "exit_code": 0,
+      "elapsed_seconds": 0.13
+    },
+    {
+      "mode": "rollback",
+      "exit_code": 0,
+      "elapsed_seconds": 9.72
+    }
+  ],
+  "after_cli_install": {
+    "installed": true,
+    "snapshot_complete": true,
+    "snapshot_files": 5666,
+    "components": 48,
+    "pages": 33
+  },
+  "restore_database": {
+    "total_original_tables": 276,
+    "content_tables_compared": 133,
+    "content_mismatches": [],
+    "all_changed_table_names": [
+      "Logging",
+      "Session"
+    ],
+    "new_table_names": []
+  },
+  "restore_files": {
+    "files": 5666,
+    "restore_mismatches": [],
+    "snapshot_mismatches": []
+  }
+}
