@@ -59,5 +59,24 @@
     "files": 5666,
     "restore_mismatches": [],
     "snapshot_mismatches": []
+  },
+  "nonfatal_warnings": [
+    {
+      "mode": "install",
+      "message": "nc_Files::field_save_file(): no file name",
+      "trace": [
+        "li_seed",
+        "nc_Message::create",
+        "nc_Files::field_save_file"
+      ],
+      "empty_file_value": true,
+      "installer_completed": true
+    }
+  ],
+  "hosting_command": {
+    "provider": "SpaceWeb",
+    "php_cli": "/usr/bin/php7.4",
+    "source": "https://help.sweb.ru/planirovshik-zadach-cron_59.html",
+    "executed_on_hosting": false
   }
 }

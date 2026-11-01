@@ -4,22 +4,37 @@
 
 Это проверенный на копии вариант продолжения, а не гарантия исправления неизвестной причины занятости дескрипторов на хостинге. У CLI есть собственные лимиты и конфигурация PHP. Задание должно выполняться от владельца сайта с доступом к существующему `state.php`, снимку и базе; права приватных файлов ослаблять не нужно.
 
+## Создание задания в SpaceWeb
+
+Откройте **Crontab → Добавить задание → Создать вручную**. Создайте отдельное задание с комментарием «Установка Жизнь подростка».
+
+| Поле | Значение |
+| --- | --- |
+| Минута | `*/5` |
+| Час | `*` |
+| День | `*` |
+| Месяц | `*` |
+| День недели | `*` |
+| Команда | Команда нужного этапа ниже |
+
+Задание будет запускаться каждые 5 минут. В поле команды вставляется только команда, без пяти полей расписания. Если используется мастер, выбирается произвольная команда, чтобы строка с переменной окружения и перенаправлением журнала выполнялась оболочкой.
+
 ## Команда задания
 
-В шаблонах ниже **замените `/ПУТЬ/К/PHP` на путь к CLI PHP 7.4 или 8.3, указанный вашим хостингом**. Название хостинга и его путь к PHP пока не получены, поэтому готовый путь к интерпретатору не угадывается. Изменение PHP сайта в панели не обязательно меняет PHP, который запускает cron.
+Пользователь подтвердил **SpaceWeb (sweb)**. Для PHP 7.4 используется `/usr/bin/php7.4` — этот путь указан в [официальной инструкции SpaceWeb](https://help.sweb.ru/planirovshik-zadach-cron_59.html). Ниже приведены обезличенные команды. Подставьте свой абсолютный путь сайта вместо `/home/u/ACCOUNT/SITE/public_html` и корень аккаунта вместо `/home/u/ACCOUNT`. Точная команда для предоставленного пользователем пути передаётся в чате. Изменение PHP сайта в панели не обязательно меняет PHP, который запускает cron.
 
-Путь сайта взят из предоставленного журнала. Лог сохраняется в каталоге аккаунта вне `public_html`; его можно читать через файловый менеджер. Назначьте запуск раз в 5 минут и после завершения этапа отключите задание перед следующим этапом. Одновременно кнопками браузерного установщика не пользуйтесь.
+Публичная инструкция не содержит реального пути аккаунта. Лог сохраняется в каталоге аккаунта вне `public_html`; его можно читать через файловый менеджер. Назначьте запуск раз в 5 минут и после завершения этапа отключите задание перед следующим этапом. Одновременно кнопками браузерного установщика не пользуйтесь.
 
 Сначала можно проверить версию PHP и доступность сайта без установки:
 
 ```sh
-HTTP_HOST=dev.lifepodrostka.ru /ПУТЬ/К/PHP -d short_open_tag=1 /home/p/postroisvo/dev_lifepodrostka_ru/public_html/zhp-install.php status --host=dev.lifepodrostka.ru >> /home/p/postroisvo/zhp-cron.log 2>&1
+HTTP_HOST=dev.example.org /usr/bin/php7.4 -d short_open_tag=1 /home/u/ACCOUNT/SITE/public_html/zhp-install.php status --host=dev.example.org >> /home/u/ACCOUNT/zhp-cron.log 2>&1
 ```
 
 В логе должны быть Netcat 7.2.0 и PHP 7.4 либо 8.3. После успешной проверки замените `status` на `install`:
 
 ```sh
-HTTP_HOST=dev.lifepodrostka.ru /ПУТЬ/К/PHP -d short_open_tag=1 /home/p/postroisvo/dev_lifepodrostka_ru/public_html/zhp-install.php install --host=dev.lifepodrostka.ru >> /home/p/postroisvo/zhp-cron.log 2>&1
+HTTP_HOST=dev.example.org /usr/bin/php7.4 -d short_open_tag=1 /home/u/ACCOUNT/SITE/public_html/zhp-install.php install --host=dev.example.org >> /home/u/ACCOUNT/zhp-cron.log 2>&1
 ```
 
 Текущее состояние и резервная копия продолжают использоваться. Завершение подготовки обозначается строкой:
@@ -29,13 +44,13 @@ HTTP_HOST=dev.lifepodrostka.ru /ПУТЬ/К/PHP -d short_open_tag=1 /home/p/post
 Только после этого отключите задание `install` и замените режим на `activate`:
 
 ```sh
-HTTP_HOST=dev.lifepodrostka.ru /ПУТЬ/К/PHP -d short_open_tag=1 /home/p/postroisvo/dev_lifepodrostka_ru/public_html/zhp-install.php activate --host=dev.lifepodrostka.ru >> /home/p/postroisvo/zhp-cron.log 2>&1
+HTTP_HOST=dev.example.org /usr/bin/php7.4 -d short_open_tag=1 /home/u/ACCOUNT/SITE/public_html/zhp-install.php activate --host=dev.example.org >> /home/u/ACCOUNT/zhp-cron.log 2>&1
 ```
 
 После сообщения «Чистый сайт включён. Заявки сохраняются в Netcat.» отключите задание `activate` и выполните `verify`:
 
 ```sh
-HTTP_HOST=dev.lifepodrostka.ru /ПУТЬ/К/PHP -d short_open_tag=1 /home/p/postroisvo/dev_lifepodrostka_ru/public_html/zhp-install.php verify --host=dev.lifepodrostka.ru >> /home/p/postroisvo/zhp-cron.log 2>&1
+HTTP_HOST=dev.example.org /usr/bin/php7.4 -d short_open_tag=1 /home/u/ACCOUNT/SITE/public_html/zhp-install.php verify --host=dev.example.org >> /home/u/ACCOUNT/zhp-cron.log 2>&1
 ```
 
 В конце отключите задание cron, проверьте сайт и удалите `zhp-install.php`. Снимок и `state.php` оставьте. При ошибке сохраните лог и продолжайте тот же этап после её устранения; переходить к следующему этапу при ошибке нельзя.
@@ -57,5 +72,7 @@ Cron с `curl` или `wget`, открывающий URL установщика,
 На предоставленной папке `lifepodr3110` и свежем SQL: PHP 7.4.33 **CLI**, MySQL 5.7.27, лимит `nofile=64:64`. Браузерная установка остановлена на сохранённой отметке 3564 файла; затем из отдельных процессов PHP выполнены `check`, `install`, повторный `install`, `activate`, `verify` и `rollback`. Все завершились с кодом 0.
 
 После CLI-установки снимок завершён: 5666 файлов, 48 компонентов, 33 раздела. Продолжение `install` заняло на стенде 6,67 секунды, активация — 2,66 секунды; это не оценка времени для хостинга. После отката совпали 133 таблицы содержимого и 5666 файлов; из 276 таблиц отличались только динамические `Logging` и `Session`.
+
+В CLI-журнале при создании записи было одно нефатальное предупреждение Netcat `nc_Files::field_save_file(): no file name` для пустого файлового значения. Трассировка на копии подтвердила вызов из `nc_Message::create()` во время наполнения; это отдельное предупреждение, не `Too many open files`. Все этапы завершились с кодом 0 и прошли проверку. Предупреждение сохранено в машинном отчёте; другие ошибки нельзя считать безвредными по аналогии.
 
 Отчёт: [`tests/cli-cron-summary.json`](../tests/cli-cron-summary.json). Файлы поставки и ранее опубликованные архивы для этого способа не изменялись.
