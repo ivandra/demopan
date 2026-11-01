@@ -1,0 +1,77 @@
+{
+  "package_version": "5.1.1",
+  "date": "2026-11-01",
+  "hosting_log": {
+    "php": "7.4.33",
+    "sapi_evidence": "Apache php7 module log",
+    "immediate_failure": "EMFILE: Too many open files",
+    "source_of_hosting_fd_exhaustion": "unknown",
+    "last_displayed_snapshot_files": 3564
+  },
+  "test_environment": {
+    "php": "7.4.33",
+    "apache": "2.4.54",
+    "sapi": "apache2handler",
+    "mysql": "5.7.27",
+    "opcache_enabled": true,
+    "nofile_soft": 64,
+    "nofile_hard": 64,
+    "workers": 1,
+    "max_connections_per_child": 0,
+    "test_host_port_stripped_from_cookie_domain": true
+  },
+  "measurements": {
+    "apache_requests": 2658,
+    "distinct_worker_processes": 1,
+    "fds_at_php_entry_min": 13,
+    "fds_at_php_entry_max": 13,
+    "fds_at_shutdown_min": 13,
+    "fds_at_shutdown_max": 17,
+    "natural_exhaustion_reproduced": false
+  },
+  "controlled_fault": {
+    "fault_injected": true,
+    "php": "7.4.33",
+    "sapi": "apache2handler",
+    "nofile_soft": 64,
+    "nofile_hard": 64,
+    "checkpoint_files": 3564,
+    "http_on_fault": 500,
+    "nc_page_file_present": true,
+    "state_unchanged_on_fault": true,
+    "components_before_fault": 0,
+    "pages_before_fault": 0,
+    "resumed_files": 3572,
+    "next_request_ok": true
+  },
+  "browser": {
+    "passed": 76,
+    "failed": 0
+  },
+  "restore_database": {
+    "total_original_tables": 276,
+    "content_tables_compared": 133,
+    "content_mismatches": [],
+    "all_changed_table_names": [
+      "Logging",
+      "Session"
+    ],
+    "new_table_names": []
+  },
+  "restore_files": {
+    "files": 5666,
+    "restore_mismatches": [],
+    "snapshot_mismatches": []
+  },
+  "cli_server": {
+    "php": "7.4.33",
+    "nofile_soft": 64,
+    "nofile_hard": 64,
+    "install_requests": 867,
+    "completed": true,
+    "fds_after_completed_install": 4
+  },
+  "deployed_php_and_assets_changed": false,
+  "existing_archives_regenerated": false,
+  "live_hosting_accessed": false
+}
