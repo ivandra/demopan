@@ -1,0 +1,31 @@
+<?php if (empty($GLOBALS['reasons_cnt'])): ?>
+			<div class="reasons__item">
+				<h3>Вывод из запоя</h3>
+                <?
+                 echo nc_browse_sub(50, $h_block_menu, $ignore_check = 0);
+                 ?>
+				<div class="reasons__item-text">Передовые методы и препараты</div>
+				<button data-fancybox="popup-<?=rand(0,999999)?>" data-src="#popup">Вызов нарколога</button>
+			</div>
+			<div class="reasons__item">
+				<h3>Лечение зависимостей</h3>
+				<ul>
+					<li><a href="/uslugi/lechenie-alkogolizma/">Лечение алкоголизма</a></li>
+					<li><a href="/uslugi/lechenie-narkomanii/">Лечение наркомании</a></li>
+					<li><a href="/uslugi/narkologicheskaya-pomosch/">Наркологическая помощь</a></li>
+				</ul>
+				<div class="reasons__item-text">Работаем со всеми видами зависимостей</div>
+				<button data-fancybox="popup-<?=rand(0,999999)?>" data-src="#popup">Консультация психиатра</button>
+			</div>
+			<div class="reasons__item">
+				<h3>Кодирование</h3>
+				 <?
+                 echo nc_browse_sub(60, $h_block_menu, $ignore_check = 0);
+                 ?>
+				<div class="reasons__item-text">Индивидуальный подход к каждому</div>
+				<button data-fancybox="popup-<?=rand(0,999999)?>" data-src="#popup">консультация</button>
+			</div>
+<?php endif; ?>
+		</div>
+	</div>
+</div>

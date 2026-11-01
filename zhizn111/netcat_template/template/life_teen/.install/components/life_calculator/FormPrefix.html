@@ -1,0 +1,54 @@
+<section class="calc" id="calc">
+    <div class="wrap">
+        <div class="calc__content">
+            <p class="hero__label">ПРЕДВАРИТЕЛЬНЫЙ РАСЧЁТ</p>
+            <h2 class="hero__title"> Стоимость <span class="hero__title-accent">пребывания</span>
+            </h2>
+            <p class="hero__description"> Цена зависит от продолжительности и необходимого объёма сопровождения. Выберите количество суток и ориентировочную ставку, чтобы увидеть диапазон бюджета. </p>
+            <div class="calc__image">
+                <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/calc.png" />
+            </div>
+            <div class="calc__mob-image">
+                <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/calc2.png" />
+            </div>
+        </div>
+        <div class="calc__panel">
+            <div class="calc__row">
+                <div class="calc__label-group">
+                    <span class="calc__label-text">Продолжительность пребывания</span>
+                    <input class="calc__input" id="amount" readonly="" type="text" />
+                </div>
+                <div class="calc__range">
+                    <div id="slider-range-max"></div>
+                </div>
+                <div class="calc__slider-marks">
+                    <span class="calc__slider-min">7 суток</span>
+                    <span class="calc__slider-max">90 суток</span>
+                </div>
+            </div>
+            <div class="calc__row">
+                <div class="calc__label-group">
+                    <span class="calc__label-text">Стоимость за сутки</span>
+                    <input class="calc__input" id="amount2" readonly="" type="text" />
+                </div>
+                <div class="calc__range">
+                    <div id="slider-range-max2"></div>
+                </div>
+                <p class="calc__hint"> Диапазон программы: от 3 000 до 6 000 ₽ за сутки. </p>
+                <div class="calc__slider-marks">
+                    <span class="calc__slider-min">3 000 ₽</span>
+                    <span class="calc__slider-max">6 000 ₽</span>
+                </div>
+            </div>
+            <div class="calc__result">
+                <p class="calc__result-label">Ориентировочная стоимость</p>
+                <p class="calc__result-value">135 000 ₽</p>
+                <p class="calc__result-formula">30 суток × 4 500 ₽</p>
+                <a class="header__button" href="/kontakty/"> Получить точный расчёт → </a>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    window.projectCalculator = <?= json_encode(array_map('intval', $cc_settings)) ?>;
+</script>

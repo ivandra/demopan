@@ -1,0 +1,28 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+	<div class="free-consult">
+		<div class="wrap">
+			<div class="free-consult__text">
+				<h2>Не знаете, с чего начать?</h2>
+				<p>Обсудим вашу ситуацию и ту помощь, которую мы сможем оказать вашим близким.</p>
+				<a href="#">Бесплатная консультация. Оставьте заявку</a>
+			</div>
+			<form class="free-consult__form" enctype='multipart/form-data' method="post" action='<?= $SUB_FOLDER ?><?= $HTTP_ROOT_PATH ?>add.php'>
+				<input name='catalogue' type='hidden' value='<?= $catalogue ?>' />
+				<input name='cc' type='hidden' value="<?=$current_catalogue['zakaz_cc']?>" />
+				<input name='sub' type='hidden' value="<?=$current_catalogue['zakaz_sub']?>"/>
+				<input name='posting' type='hidden' value='1' />
+				<input name="f_urlMessage" type="hidden" value="<?=$nc_core->url->source_url()?>"> 
+				<input name="f_utm" type="hidden" value="<?=get_utm()?>">
+				<h3>Бесплатная анонимная консультация</h3>
+				<input type="text" name="f_phone" placeholder="+7 999 999 99 99" required>
+				<button>перезвоните мне</button>
+				<div class="agree">
+					<input type="checkbox" class="checkbox" id="agree-consult" required><label for="agree-consult">Я даю свое согласие на <a href="/policy/">обработку персональных данных</a> и соглашаюсь с <a href="/politika-konfidencialnosti/">политикой конфиденциальности</a></label>
+				</div>
+			</form>
+		</div>
+	</div><!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><!-- /FormSuffix -->

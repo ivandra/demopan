@@ -1,0 +1,107 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+<!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+<div class="hero">
+		<div class="wrap">
+			<div class="hero__text">
+				<?/*<div class="hero__top-text">
+					Первый центр в Донецке
+				</div>*/?>
+				<?if($f_h1){?>
+					<h1 class="hero__name">
+						 <?=shortcode_component($f_name)?>
+					</h1>
+				 <?}else{?>
+					 <div class="hero__name"><?=shortcode_component($f_name)?></div>        
+				<?}?>
+				<?if($f_descrp){?>
+					<ul class="hero__data">
+						<?=shortcode_component($f_descrp)?>
+					</ul>
+				<?}?>
+				<div class="hero__button">
+					<button data-fancybox="popup1" data-src="#popup">Оставить заявку</button>
+					<a href="/o-nas/">Узнать о нас →</a>
+				</div>
+			</div>
+			<div class="hero__banners">
+				<div class="hero__banner hero__banner--banner1">
+					<div class="hero__banner1-text">
+						<div class="hero__banner1-image">
+							<img src="<?=$nc_parent_template_folder_path;?>img/hero-icon1.svg">
+						</div>
+						<div class="hero__banner1-txt">
+							<h3>Вывод из запоя на дому и в стационаре</h3>
+							Быстрое прибытие, эффективное снятие похмельного синдрома и восстановление.
+						</div>
+					</div>
+					<div class="hero__banner1-blocks">
+						<div class="hero__banner1-block">
+							<div class="hero__banner1-block-icon">
+								<img src="<?=$nc_parent_template_folder_path;?>img/hero-icon4.svg">
+							</div>
+							<div class="hero__banner1-block-text">
+								<h3>Круглосуточно</h3>
+								Мы рядом 24/7
+							</div>
+						</div>
+						<div class="hero__banner1-block">
+							<div class="hero__banner1-block-icon">
+								<img src="<?=$nc_parent_template_folder_path;?>img/hero-icon5.svg">
+							</div>
+							<div class="hero__banner1-block-text">
+								<h3>Анонимно</h3>
+								конфиденциально
+							</div>
+						</div>
+						<div class="hero__banner1-block">
+							<div class="hero__banner1-block-icon">
+								<img src="<?=$nc_parent_template_folder_path;?>img/hero-icon6.svg">
+							</div>
+							<div class="hero__banner1-block-text">
+								<h3>Выезд за 30 минут</h3>
+								Быстрый выезд
+							</div>
+						</div>
+					</div>
+					<div class="hero__banner-buttons">
+						<a href="/uslugi/vyvod-iz-zapoya/vyvod-iz-zapoya-v-statsionare/">подробнее</a>
+						<a href="/uslugi/vyvod-iz-zapoya/">Вывод из запоя</a>
+					</div>
+				</div>
+				<div class="hero__banner hero__banner--banner2">
+					<div class="hero__banner2-text">
+						<div class="hero__banner2-icon">
+							<img src="<?=$nc_parent_template_folder_path;?>img/hero-icon2.svg">
+						</div>
+						<div class="hero__banner2-txt">
+							<h3>Кодирование</h3>
+							<p>Различные варианты кодирование, подберем для вашего случая</p>
+							<div class="hero__banner-buttons">
+								<a href="/uslugi/kodirovanie-ot-alkogolizma/">подробнее</a>
+							</div>
+						</div>
+					</div>
+					<a href="/uslugi/kodirovanie-ot-alkogolizma/" class="hero__banner-link"></a>
+				</div>
+				<div class="hero__banner hero__banner--banner3">
+					<div class="hero__banner2-text">
+						<div class="hero__banner2-icon">
+							<img src="<?=$nc_parent_template_folder_path;?>img/hero-icon3.svg">
+						</div>
+						<div class="hero__banner2-txt">
+							<h3>Вызов врача на дом</h3>
+							<p>Анонимно, круглосуточно.</p>
+							<div class="hero__banner-buttons">
+								<a href="/uslugi/vyvod-iz-zapoya/vyzov-narkologa-na-dom/" data-fancybox="popup-<?=rand(0,999999)?>" data-src="#popup">подробнее</a>
+							</div>
+						</div>
+					</div>
+					<a href="/uslugi/vyvod-iz-zapoya/vyzov-narkologa-na-dom/" class="hero__banner-link"></a>
+				</div>
+			</div>
+		</div>
+	</div><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><!-- /FormSuffix -->

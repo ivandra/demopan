@@ -1,0 +1,157 @@
+<div class="bottom-contacts">
+	<div class="wrap">
+		<h2>Мы на связи 24 / 7</h2>
+		<div class="bottom-contacts__phone">
+			<a href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone]'))?>"><?=shortcode('[phone]')?></a>
+			Позвонить прямо сейчас — бесплатно
+		</div>
+		<div class="bottom-contacts__mess">
+			Написать:
+			<a href="<?=shortcode('[max]')?>">
+				<svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M10.6183 0.0148158C4.06492 0.342809 -0.261075 5.26572 0.0122447 11.4735C0.131626 14.1907 1.27203 16.5288 1.54221 19.1076C1.61132 19.7757 1.41026 20.6002 2.21451 20.892C3.20412 21.2501 4.72152 20.6483 5.5509 20.0976C5.83365 19.9141 6.10383 19.7004 6.31117 19.4356C7.16883 19.9803 7.98251 20.5069 9.00353 20.7416C13.4992 21.7737 18.4252 19.4116 20.6149 15.6171C24.7304 8.48847 19.1666 -0.412478 10.6183 0.0148158ZM8.07362 14.8919C7.71861 15.1567 7.37618 15.5178 6.98348 15.7254C6.41485 16.0173 6.23892 15.7134 6.02529 15.2319C5.35298 13.7003 5.2713 11.0914 5.664 9.4875C6.19179 7.3059 7.95424 5.38608 10.3764 5.18146C12.8269 4.97383 15.1014 6.16544 16.1287 8.31696C18.4032 13.1045 12.5818 17.8318 8.07362 14.8949V14.8919Z" fill="url(#paint0_linear_2001_3406)"/>
+				<defs>
+				<linearGradient id="paint0_linear_2001_3406" x1="0" y1="10.5" x2="22" y2="10.5" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#1B3FA0"/>
+				<stop offset="1" stop-color="#3E64D8"/>
+				</linearGradient>
+				</defs>
+				</svg>
+			</a>
+             <?/*
+			<a href="<?=shortcode('[telegram]')?>">
+				<svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M1.51239 7.74888C7.41795 5.20867 11.3559 3.534 13.3263 2.72489C18.9521 0.414697 20.1211 0.0133926 20.883 0.000141289C21.0506 -0.00277319 21.4253 0.0382296 21.668 0.232668C21.873 0.396848 21.9294 0.618632 21.9563 0.774293C21.9833 0.929954 22.0169 1.28455 21.9902 1.56163C21.6854 4.7241 20.3662 12.3986 19.6951 15.9406C19.4111 17.4394 18.852 17.9419 18.3107 17.9911C17.1343 18.098 16.2409 17.2235 15.1015 16.4861C13.3186 15.3323 12.3113 14.614 10.5807 13.488C8.58059 12.1868 9.87715 11.4716 11.017 10.3027C11.3153 9.99686 16.4986 5.34226 16.5989 4.92001C16.6115 4.86721 16.6231 4.67036 16.5047 4.56642C16.3862 4.46248 16.2114 4.49802 16.0852 4.52629C15.9064 4.56636 13.0581 6.42501 7.54035 10.1022C6.73187 10.6503 5.99958 10.9174 5.34347 10.9034C4.62016 10.888 3.2288 10.4996 2.19447 10.1677C0.925826 9.76056 -0.0824703 9.5453 0.00532971 8.85385C0.0510613 8.4937 0.553413 8.12538 1.51239 7.74888Z" fill="url(#paint0_linear_2001_3408)"/>
+				<defs>
+				<linearGradient id="paint0_linear_2001_3408" x1="0" y1="9" x2="22" y2="9" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#1B3FA0"/>
+				<stop offset="1" stop-color="#3E64D8"/>
+				</linearGradient>
+				</defs>
+				</svg>
+			</a>
+			<a href="<?=shortcode('[max]')?>">
+				<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M11 0C4.93475 0 7.09849e-05 4.9347 7.09849e-05 11C7.09849e-05 12.8939 0.48933 14.7563 1.41715 16.3996L0.0177666 21.3926C-0.0281463 21.5567 0.0163318 21.7327 0.13494 21.8546C0.226288 21.9488 0.350635 22 0.47833 22C0.516591 22 0.55533 21.9952 0.593113 21.9861L5.80423 20.6953C7.39539 21.5495 9.18743 22 11 22C17.0653 22 22 17.0653 22 11C22 4.9347 17.0653 0 11 0ZM16.5335 14.8816C16.2982 15.533 15.1695 16.1274 14.6272 16.2073C14.1403 16.2786 13.5243 16.3092 12.848 16.0968C12.4382 15.9677 11.9121 15.7965 11.2382 15.509C8.40548 14.301 6.55557 11.4845 6.41401 11.2984C6.27292 11.1124 5.26092 9.78665 5.26092 8.41452C5.26092 7.04239 5.99027 6.36757 6.24949 6.08826C6.5087 5.80896 6.81431 5.73913 7.00274 5.73913C7.19118 5.73913 7.37913 5.74152 7.54413 5.74917C7.71774 5.75778 7.95065 5.68365 8.17974 6.22791C8.41504 6.78652 8.97987 8.15865 9.04969 8.29878C9.12048 8.43843 9.16735 8.60152 9.07361 8.78757C8.97987 8.97361 8.933 9.08983 8.79143 9.25291C8.64987 9.416 8.49491 9.61639 8.3677 9.7417C8.22613 9.88087 8.07931 10.0315 8.24383 10.3108C8.40835 10.5901 8.97509 11.5031 9.81491 12.2425C10.8934 13.1923 11.8035 13.487 12.0857 13.6266C12.3679 13.7663 12.5329 13.7428 12.6974 13.5568C12.8619 13.3703 13.4033 12.7423 13.5912 12.4635C13.7792 12.1847 13.9676 12.2306 14.2269 12.3238C14.4861 12.4166 15.8745 13.091 16.1566 13.2306C16.4388 13.3703 16.6272 13.4401 16.698 13.5563C16.7688 13.672 16.7688 14.2307 16.5335 14.8816Z" fill="url(#paint0_linear_2001_3410)"/>
+				<defs>
+				<linearGradient id="paint0_linear_2001_3410" x1="0" y1="11" x2="22" y2="11" gradientUnits="userSpaceOnUse">
+				<stop stop-color="#1B3FA0"/>
+				<stop offset="1" stop-color="#3E64D8"/>
+				</linearGradient>
+				</defs>
+				</svg>
+			</a>
+            */?>
+		</div>
+	</div>
+</div>
+<footer class="footer">
+		<div class="wrap">
+			<div class="footer__company">
+				<div class="footer__logo">
+					<a href="/"><img src="<?=$nc_parent_template_folder_path;?>img/logo.svg"></a>
+				</div>
+				<a class="footer__license" href="/#license" title="Посмотреть лицензию на главной">Лицензия № <?=$nc_core->widget->generate('regions', array('licinfo'))?></a>
+			</div>
+			<nav class="footer__nav">
+				<h3>Услуги</h3>
+				<ul>
+					<li><a href="/uslugi/vyvod-iz-zapoya/">Вывод из запоя</a></li>
+					<li><a href="/uslugi/vyvod-iz-zapoya/vyvod-iz-zapoya-na-domu/">Вывод из запоя на дому</a></li>
+					<li><a href="/uslugi/vyvod-iz-zapoya/vyvod-iz-zapoya-v-statsionare/">Вывод из запоя в стационаре</a></li>
+					<li><a href="/uslugi/lechenie-alkogolizma/">Лечение алкоголизма</a></li>
+					<li><a href="/uslugi/lechenie-narkomanii/">Лечение наркомании</a></li>
+					<li><a href="/uslugi/kodirovanie-ot-alkogolizma/">Кодирование от алкоголизма</a></li>
+					<li><a href="/uslugi/narkologicheskaya-pomosch/">Наркологическая помощь</a></li>
+				</ul>
+			</nav>
+			<nav class="footer__nav">
+				<h3>Центр</h3>
+				<ul>
+					<li><a href="/o-nas/">О центре</a></li>
+					<li><a href="/o-nas/spetsialisty/">Специалисты</a></li>
+					<li><a href="/cases/">Кейсы</a></li>
+					<li><a href="/blog/">Статьи</a></li>
+					<li><a href="/o-nas/litsenzii/">Лицензии</a></li>
+					<li><a href="/kontakty/">Контакты</a></li>
+				</ul>
+			</nav>
+			<div class="footer__contacts">
+				<h3>Контакты</h3>
+				<a class="footer__phone" href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone]'))?>"><?=shortcode('[phone]')?></a>
+				<a class="footer__phone" href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone2]'))?>"><?=shortcode('[phone2]')?></a>
+				<a class="footer__mail" href="mailto:<?=$nc_core->widget->generate('regions', array('email'))?>"><?=$nc_core->widget->generate('regions', array('email'))?></a>
+				<div class="footer__adress">
+					<?=shortcode('[city]')?>, <?=shortcode('[address]')?>
+				</div>
+				<div class="footer__hours">
+					Круглосуточно, без выходных
+				</div>
+			</div>
+		</div>
+	</footer>
+	<div class="copy">
+		<div class="wrap">
+			© <?=date('Y')?> Центр медицины и психологии
+			<span>·</span>
+			Все права защищены
+			<span>·</span>
+			<a href="/politika-konfidencialnosti/">Политика конфиденциальности</a>
+		</div>
+	</div>
+	
+<div class="popup" id="popup" style="display: none; width: 100%; max-width: 760px;">
+		<div class="flex">
+			<div class="popup__info">
+				<div class="popup__top-text">
+					Бесплатная консультация
+				</div>
+				<h2 class="popup__name">Первый шаг <br/>к <span>выздоровлению</span></h2>
+				<ul>
+					<li>Анонимно — без постановки на учёт</li>
+					<li>Ответим в течение 10 минут</li>
+					<li>Работаем круглосуточно, 7 дней в неделю</li>
+					<li>Приезжаем на дом в экстренных ситуациях</li>
+				</ul>
+				<div class="popup__phone">
+					Позвонить напрямую
+					<a href="tel:<?=str_replace( array(" ", "(", ")", "-"), "",shortcode('[phone]'))?>"><?=shortcode('[phone]')?></a>
+				</div>
+			</div>
+			<form class="popup__form" enctype='multipart/form-data' method="post" action='<?= $SUB_FOLDER ?><?= $HTTP_ROOT_PATH ?>add.php'>
+				<input name='catalogue' type='hidden' value='<?= $catalogue ?>' />
+				<input name='cc' type='hidden' value="<?=$current_catalogue['zakaz_cc']?>" />
+				<input name='sub' type='hidden' value="<?=$current_catalogue['zakaz_sub']?>"/>
+				<input name='posting' type='hidden' value='1' />
+				<input name="f_urlMessage" type="hidden" value="<?=$nc_core->url->source_url()?>"> 
+				<input name="f_utm" type="hidden" value="<?=get_utm()?>">
+				<h3>Записаться на консультацию</h3>
+				<p>Оставьте имя и номер — перезвоним в удобное для вас время</p>
+				<div class="popup__label">
+					Ваше имя
+				</div>
+				<input type="text" name="f_name" placeholder="Иван" required>
+				<div class="popup__label">
+					Телефон
+				</div>
+				<input type="text" name="f_phone" placeholder="+7 999 999 99 99" required>
+				<button type="submit">Отправить заявку →</button>
+				<div class="agree">
+					<input type="checkbox" class="checkbox" id="agree-popup" required><label for="agree-popup">Я даю свое согласие на <a href="/policy/">обработку персональных данных</a> и соглашаюсь с <a href="/politika-konfidencialnosti/">политикой конфиденциальности</a></label>
+				</div>
+			</form>
+		</div>
+	</div>
+	<!-- cookie notice (информационный) -->
+	<div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Уведомление о файлах cookie">
+		<div class="cookie-banner__in">
+			<div class="cookie-banner__text">
+				Мы используем файлы cookie, чтобы сайт работал корректно и им было удобнее пользоваться. Продолжая просмотр сайта, вы соглашаетесь с использованием файлов cookie. <a href="/cookie/" class="cookie-banner__link">Политика использования cookie</a>
+			</div>
+			<div class="cookie-banner__btns">
+				<button type="button" class="cookie-banner__btn cookie-banner__btn--all" data-cookie-accept>Принять</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<?php
+// Валидация при редактировании редакции (§2.1) — как в AddCond, но исключаем текущий объект
+if (trim((string)$f_Content) === '' && trim((string)$f_File) === '') {
+    $warnText = "Заполните «Содержание» или прикрепите «Файл».<br><br>";
+    $posting = 0;
+}
+if ($posting && !empty($f_StartDate)) {
+    $dup = $db->get_var(
+        "SELECT `Message_ID` FROM `Message" . (int)$classID . "`
+          WHERE `Sub_Class_ID` = " . (int)$cc . "
+            AND `Message_ID` <> " . (int)$message . "
+            AND DATE(`StartDate`) = DATE('" . $db->escape($f_StartDate) . "')"
+    );
+    if ($dup) {
+        $warnText = "Редакция с такой «Датой начала действия» уже существует в этом разделе. Укажите другую дату.<br><br>";
+        $posting = 0;
+    }
+}
+?>

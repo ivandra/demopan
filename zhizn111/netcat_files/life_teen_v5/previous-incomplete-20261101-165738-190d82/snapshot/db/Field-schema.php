@@ -1,0 +1,30 @@
+<?php
+return array (
+  'sql' => 'CREATE TABLE `Field` (
+  `Field_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Class_ID` int(11) NOT NULL DEFAULT \'0\',
+  `Field_Name` char(64) NOT NULL DEFAULT \'\',
+  `Description` char(255) NOT NULL DEFAULT \'\',
+  `TypeOfData_ID` int(11) NOT NULL DEFAULT \'1\',
+  `Format` text,
+  `Extension` text NOT NULL,
+  `NotNull` smallint(6) NOT NULL DEFAULT \'1\',
+  `Priority` int(11) NOT NULL DEFAULT \'0\',
+  `DoSearch` smallint(6) NOT NULL DEFAULT \'1\',
+  `DefaultState` char(255) DEFAULT NULL,
+  `Inheritance` smallint(6) NOT NULL DEFAULT \'0\',
+  `System_Table_ID` int(11) NOT NULL DEFAULT \'0\',
+  `Widget_Class_ID` int(11) NOT NULL DEFAULT \'0\',
+  `TypeOfEdit_ID` int(11) NOT NULL DEFAULT \'1\',
+  `Checked` tinyint(1) NOT NULL DEFAULT \'1\',
+  `InTableView` tinyint(1) NOT NULL DEFAULT \'0\',
+  PRIMARY KEY (`Field_ID`),
+  KEY `TypeOfData_ID` (`TypeOfData_ID`),
+  KEY `System_Table_ID` (`System_Table_ID`),
+  KEY `Widget_Class_ID` (`Widget_Class_ID`),
+  KEY `TypeOfEdit_ID` (`TypeOfEdit_ID`),
+  KEY `Class_ID_2` (`Class_ID`,`TypeOfData_ID`),
+  KEY `Checked` (`Checked`),
+  KEY `netshop_field_index` (`Field_Name`,`Class_ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=446 DEFAULT CHARSET=utf8',
+);

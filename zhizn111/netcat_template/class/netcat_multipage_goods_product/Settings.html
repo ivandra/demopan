@@ -1,0 +1,12 @@
+<?php
+
+// Шаблон вывода мультифайлового поля Slider строкой (echo $f_Slider)
+// Подставляются только значения (%Path%, %Name% и т.п.), без условий: превью у поля
+// по умолчанию нет, поэтому используется %Path%; видео тоже попадёт в <img> —
+// для смешанного содержимого перебирайте $f_Slider->records и проверяйте is_video().
+$f_Slider_tpl = array(
+    'prefix' => "<div class='tpl-field-slider'>",
+    'record' => "<div class='tpl-field-slider-item'><a href='%Path%'><img src='%Path%' alt='' /></a></div>",
+    'divider' => '',
+    'suffix' => '</div>',
+);

@@ -1,0 +1,136 @@
+<?php
+
+const NETCAT_MODULE_LOGGING_DESCRIPTION = "Логирование системных событий";
+
+const NETCAT_MODULE_LOGGING_DATA_ID = "#";
+const NETCAT_MODULE_LOGGING_DATA_EVENT = "Событие";
+const NETCAT_MODULE_LOGGING_DATA_INFO = "Информация";
+const NETCAT_MODULE_LOGGING_DATA_DATE = "Дата события";
+const NETCAT_MODULE_LOGGING_DATA_USER = "Пользователь";
+const NETCAT_MODULE_LOGGING_DATA_SYSTEM = "система";
+const NETCAT_MODULE_LOGGING_DATA_IP = "IP-адрес";
+
+const NETCAT_MODULE_LOGGING_BUTTON_CLEAR = "Очистить";
+const NETCAT_MODULE_LOGGING_BUTTON_CANCEL = "Отменить";
+const NETCAT_MODULE_LOGGING_BUTTON_SORT = "Отобразить";
+
+const NETCAT_MODULE_LOGGING_NOTICE_CLEAR = "Очистить все данные логирования?";
+
+const NETCAT_MODULE_LOGGING_SHOW_PARAMETERS = "Параметры отображения";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_BY = "сортировать по";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_BY_DATE = "дате события";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_BY_EVENT = "названию события";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_BY_USER = "пользователю";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_DIR = "порядок сортировки";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_DIR_ASC = "по возрастанию";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_DIR_DESC = "по убыванию";
+const NETCAT_MODULE_LOGGING_SHOW_ONLY_ACTION = "отобразить действие";
+const NETCAT_MODULE_LOGGING_SHOW_ONLY_ACTION_NONE = "-- действие не задано --";
+const NETCAT_MODULE_LOGGING_SHOW_ONLY_ESSENCE = "отобразить сущность";
+const NETCAT_MODULE_LOGGING_SHOW_ONLY_ESSENCE_NONE = "-- сущность не задана --";
+
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_ADD = "добавление";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_UPDATE = "изменение";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_DROP = "удаление";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_CHECK = "включение";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_UNCHECK = "выключение";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_AUTHORIZE = "авторизация";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_BLOCK = "блокирование";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_UNBLOCK = "разблокирование";
+
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_CATALOGUE = "сайт";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_SUBDIVISION = "раздел";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_SUBCLASS = "инфоблок";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_CLASS = "компонент";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_CLASSTEMPLATE = "шаблон компонента";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_MESSAGE = "объект";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_SYSTEMTABLE = "системная таблица";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_TEMPLATE = "макет";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_USER = "пользователь";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_MODULE = "модуль";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_COMMENT = "комментарий";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_WIDGETCLASS = "виджет";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_FIELD = "поле";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_CLASSIFICATOR = "список";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_CLASSIFICATORITEM = "элемент списка";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_TEMPLATEPARTIAL = "врезка";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_EXTERNALSCRIPT = "внешний скрипт";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_EXTERNALSCRIPTPROVIDER = "провайдер автоблокировки";
+
+const NETCAT_MODULE_LOGGING_QUOTE1 = "«";
+const NETCAT_MODULE_LOGGING_QUOTE2 = "»";
+
+const NETCAT_MODULE_LOGGING_ALL_USERS = "все пользователи";
+const NETCAT_MODULE_LOGGING_SHOW_USER = "совершивший действие пользователь";
+const NETCAT_MODULE_LOGGING_OVER_PERIOD = "за период";
+
+// Журнал согласий 152-ФЗ
+const NETCAT_MODULE_LOGGING_CONSENT_JOURNAL = "Журнал согласий";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_DATE = "Дата и время";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_SUBJECT = "Субъект";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_NAME = "Имя";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_CONTACTS = "Контакты";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_TYPE = "Тип";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_ACTION = "Действие";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_SOURCE = "Источник";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_LABEL = "Текст согласия";
+const NETCAT_MODULE_LOGGING_CONSENT_ACTION_GRANT = "Согласие";
+const NETCAT_MODULE_LOGGING_CONSENT_ACTION_WITHDRAW = "Отзыв";
+const NETCAT_MODULE_LOGGING_CONSENT_SUBJECT_USER = "Пользователь";
+const NETCAT_MODULE_LOGGING_CONSENT_SUBJECT_ANON = "Аноним";
+const NETCAT_MODULE_LOGGING_CONSENT_EMPTY = "Записей в журнале согласий нет";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_SEARCH = "Email или телефон";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_NAME = "Имя";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_ACTION = "Действие";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_ALL = "любое";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_PERIOD = "Период";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_FROM = "с";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_TO = "по";
+const NETCAT_MODULE_LOGGING_CONSENT_RECORD = "Запись журнала согласий";
+const NETCAT_MODULE_LOGGING_CONSENT_SOURCE_URL = "Страница согласия";
+const NETCAT_MODULE_LOGGING_CONSENT_SOURCE_OBJECT = "Объект-источник";
+const NETCAT_MODULE_LOGGING_CONSENT_USER_AGENT = "User-Agent";
+const NETCAT_MODULE_LOGGING_CONSENT_DOCS = "Документы";
+const NETCAT_MODULE_LOGGING_CONSENT_BACK = "&larr; к списку";
+const NETCAT_MODULE_LOGGING_CONSENT_HEALTH_WARN = "Внимание: запись в журнал согласий завершалась ошибкой (последняя: %s; всего ошибок: %s). Проверьте таблицу ConsentLog и права доступа БД.";
+const NETCAT_MODULE_LOGGING_CONSENT_LAST_SUCCESS = "Последняя успешная запись: %s";
+const NETCAT_MODULE_LOGGING_COOKIE_JOURNAL = "Cookie-согласия";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_DECISION = "Решение";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_CATEGORIES = "Разрешённые категории";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_UID = "ID согласия";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_PAGE = "Страница";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_MODE = "Режим окна";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_TEXT = "Текст уведомления";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_SITE = "Сайт";
+const NETCAT_MODULE_LOGGING_COOKIE_DECISION_ACCEPT = "Принял все";
+const NETCAT_MODULE_LOGGING_COOKIE_DECISION_REJECT = "Отклонил";
+const NETCAT_MODULE_LOGGING_COOKIE_DECISION_PARTIAL = "Принял частично";
+const NETCAT_MODULE_LOGGING_COOKIE_CATEGORY_FUNCTIONAL = "функциональные";
+const NETCAT_MODULE_LOGGING_COOKIE_CATEGORY_ANALYTICS = "аналитические";
+const NETCAT_MODULE_LOGGING_COOKIE_CATEGORY_MARKETING = "маркетинговые";
+const NETCAT_MODULE_LOGGING_COOKIE_CATEGORY_NECESSARY_ONLY = "только необходимые";
+const NETCAT_MODULE_LOGGING_COOKIE_MODE_ACCEPTALL = "Блокировать всё до согласия (одна кнопка)";
+const NETCAT_MODULE_LOGGING_COOKIE_MODE_CATEGORIES = "Выбор категорий пользователем";
+const NETCAT_MODULE_LOGGING_COOKIE_FILTER_SEARCH = "ID согласия или IP";
+const NETCAT_MODULE_LOGGING_COOKIE_HISTORY = "История выбора с этим ID согласия";
+const NETCAT_MODULE_LOGGING_COOKIE_DISABLED = "Журналирование выбора в окне cookie-согласия выключено. Включить: настройки сайта &rarr; «Сбор согласий» &rarr; «Записывать выбор посетителя в журнал согласий» (доступно в режимах с блокировкой до согласия).";
+const NETCAT_MODULE_LOGGING_COOKIE_ENABLED_ON = "Журналирование включено: %s";
+const NETCAT_MODULE_LOGGING_COOKIE_SILENT = "Журналирование включено, но за 14 дней нет ни одной записи: %s. Проверьте, что на сайте выведено окно cookie-согласия (виджет или сервис-компонент).";
+const NETCAT_MODULE_LOGGING_COOKIE_NO_TABLE = "Таблица журнала cookie-согласий (CookieConsentLog) не найдена — установите обновление системы.";
+const NETCAT_MODULE_LOGGING_COOKIE_TEXT_UNKNOWN = "не сохранён — текст не передан или не совпал ни с одним текстом окна, настроенным на сайте";
+const NETCAT_MODULE_LOGGING_COOKIE_OVERFLOW = "Сайт «%s»: срабатывал лимит записей в минуту на сайт (последний раз %s, лимит %s) — записи сверх лимита отброшены. Так бывает и при всплеске посещаемости, и при массовой отправке записей скриптом. Если трафик легальный — увеличьте лимит в настройках сайта («Сбор согласий»).";
+const NETCAT_MODULE_LOGGING_COOKIE_OVERFLOW_DAY = "Сайт «%s»: достигнут суточный лимит записей (последний раз %s, лимит %s) — до конца суток новые записи отбрасывались. Если трафик легальный — увеличьте лимит в настройках сайта («Сбор согласий»).";
+const NETCAT_MODULE_LOGGING_COOKIE_DROPPED = "Сайт «%s»: отброшено записей по лимитам — сегодня: %s, вчера: %s.";
+const NETCAT_MODULE_LOGGING_COOKIE_FILTER_ALL_SITES = "все сайты";
+const NETCAT_MODULE_LOGGING_COOKIE_PAGE_FIRST = "в начало";
+const NETCAT_MODULE_LOGGING_COOKIE_PAGE_NEWER = "&larr; новее";
+const NETCAT_MODULE_LOGGING_COOKIE_PAGE_OLDER = "старее &rarr;";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_TITLE = "Удаление старых записей";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_OLDER_THAN = "удалить записи старше";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_DAYS = "дней";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_BUTTON = "Удалить";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_CONFIRM = "Удалить записи журнала cookie-согласий старше %s дней (%s)? Действие необратимо.";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_DONE = "Удалено записей: %s.";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_PARTIAL = "Удалено записей: %s. Удалены не все — повторите удаление.";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_INVALID = "Укажите число дней — целое число от 1.";
+const NETCAT_MODULE_LOGGING_COOKIE_TRUST_NOTE = "Записи приходят на общедоступную точку приёма. Проверка источника запроса (Origin/Referer) отсекает только отправку с чужих страниц в браузере — скрипт может отправить запись напрямую. Запись подтверждает действие в браузере с этим ID согласия, но не защищена от подделки; объём таких записей ограничивают лимиты в настройках сайта. Старые записи удаляются раз в сутки по сроку хранения.";

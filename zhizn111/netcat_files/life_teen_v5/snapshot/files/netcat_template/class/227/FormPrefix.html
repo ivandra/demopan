@@ -1,0 +1,23 @@
+<?=$f_AdminCommon;?>
+<h2>Заявки</h2>
+<?if($AUTH_USER_ID==1){?>
+	<form method='POST' action='' >
+		Выберите дату подсчёта заявок
+		<input type='hidden' name='podscet' value='1' />
+		<label for='date1'>С </label>
+		<input type='date' name='date1' value='<?=$_POST[date1]?>' />
+		<label for='date2'>по </label>
+		<input type='date' name='date2' value='<?=$_POST[date2]?>' />		
+		<input type='submit' value='Подсчитать' />
+	</form>
+<?}?>
+  
+
+<?if($_POST[podscet]==1){?>
+	<p style='margin: 10px 0;'><big>Заявок c <?=$_POST[date1]?> по <?=$_POST[date2] ?> -  <b><big><?=$totRows?></big></b><br /></big>
+<?}?>
+
+<?
+//подсчёт количества уникальных заявок
+$countZayavki=0;
+?>

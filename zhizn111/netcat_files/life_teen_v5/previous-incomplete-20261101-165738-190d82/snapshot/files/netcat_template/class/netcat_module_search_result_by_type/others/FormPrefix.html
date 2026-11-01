@@ -1,0 +1,55 @@
+<?= $f_AdminCommon; ?>
+<?php
+// Подсчёт уникальных элементов (для товаров netshop - без вариантов)
+$nc_search_unique_count = 0;
+$nc_search_shown_others = [];
+$nc_search_goods_components = nc_module_check_by_keyword('netshop')
+    ? nc_netshop::get_instance()->get_goods_components_ids()
+    : [];
+$nc_search_others_cache = [];
+
+if (!empty($fetch_row)) {
+    foreach ($fetch_row as $row) {
+        $meta = $row instanceof Iterator ? $row->get('meta') : ($row['meta'] ?? []);
+        $component_id = $meta['component_id'] ?? null;
+        $message_id = $meta['message_id'] ?? null;
+
+        if ($component_id && $message_id && in_array($component_id, $nc_search_goods_components)) {
+            // Это товар netshop - группируем по родителю
+            $item = nc_netshop_item::by_id($component_id, $message_id);
+            if ($item) {
+                $parent_id = $item['Parent_Message_ID'] ?: $item['Message_ID'];
+                $cache_key = $component_id . '_' . $parent_id;
+                if (!isset($nc_search_shown_others[$cache_key])) {
+                    $nc_search_shown_others[$cache_key] = true;
+                    $nc_search_unique_count++;
+                    // Кэшируем данные для RecordTemplate
+                    if ($item['Parent_Message_ID']) {
+                        $parent_item = nc_netshop_item::by_id($component_id, $item['Parent_Message_ID']);
+                        $nc_search_others_cache[$message_id] = [
+                            'url' => $parent_item['URL'],
+                            'title' => $parent_item['FullName'],
+                            'parent_id' => $parent_id
+                        ];
+                    } else {
+                        $nc_search_others_cache[$message_id] = ['parent_id' => $parent_id];
+                    }
+                }
+            }
+        } else {
+            // Не товар - считаем как уникальный
+            $nc_search_unique_count++;
+        }
+    }
+}
+// Сбрасываем для RecordTemplate
+$nc_search_shown_others = [];
+?>
+<?php if (($search_query && ($cc_settings['showBlock'] == 'on' && !$nc_search_unique_count) || $nc_search_unique_count) || $admin_mode) { ?>
+    <?php if($cc_settings['blockTitle']) { ?>
+    <h3><?= $cc_settings['blockTitle']; ?> (<?= $nc_search_unique_count; ?>)</h3>
+    <?php } ?>
+    <?php if (!$nc_search_unique_count) { ?>
+        <p><?= NETCAT_MODULE_SEARCH_NO_RESULTS; ?></p>
+    <?php } ?>
+<?php } ?>

@@ -1,0 +1,31 @@
+<?php
+return array (
+  0 => 
+  array (
+    'Message_ID' => '1',
+    'User_ID' => '1',
+    'Subdivision_ID' => '12',
+    'Sub_Class_ID' => '41',
+    'Priority' => '1',
+    'Keyword' => '',
+    'ncTitle' => '',
+    'ncKeywords' => '',
+    'ncDescription' => '',
+    'ncSMO_Title' => '',
+    'ncSMO_Description' => '',
+    'ncSMO_Image' => NULL,
+    'ncFullPageMode' => 'inherit',
+    'ncFullPageCreated' => '0',
+    'ncDemoContent' => '0',
+    'Checked' => '1',
+    'IP' => '62.60.156.219',
+    'UserAgent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36',
+    'Parent_Message_ID' => '0',
+    'Created' => '2026-08-03 00:15:12',
+    'LastUpdated' => '2026-10-08 21:38:54',
+    'LastUser_ID' => '1',
+    'LastIP' => '62.60.230.8',
+    'LastUserAgent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36',
+    'img' => '',
+  ),
+);

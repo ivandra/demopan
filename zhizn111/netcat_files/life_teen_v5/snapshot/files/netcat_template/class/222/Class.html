@@ -1,0 +1,15 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+	<div class="our-center">
+		<div class="wrap">
+<!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons;?>
+<?= shortcode_component($f_spectext) ?>
+<?if($f_text){?>
+<div class="site-text">
+  <?=shortcode_component($f_text) ?>	
+</div>
+<?}?><!-- /RecordTemplate -->
+
+<!-- FormSuffix -->		</div>
+	</div><!-- /FormSuffix -->

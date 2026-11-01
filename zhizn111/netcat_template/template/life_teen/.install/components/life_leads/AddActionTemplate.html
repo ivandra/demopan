@@ -1,0 +1,52 @@
+<?php
+$_SESSION["life_sent"][] = time();
+$_SESSION["life_sent"] = array_slice($_SESSION["life_sent"], -10);
+$life_to = trim(shortcode("[email_to]"));
+$life_from = trim(shortcode("[email_from]"));
+$life_delivery = "Сохранено в Netcat; email выключен";
+if (
+    shortcode("[email_enabled]") === "1" &&
+    shortcode("[demo]") !== "1" &&
+    filter_var($life_to, FILTER_VALIDATE_EMAIL) &&
+    filter_var($life_from, FILTER_VALIDATE_EMAIL) &&
+    !preg_match('/[\r\n]/', $life_to . $life_from)
+) {
+    $life_subject = "=?UTF-8?B?" . base64_encode("Заявка — Жизнь подростка") . "?=";
+    $life_body =
+        "Форма: " .
+        $f_form_type .
+        "\nИмя: " .
+        $f_name .
+        "\nТелефон: " .
+        $f_phone .
+        "\nEmail: " .
+        $f_email .
+        "\nКонтакт: " .
+        $f_contact .
+        "\nСообщение: " .
+        $f_message .
+        "\nОтветы: " .
+        $f_answers .
+        "\nДомен: " .
+        $f_domain .
+        "\nСтраница: " .
+        $f_page_url;
+    $life_delivery = mail(
+        $life_to,
+        $life_subject,
+        $life_body,
+        "From: " . $life_from . "\r\nContent-Type: text/plain; charset=UTF-8",
+    )
+        ? "Письмо передано почтовой системе"
+        : "Ошибка отправки email; заявка сохранена";
+}
+$db->query(
+    "UPDATE Message" .
+        (int) $classID .
+        " SET delivery='" .
+        $db->escape($life_delivery) .
+        "' WHERE Message_ID=" .
+        (int) $message,
+);
+?>
+<div data-zhp-success>Спасибо! Заявка сохранена.</div>

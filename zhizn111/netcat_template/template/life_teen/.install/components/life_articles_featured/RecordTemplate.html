@@ -1,0 +1,26 @@
+        <?= $f_AdminButtons ?>
+        <div class="articles-block__text">
+            <h2 class="hero__title"> Полезные
+                <br />
+                <span class="hero__title-accent">статьи</span>
+                <img alt="" class="hero__title-line" decoding="async" src="/netcat_template/template/life_teen/img/line3.svg" />
+            </h2>
+            <p class="hero__description"> Практические советы, проверенные экспертом материалы и истории, которые помогут лучше понимать друг друга и справляться с трудностями. </p>
+        </div>
+        <div class="articles-block__card">
+            <span class="articles-block__badge">Рекомендуем</span>
+            <h3 class="blog__item-title">
+                <?= htmlspecialchars(shortcode((string)$f_name),ENT_QUOTES,'UTF-8') ?>
+            </h3>
+            <p class="blog__item-description">
+                <?= htmlspecialchars(shortcode((string)$f_intro),ENT_QUOTES,'UTF-8') ?>
+            </p>
+            <div class="blog__item-meta">
+                <?= date('d.m.Y', strtotime($f_date)) ?> •
+                <?= htmlspecialchars(shortcode((string)$f_readtime),ENT_QUOTES,'UTF-8') ?>
+            </div>
+            <a class="header__button" href="<?= $fullLink ?>" type="button">Читать статью →</a>
+            <div class="articles-block__card-image">
+                <img alt="" decoding="async" src="<?= htmlspecialchars(shortcode((string)$f_img),ENT_QUOTES,'UTF-8') ?>" />
+            </div>
+        </div>

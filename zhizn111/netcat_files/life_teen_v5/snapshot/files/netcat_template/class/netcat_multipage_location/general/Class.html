@@ -1,0 +1,45 @@
+<!-- FormPrefix --><?= $f_AdminCommon ?>
+
+<div class="contacts-location" <?= $styles ?>>
+    <!-- /FormPrefix -->
+
+<!-- RecordTemplate --><div class="object-item contact-item">
+        <?= $f_AdminButtons ?>
+
+        <?php
+        $is_placeholder = false;
+        $item_image_html = '';
+        if (!empty($f_Image)) {
+            $item_image_html = $f_Image->as_img(array("alt" => $f_Name));
+        } else {
+            if ($placeholder_src) {
+                $item_image_html = '<img src="' . htmlspecialchars($placeholder_src) . '" alt="' . htmlspecialchars($f_Name) . '">';
+            } else {
+                $item_image_html = "<div style='width:100%; height:100%; background-color: var(--tpl-color-background-accent);'></div>";
+            }
+            $is_placeholder = true;
+        }
+        ?>
+
+        <a href="<?= $fullLink ?>" class="item-image-wrapper<?= $is_placeholder ? ' item-image-placeholder' : '' ?>"><?= $item_image_html ?></a>
+
+        <div class="item-content">
+            <a href="<?= $fullLink ?>" class="item-name contact-title <?= $cc_settings["title_size"] ?>"><?= nc_edit_inline(
+                    "Name",
+                    $f_RowID,
+                    $cc_env["Sub_Class_ID"]
+                ) ?></a>
+
+            <?php if ($admin_mode || $f_Address): ?>
+                <div class="contact-address tpl-text-default-paragraph">
+                    <div class="item-value"><?= nc_edit_inline("Address", $f_RowID, $cc_env["Sub_Class_ID"]) ?></div>
+                </div>
+            <?php endif ?>
+        </div>
+    </div><!-- /RecordTemplate -->
+
+<!-- FormSuffix --></div>
+
+<?php if ($totRows > $recNum): ?>
+  <?= nc_browse_messages($cc_env, 10); ?>
+<?php endif; ?><!-- /FormSuffix -->

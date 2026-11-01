@@ -1,0 +1,19 @@
+<?php
+// Валидация компонента «Документ с временными версиями» (§2.1)
+// 1) заполнено хотя бы одно из «Содержание» (Content) / «Файл» (File)
+if (trim((string)$f_Content) === '' && trim((string)$f_File) === '') {
+    $warnText = "Заполните «Содержание» или прикрепите «Файл».<br><br>";
+    $posting = 0;
+}
+// 2) запрет дублирующей «Даты начала действия» в этом инфоблоке (защита от коллизии периодов)
+if ($posting && !empty($f_StartDate)) {
+    $dup = $db->get_var(
+        "SELECT `Message_ID` FROM `Message" . (int)$classID . "`
+          WHERE `Sub_Class_ID` = " . (int)$cc . " AND DATE(`StartDate`) = DATE('" . $db->escape($f_StartDate) . "')"
+    );
+    if ($dup) {
+        $warnText = "Редакция с такой «Датой начала действия» уже существует в этом разделе. Укажите другую дату.<br><br>";
+        $posting = 0;
+    }
+}
+?>

@@ -1,0 +1,53 @@
+<!-- FormPrefix --><?= $f_AdminCommon ?>
+<section class="articles">
+    <div class="wrap">
+        <nav class="specialists-block__filters" aria-label="Категории статей">
+            <button type="button" data-article-category="" class="specialists-block__filter<?= (($_GET['category'] ?? '') === '') ? ' specialists-block__filter--active' : '' ?>">
+                <?= htmlspecialchars(shortcode((string)($cc_settings['filter_all'] ?? '')),ENT_QUOTES,'UTF-8') ?>
+            </button>
+            <button type="button" data-article-category="teens" class="specialists-block__filter<?= (($_GET['category'] ?? '') === 'teens') ? ' specialists-block__filter--active' : '' ?>">
+                <?= htmlspecialchars(shortcode((string)($cc_settings['filter_teens'] ?? '')),ENT_QUOTES,'UTF-8') ?>
+            </button>
+            <button type="button" data-article-category="parents" class="specialists-block__filter<?= (($_GET['category'] ?? '') === 'parents') ? ' specialists-block__filter--active' : '' ?>">
+                <?= htmlspecialchars(shortcode((string)($cc_settings['filter_parents'] ?? '')),ENT_QUOTES,'UTF-8') ?>
+            </button>
+            <button type="button" data-article-category="specialists" class="specialists-block__filter<?= (($_GET['category'] ?? '') === 'specialists') ? ' specialists-block__filter--active' : '' ?>">
+                <?= htmlspecialchars(shortcode((string)($cc_settings['filter_specialists'] ?? '')),ENT_QUOTES,'UTF-8') ?>
+            </button>
+        </nav>
+        <div class="articles__list">
+<!-- /FormPrefix -->
+<!-- RecordTemplate -->            <?= $f_AdminButtons ?>
+            <article class="blog__item">
+                <div class="blog__item-image">
+                    <img alt="<?= htmlspecialchars(shortcode((string)$f_name),ENT_QUOTES,'UTF-8') ?>" decoding="async" src="<?= htmlspecialchars(shortcode((string)$f_img),ENT_QUOTES,'UTF-8') ?>" />
+                </div>
+                <div class="blog__item-tag<?php if ($f_category === "parents") {
+    echo " blog__item-tag--blue";
+} ?>">
+                    <?= htmlspecialchars(array('teens'=>'Подросткам','parents'=>'Родителям','specialists'=>'Специалистам')[$f_category]??'',ENT_QUOTES,'UTF-8') ?>
+                </div>
+                <h3 class="blog__item-title">
+                    <a href="<?= $fullLink ?>">
+                        <?= htmlspecialchars(shortcode((string)$f_name),ENT_QUOTES,'UTF-8') ?>
+                    </a>
+                </h3>
+                <p class="blog__item-description">
+                    <?= htmlspecialchars(shortcode((string)$f_intro),ENT_QUOTES,'UTF-8') ?>
+                </p>
+                <div class="blog__item-meta">
+                    <?= date('d.m.Y',strtotime($f_date)) ?> •
+                    <?= htmlspecialchars(shortcode((string)$f_readtime),ENT_QUOTES,'UTF-8') ?>
+                </div>
+            </article>
+<!-- /RecordTemplate -->
+<!-- FormSuffix -->        </div>
+    </div>
+</section>
+<?php if ($totRows > $recNum) {
+?>
+<nav>
+    <?= browse_messages($cc_env,5) ?>
+</nav>
+<?php } ?>
+<!-- /FormSuffix -->

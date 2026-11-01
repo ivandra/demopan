@@ -1,0 +1,46 @@
+<div class="nc-mixins-mixin-settings-netcat-shadow">
+    <div class="nc-mixins-mixin-settings-vertical-container">
+        <div>
+            <label>
+                Размещение:
+                <select name="mixin.settings.shadow_type">
+                    <option value="outset">снаружи блока</option>
+                    <option value="inset">внутри блока</option>
+                    <option value="drop">на содержимом блока</option>
+                </select>
+            </label>
+        </div>
+        <div>
+            <label>
+                Цвет:
+                <input type="hidden" name="mixin.settings.color" data-palette-color data-sync-color="">
+            </label>
+        </div>
+    </div>
+    <div class="nc-mixins-mixin-settings-vertical-container">
+        <div>
+            <label>
+                Смещение X:
+                <input type="number" name="mixin.settings.horizontal" value="0"> пикс.
+            </label>
+        </div>
+        <div>
+            <label>
+                Смещение Y:
+                <input type="number" name="mixin.settings.vertical" value="0"> пикс.
+            </label>
+        </div>
+        <div>
+            <label>
+                Размытие:
+                <input type="number" name="mixin.settings.blur" value="0" min="0"> пикс.
+            </label>
+        </div>
+        <div>
+            <label>
+                Растяжение:
+                <input type="number" name="mixin.settings.spread" value="0"> пикс.
+            </label>
+        </div>
+    </div>
+</div>
