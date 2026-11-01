@@ -1,16 +1,14 @@
-# «Жизнь подростка» — чистый патч v5.1
+# «Жизнь подростка» — чистый патч v5.1.1
 
 ## Скачать
 
-- **[Полный архив v5.1](https://raw.githubusercontent.com/ivandra/demopan/fix/netcat-v5-mysql-restore/deliverables/lifepodrostka-netcat-v5.1.zip)**
-- [Часть 1](https://raw.githubusercontent.com/ivandra/demopan/fix/netcat-v5-mysql-restore/deliverables/lifepodrostka-netcat-v5.1-part1.zip)
-- [Часть 2](https://raw.githubusercontent.com/ivandra/demopan/fix/netcat-v5-mysql-restore/deliverables/lifepodrostka-netcat-v5.1-part2.zip)
+- **[Архив для распаковки прямо в корне сайта](https://raw.githubusercontent.com/ivandra/demopan/main/deliverables/lifepodrostka-netcat-v5.1.1-upload.zip)** — загрузите через файловый менеджер и распакуйте с заменой. Внутри сразу `zhp-install.php` и `netcat_template`.
+- [Полный архив с инструкцией и отчётами](https://raw.githubusercontent.com/ivandra/demopan/main/deliverables/lifepodrostka-netcat-v5.1.1.zip).
+- [Часть 1 полного архива](https://raw.githubusercontent.com/ivandra/demopan/main/deliverables/lifepodrostka-netcat-v5.1.1-part1.zip) и [часть 2](https://raw.githubusercontent.com/ivandra/demopan/main/deliverables/lifepodrostka-netcat-v5.1.1-part2.zip). Это самостоятельные ZIP: распакуйте обе в одну папку; двоичное объединение не нужно. Внутри папка `UPLOAD_TO_ROOT`.
 
-Скачайте полный ZIP либо обе части. Части — самостоятельные ZIP:
-распакуйте обе в одну папку, склеивать их не нужно. Набор файлов совпадает
-с полным архивом. Контрольные суммы — [SHA256SUMS.txt](SHA256SUMS.txt).
+Папка `netcat-integration-v5/files` в GitHub теперь также полная — **445 файлов**, включая скрытые `.install` и `.htaccess`. v5.1.1 допускает эквивалентные LF/CRLF при проверке текста и сохраняет строгую проверку содержимого. Контрольные суммы — [SHA256SUMS.txt](SHA256SUMS.txt).
 
-Прежний хостинговый сбой `nc_page.class.php` не воспроизведён, его причина не установлена. v5.1 исправляет подтверждённые ошибки MySQL-отката, региональных подстановок и Fancybox; включает приватную диагностику.
+Прежний хостинговый сбой `nc_page.class.php` не воспроизведён, его причина не установлена. Его диагностика и исправления MySQL-отката, региональных подстановок и Fancybox из v5.1 сохранены.
 
 ## Что делает патч
 
@@ -33,7 +31,7 @@
 ## Установка на shared-хостинг
 
 1. Сохраните резервную копию файлов и БД в панели хостинга.
-2. Загрузите **содержимое `UPLOAD_TO_ROOT`** в корень сайта рядом с `vars.inc.php`.
+2. Загрузите `*-upload.zip` рядом с `vars.inc.php` и распакуйте там с заменой. Либо перенесите все 445 файлов из `files`/`UPLOAD_TO_ROOT`, включая скрытые.
 3. Войдите администратором в Netcat на том же домене.
 4. Откройте `https://dev.lifepodrostka.ru/zhp-install.php`.
 5. Выполните «Проверить файлы» → «Установить / продолжить» →
@@ -46,4 +44,4 @@ SSH и ручной импорт SQL не нужны. Резервная коп�
 На хостинг переносится только `UPLOAD_TO_ROOT`.
 
 Предыдущие архивы сохранены в этой папке для истории. Для новой установки
-используйте v5.1.
+используйте v5.1.1.

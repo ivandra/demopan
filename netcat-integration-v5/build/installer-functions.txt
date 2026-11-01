@@ -37,8 +37,66 @@ function li_infoblock($key,$sub_id,$title,$priority,$settings=array()){
  if(!$id){li_fail('Не создан инфоблок '.$title);}$state['blocks'][$state_key]=$id;$state['new_blocks'][]=$id;$state['block_locations'][$id]=$sub_id;$state['block_classes'][$id]=$base;li_save();li_checkpoint('Создан инфоблок: '.$title);return $id;
 }
 function li_seed($id,$key,$records){global $nc_core,$db,$state,$manifest;li_new_field_values($id,$key,$records);$base=$manifest['classes'][$key]['parent']?:$key;$class=(int)$state['classes'][$base];foreach($records as $i=>$r){$sk=$id.':'.$i;if(!empty($state['seeded'][$sk])){continue;}if($key==='life_regions'&&$i===0){$r['main_domain']=$state['domain'];}$r['Priority']=$i+1;$r['Checked']=1;$r['Keyword']=$r['Keyword']??('zhp-item-'.($i+1));$existing=(int)$db->get_var("SELECT Message_ID FROM Message".$class." WHERE Sub_Class_ID=".(int)$id." AND Keyword='".$db->escape($r['Keyword'])."'");if($existing){$state['seeded'][$sk]=$existing;li_save();continue;}if(in_array($key,array('life_specialists','life_articles'),true)){$r['ncTitle']=($r['fio']??$r['name']).' — Жизнь подростка';$r['ncDescription']=$r['intro']??'';}$msg=(int)$nc_core->message->create($id,$r);if(!$msg){li_fail('Не создана запись '.$key);}$state['seeded'][$sk]=$msg;li_save();li_checkpoint('Импортирована запись: '.$key);}}
-function li_payload_check($persistent=false){
- global $design,$state;$hash_file=$design.'/.install/hashes.json';if(!is_file($hash_file)){li_fail('Не найден список файлов пакета.');}$hashes=json_decode(file_get_contents($hash_file),true);if(!$hashes){li_fail('Повреждён список файлов пакета.');}
- foreach($hashes as $file=>$hash){if($persistent&&!empty($state['checked_files'][$file])){continue;}if(!is_file($design.'/'.$file)||!hash_equals($hash,hash_file('sha256',$design.'/'.$file))){li_fail('Файл отсутствует или изменён при загрузке: '.$file.'. Загрузите его повторно из этого архива.');}if($persistent){$state['checked_files'][$file]=true;li_save();li_checkpoint('Проверен файл '.$file);}}
- if($persistent){$state['payload_checked']=true;li_save();}
+function li_payload_file_check($file, $hash)
+{
+    global $design;
+    $path = $design . '/' . $file;
+    if (!is_file($path)) {
+        li_fail('PHP не видит файл пакета: ' . $file . '. Он не загружен или его каталог недоступен. Проверьте доступ и загрузку скрытых папок и файлов .install и .htaccess из полной поставки.');
+    }
+    if (!is_readable($path)) {
+        li_fail('Файл пакета недоступен для чтения: ' . $file . '. Проверьте права доступа на хостинге.');
+    }
+    $actual = @hash_file('sha256', $path);
+    if ($actual === false) {
+        li_fail('Не удалось прочитать файл пакета: ' . $file . '. Проверьте права доступа и повторите загрузку.');
+    }
+    if (hash_equals($hash, $actual)) {
+        return false;
+    }
+    if (basename($file) === '.htaccess' || preg_match('/\.(?:html|php|txt|json|js|css|svg)$/i', $file)) {
+        $content = @file_get_contents($path);
+        if ($content !== false && hash_equals($hash, hash('sha256', str_replace("\r\n", "\n", $content)))) {
+            return true;
+        }
+    }
+    $bytes = @filesize($path);
+    li_diagnostic('payload_mismatch', [
+        'file' => $file,
+        'expected_sha256' => $hash,
+        'actual_sha256' => $actual,
+        'bytes' => $bytes,
+    ]);
+    li_fail('Содержимое файла не совпадает с пакетом: ' . $file . '. Размер: ' . $bytes . ' байт. SHA-256: ' . $actual . '. Загрузите файл повторно из полной поставки той же версии.');
+}
+function li_payload_check($persistent=false)
+{
+    global $design, $state;
+    $hash_file = $design . '/.install/hashes.json';
+    if (!is_file($hash_file)) {
+        li_fail('Не найден список файлов пакета .install/hashes.json. Загрузите полную папку files или UPLOAD_TO_ROOT, включая скрытую папку .install.');
+    }
+    $hashes = json_decode(file_get_contents($hash_file), true);
+    if (!$hashes) {
+        li_fail('Повреждён список файлов пакета.');
+    }
+    $reported_crlf = false;
+    foreach ($hashes as $file => $hash) {
+        if ($persistent && !empty($state['checked_files'][$file])) {
+            continue;
+        }
+        if (li_payload_file_check($file, $hash) && !$reported_crlf) {
+            li_out('Учтены переводы строк Windows CRLF: текст файлов соответствует пакету.');
+            $reported_crlf = true;
+        }
+        if ($persistent) {
+            $state['checked_files'][$file] = true;
+            li_save();
+            li_checkpoint('Проверен файл ' . $file);
+        }
+    }
+    if ($persistent) {
+        $state['payload_checked'] = true;
+        li_save();
+    }
 }

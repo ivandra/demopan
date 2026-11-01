@@ -575,30 +575,85 @@ function li_seed($id, $key, $records)
         li_checkpoint("Импортирована запись: " . $key);
     }
 }
+function li_payload_file_check($file, $hash)
+{
+    global $design;
+    $path = $design . "/" . $file;
+    if (!is_file($path)) {
+        li_fail(
+            "PHP не видит файл пакета: " .
+                $file .
+                ". Он не загружен или его каталог недоступен. Проверьте доступ и загрузку скрытых папок и файлов .install и .htaccess из полной поставки.",
+        );
+    }
+    if (!is_readable($path)) {
+        li_fail(
+            "Файл пакета недоступен для чтения: " .
+                $file .
+                ". Проверьте права доступа на хостинге.",
+        );
+    }
+    $actual = @hash_file("sha256", $path);
+    if ($actual === false) {
+        li_fail(
+            "Не удалось прочитать файл пакета: " .
+                $file .
+                ". Проверьте права доступа и повторите загрузку.",
+        );
+    }
+    if (hash_equals($hash, $actual)) {
+        return false;
+    }
+    if (
+        basename($file) === ".htaccess" ||
+        preg_match('/\.(?:html|php|txt|json|js|css|svg)$/i', $file)
+    ) {
+        $content = @file_get_contents($path);
+        if (
+            $content !== false &&
+            hash_equals($hash, hash("sha256", str_replace("\r\n", "\n", $content)))
+        ) {
+            return true;
+        }
+    }
+    $bytes = @filesize($path);
+    li_diagnostic("payload_mismatch", [
+        "file" => $file,
+        "expected_sha256" => $hash,
+        "actual_sha256" => $actual,
+        "bytes" => $bytes,
+    ]);
+    li_fail(
+        "Содержимое файла не совпадает с пакетом: " .
+            $file .
+            ". Размер: " .
+            $bytes .
+            " байт. SHA-256: " .
+            $actual .
+            ". Загрузите файл повторно из полной поставки той же версии.",
+    );
+}
 function li_payload_check($persistent = false)
 {
     global $design, $state;
     $hash_file = $design . "/.install/hashes.json";
     if (!is_file($hash_file)) {
-        li_fail("Не найден список файлов пакета.");
+        li_fail(
+            "Не найден список файлов пакета .install/hashes.json. Загрузите полную папку files или UPLOAD_TO_ROOT, включая скрытую папку .install.",
+        );
     }
     $hashes = json_decode(file_get_contents($hash_file), true);
     if (!$hashes) {
         li_fail("Повреждён список файлов пакета.");
     }
+    $reported_crlf = false;
     foreach ($hashes as $file => $hash) {
         if ($persistent && !empty($state["checked_files"][$file])) {
             continue;
         }
-        if (
-            !is_file($design . "/" . $file) ||
-            !hash_equals($hash, hash_file("sha256", $design . "/" . $file))
-        ) {
-            li_fail(
-                "Файл отсутствует или изменён при загрузке: " .
-                    $file .
-                    ". Загрузите его повторно из этого архива.",
-            );
+        if (li_payload_file_check($file, $hash) && !$reported_crlf) {
+            li_out("Учтены переводы строк Windows CRLF: текст файлов соответствует пакету.");
+            $reported_crlf = true;
         }
         if ($persistent) {
             $state["checked_files"][$file] = true;
@@ -1270,7 +1325,7 @@ try {
             $nc_core->get_settings("VersionNumber") .
             "; PHP " .
             PHP_VERSION .
-            "; чистый патч v5.1",
+            "; чистый патч v5.1.1",
     );
     if ($mode === "check") {
         li_payload_check(false);

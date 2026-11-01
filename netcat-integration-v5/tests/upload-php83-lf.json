@@ -1,0 +1,445 @@
+{
+  "patch": "v5.1.1",
+  "php": "8.3.36",
+  "input_line_endings": "LF",
+  "browser_checks": [
+    {
+      "name": "installer requires administrator",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "v5 state",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no old templates in CMS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no old components in CMS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no old or empty extra sections",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no draft or archive section slugs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "18 drafts remain empty disabled and private",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "only supplied project layouts",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "video has exactly four editorial fields",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "video named from source caption",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "video prefix opens source containers",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "video object only contains object content",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "video suffix closes containers",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "video code has readable indentation",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no object filling needed life_parent_group",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no object filling needed life_first_step",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no object filling needed life_socials",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no object filling needed life_subscription",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no object filling needed life_calculator",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "parent group uses region shortcut",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "existing regions retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "native component editor shows formatted prefix",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "native component editor shows object separately",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "explicit navigation arrays as in source CMS",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "native layout editor shows formatted source",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "native layout editor has no added wrapper or comments",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "child layout inherits header and footer",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "page /",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no added layout wrapper /",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shared source footer /",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "page /o-nas/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no added layout wrapper /o-nas/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shared source footer /o-nas/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "page /blog/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no added layout wrapper /blog/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shared source footer /blog/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "page /kontakty/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no added layout wrapper /kontakty/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shared source footer /kontakty/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "page /o-nas/spetsialisty/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no added layout wrapper /o-nas/spetsialisty/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shared source footer /o-nas/spetsialisty/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "page /o-nas/foto/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no added layout wrapper /o-nas/foto/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shared source footer /o-nas/foto/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "page /podrostkam/trevoga-i-perezhivaniya/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no added layout wrapper /podrostkam/trevoga-i-perezhivaniya/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shared source footer /podrostkam/trevoga-i-perezhivaniya/",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "one video block wrapper",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "fieldless parent group is visible",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "typographic text from source retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "source jQuery UI sliders retained",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "footer year is current",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "article full view from home",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "source related articles sidebar",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "full article uses common source subscription",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "native edit f_fio,f_position",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "native specialist edit updates carousel",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "native specialist edit updates full view",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "source other specialists use same collection",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "full specialist uses common source subscription",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "native edit f_fio,f_position",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "native edit f_date_day,f_date_month,f_date_year",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "article date is dynamic",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "native edit f_date_day,f_date_month,f_date_year",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "native edit f_phone,f_main_domain",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "configured existing region phone shown",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "native edit f_phone",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "regional data follows current domain",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "full article inherits section template settings",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "contact form saves through Netcat",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "source subscription form works",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "quiz works in source markup",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "provided popup opens and saves through Netcat",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "full rollback and clean reinstall",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "no public JavaScript errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "database_restore": {
+    "total_original_tables": 276,
+    "content_tables_compared": 133,
+    "content_mismatches": [],
+    "all_changed_table_names": [
+      "Logging",
+      "Session"
+    ],
+    "new_table_names": []
+  },
+  "file_restore": {
+    "files": 5666,
+    "restore_mismatches": [],
+    "snapshot_mismatches": []
+  },
+  "upload_unit_checks": [
+    {
+      "name": "exact LF file accepted",
+      "passed": true
+    },
+    {
+      "name": "CRLF text accepted against original SHA",
+      "passed": true
+    },
+    {
+      "name": "preflight does not rewrite uploaded bytes",
+      "passed": true
+    },
+    {
+      "name": "changed access directive rejected despite CRLF",
+      "passed": true
+    },
+    {
+      "name": "mismatch diagnostic has actual SHA and size",
+      "passed": true
+    },
+    {
+      "name": "missing hidden file reported precisely",
+      "passed": true
+    },
+    {
+      "name": "unchanged binary accepted",
+      "passed": true
+    },
+    {
+      "name": "changed binary never normalized",
+      "passed": true
+    },
+    {
+      "name": "unknown extension kept strict",
+      "passed": true
+    },
+    {
+      "name": "unreadable file reported precisely",
+      "passed": true
+    }
+  ],
+  "syntax_files_passed": 192
+}

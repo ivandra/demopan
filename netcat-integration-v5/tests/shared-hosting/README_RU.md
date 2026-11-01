@@ -104,3 +104,21 @@ Smoke проверяет 13 готовых разделов, локальные 
 проверялись отдельно в папке копии, без изменения ядра. Это проверка журнала,
 а не воспроизведение старого сбоя хостинга. Протоколы —
 `../shared-hosting-php74.json` и `../shared-hosting-php83.json`.
+
+## Регрессия загрузки v5.1.1
+
+`check-distribution.py` экспортирует staged Git index с Windows-настройками и
+сравнивает все файлы с полной поставкой и SHA-256 манифеста. Перед запуском
+добавьте подготовленные файлы в index; скрипт не меняет рабочее дерево.
+
+```sh
+python3 netcat-integration-v5/tests/shared-hosting/check-distribution.py deliverables/lifepodrostka-netcat-v5.1.1-upload.zip
+python3 netcat-integration-v5/tests/shared-hosting/simulate-crlf.py
+```
+
+Вторую команду запускают после `reset.py`, до browser runner, с теми же
+`NETCAT_TEST_SITE` и `NETCAT_QA_OUTPUT`. Она меняет только текстовые файлы
+поставки на тестовой копии. `upload-check.php` извлекает настоящий верификатор
+из установщика и проверяет LF/CRLF, отсутствие записи в исходные файлы,
+изменённые директивы, бинарные повреждения, неизвестные расширения, отсутствие
+файла и недоступный файл; для проверки прав нужен непривилегированный UID.

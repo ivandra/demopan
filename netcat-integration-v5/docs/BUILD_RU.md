@@ -1,6 +1,6 @@
-# Сборка и проверки v5.1
+# Сборка и проверки v5.1.1
 
-Новая проверка свежих бэкапов описана в `../tests/shared-hosting/README_RU.md` и `../TEST_REPORT_RU.md`. Старые `tests/run.py` и его фиксированный SQL относятся к прежнему стенду; не используйте их вместо свежей пары. Сборка ZIP теперь создаёт `lifepodrostka-netcat-v5.1.zip`, не перезаписывая прежний v5.
+Новая проверка свежих бэкапов описана в `../tests/shared-hosting/README_RU.md` и `../TEST_REPORT_RU.md`. Старые `tests/run.py` и его фиксированный SQL относятся к прежнему стенду; не используйте их вместо свежей пары. Сборка ZIP теперь создаёт `lifepodrostka-netcat-v5.1.1.zip` и плоский `lifepodrostka-netcat-v5.1.1-upload.zip`, не перезаписывая прежний v5.
 
 Исходники патча — `netcat-integration-v5`. Исходные пользовательские папки
 не изменяются. В `build/reference-layout` находятся предоставленные HTML;
@@ -10,8 +10,7 @@
 Нужны Python с beautifulsoup4, Node с prettier / @prettier/plugin-php /
 js-beautify и PHP. `NETCAT_FORMAT_MODULES` задаёт папку Node-зависимостей.
 Если PHP не установлен локально, используется контейнер `netcat-qa-web`.
-Для нового checkout сначала скопируйте `UPLOAD_TO_ROOT` полного архива в
-`netcat-integration-v5/files`: изображения, шрифты и видео не дублируются в Git.
+В `netcat-integration-v5/files` теперь отслеживаются все 445 файлов; дополнительное копирование ресурсов из ZIP для нового checkout не требуется. `.gitattributes` запрещает Git менять их переводы строк.
 
 ```sh
 python3 netcat-integration-v5/build/build.py

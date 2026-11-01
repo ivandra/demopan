@@ -9,7 +9,7 @@ try {
     if (!$catalogue) { li_fail('Исходный сайт №1 не найден.'); }
     if ((int)$db->get_var('SELECT Class_ID FROM Sub_Class WHERE Sub_Class_ID=57')!==223) { li_fail('Нет исходного компонента регионов №223 / инфоблока №57.'); }
     if (!is_writable($nc_core->CLASS_TEMPLATE_FOLDER) || !is_writable($nc_core->TEMPLATE_FOLDER) || !is_writable($nc_core->FILES_FOLDER)) { li_fail('Папки шаблонов и файлов Netcat недоступны для записи.'); }
-    li_out('Netcat '.$nc_core->get_settings('VersionNumber').'; PHP '.PHP_VERSION.'; чистый патч v5.1');
+    li_out('Netcat '.$nc_core->get_settings('VersionNumber').'; PHP '.PHP_VERSION.'; чистый патч v5.1.1');
     if ($mode==='check') {
         li_payload_check(false);
         li_region_notice();

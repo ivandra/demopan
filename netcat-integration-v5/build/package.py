@@ -2,7 +2,7 @@ from pathlib import Path
 from zipfile import ZipFile,ZipInfo,ZIP_DEFLATED
 import hashlib,copy
 
-R=Path(__file__).resolve().parents[1];out=R.parent/'deliverables/lifepodrostka-netcat-v5.1.zip'
+R=Path(__file__).resolve().parents[1];out=R.parent/'deliverables/lifepodrostka-netcat-v5.1.1.zip'
 entries=[]
 for file in sorted((R/'files').rglob('*')):
  if file.is_file():entries.append((file,'UPLOAD_TO_ROOT/'+file.relative_to(R/'files').as_posix()))
@@ -36,6 +36,15 @@ with ZipFile(out) as full:
   print(part.name,round(part.stat().st_size/1024**2,2),'MiB')
  assert merged=={name:hashlib.sha256(full.read(name)).hexdigest() for name in full.namelist()}
  print('PASS',len(names),'ZIP entries; two parts match complete package')
+ upload=out.with_name(out.stem+'-upload.zip')
+ upload_entries={name.removeprefix('UPLOAD_TO_ROOT/'):full.read(name) for name in names if name.startswith('UPLOAD_TO_ROOT/')}
+ with ZipFile(upload,'w',ZIP_DEFLATED,compresslevel=9) as z:
+  for name,data in upload_entries.items():z.writestr(info(name),data)
+ with ZipFile(upload) as z:
+  assert z.testzip() is None
+  assert set(z.namelist())==set(upload_entries)
+  assert all(z.read(name)==data for name,data in upload_entries.items())
+ print(upload.name,round(upload.stat().st_size/1024**2,2),'MiB;',len(upload_entries),'root upload entries match full package')
 archives=sorted(out.parent.glob('lifepodrostka-netcat-v*.zip'))
 (out.parent/'SHA256SUMS.txt').write_text(''.join(hashlib.sha256(file.read_bytes()).hexdigest()+'  '+file.name+'\n' for file in archives))
 print(out.name,round(out.stat().st_size/1024**2,2),'MiB',hashlib.sha256(out.read_bytes()).hexdigest())

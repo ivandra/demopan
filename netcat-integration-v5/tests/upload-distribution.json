@@ -1,0 +1,27 @@
+{
+  "before": {
+    "source_commit": "e3b0d0b673181bfeb61ad728600ca068eeffa45b",
+    "tracked_payload_files": 212,
+    "missing_assets": 233,
+    "crlf_mismatches": 181,
+    "first_mismatch": ".install/.htaccess",
+    "htaccess_bytes": "b'Require all denied\\r\\nDeny from all\\r\\n'",
+    "reproduced_error": true
+  },
+  "after": {
+    "windows_autocrlf_checkout": true,
+    "payload_files": 445,
+    "manifest_files": 443,
+    "all_raw_hashes_match": true,
+    "git_files_complete": true,
+    "root_upload_zip_matches_git": true
+  },
+  "crlf_variant": {
+    "variant": "CRLF upload",
+    "text_files": 317,
+    "changed_files": 294,
+    "binary_files_modified": false
+  },
+  "host_htaccess_bytes_compared": false,
+  "user_transfer_method": "Web Git download and hosting file-manager directory upload"
+}
