@@ -32,6 +32,7 @@
     <?= shortcode_component((string)$f_bio) ?>
     <?= shortcode_component((string)$f_methods) ?>
     <?= shortcode_component((string)$f_education) ?>
+    <?= project_specialist_documents_block((int)$f_RowID, false) ?>
     <?php
     $project_related = $db->get_row(
         "SELECT s.Sub_Class_ID, s.Subdivision_ID, c.Class_ID AS View_ID FROM Sub_Class s " .

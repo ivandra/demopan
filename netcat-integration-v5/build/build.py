@@ -21,9 +21,12 @@ for folder in list(C.iterdir()):
 for p in C.rglob('*.html'):p.write_text(convert(p.read_text()))
 source=B/'source-layout'
 for name in ['Header.html','Footer.html','function.inc.php.txt','regions-widget.html']:
- (D/name).write_text(convert((source/name).read_text()))
+ value=convert((source/name).read_text())
+ if name=='function.inc.php.txt':value+='\n'+(B/'problem1-runtime.php.txt').read_text()
+ (D/name).write_text(value)
 (D/'Header.html').write_text((D/'Header.html').read_text().replace('$life_mobile','$mobile_menu').replace('$life_menu','$h_menu'))
 (D/'js/forms.js').write_text((source/'forms.js').read_text())
+(D/'js/common.js').write_text((source/'common.js').read_text())
 settings="<?php\n\n$template_settings = $nc_core->subdivision->get_template_settings($sub);\n$mobile_menu = [];\n$h_menu = [];\n\n"
 for variable,prefix in [('mobile_menu','mobile-menu'),('h_menu','header')]:
  for level,list_part,item_part,link_part in [(0,'list','item','link'),(1,'sublist','subitem','sublink'),(2,'subsublist','subsubitem','subsublink')]:
@@ -59,7 +62,7 @@ for p in list(pages.values()):
  if p['url'].startswith('/podrostkam/') or p['url'] in ['/roditelyam/','/spetsialistam/']:
   p['layout']='service'
   if p['url']!='/podrostkam/trevoga-i-perezhivaniya/':
-   p['blocks']=[];p['draft']=True;p['nav']=False
+   p['blocks']=[];p['draft']=False;p['nav']=True
  else:
   p['layout']={'/':'home','/o-nas/':'about','/blog/':'blog','/kontakty/':'contacts','/o-nas/spetsialisty/':'specialists','/o-nas/foto/':'gallery'}.get(p['url'],'root')
 for url in ['/policy/','/politika-konfidentsialnosti/']:
@@ -69,7 +72,7 @@ body=BeautifulSoup(article['text'],'html.parser')
 for block in pages['/']['blocks']:
  if block['class']=='life_text':block['records']=[{'text':'<h2>'+html.escape(article['name'])+'</h2><p>'+html.escape(article['intro'])+'</p>'+''.join(str(node) for node in body.select('p')[:2])}]
 exec(compile((B/'popup.py').read_text(),'popup.py','exec'))
-ready_links={'/podrostkam/':'/podrostkam/trevoga-i-perezhivaniya/','/roditelyam/':'/blog/?category=parents','/spetsialistam/':'/blog/?category=specialists'}
+ready_links={}
 def ready_value(value):
  if isinstance(value,str):
   if value in ready_links:return ready_links[value]

@@ -13,13 +13,13 @@
                     <a class="footer__link" href="/o-nas/">О проекте</a>
                 </li>
                 <li class="footer__list-item">
-                    <a class="footer__link" href="/podrostkam/trevoga-i-perezhivaniya/">Подросткам</a>
+                    <a class="footer__link" href="/podrostkam/">Подросткам</a>
                 </li>
                 <li class="footer__list-item">
-                    <a class="footer__link" href="/blog/?category=parents">Родителям</a>
+                    <a class="footer__link" href="/roditelyam/">Родителям</a>
                 </li>
                 <li class="footer__list-item">
-                    <a class="footer__link" href="/blog/?category=specialists">Специалистам</a>
+                    <a class="footer__link" href="/spetsialistam/">Специалистам</a>
                 </li>
                 <li class="footer__list-item">
                     <a class="footer__link" href="/blog/">Блог</a>
@@ -53,7 +53,7 @@
             <h4 class="footer__col-title">Родителям</h4>
             <ul class="footer__list">
                 <li class="footer__list-item">
-                    <a class="footer__link" href="/blog/?category=parents">Советы психологов</a>
+                    <a class="footer__link" href="/roditelyam/">Советы психологов</a>
                 </li>
                 <li class="footer__list-item">
                     <a class="footer__link" href="/#quiz">Тесты</a>
@@ -69,10 +69,10 @@
         <div class="footer__col footer__col--contacts">
             <h4 class="footer__col-title">Контакты</h4>
             <p class="footer__contact-item">
-                <?= htmlspecialchars(shortcode('[email]'),ENT_QUOTES,'UTF-8') ?>
+                <a href="mailto:<?= htmlspecialchars(shortcode('[email]'),ENT_QUOTES,'UTF-8') ?>"><?= htmlspecialchars(shortcode('[email]'),ENT_QUOTES,'UTF-8') ?></a>
             </p>
             <p class="footer__contact-item">
-                <?= htmlspecialchars(shortcode('[phone]'),ENT_QUOTES,'UTF-8') ?>
+                <a href="tel:<?= htmlspecialchars(preg_replace('/[^0-9+]/', '', shortcode('[phone]')),ENT_QUOTES,'UTF-8') ?>"><?= htmlspecialchars(shortcode('[phone]'),ENT_QUOTES,'UTF-8') ?></a>
             </p>
             <p class="footer__contact-item">
                 <?= htmlspecialchars(shortcode('[city]'),ENT_QUOTES,'UTF-8') ?>
@@ -97,15 +97,18 @@
         </p>
     </div>
 </footer>
-<?php if ((int) $sub !== (int) $current_catalogue["Title_Sub_ID"]) {
-    echo project_shared_block("life_popup");
-} ?>
+<section class="project-cookie" data-project-cookie hidden role="region" aria-label="Использование cookies">
+    <p>Мы используем cookies для работы сайта и анализа посещений. Подробнее — в <a href="/politika-konfidentsialnosti/">политике конфиденциальности</a>.</p>
+    <button type="button">Согласен</button>
+</section>
+<?php if ((int)$sub !== (int)$current_catalogue['Title_Sub_ID']) { echo project_shared_block('life_popup'); } ?>
 <script src="/netcat_template/template/life_teen/js/jquery.min.js"></script>
 <script src="/netcat_template/template/life_teen/js/swiper-bundle.min.js"></script>
 <script src="/netcat_template/template/life_teen/js/jquery.fancybox.min.js"></script>
 <script src="/netcat_template/template/life_teen/js/jquery-ui.min.js"></script>
 <script src="/netcat_template/template/life_teen/js/jquery.ui.touch-punch.min.js"></script>
-<script src="/netcat_template/template/life_teen/js/common.js"></script>
-<script src="/netcat_template/template/life_teen/js/forms.js"></script>
+<script src="/netcat_template/template/life_teen/js/common.js?v=5.2.0"></script>
+<script src="/netcat_template/template/life_teen/js/forms.js?v=5.2.0"></script>
+<script src="/netcat_template/template/life_teen/js/project-ui.js?v=5.2.0"></script>
 </body>
 </html>

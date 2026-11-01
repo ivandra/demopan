@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     selectAll('[data-specialist-filter]').forEach(button => {
         button.addEventListener('click', () => {
+            if (window.lifeProjectUI) return;
             const category = button.dataset.specialistFilter;
             selectAll('[data-specialist-filter]').forEach(item =>
                 item.classList.toggle('specialists-block__filter--active', item === button));
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     selectAll('.gallery .specialists-block__filter').forEach(button => {
         button.addEventListener('click', event => {
+            if (window.lifeProjectUI) return;
             event.stopPropagation();
             const category = button.dataset.filter || 'all';
             selectAll('.gallery .specialists-block__filter').forEach(item =>
@@ -53,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     selectAll('[data-article-category]').forEach(button => {
         button.addEventListener('click', () => {
+            if (window.lifeProjectUI) return;
             const category = button.dataset.articleCategory;
             location.href = '/blog/' + (category ? '?category=' + encodeURIComponent(category) : '');
         });

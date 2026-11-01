@@ -1,0 +1,77 @@
+{
+  "version": "5.2.0",
+  "components": {
+    "life_articles": [
+      "FormPrefix",
+      "FormSuffix"
+    ],
+    "life_certificates_home": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_faq": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_faq_contacts": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_gallery": [
+      "RecordTemplate"
+    ],
+    "life_specialists": [
+      "RecordTemplate",
+      "RecordTemplateFull"
+    ],
+    "life_specialists_team": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_text": [
+      "RecordTemplate"
+    ],
+    "life_video": [
+      "RecordTemplate"
+    ],
+    "life_subscription": [
+      "FormPrefix"
+    ],
+    "life_certificates": [
+      "FormSuffix"
+    ]
+  },
+  "theme": [
+    "Header.html",
+    "Footer.html",
+    "function.inc.php.txt",
+    "css/project-ui.css",
+    "js/project-ui.js",
+    "js/common.js",
+    "js/forms.js"
+  ],
+  "empty_pages": [
+    "/podrostkam/",
+    "/podrostkam/trevoga-i-perezhivaniya/trevozhnye-mysli-i-strahi/",
+    "/podrostkam/trevoga-i-perezhivaniya/stress-i-silnye-perezhivaniya/",
+    "/podrostkam/neuverennost-v-sebe/",
+    "/podrostkam/neuverennost-v-sebe/sravnenie-sebya-s-drugimi/",
+    "/podrostkam/neuverennost-v-sebe/strah-neudachi-i-oshibok/",
+    "/podrostkam/neuverennost-v-sebe/rabota-nad-samootsenkoy/",
+    "/podrostkam/otnosheniya-s-roditelyami/",
+    "/podrostkam/otnosheniya-s-roditelyami/konflikty-i-sposoby-ih-resheniya/",
+    "/podrostkam/otnosheniya-s-roditelyami/kak-govorit-o-slozhnom/",
+    "/podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/",
+    "/podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/raspoznavanie-svoih-emotsiy/",
+    "/podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/tehniki-samoregulyatsii/",
+    "/podrostkam/emotsionalnye-perepady-i-trudnosti-s-upravleniem-emotsiyami/kogda-stoit-obratitsya-za-podderzhkoy/",
+    "/podrostkam/ucheba-i-motivatsiya/",
+    "/podrostkam/poisk-sebya/",
+    "/roditelyam/",
+    "/spetsialistam/"
+  ]
+}

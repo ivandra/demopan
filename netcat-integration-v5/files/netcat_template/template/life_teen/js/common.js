@@ -11,6 +11,7 @@ $(function(){
 		$(this).next('.mobile-menu__sublist').slideToggle();
 	});
 	$('.faq-block__trigger').click(function() {
+		if (window.lifeProjectUI) return;
 		$(this).toggleClass('faq-block__trigger--active');
 		$(this).next('.faq-block__answer').slideToggle();
 	});
@@ -87,6 +88,7 @@ $(function(){
 		var $lists = $gallery.find('.gallery__list');
 
 		$filters.on('click', '.specialists-block__filter', function() {
+			if (window.lifeProjectUI) return;
 			var $btn = $(this);
 			var filterValue = $btn.data('filter') || 'all';
 

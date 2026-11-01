@@ -32,7 +32,8 @@ value = config.read_text()
 for key, replacement in {'MYSQL_HOST': 'demopan-repro-db', 'MYSQL_USER': 'root', 'MYSQL_PASSWORD': '', 'MYSQL_DB_NAME': database, 'MYSQL_PORT': '3306', 'MYSQL_SOCKET': ''}.items():
     value = re.sub(r'(\$' + key + r'\s*=\s*)[^;]*;', lambda m: m[1] + repr(replacement) + ';', value)
 config.write_text(value.replace('getenv("DOCUMENT_ROOT")', '(getenv("DOCUMENT_ROOT") ?: __DIR__)'))
-shutil.copytree(package / 'files', site, dirs_exist_ok=True)
+if os.environ.get('NETCAT_TEST_SOURCE_ONLY') != '1':
+    shutil.copytree(package / 'files', site, dirs_exist_ok=True)
 prepare = (package / 'tests/prepare.py').read_text().replace("shutil.copytree(PACKAGE / 'files', SITE, dirs_exist_ok=True)", '')
 os.environ['NETCAT_TEST_SITE'] = str(site)
 exec(compile(prepare, str(package / 'tests/prepare.py'), 'exec'), {'__file__': str(package / 'tests/prepare.py')})
