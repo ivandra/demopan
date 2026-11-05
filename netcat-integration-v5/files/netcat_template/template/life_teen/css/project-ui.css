@@ -110,3 +110,7 @@
   .project-cookie button { align-self: flex-start; padding: 10px 24px; }
   .project-404 { margin: 24px 12px 40px; padding: 30px 18px; }
 }
+
+.project-filter-status:empty { display: none; }
+.article-page__related-image { flex: 0 0 70px; height: 70px; overflow: hidden; border-radius: 8px; }
+.article-page__related-image img { display: block; width: 100%; height: 100%; object-fit: cover; }

@@ -42,8 +42,25 @@
                 var open = trigger.getAttribute('aria-expanded') !== 'true';
                 trigger.setAttribute('aria-expanded', String(open));
                 trigger.classList.toggle('faq-block__trigger--active', open);
-                answer.hidden = !open;
-                answer.style.display = open ? 'block' : 'none';
+                var duration = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 400;
+                if (window.jQuery) {
+                    var panel = window.jQuery(answer);
+                    panel.stop(true, false);
+                    if (open) {
+                        if (answer.hidden) {
+                            answer.hidden = false;
+                            panel.hide();
+                        }
+                        panel.slideDown(duration);
+                    } else {
+                        panel.slideUp(duration, function () {
+                            if (trigger.getAttribute('aria-expanded') === 'false') answer.hidden = true;
+                        });
+                    }
+                } else {
+                    answer.hidden = !open;
+                    answer.style.display = open ? 'block' : 'none';
+                }
                 return;
             }
             var specialistFilter = event.target.closest('[data-specialist-filter]');
@@ -97,7 +114,7 @@
             request = new AbortController();
             var status = articleSection.querySelector('[data-article-status]');
             articleSection.setAttribute('aria-busy', 'true');
-            if (status) status.textContent = 'Загружаем статьи…';
+            if (status) status.textContent = '';
             try {
                 var response = await fetch(url.href, { credentials: 'same-origin', signal: request.signal, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
                 if (!response.ok) throw new Error('HTTP ' + response.status);
@@ -107,7 +124,7 @@
                 articleSection.querySelector('[data-article-results]').replaceWith(content);
                 markArticleFilter(url.searchParams.get('category') || '');
                 if (push) history.pushState({ lifeArticles: true }, '', url.href);
-                if (status) status.textContent = content.querySelector('[data-article-empty]') ? 'В этой категории пока нет статей.' : 'Список статей обновлён.';
+                if (status) status.textContent = '';
             } catch (error) {
                 if (error.name !== 'AbortError' && status) status.textContent = 'Не удалось обновить статьи. Повторите попытку.';
             } finally {
