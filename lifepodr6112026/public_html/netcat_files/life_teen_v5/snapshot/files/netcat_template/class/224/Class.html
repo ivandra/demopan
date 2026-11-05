@@ -1,0 +1,76 @@
+<!-- FormPrefix --><?header("Content-Type:text/plain");?>
+<?
+$domain = $_SERVER[SERVER_NAME];
+echo "# Компонент автогенерации Robots файлов\n";
+if($nc_core->widget->generate('regions', array('novisible'))){?>
+
+  User-agent: *
+  Disallow: /
+
+<?}else{?>
+User-agent: *
+host: <?=$domain?>
+
+Disallow: /temp/*
+Disallow: /netcat/
+Disallow: /*admin/
+Disallow: /ajax/
+Disallow: /*?cur_cc*
+Disallow: /*?curPos*
+Disallow: /*?adposition*
+Disallow: /*?matchtype*
+Disallow: /*?utm_source*
+Disallow: /*?utm_medium*
+Disallow: /*?utm_term*
+Disallow: /*?utm_content*
+Disallow: /*?utm_campaign*
+Disallow: /*?srchPat[0]*
+Disallow: /*?fbclid*
+
+User-agent: Yandex
+Disallow: /regions/*
+Disallow: /temp/*
+Disallow: /netcat/
+Disallow: /*admin/
+Disallow: /ajax/
+Disallow: /*?cur_cc*
+Disallow: /*?curPos*
+Disallow: /*?adposition*
+Disallow: /*?matchtype*
+Disallow: /*?utm_source*
+Disallow: /*?utm_medium*
+Disallow: /*?utm_term*
+Disallow: /*?utm_content*
+Disallow: /*?utm_campaign*
+Disallow: /*?srchPat[0]*
+Disallow: /*?fbclid*
+
+User-agent: Googlebot
+Disallow: /temp/*
+Disallow: /netcat/
+Disallow: /*admin/
+Disallow: /ajax/
+Disallow: /*?cur_cc*
+Disallow: /*?curPos*
+Disallow: /*?adposition*
+Disallow: /*?matchtype*
+Disallow: /*?utm_source*
+Disallow: /*?utm_medium*
+Disallow: /*?utm_term*
+Disallow: /*?utm_content*
+Disallow: /*?utm_campaign*
+Disallow: /*?srchPat[0]*
+Disallow: /*?fbclid*
+<?
+    echo "\n";
+    echo "Sitemap: https://".$domain."/sitemap.xml\n";
+}
+
+?>
+
+
+<!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><!-- /FormSuffix -->

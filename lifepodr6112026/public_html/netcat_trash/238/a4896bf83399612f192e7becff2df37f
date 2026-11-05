@@ -1,0 +1,1237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="35" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование методом торпедо</Subdivision_Name>
+      <EnglishName>life-old-35</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="34" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Комплексное лечение алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-34</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="33" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Комплексное лечение наркомании</Subdivision_Name>
+      <EnglishName>life-old-33</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="32" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование гипнозом от алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-32</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="31" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование по методу Довженко</Subdivision_Name>
+      <EnglishName>life-old-31</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="37" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Принудительное лечение алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-37</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="38" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение алкоголизма в стационаре</Subdivision_Name>
+      <EnglishName>life-old-38</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="16" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Наркологическая помощь</Subdivision_Name>
+      <EnglishName>life-old-16</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="36" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вызов нарколога на дом</Subdivision_Name>
+      <EnglishName>life-old-36</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="39" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Капельница от похмелья</Subdivision_Name>
+      <EnglishName>life-old-39</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="30" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Детоксикация от алкоголя</Subdivision_Name>
+      <EnglishName>life-old-30</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="29" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Капельница от запоя</Subdivision_Name>
+      <EnglishName>life-old-29</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="28" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Прокапаться от алкоголя</Subdivision_Name>
+      <EnglishName>life-old-28</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="27" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вывод из запоя в стационаре</Subdivision_Name>
+      <EnglishName>life-old-27</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="40" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вывод из запоя на дому</Subdivision_Name>
+      <EnglishName>life-old-40</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="17" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вывод из запоя</Subdivision_Name>
+      <EnglishName>life-old-17</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="18" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование от алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-18</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="24" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение наркомании</Subdivision_Name>
+      <EnglishName>life-old-24</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="19" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение ПТСР</Subdivision_Name>
+      <EnglishName>life-old-19</EnglishName>
+      <Checked>0</Checked>
+    </subdivision>
+    <subdivision subdivision_id="20" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-20</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="194" subdivision_id="35" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="186" subdivision_id="34" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="178" subdivision_id="33" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="170" subdivision_id="32" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="162" subdivision_id="31" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="150" subdivision_id="37" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="143" subdivision_id="38" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="124" subdivision_id="16" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="117" subdivision_id="36" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="104" subdivision_id="39" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="97" subdivision_id="30" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="88" subdivision_id="29" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="81" subdivision_id="28" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="74" subdivision_id="27" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="66" subdivision_id="40" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="45" subdivision_id="17" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="34" subdivision_id="18" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="26" subdivision_id="24" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="22" subdivision_id="19" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="12" subdivision_id="20" class_id="238">
+      <Sub_Class_Name>Цены (услуги)</Sub_Class_Name>
+      <EnglishName>tseny</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="417" type_of_data_id="1">
+      <Field_Name>maintitle</Field_Name>
+      <Description>Заголовок над таблицей</Description>
+    </field>
+    <field field_id="416" type_of_data_id="3">
+      <Field_Name>price</Field_Name>
+      <Description>Таблица цен через table tr и td</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="20" class_id="238" subdivision_id="35" sub_class_id="194">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.200</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-23 20:55:10</Created>
+      <LastUpdated>2026-09-23 20:55:10</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на кодирование от алкоголизма в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+
+        <tr>
+            <td>
+                Кодирование Налтрексон</td>
+            <td>8500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование гипнозом</td>
+            <td>10000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование методом имплантации (Дисульфирам, Налтрексон)</td>
+            <td>17000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование от алкголизма Алгоминал</td>
+            <td>12000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование от алкоголизма Аквилонг</td>
+            <td>9900 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Внутривенное кодирование от алкоголизма  на 1 год</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Внутривенное кодирование на 2 года</td>
+            <td>12000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Внутривенное кодирование на 3 года</td>
+            <td>16000 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="19" class_id="238" subdivision_id="34" sub_class_id="186">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 18:08:06</Created>
+      <LastUpdated>2026-09-06 18:08:06</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на лечение алкоголизма в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+
+        <tr>
+            <td>
+                Снятие алкогольной абстиненции</td>
+            <td>4600 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) Общая палата</td>
+            <td>5000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) VIP-палата</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение алкогольных отравлений</td>
+            <td>4900 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="18" class_id="238" subdivision_id="33" sub_class_id="178">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 17:51:27</Created>
+      <LastUpdated>2026-09-06 17:51:27</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на лечение наркомании в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+
+        <tr>
+            <td>
+                Снятие наркотической ломки на дому</td>
+            <td>9900 рублей</td>
+        </tr>
+
+          <tr>
+            <td>УБОД</td>
+            <td>10000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение зависимости в наркологическом стационаре - Стандарт</td>
+            <td>2000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение зависимости в наркологическом стационаре - Комфорт</td>
+            <td>5500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение зависимости в наркологическом стационаре - Люкс</td>
+            <td>10000 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="17" class_id="238" subdivision_id="32" sub_class_id="170">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 13:24:08</Created>
+      <LastUpdated>2026-09-06 13:24:08</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на кодирование от алкоголизма в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+
+        <tr>
+            <td>
+                Кодирование Налтрексон</td>
+            <td>8500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование гипнозом</td>
+            <td>10000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование методом имплантации (Дисульфирам, Налтрексон)</td>
+            <td>17000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование от алкголизма Алгоминал</td>
+            <td>12000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование от алкоголизма Аквилонг</td>
+            <td>9900 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Внутривенное кодирование от алкоголизма  на 1 год</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Внутривенное кодирование на 2 года</td>
+            <td>12000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Внутривенное кодирование на 3 года</td>
+            <td>16000 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="16" class_id="238" subdivision_id="31" sub_class_id="162">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 12:31:08</Created>
+      <LastUpdated>2026-09-06 12:31:08</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на кодирование от алкоголизма в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+
+        <tr>
+            <td>
+                Кодирование Налтрексон</td>
+            <td>8500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование гипнозом</td>
+            <td>10000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование методом имплантации (Дисульфирам, Налтрексон)</td>
+            <td>17000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование от алкголизма Алгоминал</td>
+            <td>12000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование от алкоголизма Аквилонг</td>
+            <td>9900 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Внутривенное кодирование от алкоголизма  на 1 год</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Внутривенное кодирование на 2 года</td>
+            <td>12000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Внутривенное кодирование на 3 года</td>
+            <td>16000 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="15" class_id="238" subdivision_id="37" sub_class_id="150">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 12:31:40</Created>
+      <LastUpdated>2026-08-21 12:31:40</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на лечение алкоголизма в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+
+        <tr>
+            <td>
+                Снятие алкогольной абстиненции</td>
+            <td>4600 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) Общая палата</td>
+            <td>5000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) VIP-палата</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение алкогольных отравлений</td>
+            <td>4900 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="14" class_id="238" subdivision_id="38" sub_class_id="143">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:06:16</Created>
+      <LastUpdated>2026-08-21 14:06:16</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на лечение алкоголизма в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+
+        <tr>
+            <td>
+                Снятие алкогольной абстиненции</td>
+            <td>4600 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) Общая палата</td>
+            <td>5000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) VIP-палата</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение алкогольных отравлений</td>
+            <td>4900 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="13" class_id="238" subdivision_id="16" sub_class_id="124">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 15:02:35</Created>
+      <LastUpdated>2026-08-05 15:07:50</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на наркологическую помощь в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+        <tr>
+            <td>Выведение из запоя на дому</td>
+            <td>3900 рублей</td>
+        </tr>
+
+        <tr>
+            <td>Выведение из запоя в стационаре (сутки)</td>
+            <td>4500 рублей</td>
+        </tr>
+
+        <tr>
+            <td>
+                <td>Снятие наркотической ломки на дому</td>
+            <td>9900 рублей</td>
+        </tr>
+
+        <tr>
+            <td>
+                <td>Снятие алкогольной абстиненции</td>
+            <td>4600 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Капельница от запоя</td>
+            <td>5500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>УБОД</td>
+            <td>10000 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="12" class_id="238" subdivision_id="36" sub_class_id="117">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.101</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-06 11:12:05</Created>
+      <LastUpdated>2026-08-06 11:18:37</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.181.101</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Стоимость консультаций врачей в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+        <tr>
+            <td>Консультация дежурного врача по телефону</td>
+            <td>Бесплатно</td>
+        </tr>
+
+        <tr>
+            <td>Психиатр-нарколог с назначением лечения</td>
+            <td>1500 рублей</td>
+        </tr>
+
+        <tr>
+            <td>
+               <td>Консультация психиатра-нарколога/повторая консультация</td>
+            <td>2500/2200 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Консультация психотерапевта/повторная консультция </td>
+            <td>3000/2500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Консультация психолога (50 минут)</td>
+            <td>3000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Семейная консультация психолога (80 минут)</td>
+            <td>5000 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="11" class_id="238" subdivision_id="39" sub_class_id="104">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:35:03</Created>
+      <LastUpdated>2026-08-21 14:35:03</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на вывод из запоя в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+        <tr>
+            <td>Выведение из запоя на дому</td>
+            <td>3900 рублей</td>
+        </tr>
+
+        <tr>
+            <td>Выведение из запоя в стационаре (сутки)</td>
+            <td>4500 рублей</td>
+        </tr>
+
+        <tr>
+            <td>
+                Снятие алкогольной абстиненции</td>
+            <td>4600 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Капельница от запоя</td>
+            <td>5500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) Общая палата</td>
+            <td>5000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) VIP-палата</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение алкогольных отравлений</td>
+            <td>4900 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="10" class_id="238" subdivision_id="30" sub_class_id="97">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 11:43:38</Created>
+      <LastUpdated>2026-09-06 11:43:38</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на вывод из запоя в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+        <tr>
+            <td>Выведение из запоя на дому</td>
+            <td>3900 рублей</td>
+        </tr>
+
+        <tr>
+            <td>Выведение из запоя в стационаре (сутки)</td>
+            <td>4500 рублей</td>
+        </tr>
+
+        <tr>
+            <td>
+                Снятие алкогольной абстиненции</td>
+            <td>4600 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Капельница от запоя</td>
+            <td>5500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) Общая палата</td>
+            <td>5000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) VIP-палата</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение алкогольных отравлений</td>
+            <td>4900 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="9" class_id="238" subdivision_id="29" sub_class_id="88">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:33:30</Created>
+      <LastUpdated>2026-08-21 15:33:30</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на вывод из запоя в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+        <tr>
+            <td>Выведение из запоя на дому</td>
+            <td>3900 рублей</td>
+        </tr>
+
+        <tr>
+            <td>Выведение из запоя в стационаре (сутки)</td>
+            <td>4500 рублей</td>
+        </tr>
+
+        <tr>
+            <td>
+                Снятие алкогольной абстиненции</td>
+            <td>4600 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Капельница от запоя</td>
+            <td>5500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) Общая палата</td>
+            <td>5000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) VIP-палата</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение алкогольных отравлений</td>
+            <td>4900 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="8" class_id="238" subdivision_id="28" sub_class_id="81">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:22:21</Created>
+      <LastUpdated>2026-08-21 15:22:21</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на вывод из запоя в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+        <tr>
+            <td>Выведение из запоя на дому</td>
+            <td>3900 рублей</td>
+        </tr>
+
+        <tr>
+            <td>Выведение из запоя в стационаре (сутки)</td>
+            <td>4500 рублей</td>
+        </tr>
+
+        <tr>
+            <td>
+                Снятие алкогольной абстиненции</td>
+            <td>4600 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Капельница от запоя</td>
+            <td>5500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) Общая палата</td>
+            <td>5000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) VIP-палата</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение алкогольных отравлений</td>
+            <td>4900 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="7" class_id="238" subdivision_id="27" sub_class_id="74">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:55:28</Created>
+      <LastUpdated>2026-08-04 22:02:30</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на вывод из запоя в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+ 
+        <tr>
+            <td>Выведение из запоя в стационаре (сутки)</td>
+            <td>4500 рублей</td>
+        </tr>
+
+        <tr>
+            <td>
+                Снятие алкогольной абстиненции</td>
+            <td>4600 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Капельница от запоя</td>
+            <td>5500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) Общая палата</td>
+            <td>5000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) VIP-палата</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение алкогольных отравлений</td>
+            <td>4900 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="6" class_id="238" subdivision_id="40" sub_class_id="66">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:12:00</Created>
+      <LastUpdated>2026-08-04 21:12:00</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на вывод из запоя в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+        <tr>
+            <td>Выведение из запоя на дому</td>
+            <td>3900 рублей</td>
+        </tr>
+
+        <tr>
+            <td>Выведение из запоя в стационаре (сутки)</td>
+            <td>4500 рублей</td>
+        </tr>
+
+        <tr>
+            <td>
+                Снятие алкогольной абстиненции</td>
+            <td>4600 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Капельница от запоя</td>
+            <td>5500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) Общая палата</td>
+            <td>5000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) VIP-палата</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение алкогольных отравлений</td>
+            <td>4900 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="5" class_id="238" subdivision_id="17" sub_class_id="45">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 15:15:46</Created>
+      <LastUpdated>2026-08-04 20:53:09</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на вывод из запоя в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+        <tr>
+            <td>Выведение из запоя на дому</td>
+            <td>3900 рублей</td>
+        </tr>
+
+        <tr>
+            <td>Выведение из запоя в стационаре (сутки)</td>
+            <td>4500 рублей</td>
+        </tr>
+
+        <tr>
+            <td>
+                Снятие алкогольной абстиненции</td>
+            <td>4600 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Капельница от запоя</td>
+            <td>5500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) Общая палата</td>
+            <td>5000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) VIP-палата</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение алкогольных отравлений</td>
+            <td>4900 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="4" class_id="238" subdivision_id="18" sub_class_id="34">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 14:23:03</Created>
+      <LastUpdated>2026-08-05 14:32:02</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на кодирование от алкоголизма в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+
+        <tr>
+            <td>
+                Кодирование Налтрексон</td>
+            <td>8500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование гипнозом</td>
+            <td>10000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование методом имплантации (Дисульфирам, Налтрексон)</td>
+            <td>17000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование от алкголизма Алгоминал</td>
+            <td>12000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Кодирование от алкоголизма Аквилонг</td>
+            <td>9900 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Внутривенное кодирование от алкоголизма  на 1 год</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Внутривенное кодирование на 2 года</td>
+            <td>12000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Внутривенное кодирование на 3 года</td>
+            <td>16000 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="3" class_id="238" subdivision_id="24" sub_class_id="26">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:26:06</Created>
+      <LastUpdated>2026-08-05 13:36:14</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на лечение наркомании в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+
+        <tr>
+            <td>
+                Снятие наркотической ломки на дому</td>
+            <td>9900 рублей</td>
+        </tr>
+
+          <tr>
+            <td>УБОД</td>
+            <td>10000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение зависимости в наркологическом стационаре - Стандарт</td>
+            <td>2000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение зависимости в наркологическом стационаре - Комфорт</td>
+            <td>5500 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение зависимости в наркологическом стационаре - Люкс</td>
+            <td>10000 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="2" class_id="238" subdivision_id="19" sub_class_id="22">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:44:20</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>62.60.156.219</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на лечение алкоголизма в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+        <tr>
+            <td>Вывод из запоя в стационаре (длительность 1-3 дня)</td>
+            <td>3000 рублей</td>
+        </tr>
+
+        <tr>
+            <td>ВИП-комплекс</td>
+            <td>10000 рублей</td>
+        </tr>
+
+        <tr>
+            <td>
+               Полный восстанавливающий комплекс в стационаре и терапия после выписки с поддерживающими препаратами
+            </td>
+            <td>7000 рублей</td>
+        </tr>
+    </tbody>
+</table>]]></price>
+    </message>
+    <message message_id="1" class_id="238" subdivision_id="20" sub_class_id="12">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:51:40</Created>
+      <LastUpdated>2026-08-05 13:07:13</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Цены на лечение алкоголизма в [inCity]]]></maintitle>
+      <price><![CDATA[<table>
+    <tbody>
+
+        <tr>
+            <td>
+                Снятие алкогольной абстиненции</td>
+            <td>4600 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) Общая палата</td>
+            <td>5000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Детоксикация (продолжительность 8 часов) VIP-палата</td>
+            <td>8000 рублей</td>
+        </tr>
+
+          <tr>
+            <td>Лечение алкогольных отравлений</td>
+            <td>4900 рублей</td>
+        </tr>
+
+    </tbody>
+</table>]]></price>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

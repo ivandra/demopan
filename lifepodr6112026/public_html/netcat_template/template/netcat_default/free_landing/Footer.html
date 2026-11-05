@@ -1,0 +1,18 @@
+</div>
+<?php if (!empty($template_settings["js"])): ?>
+<script><?= $template_settings["js"] ?></script>
+<?php endif; ?>
+<?php if (!empty($_GET['fx_review']) || !empty($_COOKIE['fx_review'])): ?>
+<?php /* Чип доработки Netcat Studio (флаг fx_review): страница открыта во фрейме панели —
+        сообщаем родителю путь, секцию и элемент под кликом. Вне фрейма скрипт молчит. */ ?>
+<script>(function(){if(window.top===window||window.__fxReviewChip)return;window.__fxReviewChip=1;var on=/[?&]fx_review=1/.test(location.search)||/(^|; )fx_review=1/.test(document.cookie);if(!on)return;
+try{document.cookie="fx_review=1;path=/;max-age=86400";}catch(e){}
+function box(t){var s=t.closest("[data-section],section[id]");var id=s?(s.getAttribute("data-section")||s.id):"";if(!id){if(t.closest("header"))id="_header";else if(t.closest("footer"))id="_footer";}
+var lab=null;if(s){var h=s.querySelector("h1,h2,h3,h4");if(h)lab=(h.textContent||"").trim().slice(0,60);}
+var f=t.closest("[data-field]"),el=null;if(f){var n=f.getAttribute("data-field"),i=0;if(s){var all=s.querySelectorAll("[data-field=\""+n+"\"]");for(var k=0;k<all.length;k++){if(all[k]===f){i=k;break;}}}
+el={field:n,index:i,kind:(f.tagName==="IMG"||f.getAttribute("data-type")==="image"||f.querySelector("img"))?"image":"text"};}return {section:id,section_label:lab,element:el};}
+function send(x){try{var m={type:"fx_review",path:location.pathname,viewport:window.innerWidth,title:document.title};for(var k in x)m[k]=x[k];parent.postMessage(m,"*");}catch(e){}}
+send({event:"load"});document.addEventListener("click",function(e){var t=e.target;if(!(t instanceof Element))return;var b=box(t);b.event="click";send(b);},true);})();</script>
+<?php endif; ?>
+</body>
+</html>

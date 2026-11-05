@@ -1,0 +1,137 @@
+<?php
+
+const NETCAT_MODULE_LOGGING_DESCRIPTION = "Logging system actions.";
+
+const NETCAT_MODULE_LOGGING_DATA_ID = "#";
+const NETCAT_MODULE_LOGGING_DATA_EVENT = "Action";
+const NETCAT_MODULE_LOGGING_DATA_INFO = "Information";
+const NETCAT_MODULE_LOGGING_DATA_DATE = "Date";
+const NETCAT_MODULE_LOGGING_DATA_USER = "User";
+const NETCAT_MODULE_LOGGING_DATA_SYSTEM = "system";
+const NETCAT_MODULE_LOGGING_IP = "IP address";
+
+const NETCAT_MODULE_LOGGING_BUTTON_CLEAR = "Clear";
+const NETCAT_MODULE_LOGGING_BUTTON_CANCEL = "Cancel";
+const NETCAT_MODULE_LOGGING_BUTTON_SORT = "Display";
+
+const NETCAT_MODULE_LOGGING_NOTICE_CLEAR = "Clear all logging data?";
+
+const NETCAT_MODULE_LOGGING_SHOW_PARAMETERS = "Display options";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_BY = "sort by";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_BY_DATE = "date";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_BY_EVENT = "action";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_BY_USER = "user";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_DIR = "sort direction";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_DIR_ASC = "ascending";
+const NETCAT_MODULE_LOGGING_SHOW_SORT_DIR_DESC = "descending";
+const NETCAT_MODULE_LOGGING_SHOW_ONLY_ACTION = "display action";
+const NETCAT_MODULE_LOGGING_SHOW_ONLY_ACTION_NONE = "-- action is not set --";
+const NETCAT_MODULE_LOGGING_SHOW_ONLY_ESSENCE = "display item";
+const NETCAT_MODULE_LOGGING_SHOW_ONLY_ESSENCE_NONE = "-- essence is not set --";
+
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_ADD = "add";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_UPDATE = "update";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_DROP = "drop";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_CHECK = "check";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_UNCHECK = "uncheck";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_AUTHORIZE = "authorize";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_BLOCK = "block";
+const NETCAT_MODULE_LOGGING_EVENT_TYPE_UNBLOCK = "unblock";
+
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_CATALOGUE = "site";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_SUBDIVISION = "subdivision";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_SUBCLASS = "infoblock";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_CLASS = "component";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_CLASSTEMPLATE = "component template";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_MESSAGE = "message";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_SYSTEMTABLE = "system table";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_TEMPLATE = "design template";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_USER = "user";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_MODULE = "module";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_COMMENT = "comments";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_WIDGETCLASS = "widget";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_FIELD = "field";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_CLASSIFICATOR = "classificator";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_CLASSIFICATORITEM = "classificator item";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_TEMPLATEPARTIAL = "partial";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_EXTERNALSCRIPT = "external script";
+const NETCAT_MODULE_LOGGING_EVENT_ESSENCE_EXTERNALSCRIPTPROVIDER = "auto-blocking provider";
+
+const NETCAT_MODULE_LOGGING_QUOTE1 = "“";
+const NETCAT_MODULE_LOGGING_QUOTE2 = "”";
+
+const NETCAT_MODULE_LOGGING_ALL_USERS = "All Users";
+const NETCAT_MODULE_LOGGING_SHOW_USER = "user which performed the action";
+const NETCAT_MODULE_LOGGING_OVER_PERIOD = "over period";
+
+// Consent journal (152-FZ)
+const NETCAT_MODULE_LOGGING_CONSENT_JOURNAL = "Consent journal";
+const NETCAT_MODULE_LOGGING_ACTIVITY_JOURNAL = "Activity log";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_DATE = "Date / time";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_SUBJECT = "Subject";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_NAME = "Name";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_CONTACTS = "Contacts";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_TYPE = "Type";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_ACTION = "Action";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_SOURCE = "Source";
+const NETCAT_MODULE_LOGGING_CONSENT_COL_LABEL = "Consent text";
+const NETCAT_MODULE_LOGGING_CONSENT_ACTION_GRANT = "Granted";
+const NETCAT_MODULE_LOGGING_CONSENT_ACTION_WITHDRAW = "Withdrawn";
+const NETCAT_MODULE_LOGGING_CONSENT_SUBJECT_USER = "User";
+const NETCAT_MODULE_LOGGING_CONSENT_SUBJECT_ANON = "Anonymous";
+const NETCAT_MODULE_LOGGING_CONSENT_EMPTY = "Consent journal is empty";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_SEARCH = "Email or phone";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_NAME = "Name";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_ACTION = "Action";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_ALL = "any";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_PERIOD = "Period";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_FROM = "from";
+const NETCAT_MODULE_LOGGING_CONSENT_FILTER_TO = "to";
+const NETCAT_MODULE_LOGGING_CONSENT_RECORD = "Consent journal record";
+const NETCAT_MODULE_LOGGING_CONSENT_SOURCE_URL = "Consent page";
+const NETCAT_MODULE_LOGGING_CONSENT_SOURCE_OBJECT = "Source object";
+const NETCAT_MODULE_LOGGING_CONSENT_USER_AGENT = "User-Agent";
+const NETCAT_MODULE_LOGGING_CONSENT_DOCS = "Documents";
+const NETCAT_MODULE_LOGGING_CONSENT_BACK = "← back to list";
+const NETCAT_MODULE_LOGGING_CONSENT_HEALTH_WARN = "Warning: writing to the consent journal failed (last: %s; total errors: %s). Check the ConsentLog table and DB permissions.";
+const NETCAT_MODULE_LOGGING_CONSENT_LAST_SUCCESS = "Last successful write: %s";
+const NETCAT_MODULE_LOGGING_COOKIE_JOURNAL = "Cookie consents";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_DECISION = "Decision";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_CATEGORIES = "Allowed categories";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_UID = "Consent ID";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_PAGE = "Page";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_MODE = "Window mode";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_TEXT = "Notice text";
+const NETCAT_MODULE_LOGGING_COOKIE_COL_SITE = "Site";
+const NETCAT_MODULE_LOGGING_COOKIE_DECISION_ACCEPT = "Accepted all";
+const NETCAT_MODULE_LOGGING_COOKIE_DECISION_REJECT = "Rejected";
+const NETCAT_MODULE_LOGGING_COOKIE_DECISION_PARTIAL = "Accepted partially";
+const NETCAT_MODULE_LOGGING_COOKIE_CATEGORY_FUNCTIONAL = "functional";
+const NETCAT_MODULE_LOGGING_COOKIE_CATEGORY_ANALYTICS = "analytics";
+const NETCAT_MODULE_LOGGING_COOKIE_CATEGORY_MARKETING = "marketing";
+const NETCAT_MODULE_LOGGING_COOKIE_CATEGORY_NECESSARY_ONLY = "necessary only";
+const NETCAT_MODULE_LOGGING_COOKIE_MODE_ACCEPTALL = "Block everything until consent (single button)";
+const NETCAT_MODULE_LOGGING_COOKIE_MODE_CATEGORIES = "Let the visitor choose categories";
+const NETCAT_MODULE_LOGGING_COOKIE_FILTER_SEARCH = "Consent ID or IP";
+const NETCAT_MODULE_LOGGING_COOKIE_HISTORY = "Choice history for this consent ID";
+const NETCAT_MODULE_LOGGING_COOKIE_DISABLED = "Logging of cookie consent choices is off. Enable it in site settings → “Consent collection” → “Record the visitor's choice in the consent log” (available in modes that block until consent).";
+const NETCAT_MODULE_LOGGING_COOKIE_ENABLED_ON = "Logging is on: %s";
+const NETCAT_MODULE_LOGGING_COOKIE_SILENT = "Logging is on, but there are no records for 14 days: %s. Make sure the cookie consent window (widget or service component) is shown on the site.";
+const NETCAT_MODULE_LOGGING_COOKIE_NO_TABLE = "The cookie consent log table (CookieConsentLog) is missing — install the system update.";
+const NETCAT_MODULE_LOGGING_COOKIE_TEXT_UNKNOWN = "not saved — no text was sent or it did not match any consent window text configured on the site";
+const NETCAT_MODULE_LOGGING_COOKIE_OVERFLOW = "Site “%s”: the per-minute site limit of the cookie consent log was hit (last at %s, limit %s) — records over the limit were dropped. This happens both on traffic spikes and when records are sent in bulk by a script. If the traffic is legitimate, raise the limit in site settings (“Consent collection”).";
+const NETCAT_MODULE_LOGGING_COOKIE_OVERFLOW_DAY = "Site “%s”: the daily record limit was reached (last at %s, limit %s) — new records were dropped until the end of the day. If the traffic is legitimate, raise the limit in site settings (“Consent collection”).";
+const NETCAT_MODULE_LOGGING_COOKIE_DROPPED = "Site “%s”: records dropped by limits — today: %s, yesterday: %s.";
+const NETCAT_MODULE_LOGGING_COOKIE_FILTER_ALL_SITES = "all sites";
+const NETCAT_MODULE_LOGGING_COOKIE_PAGE_FIRST = "first page";
+const NETCAT_MODULE_LOGGING_COOKIE_PAGE_NEWER = "← newer";
+const NETCAT_MODULE_LOGGING_COOKIE_PAGE_OLDER = "older →";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_TITLE = "Delete old records";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_OLDER_THAN = "delete records older than";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_DAYS = "days";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_BUTTON = "Delete";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_CONFIRM = "Delete cookie consent log records older than %s days (%s)? This cannot be undone.";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_DONE = "Records deleted: %s.";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_PARTIAL = "Records deleted: %s. Not all were deleted — run the deletion again.";
+const NETCAT_MODULE_LOGGING_COOKIE_PURGE_INVALID = "Enter the number of days — an integer from 1.";
+const NETCAT_MODULE_LOGGING_COOKIE_TRUST_NOTE = "Records arrive at a public endpoint. The request origin check (Origin/Referer) only stops submissions from other sites' pages in a browser — a script can send a record directly. A record confirms an action in a browser with this consent ID but is not tamper-proof; the volume of such records is capped by the limits in site settings. Old records are deleted daily according to the retention period.";

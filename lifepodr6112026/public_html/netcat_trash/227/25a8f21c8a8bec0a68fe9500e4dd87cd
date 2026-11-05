@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="15" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Заявки</Subdivision_Name>
+      <EnglishName>life-old-15</EnglishName>
+      <Checked>0</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="58" subdivision_id="15" class_id="227">
+      <Sub_Class_Name>Заявки</Sub_Class_Name>
+      <EnglishName>zayavki</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="366" type_of_data_id="1">
+      <Field_Name>name</Field_Name>
+      <Description>Имя</Description>
+    </field>
+    <field field_id="367" type_of_data_id="1">
+      <Field_Name>phone</Field_Name>
+      <Description>Телефон</Description>
+    </field>
+    <field field_id="368" type_of_data_id="1">
+      <Field_Name>email</Field_Name>
+      <Description>Email</Description>
+    </field>
+    <field field_id="373" type_of_data_id="3">
+      <Field_Name>message</Field_Name>
+      <Description>Вопрос</Description>
+    </field>
+    <field field_id="369" type_of_data_id="1">
+      <Field_Name>urlMessage</Field_Name>
+      <Description>Страница обращения</Description>
+    </field>
+    <field field_id="370" type_of_data_id="1">
+      <Field_Name>trafficSource</Field_Name>
+      <Description>Тип трафика</Description>
+    </field>
+    <field field_id="371" type_of_data_id="1">
+      <Field_Name>istochnik</Field_Name>
+      <Description>Источник трафика</Description>
+    </field>
+    <field field_id="372" type_of_data_id="1">
+      <Field_Name>utm</Field_Name>
+      <Description>utm метки</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="1" class_id="227" subdivision_id="15" sub_class_id="58">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>77.246.110.113</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:36:34</Created>
+      <LastUpdated>2026-08-05 13:36:34</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Проверка форма]]></name>
+      <phone><![CDATA[+7(909) 343-4343]]></phone>
+      <email><![CDATA[]]></email>
+      <message><![CDATA[]]></message>
+      <urlMessage><![CDATA[https://medelta.clinic/]]></urlMessage>
+      <trafficSource><![CDATA[]]></trafficSource>
+      <istochnik><![CDATA[]]></istochnik>
+      <utm><![CDATA[]]></utm>
+    </message>
+    <message message_id="2" class_id="227" subdivision_id="15" sub_class_id="58">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>77.246.110.113</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:43:29</Created>
+      <LastUpdated>2026-08-05 13:43:29</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Проверка форма]]></name>
+      <phone><![CDATA[+7(909) 343-4343]]></phone>
+      <email><![CDATA[]]></email>
+      <message><![CDATA[]]></message>
+      <urlMessage><![CDATA[https://medelta.clinic/]]></urlMessage>
+      <trafficSource><![CDATA[]]></trafficSource>
+      <istochnik><![CDATA[]]></istochnik>
+      <utm><![CDATA[]]></utm>
+    </message>
+    <message message_id="3" class_id="227" subdivision_id="15" sub_class_id="58">
+      <User_ID>0</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Mobile Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 14:04:06</Created>
+      <LastUpdated>2026-08-05 14:04:06</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[]]></name>
+      <phone><![CDATA[+7(909) 445-3354]]></phone>
+      <email><![CDATA[]]></email>
+      <message><![CDATA[]]></message>
+      <urlMessage><![CDATA[https://medelta.clinic/]]></urlMessage>
+      <trafficSource><![CDATA[]]></trafficSource>
+      <istochnik><![CDATA[]]></istochnik>
+      <utm><![CDATA[]]></utm>
+    </message>
+    <message message_id="4" class_id="227" subdivision_id="15" sub_class_id="58">
+      <User_ID>0</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>37.112.234.203</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 YaBrowser/26.6.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:19:56</Created>
+      <LastUpdated>2026-08-05 21:19:56</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Тест тест]]></name>
+      <phone><![CDATA[+7(928) 768-9999]]></phone>
+      <email><![CDATA[]]></email>
+      <message><![CDATA[]]></message>
+      <urlMessage><![CDATA[https://medelta.clinic/uslugi/vyvod-iz-zapoya/]]></urlMessage>
+      <trafficSource><![CDATA[]]></trafficSource>
+      <istochnik><![CDATA[]]></istochnik>
+      <utm><![CDATA[]]></utm>
+    </message>
+    <message message_id="5" class_id="227" subdivision_id="15" sub_class_id="58">
+      <User_ID>0</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>37.112.234.203</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 YaBrowser/26.6.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:24:15</Created>
+      <LastUpdated>2026-08-05 21:24:15</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Иван Тест]]></name>
+      <phone><![CDATA[+7(928) 777-8899]]></phone>
+      <email><![CDATA[]]></email>
+      <message><![CDATA[]]></message>
+      <urlMessage><![CDATA[https://medelta.clinic/]]></urlMessage>
+      <trafficSource><![CDATA[]]></trafficSource>
+      <istochnik><![CDATA[]]></istochnik>
+      <utm><![CDATA[]]></utm>
+    </message>
+    <message message_id="6" class_id="227" subdivision_id="15" sub_class_id="58">
+      <User_ID>0</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>85.192.60.227</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-13 20:08:18</Created>
+      <LastUpdated>2026-08-13 20:08:18</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Иван Никулин]]></name>
+      <phone><![CDATA[+7(999) 999-9999]]></phone>
+      <email><![CDATA[]]></email>
+      <message><![CDATA[]]></message>
+      <urlMessage><![CDATA[https://medelta.clinic/]]></urlMessage>
+      <trafficSource><![CDATA[]]></trafficSource>
+      <istochnik><![CDATA[]]></istochnik>
+      <utm><![CDATA[]]></utm>
+    </message>
+    <message message_id="7" class_id="227" subdivision_id="15" sub_class_id="58">
+      <User_ID>0</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>5.165.181.29</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 YaBrowser/26.8.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-08 21:23:11</Created>
+      <LastUpdated>2026-10-08 21:23:11</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[]]></name>
+      <phone><![CDATA[+7(928) 768-9855]]></phone>
+      <email><![CDATA[]]></email>
+      <message><![CDATA[]]></message>
+      <urlMessage><![CDATA[https://medelta.clinic/]]></urlMessage>
+      <trafficSource><![CDATA[]]></trafficSource>
+      <istochnik><![CDATA[]]></istochnik>
+      <utm><![CDATA[]]></utm>
+    </message>
+    <message message_id="8" class_id="227" subdivision_id="15" sub_class_id="58">
+      <User_ID>0</User_ID>
+      <Priority>8</Priority>
+      <Checked>1</Checked>
+      <IP>5.165.181.29</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 YaBrowser/26.8.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-08 21:30:11</Created>
+      <LastUpdated>2026-10-08 21:30:11</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Иван]]></name>
+      <phone><![CDATA[+7(928) 768-9866]]></phone>
+      <email><![CDATA[]]></email>
+      <message><![CDATA[]]></message>
+      <urlMessage><![CDATA[https://medelta.clinic/]]></urlMessage>
+      <trafficSource><![CDATA[]]></trafficSource>
+      <istochnik><![CDATA[]]></istochnik>
+      <utm><![CDATA[]]></utm>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

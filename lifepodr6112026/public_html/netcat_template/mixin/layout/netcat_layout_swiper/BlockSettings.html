@@ -1,0 +1,385 @@
+<div class="nc-mixins-mixin-settings-netcat-layout-swiper">
+
+    <div class="nc-mixins-mixin-settings-netcat-layout-swiper-slides-per-view">
+        <label>
+            Количество одновременно отображаемых слайдов:
+            <span style="display: block">
+            <select name="mixin.settings.slides_per_view">
+                <option value="auto">сколько поместится</option>
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+            </span>
+        </label>
+    </div>
+
+    <div class="nc-mixins-mixin-settings-netcat-layout-swiper-pagination">
+        <label>
+            Отображение текущего положения слайдера:
+            <span style="display: block">
+            <select name="mixin.settings.pagination_type">
+                <option value="">нет</option>
+                <option value="bullets">«биатлон» (точки-буллеты с подсветкой текущего слайда)</option>
+                <option value="progressbar">полоса-индикатор (progress bar)</option>
+                <option value="fraction">номер слайда</option>
+            </select>
+            </span>
+        </label>
+    </div>
+
+    <div class="nc-mixins-mixin-settings-netcat-layout-swiper-pagination-options" style="margin-left: 20px;">
+        <div>
+            <label>
+                Позиция пагинации:
+                <span style="display: block">
+                <select name="mixin.settings.pagination_position">
+                    <option value="inside">внутри слайдера</option>
+                    <option value="outside">под слайдером</option>
+                </select>
+                </span>
+            </label>
+        </div>
+        <div>
+            <label>
+                Размер пагинации:
+                <span style="display: block">
+                <select name="mixin.settings.pagination_size">
+                    <option value="small">маленький</option>
+                    <option value="medium" selected>средний</option>
+                    <option value="large">большой</option>
+                </select>
+                </span>
+            </label>
+        </div>
+        <div class="nc-mixins-mixin-settings-netcat-layout-swiper-bullets-options">
+            <div class="nc-mixins-mixin-settings-netcat-layout-swiper-bullets-style">
+                <label>
+                    Стиль буллетов:
+                    <span style="display: block">
+                    <select name="mixin.settings.bullets_style">
+                        <option value="circle">круги</option>
+                        <option value="square">квадраты</option>
+                        <option value="line">линии</option>
+                    </select>
+                    </span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    Цвет буллетов (неактивных):
+                    <input type="hidden" name="mixin.settings.bullets_color" data-palette-color data-sync-color="">
+                </label>
+            </div>
+            <div>
+                <label>
+                    Цвет активного буллета:
+                    <input type="hidden" name="mixin.settings.bullets_active_color" data-palette-color data-sync-color="">
+                </label>
+            </div>
+        </div>
+        <div class="nc-mixins-mixin-settings-netcat-layout-swiper-progressbar-options">
+            <div>
+                <label>
+                    Цвет неактивного отрезка:
+                    <input type="hidden" name="mixin.settings.progressbar_bg_color" data-palette-color data-sync-color="">
+                </label>
+            </div>
+            <div>
+                <label>
+                    Цвет активного отрезка:
+                    <input type="hidden" name="mixin.settings.progressbar_fill_color" data-palette-color data-sync-color="">
+                </label>
+            </div>
+        </div>
+        <div class="nc-mixins-mixin-settings-netcat-layout-swiper-fraction-options">
+            <div>
+                <label>
+                    Цвет номера:
+                    <input type="hidden" name="mixin.settings.fraction_color" data-palette-color data-sync-color="">
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <label>
+            Полоса прокрутки:
+            <span style="display: block">
+            <select name="mixin.settings.show_scrollbar">
+                <option value="">нет</option>
+                <option value="after_interaction">показывать после смены слайда</option>
+                <option value="always">показывать всегда</option>
+            </select>
+            </span>
+        </label>
+    </div>
+
+    <div class="nc-mixins-mixin-settings-netcat-layout-swiper-effect">
+        <label>
+            Смена слайдов:
+            <span style="display: block">
+            <select name="mixin.settings.effect">
+                <option value="slide">сдвиг (slide)</option>
+                <option value="fade">исчезновение и появление (fade)</option>
+                <option value="cube">3D куб (cube)</option>
+                <option value="coverflow">3D обложки (coverflow)</option>
+                <option value="flip">3D переворот (flip)</option>
+                <option value="cards">карточки (cards)</option>
+            </select>
+            </span>
+        </label>
+    </div>
+
+    <div>
+        <label>
+            Скорость смены слайдов:
+            <input type="number" name="mixin.settings.speed" value="300" min="0" class="nc--medium">
+            мс
+        </label>
+    </div>
+
+    <div>
+        <label>
+            Расстояние между слайдами:
+            <input type="number" name="mixin.settings.space_between" value="" min="0" class="nc--medium">
+            пикс.
+        </label>
+    </div>
+
+    <div>
+        <label>
+            <input type="checkbox" name="mixin.settings.show_arrows" value="1" checked>
+            Показывать стрелки «Вперёд» и «Назад»
+        </label>
+    </div>
+
+    <div class="nc-mixins-mixin-settings-netcat-layout-swiper-arrows-options" style="margin-left: 20px;">
+        <div>
+            <label>
+                Позиция стрелок:
+                <span style="display: block">
+                <select name="mixin.settings.arrows_position">
+                    <option value="inside">внутри слайдера</option>
+                    <option value="outside">снаружи слайдера</option>
+                </select>
+                </span>
+            </label>
+        </div>
+        <div>
+            <label>
+                Размер стрелок:
+                <span style="display: block">
+                <select name="mixin.settings.arrows_size">
+                    <option value="small">маленький</option>
+                    <option value="medium" selected>средний</option>
+                    <option value="large">большой</option>
+                </select>
+                </span>
+            </label>
+        </div>
+        <div>
+            <label>
+                Стиль стрелок:
+                <span style="display: block">
+                <select name="mixin.settings.arrows_style">
+                    <option value="default">стандартные (шеврон)</option>
+                    <option value="arrow">стрелки</option>
+                    <option value="arrow_long">длинные стрелки</option>
+                    <option value="angle">уголки</option>
+                    <option value="caret">каретки</option>
+                </select>
+                </span>
+            </label>
+        </div>
+        <div>
+            <label>
+                Цвет стрелок:
+                <input type="hidden" name="mixin.settings.arrows_color" data-palette-color data-sync-color="">
+            </label>
+        </div>
+        <div>
+            <label>
+                Непрозрачность стрелок:
+                <input type="number" name="mixin.settings.arrows_opacity" value="" min="0" max="100" class="nc--small" placeholder="100">
+                %
+            </label>
+        </div>
+        <div>
+            <label>
+                Форма фона стрелок:
+                <span style="display: block">
+                <select name="mixin.settings.arrows_bg_shape">
+                    <option value="">без фона</option>
+                    <option value="circle">круг</option>
+                    <option value="square">квадрат</option>
+                    <option value="rounded">скруглённый квадрат</option>
+                </select>
+                </span>
+            </label>
+        </div>
+        <div class="nc-mixins-mixin-settings-netcat-layout-swiper-arrows-bg-options">
+            <label>
+                Цвет фона стрелок:
+                <input type="hidden" name="mixin.settings.arrows_bg_color" data-palette-color data-sync-color="">
+            </label>
+        </div>
+        <div>
+            <label>
+                Толщина рамки стрелок:
+                <input type="number" name="mixin.settings.arrows_border_width" value="" min="0" class="nc--small" placeholder="0">
+                пикс.
+            </label>
+        </div>
+        <div class="nc-mixins-mixin-settings-netcat-layout-swiper-arrows-border-options">
+            <label>
+                Цвет рамки стрелок:
+                <input type="hidden" name="mixin.settings.arrows_border_color" data-palette-color data-sync-color="">
+            </label>
+        </div>
+        <div>
+            <label>
+                Вертикальное смещение:
+                <input type="number" name="mixin.settings.arrows_offset_y" value="" class="nc--small" placeholder="0">
+                пикс.
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="checkbox" name="mixin.settings.arrows_auto_hide" value="1">
+                Скрывать стрелки в начале/конце (если не закольцовано)
+            </label>
+        </div>
+    </div>
+
+    <div>
+        <label>
+            <input type="checkbox" name="mixin.settings.loop" value="1">
+            Закольцевать (бесконечная прокрутка вперёд и назад)
+        </label>
+    </div>
+
+    <div>
+        <label>
+            <input type="checkbox" name="mixin.settings.autoplay" value="1">
+            Автоматическое перелистывание
+        </label>
+        <label>
+            каждые
+            <input type="number" name="mixin.settings.autoplay_delay" value="10" min="1" class="nc--small">
+            секунд
+        </label>
+    </div>
+
+</div>
+<script>
+(function() {
+    var prefix = '.nc-mixins-mixin-settings-netcat-layout-swiper',
+        singleSlideEffects = ['fade', 'cube', 'flip', 'cards'];
+
+    function init(event, data) {
+        var settings = $nc(this).find(prefix);
+        if (!settings.length) {
+            settings = $nc(prefix);
+        }
+        if (!settings.length || settings.data('swiper-initialized')) {
+            return;
+        }
+
+        var effectSelect = settings.find(prefix + '-effect select'),
+            arrowsOptions = settings.find(prefix + '-arrows-options'),
+            arrowsBgOptions = settings.find(prefix + '-arrows-bg-options'),
+            arrowsBorderOptions = settings.find(prefix + '-arrows-border-options'),
+            paginationOptions = settings.find(prefix + '-pagination-options'),
+            bulletsOptions = settings.find(prefix + '-bullets-options'),
+            progressbarOptions = settings.find(prefix + '-progressbar-options'),
+            fractionOptions = settings.find(prefix + '-fraction-options');
+
+        // Количество слайдов -> эффекты
+        settings.find(prefix + '-slides-per-view select').on('change', function() {
+            var slidesVal = $nc(this).val();
+            if (slidesVal == 1) {
+                effectSelect.find('option').prop('disabled', false);
+            } else {
+                effectSelect.find('option').each(function() {
+                    var opt = $nc(this);
+                    if (singleSlideEffects.indexOf(opt.val()) !== -1) {
+                        opt.prop('disabled', true);
+                    }
+                });
+                if (singleSlideEffects.indexOf(effectSelect.val()) !== -1) {
+                    effectSelect.val('slide');
+                }
+            }
+        }).trigger('change');
+
+        // Показ стрелок -> настройки стрелок
+        settings.find('input[name="mixin.settings.show_arrows"]').on('change', function() {
+            if ($nc(this).is(':checked')) {
+                arrowsOptions.show();
+            } else {
+                arrowsOptions.hide();
+            }
+        }).trigger('change');
+
+        // Тип пагинации -> зависимые настройки
+        settings.find('select[name="mixin.settings.pagination_type"]').on('change', function() {
+            var paginationType = $nc(this).val();
+            if (paginationType !== '') {
+                paginationOptions.show();
+            } else {
+                paginationOptions.hide();
+            }
+            if (paginationType === 'bullets') {
+                bulletsOptions.show();
+            } else {
+                bulletsOptions.hide();
+            }
+            if (paginationType === 'progressbar') {
+                progressbarOptions.show();
+            } else {
+                progressbarOptions.hide();
+            }
+            if (paginationType === 'fraction') {
+                fractionOptions.show();
+            } else {
+                fractionOptions.hide();
+            }
+        }).trigger('change');
+
+        // Форма фона стрелок -> цвет фона
+        settings.find('select[name="mixin.settings.arrows_bg_shape"]').on('change', function() {
+            if ($nc(this).val() !== '') {
+                arrowsBgOptions.show();
+            } else {
+                arrowsBgOptions.hide();
+            }
+        }).trigger('change');
+
+        // Толщина рамки -> цвет рамки
+        settings.find('input[name="mixin.settings.arrows_border_width"]').on('input change', function() {
+            var borderWidth = parseInt($nc(this).val(), 10) || 0;
+            if (borderWidth > 0) {
+                arrowsBorderOptions.show();
+            } else {
+                arrowsBorderOptions.hide();
+            }
+        }).trigger('change');
+
+        settings.data('swiper-initialized', true);
+    }
+
+    // Инициализация при загрузке значений миксина
+    $nc(prefix).closest('.nc-mixins-mixin-settings')
+        .off(nc_mixin_settings_editor.mixin_settings_set_values_event + prefix)
+        .on(nc_mixin_settings_editor.mixin_settings_set_values_event + prefix, init);
+
+})();
+</script>

@@ -1,0 +1,77 @@
+<!-- FormPrefix -->
+<?= $f_AdminCommon; ?>
+
+<div id="file-wrapper-<?= $cc ?>" class="file-wrapper" <?= $styles; ?>>
+    <!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+
+    <?php
+
+    if ($_icon_default !== "") {
+        $_icon = $_icon_default;
+    } else {
+        $_icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M38 18h-8V6H18v12h-8l14 14 14-14zM10 36v4h28v-4H10z"/></svg>';
+    }
+
+    if ($cc_settings['linkOn'] === 'icon' || $cc_settings['linkOn'] === 'all') {
+        $_icon = "<a href='" . $f_File . "' class='" . implode(" ", $icon_class) . "'>$_icon</a>";
+    } else {
+        $_icon = "<span class='" . implode(" ", $icon_class) . "'>" . $_icon . "</span>";
+    }
+
+    $_name = ($f_Name ?: ($f_File_name ?: pathinfo($f_File, PATHINFO_BASENAME)));
+
+    if ($cc_settings['linkOn'] === 'name' || $cc_settings['linkOn'] === 'all') {
+        $_name = "<a href='" . $f_File . "' class='item-name $cc_settings[title_font_size]'>$_name</a>";
+    } else {
+        $_name = "<span class='item-name'>" . $_name . "</span>";
+    }
+
+    $_size = "";
+
+    if ($cc_settings['showSize'] === 'on') {
+        $_size = "<span class='item-size $cc_settings[extension_font_size]'>" . strtoupper(pathinfo($f_File_name, PATHINFO_EXTENSION)) .
+            ", " .
+            nc_bytes2size($f_File_size) .
+            "</span>";
+    }
+
+    $_icon_position = ($cc_settings["iconPosition"] === "top") ? "icon-top" : "icon-left";
+    $_text_block = "<div class='object-item-content'>" . $_name . $_size . "</div>";
+
+    switch ($cc_settings['displayAs']) {
+        case "icon":
+            $_return = $_icon;
+            break;
+        case "name":
+            $_return = $_text_block;
+            break;
+        case "full":
+        default:
+            $_return = "<div class='icon-layout {$_icon_position}'>" .
+                "<div class='object-item-image {$_icon_position} $icon_size_class'>" . $_icon . "</div>" .
+                $_text_block .
+                "</div>";
+            break;
+    }
+    ?>
+
+    <div class="object-item <?= $cc_settings["displayAs"] !== "name" ? "iconpos-" . $cc_settings['iconPosition'] :
+        "" ?>"><?= $_return; ?></div><!-- /RecordTemplate -->
+
+<!-- FormSuffix -->
+</div>
+
+<script>
+    const fileSize = document.querySelector(".tpl-block-<?= $cc ?>-list .item-size");
+    const iconSize = document.querySelector(".tpl-block-<?= $cc ?>-list .tpl-icon");
+
+    if (iconSize && fileSize) {
+        const fileWrapper = document.getElementById("file-wrapper-<?= $cc ?>");
+        const itemName = document.querySelector(".tpl-block-<?= $cc ?>-list .item-name");
+
+        itemName ? fileWrapper.style.setProperty("--tpl-object-icon-size", `${iconSize.clientWidth}px`) : fileSize.style.paddingLeft = "0px";
+    }
+</script>
+<!-- /FormSuffix -->

@@ -1,0 +1,115 @@
+<?php
+function get_utm()
+{
+    $values = [];
+    foreach (
+        ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "yclid", "gclid"]
+        as $k
+    ) {
+        if (isset($_GET[$k]) && is_string($_GET[$k])) {
+            $values[$k] = mb_substr($_GET[$k], 0, 250);
+        }
+    }
+    if ($values) {
+        $_SESSION["utm_get"] = http_build_query($values);
+    }
+    return (string) ($_SESSION["utm_get"] ?? "");
+}
+function project_region_values()
+{
+    static $regions = [];
+    $host = strtolower(preg_replace('/:\d+$/', "", $_SERVER["HTTP_HOST"] ?? ""));
+    if (!array_key_exists($host, $regions)) {
+        $regions[$host] = [];
+        if (preg_match("/\A[a-z0-9.-]+\z/", $host)) {
+            $nc = nc_core();
+            $row = (array) $nc->db->get_row(
+                "SELECT * FROM Message223 WHERE Sub_Class_ID=57 AND Checked=1 AND main_domain='" .
+                    $nc->db->escape($host) .
+                    "' ORDER BY Priority, Message_ID LIMIT 1",
+                ARRAY_A,
+            );
+            $fields = [
+                "main_domain",
+                "codename",
+                "city",
+                "inCity",
+                "cityregion",
+                "cityregionRP",
+                "cityRP",
+                "cityDP",
+                "address",
+                "phone",
+                "phone2",
+                "email",
+                "regim",
+                "licinfo",
+                "max",
+                "telegram",
+                "whatsapp",
+                "vk",
+                "youtube",
+                "instagram",
+                "inst",
+                "mapcode",
+                "email_to",
+                "email_from",
+                "email_enabled",
+            ];
+            $regions[$host] = array_intersect_key($row, array_fill_keys($fields, true));
+        }
+    }
+    return $regions[$host];
+}
+function shortcode($text)
+{
+    $region = project_region_values();
+    return preg_replace_callback(
+        "/\[([a-zA-Z_][a-zA-Z0-9_]*)\]/",
+        function ($m) use ($region) {
+            return (string) ($region[$m[1]] ?? "");
+        },
+        (string) $text,
+    );
+}
+function shortcode_component($text)
+{
+    return shortcode($text);
+}
+function formatDate($day, $month, $year)
+{
+    $d = DateTime::createFromFormat("!d-m-Y", sprintf("%02d-%02d-%04d", $day, $month, $year));
+    return $d ? $d->format("d.m.Y") : "";
+}
+
+function project_title($value)
+{
+    $value = preg_replace("~<img\b[^>]*hero__title-line[^>]*>~i", "", (string) $value);
+    return shortcode_component($value);
+}
+function project_text($value)
+{
+    return trim((string) $value) === "<p>Материал готовится к публикации.</p>"
+        ? ""
+        : shortcode_component($value);
+}
+function project_label($value)
+{
+    return str_replace("‑", "‑<wbr>", htmlspecialchars(shortcode($value), ENT_QUOTES, "UTF-8"));
+}
+function project_shared_block($keyword)
+{
+    global $db, $catalogue;
+    $block = $db->get_row(
+        "SELECT s.Subdivision_ID,s.Sub_Class_ID FROM Sub_Class s JOIN Class c USING(Class_ID) " .
+            "WHERE s.Catalogue_ID=" .
+            (int) $catalogue .
+            " AND s.Checked=1 AND c.Keyword='" .
+            $db->escape($keyword) .
+            "' ORDER BY s.Class_Template_ID,s.Priority,s.Sub_Class_ID LIMIT 1",
+        ARRAY_A,
+    );
+    return $block
+        ? nc_objects_list((int) $block["Subdivision_ID"], (int) $block["Sub_Class_ID"])
+        : "";
+}

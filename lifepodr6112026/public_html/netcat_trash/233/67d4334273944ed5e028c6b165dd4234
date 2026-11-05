@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="14" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Услуги</Subdivision_Name>
+      <EnglishName>life-old-14</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="63" subdivision_id="14" class_id="233">
+      <Sub_Class_Name>Все услуги списком</Sub_Class_Name>
+      <EnglishName>vse-uslugi-spiskom</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="412" type_of_data_id="1">
+      <Field_Name>name</Field_Name>
+      <Description>Название услуги</Description>
+    </field>
+    <field field_id="395" type_of_data_id="3">
+      <Field_Name>descr</Field_Name>
+      <Description>Описание</Description>
+    </field>
+    <field field_id="419" type_of_data_id="1">
+      <Field_Name>link</Field_Name>
+      <Description>ссылка на услугу</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="1" class_id="233" subdivision_id="14" sub_class_id="63">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 16:43:17</Created>
+      <LastUpdated>2026-08-05 19:42:34</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <name><![CDATA[Вывод из запоя]]></name>
+      <descr><![CDATA[Вывод из запоя с использованием современных методов лечения. Врач-нарколог проводит диагностику, детоксикацию организма и помогает безопасно восстановить состояние пациента после длительного употребления алкоголя.]]></descr>
+      <link><![CDATA[/uslugi/vyvod-iz-zapoya/]]></link>
+    </message>
+    <message message_id="2" class_id="233" subdivision_id="14" sub_class_id="63">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 16:43:51</Created>
+      <LastUpdated>2026-08-05 19:42:12</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <name><![CDATA[Лечение алкоголизма]]></name>
+      <descr><![CDATA[Лечение алкоголизма с использованием современных методов терапии. Врач-нарколог проводит диагностику, разрабатывает индивидуальную программу лечения и помогает преодолеть алкогольную зависимость, восстановив здоровье и качество жизни пациента.]]></descr>
+      <link><![CDATA[/uslugi/lechenie-alkogolizma/]]></link>
+    </message>
+    <message message_id="3" class_id="233" subdivision_id="14" sub_class_id="63">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 16:44:39</Created>
+      <LastUpdated>2026-08-05 19:42:20</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <name><![CDATA[Лечение наркомании]]></name>
+      <descr><![CDATA[Лечение наркомании с использованием современных методов терапии. Врач-нарколог проводит диагностику, разрабатывает индивидуальную программу лечения и помогает преодолеть наркотическую зависимость, восстановив здоровье и качество жизни пациента.]]></descr>
+      <link><![CDATA[/uslugi/lechenie-narkomanii/]]></link>
+    </message>
+    <message message_id="4" class_id="233" subdivision_id="14" sub_class_id="63">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 19:43:32</Created>
+      <LastUpdated>2026-08-05 19:43:32</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Кодирование от алкоголизма]]></name>
+      <descr><![CDATA[Кодирование от алкоголизма с использованием современных методов лечения. Врач-нарколог проводит диагностику, подбирает оптимальный метод кодирования и помогает сформировать устойчивую мотивацию к отказу от употребления алкоголя.]]></descr>
+      <link><![CDATA[/uslugi/kodirovanie-ot-alkogolizma/]]></link>
+    </message>
+    <message message_id="5" class_id="233" subdivision_id="14" sub_class_id="63">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 19:44:18</Created>
+      <LastUpdated>2026-08-05 19:44:18</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Наркологическая помощь]]></name>
+      <descr><![CDATA[Наркологическая помощь с использованием современных методов лечения. Врач-нарколог проводит диагностику, подбирает индивидуальную программу терапии и помогает справиться с алкогольной и наркотической зависимостью, восстановив здоровье пациента.]]></descr>
+      <link><![CDATA[/uslugi/narkologicheskaya-pomosch/]]></link>
+    </message>
+    <message message_id="6" class_id="233" subdivision_id="14" sub_class_id="63">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 19:29:38</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Реабилитация от алкоголизма]]></name>
+      <descr><![CDATA[Комплексная терапия при алкогольной зависимости с применением современных методов психотерапии и восстановления. Индивидуальная программа помогает закрепить трезвость, снизить риск срыва и постепенно вернуться к полноценной жизни.]]></descr>
+      <link><![CDATA[/uslugi/lechenie-alkogolizma/reabilitatsiya-ot-alkogolizma/]]></link>
+    </message>
+    <message message_id="7" class_id="233" subdivision_id="14" sub_class_id="63">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 19:30:28</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Реабилитация наркозависимых]]></name>
+      <descr><![CDATA[Комплексная терапия при наркотической зависимости с применением современных методов психотерапии и социальной адаптации. Индивидуальная программа помогает преодолеть зависимое поведение, снизить риск срыва и вернуться к полноценной жизни без наркотиков.]]></descr>
+      <link><![CDATA[/uslugi/lechenie-narkomanii/reabilitatsiya-narkozavisimyh/]]></link>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

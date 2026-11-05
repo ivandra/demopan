@@ -1,0 +1,89 @@
+/* layout */
+.object-item .item-name {
+    text-decoration: none;
+}
+
+.icon-layout {
+    display: flex;
+    align-items: center;
+}
+
+.icon-layout.icon-top {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.icon-layout.icon-left .object-item-image {
+    margin-right: var(--tpl-object-item--icon-space-text);
+}
+
+.icon-layout.icon-top .object-item-image {
+    margin-bottom: var(--tpl-object-item--icon-space-text);
+}
+
+.object-item .object-item-image {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin: 0;
+}
+
+.object-item .object-item-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 0px;
+}
+
+.object-item .tpl-icon {
+    height: 1em;
+    width: 1em;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.object-item .tpl-icon * {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.object-item .tpl-icon svg, .object-item .tpl-icon img {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.object-item .tpl-icon.library-icon {
+    fill: var(--tpl-object-item--icon-color, revert-layer);
+}
+
+.object-item .tpl-icon:not(.library-icon) path {
+    stroke: var(--tpl-object-item--icon-color, revert-layer);
+}
+
+.object-item .tpl-icon[class*='icon-decor-'] svg, .object-item .tpl-icon[class*='icon-decor-'] img {
+    max-width: 50%;
+    max-height: 50%;
+}
+
+.object-item .tpl-icon[class*='icon-decor-circle'] {
+    border-radius: 50%;
+}
+
+.object-item .tpl-icon[class*='icon-decor-circle'] svg, .object-item .tpl-icon[class*='icon-decor-circle'] img {
+    max-width: 40%;
+    max-height: 40%;
+}
+
+.object-item .tpl-icon[class*='icon-decor-'] {
+    border: 1px solid var(--tpl-object-item--icon-decor-color);
+}
+
+.object-item .tpl-icon[class*='icon-decor-'][class*='-fill'] {
+    background-color: var(--tpl-object-item--icon-decor-color);
+}

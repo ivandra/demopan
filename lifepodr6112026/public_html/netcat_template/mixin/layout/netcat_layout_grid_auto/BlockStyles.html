@@ -1,0 +1,46 @@
+<?php
+
+/** @var string $selector */
+/** @var string $list_selector */
+/** @var array $settings */
+
+$auto_mode = nc_array_value($settings, 'auto_mode', 'auto-fill');
+$column_min_width = (int)nc_array_value($settings, 'column_min_width', 280);
+$column_min_width_unit = nc_array_value($settings, 'column_min_width_unit', 'px');
+$column_max_width = nc_array_value($settings, 'column_max_width', '1fr');
+$column_gap = (int)nc_array_value($settings, 'column_gap', 0);
+$column_gap_unit = nc_array_value($settings, 'column_gap_unit', 'px');
+$row_gap = (int)nc_array_value($settings, 'row_gap', 0);
+$row_gap_unit = nc_array_value($settings, 'row_gap_unit', 'px');
+$align_items = nc_array_value($settings, 'align_items', 'stretch');
+$justify_items = nc_array_value($settings, 'justify_items', 'stretch');
+
+$rules = array('display: grid');
+
+// Grid template columns with auto-fill/auto-fit
+$rules[] = "grid-template-columns: repeat($auto_mode, minmax({$column_min_width}{$column_min_width_unit}, $column_max_width))";
+
+// Gap
+if ($column_gap && $row_gap && $column_gap === $row_gap && $column_gap_unit === $row_gap_unit) {
+    $rules[] = "gap: {$column_gap}{$column_gap_unit}";
+} else {
+    if ($row_gap) {
+        $rules[] = "row-gap: {$row_gap}{$row_gap_unit}";
+    }
+    if ($column_gap) {
+        $rules[] = "column-gap: {$column_gap}{$column_gap_unit}";
+    }
+}
+
+// Alignment
+if ($align_items && $align_items !== 'stretch') {
+    $rules[] = "align-items: $align_items";
+}
+if ($justify_items && $justify_items !== 'stretch') {
+    $rules[] = "justify-items: $justify_items";
+}
+
+// Generate CSS
+$css = "$list_selector {\n  " . implode(";\n  ", $rules) . ";\n}\n";
+
+return $css;

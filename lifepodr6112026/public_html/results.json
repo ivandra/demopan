@@ -1,0 +1,119 @@
+{
+  "input": "zhizn111 + fresh SQL dump",
+  "database": "MySQL 5.7.27",
+  "netcat": "7.2.0",
+  "nofile": 64,
+  "environments": [
+    {
+      "php": "7.4.33",
+      "tests": {
+        "interface": {
+          "passed": 244,
+          "total": 244,
+          "javascript_errors": [],
+          "updater_modes": [
+            {
+              "mode": "check",
+              "requests": 1
+            },
+            {
+              "mode": "update",
+              "requests": 42
+            },
+            {
+              "mode": "update",
+              "requests": 1
+            },
+            {
+              "mode": "verify",
+              "requests": 1
+            }
+          ]
+        },
+        "native_editor_and_forms": {
+          "passed": 15,
+          "total": 15
+        },
+        "public_sections": {
+          "passed": 115,
+          "total": 115
+        },
+        "event_propagation": {
+          "passed": 4,
+          "total": 4
+        }
+      },
+      "rollback": {
+        "content_tables": 123,
+        "content_mismatches": [],
+        "files": 5744,
+        "file_mismatches": [],
+        "new_tables": []
+      },
+      "syntax": {
+        "php_template_files": 25,
+        "failures": 0
+      }
+    },
+    {
+      "php": "8.3.36",
+      "tests": {
+        "interface": {
+          "passed": 244,
+          "total": 244,
+          "javascript_errors": [],
+          "updater_modes": [
+            {
+              "mode": "check",
+              "requests": 1
+            },
+            {
+              "mode": "update",
+              "requests": 42
+            },
+            {
+              "mode": "update",
+              "requests": 1
+            },
+            {
+              "mode": "verify",
+              "requests": 1
+            }
+          ]
+        },
+        "native_editor_and_forms": {
+          "passed": 15,
+          "total": 15
+        },
+        "public_sections": {
+          "passed": 115,
+          "total": 115
+        },
+        "event_propagation": {
+          "passed": 4,
+          "total": 4
+        }
+      },
+      "rollback": {
+        "content_tables": 123,
+        "content_mismatches": [],
+        "files": 5744,
+        "file_mismatches": [],
+        "new_tables": []
+      },
+      "syntax": {
+        "php_template_files": 25,
+        "failures": 0
+      }
+    }
+  ],
+  "preservation": {
+    "unexpected_changed_tables": [],
+    "preserved_media_and_region_files": 362,
+    "media_mismatches": [],
+    "original_installation_backup_files": 10283,
+    "original_installation_backup_mismatches": [],
+    "site_checked": 0
+  },
+  "total_checks": 756
+}

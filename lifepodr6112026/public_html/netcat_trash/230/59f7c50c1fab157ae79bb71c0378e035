@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="21" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Специалисты</Subdivision_Name>
+      <EnglishName>life-old-21</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="95" subdivision_id="21" class_id="230">
+      <Sub_Class_Name>Врачи клиники</Sub_Class_Name>
+      <EnglishName>vrachi-kliniki</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="384" type_of_data_id="6">
+      <Field_Name>img</Field_Name>
+      <Description>Фото врача (336 × 386 px)</Description>
+    </field>
+    <field field_id="385" type_of_data_id="1">
+      <Field_Name>fio</Field_Name>
+      <Description>ФИО</Description>
+    </field>
+    <field field_id="425" type_of_data_id="1">
+      <Field_Name>fio_short</Field_Name>
+      <Description>ФИО короткая версия (инициалы имя и отчество)</Description>
+    </field>
+    <field field_id="399" type_of_data_id="1">
+      <Field_Name>position</Field_Name>
+      <Description>должность</Description>
+    </field>
+    <field field_id="394" type_of_data_id="3">
+      <Field_Name>bio</Field_Name>
+      <Description>краткая биография или текст на подробной странице справа от фото</Description>
+    </field>
+    <field field_id="376" type_of_data_id="3">
+      <Field_Name>shedule</Field_Name>
+      <Description>Расписание</Description>
+    </field>
+    <field field_id="424" type_of_data_id="3">
+      <Field_Name>skills</Field_Name>
+      <Description>чем поможет (для карусели)</Description>
+    </field>
+    <field field_id="415" type_of_data_id="3">
+      <Field_Name>personalquote</Field_Name>
+      <Description>Маленькая цитата врача для баннера. Например "Я помогаю, потому что могу. &lt;br/&gt;Каждый на моем месте делал бы то же самое”</Description>
+    </field>
+    <field field_id="427" type_of_data_id="11">
+      <Field_Name>diploms</Field_Name>
+      <Description>Документы и сертификаты</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="1" class_id="230" subdivision_id="21" sub_class_id="95">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-07-31 00:50:07</Created>
+      <LastUpdated>2026-10-18 07:40:11</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>5.165.181.29</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 YaBrowser/26.8.0.0 Safari/537.36</LastUserAgent>
+      <Keyword>psiholog-addiktolog</Keyword>
+      <img path=""/>
+      <fio><![CDATA[Пономаренко Виталий Сергеевич]]></fio>
+      <fio_short><![CDATA[Пономаренко В. С.]]></fio_short>
+      <position><![CDATA[Психолог-аддиктолог]]></position>
+      <bio><![CDATA[]]></bio>
+      <shedule><![CDATA[ПН: 10:00, 11:00, (12:00), 13:00, 14:00
+ВТ: 10:00, 11:00, 12:00
+СР: выходной
+ЧТ: 09:00, (11:00), 14:30
+ПТ: 09:00, 10:00
+СБ: 11:00, (12:00)]]></shedule>
+      <skills><![CDATA[<ul>
+				<li>Работа с психологическими причинами зависимости</li>
+				<li>Формирование мотивации и профилактика срывов</li>
+				<li>Психологическая поддержка пациента и его близких</li>
+			</ul>]]></skills>
+      <personalquote><![CDATA[]]></personalquote>
+      <diploms/>
+    </message>
+    <message message_id="2" class_id="230" subdivision_id="21" sub_class_id="95">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-02 21:05:59</Created>
+      <LastUpdated>2026-10-18 07:40:05</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>5.165.181.29</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 YaBrowser/26.8.0.0 Safari/537.36</LastUserAgent>
+      <Keyword>glavnaya-medicinskaya-sestra</Keyword>
+      <img path=""/>
+      <fio><![CDATA[Безушкевич Татьяна Вадимовна]]></fio>
+      <fio_short><![CDATA[Безушкевич Т.В.]]></fio_short>
+      <position><![CDATA[Главная медицинская сестра]]></position>
+      <bio><![CDATA[]]></bio>
+      <shedule><![CDATA[ПН: 10:00, 11:00, (12:00), 13:00, 14:00
+ВТ: 10:00, 11:00, 12:00
+СР: выходной
+ЧТ: 09:00, (11:00), 14:30
+ПТ: 09:00, 10:00
+СБ: 11:00, (12:00)]]></shedule>
+      <skills><![CDATA[<ul>
+				<li>Контроль выполнения медицинских назначений и процедур</li>
+				<li>Организация ухода и наблюдения за пациентами</li>
+				<li>Координация работы среднего медицинского персонала</li>
+			</ul>]]></skills>
+      <personalquote><![CDATA[]]></personalquote>
+      <diploms/>
+    </message>
+    <message message_id="3" class_id="230" subdivision_id="21" sub_class_id="95">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-02 21:06:06</Created>
+      <LastUpdated>2026-08-10 11:59:57</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.182.172</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword>glavnyj-vrach-kliniki</Keyword>
+      <img path=""/>
+      <fio><![CDATA[Кельник Александр Иванович]]></fio>
+      <fio_short><![CDATA[Кельник А.И.]]></fio_short>
+      <position><![CDATA[Главный врач клиники]]></position>
+      <bio><![CDATA[<p>Окончил:</p>Могилевский государственный университет.
+<p>Повышение квалификации:</p> МИП &laquo;Арт-терапия в работе с зависимыми и созависимыми пациентами&raquo;.
+<p>Врач высшей категории</p>]]></bio>
+      <shedule><![CDATA[ПН: 10:00, 11:00, (12:00), 13:00, 14:00
+ВТ: 10:00, 11:00, 12:00
+СР: выходной
+ЧТ: 09:00, (11:00), 14:30
+ПТ: 09:00, 10:00
+СБ: 11:00, (12:00)]]></shedule>
+      <skills><![CDATA[<ul>
+				<li>Диагностика и подбор индивидуальной программы лечения</li>
+				<li>Лечение алкогольной и наркотической зависимости</li>
+				<li>Контроль терапии и сопровождение пациента на всех этапах</li>
+			</ul>]]></skills>
+      <personalquote><![CDATA[]]></personalquote>
+      <diploms/>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

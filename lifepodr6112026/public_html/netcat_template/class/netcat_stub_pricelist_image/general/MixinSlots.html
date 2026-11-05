@@ -1,0 +1,16 @@
+<?php
+/**
+ * Слоты миксинов для компонента "Прайс-лист с картинкой"
+ */
+return array(
+    'list_image' => array(
+        'name' => 'Изображение',
+        'selector' => '.item-image',
+        'scopes' => array('border', 'border_radius', 'shadow', 'effect'),
+    ),
+    'list_content' => array(
+        'name' => 'Текстовая часть',
+        'selector' => '.item-description-wrapper',
+        'scopes' => array('color', 'padding', 'margin', 'background', 'border', 'border_radius', 'shadow'),
+    ),
+);

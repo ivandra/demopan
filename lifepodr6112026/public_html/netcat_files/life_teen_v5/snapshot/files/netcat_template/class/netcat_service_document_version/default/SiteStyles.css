@@ -1,0 +1,12 @@
+.tpl-docver-current { margin-bottom: 1.5em; }
+.tpl-docver-asof { font-size: .9em; color: #888; margin-bottom: .5em; }
+.tpl-docver-file { margin-top: .5em; }
+.tpl-docver-history { margin-top: 1.5em; border-top: 1px solid #eee; padding-top: 1em; }
+.tpl-docver-history-caption { font-weight: 700; margin-bottom: .5em; }
+.tpl-docver-history ul { list-style: none; padding: 0; margin: 0; }
+.tpl-docver-history li { margin-bottom: .3em; }
+.tpl-docver-title { color: #888; font-size: .9em; }
+.tpl-docver-reset { margin-top: 1em; }
+.tpl-docver-empty { color: #888; font-style: italic; }
+.tpl-docver-admin-row { padding: .4em 0; border-bottom: 1px solid #eee; }
+.tpl-docver-admin-date { color: #888; margin-right: .5em; }

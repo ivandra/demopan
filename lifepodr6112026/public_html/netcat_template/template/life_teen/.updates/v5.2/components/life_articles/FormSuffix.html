@@ -1,0 +1,4 @@
+</div>
+<?php if (!(int)$totRows) { ?><p data-article-empty>В этой категории пока нет статей.</p><?php } ?>
+<?php if ($totRows > $recNum) { ?><nav class="articles__pagination" aria-label="Страницы статей"><?= browse_messages($cc_env, 5) ?></nav><?php } ?>
+</div></div></section>

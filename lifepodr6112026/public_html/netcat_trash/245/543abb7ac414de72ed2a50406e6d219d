@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="12" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Титульная страница</Subdivision_Name>
+      <EnglishName>life-old-12</EnglishName>
+      <Checked>0</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="41" subdivision_id="12" class_id="245">
+      <Sub_Class_Name>О центре (главная)</Sub_Class_Name>
+      <EnglishName>o-tsentre-glavnaya</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="407" type_of_data_id="11">
+      <Field_Name>img</Field_Name>
+      <Description>Изображения для галереи</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="1" class_id="245" subdivision_id="12" sub_class_id="41">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 00:15:12</Created>
+      <LastUpdated>2026-10-08 21:38:54</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>62.60.230.8</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <img/>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

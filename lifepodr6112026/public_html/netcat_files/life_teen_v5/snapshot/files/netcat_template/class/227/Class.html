@@ -1,0 +1,44 @@
+<!-- FormPrefix --><?=$f_AdminCommon;?>
+<h2>Заявки</h2>
+<?if($AUTH_USER_ID==1){?>
+	<form method='POST' action='' >
+		Выберите дату подсчёта заявок
+		<input type='hidden' name='podscet' value='1' />
+		<label for='date1'>С </label>
+		<input type='date' name='date1' value='<?=$_POST[date1]?>' />
+		<label for='date2'>по </label>
+		<input type='date' name='date2' value='<?=$_POST[date2]?>' />		
+		<input type='submit' value='Подсчитать' />
+	</form>
+<?}?>
+  
+
+<?if($_POST[podscet]==1){?>
+	<p style='margin: 10px 0;'><big>Заявок c <?=$_POST[date1]?> по <?=$_POST[date2] ?> -  <b><big><?=$totRows?></big></b><br /></big>
+<?}?>
+
+<?
+//подсчёт количества уникальных заявок
+$countZayavki=0;
+?>
+<!-- /FormPrefix -->
+
+<!-- RecordTemplate --><? echo $f_AdminButtons; ?>
+
+<?
+//подсчёт количества текущих заявок
+$countZayavki++;
+?>
+<h3>Заявка № <?=$countZayavki?></h3>
+<p><b>Дата:</b> <?=$f_Created_day?> <?=$f_Created_month?> <?=$f_Created_year?> г. <small><?=$f_Created_hours?>:<?=$f_Created_minutes?>:<?=$f_Created_seconds?></small></p> 
+<?if($f_name){ echo "<p><b>Имя:</b> $f_name</p>"; }?> 
+<?if($f_phone){ echo "<p><b>Телефон:</b> $f_phone</p>"; }?> 
+<?if($f_email){ echo "<p><b>E-mail:</b> $f_email</p>"; }?> 
+<?if($f_message){ echo "<p><b>Сообщение:</b> $f_message</p>"; }?> 
+<?if($f_kadastr_num){ echo "<p><b>Кадастровый номер участка:</b> $f_kadastr_num</p>"; }?> 
+<?if($f_urlMessage){ echo "<p><b>Страница обращения:</b> $f_urlMessage</p>"; }?> 
+<?if($f_trafficSource){ echo "<p><b>Тип трафика:</b> $f_trafficSource</p>"; }?> 
+<?if($f_istochnik){ echo "<p><b>Источник трафика:</b> $f_istochnik</p>"; }?> 
+<hr /><!-- /RecordTemplate -->
+
+<!-- FormSuffix --><?=nc_browse_messages($cc_env, 20);?><!-- /FormSuffix -->

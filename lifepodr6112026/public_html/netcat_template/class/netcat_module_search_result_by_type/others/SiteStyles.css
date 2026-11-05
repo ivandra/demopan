@@ -1,0 +1,19 @@
+/* Результаты поиска - Страницы */
+/* Отступы и стили текста настраиваются через миксины */
+
+.search-item a {
+    text-decoration: none;
+}
+
+.search-item a:hover {
+    text-decoration: underline;
+}
+
+.search-item cite {
+    font-style: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    opacity: 0.5;
+}

@@ -1,0 +1,2893 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="5" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>О нас</Subdivision_Name>
+      <EnglishName>life-old-5</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="35" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование методом торпедо</Subdivision_Name>
+      <EnglishName>life-old-35</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="34" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Комплексное лечение алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-34</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="33" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Комплексное лечение наркомании</Subdivision_Name>
+      <EnglishName>life-old-33</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="32" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование гипнозом от алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-32</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="31" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование по методу Довженко</Subdivision_Name>
+      <EnglishName>life-old-31</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="30" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Детоксикация от алкоголя</Subdivision_Name>
+      <EnglishName>life-old-30</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="18" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование от алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-18</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="38" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение алкоголизма в стационаре</Subdivision_Name>
+      <EnglishName>life-old-38</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="28" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Прокапаться от алкоголя</Subdivision_Name>
+      <EnglishName>life-old-28</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="16" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Наркологическая помощь</Subdivision_Name>
+      <EnglishName>life-old-16</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="36" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вызов нарколога на дом</Subdivision_Name>
+      <EnglishName>life-old-36</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="25" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вопросы и ответы</Subdivision_Name>
+      <EnglishName>life-old-25</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="39" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Капельница от похмелья</Subdivision_Name>
+      <EnglishName>life-old-39</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="12" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Титульная страница</Subdivision_Name>
+      <EnglishName>life-old-12</EnglishName>
+      <Checked>0</Checked>
+    </subdivision>
+    <subdivision subdivision_id="29" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Капельница от запоя</Subdivision_Name>
+      <EnglishName>life-old-29</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="27" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вывод из запоя в стационаре</Subdivision_Name>
+      <EnglishName>life-old-27</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="40" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вывод из запоя на дому</Subdivision_Name>
+      <EnglishName>life-old-40</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="17" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вывод из запоя</Subdivision_Name>
+      <EnglishName>life-old-17</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="24" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение наркомании</Subdivision_Name>
+      <EnglishName>life-old-24</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="37" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Принудительное лечение алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-37</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="20" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-20</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="19" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение ПТСР</Subdivision_Name>
+      <EnglishName>life-old-19</EnglishName>
+      <Checked>0</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="211" subdivision_id="5" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="199" subdivision_id="35" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="191" subdivision_id="34" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="183" subdivision_id="33" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="175" subdivision_id="32" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="167" subdivision_id="31" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="159" subdivision_id="30" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="147" subdivision_id="18" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="139" subdivision_id="38" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="134" subdivision_id="28" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="129" subdivision_id="16" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="122" subdivision_id="36" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="111" subdivision_id="25" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="109" subdivision_id="39" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="93" subdivision_id="12" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="87" subdivision_id="29" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="79" subdivision_id="27" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="71" subdivision_id="40" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="50" subdivision_id="17" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="31" subdivision_id="24" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="21" subdivision_id="37" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="17" subdivision_id="20" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="9" subdivision_id="19" class_id="237">
+      <Sub_Class_Name>Ответы на часто задаваемые вопросы</Sub_Class_Name>
+      <EnglishName>otvety-na-chasto-zadavaemye-voprosy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="404" type_of_data_id="3">
+      <Field_Name>question</Field_Name>
+      <Description>Вопрос</Description>
+    </field>
+    <field field_id="405" type_of_data_id="3">
+      <Field_Name>answer</Field_Name>
+      <Description>Ответ</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="161" class_id="237" subdivision_id="5" sub_class_id="211">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-14 01:59:25</Created>
+      <LastUpdated>2026-10-14 01:59:25</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Лечение проводится анонимно?]]></question>
+      <answer><![CDATA[Да. Помощь оказывается конфиденциально, без постановки на наркологический учёт.]]></answer>
+    </message>
+    <message message_id="162" class_id="237" subdivision_id="5" sub_class_id="211">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-14 02:00:22</Created>
+      <LastUpdated>2026-10-14 02:00:22</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Можно ли вызвать врача на дом?]]></question>
+      <answer><![CDATA[Да, клиника выезжает на дом для первичного осмотра и помощи, в том числе круглосуточно.]]></answer>
+    </message>
+    <message message_id="163" class_id="237" subdivision_id="5" sub_class_id="211">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-14 02:00:39</Created>
+      <LastUpdated>2026-10-14 02:00:39</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Как проходит лечение алкоголизма и наркомании?]]></question>
+      <answer><![CDATA[Индивидуально: консультация и диагностика, детоксикация по показаниям, медикаментозная поддержка, психотерапия и последующее сопровождение.]]></answer>
+    </message>
+    <message message_id="164" class_id="237" subdivision_id="5" sub_class_id="211">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-14 02:00:54</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Сколько длится лечение зависимости?]]></question>
+      <answer><![CDATA[Зависит от состояния пациента и программы — от неотложной помощи за несколько дней до длительной терапии.]]></answer>
+    </message>
+    <message message_id="165" class_id="237" subdivision_id="5" sub_class_id="211">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-14 02:01:17</Created>
+      <LastUpdated>2026-10-14 02:01:17</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Можно ли вылечить зависимость полностью?]]></question>
+      <answer><![CDATA[Зависимость — хроническое заболевание; устойчивая ремиссия достигается при комплексном лечении и участии самого пациента.]]></answer>
+    </message>
+    <message message_id="154" class_id="237" subdivision_id="35" sub_class_id="199">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.200</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-23 20:55:10</Created>
+      <LastUpdated>2026-09-23 21:30:56</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.200</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что такое кодирование методом Торпедо?]]></question>
+      <answer><![CDATA[«Торпедо» — распространенное название медикаментозного метода кодирования от алкогольной зависимости. Под ним могут подразумеваться разные препараты и способы их применения. Поэтому перед процедурой врач должен уточнить действующее вещество, способ введения, противопоказания и предполагаемый срок терапии.]]></answer>
+    </message>
+    <message message_id="155" class_id="237" subdivision_id="35" sub_class_id="199">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.200</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-23 20:55:10</Created>
+      <LastUpdated>2026-09-23 21:31:08</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.200</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как действует кодирование Торпедо от алкоголизма?]]></question>
+      <answer><![CDATA[Механизм действия зависит от используемого препарата. Если применяется средство на основе дисульфирама, оно нарушает один из этапов переработки этанола в организме. Употребление алкоголя на фоне такой терапии может вызвать выраженное ухудшение самочувствия, поэтому пациенту необходимо полностью соблюдать рекомендации врача.]]></answer>
+    </message>
+    <message message_id="156" class_id="237" subdivision_id="35" sub_class_id="199">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.200</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-23 20:55:10</Created>
+      <LastUpdated>2026-09-23 21:31:22</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.200</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как подготовиться к кодированию методом Торпедо?]]></question>
+      <answer><![CDATA[Перед процедурой необходима консультация психиатра-нарколога. Врачу следует сообщить, когда пациент последний раз употреблял алкоголь, как долго продолжается зависимость, какие заболевания и аллергические реакции имеются и какие лекарственные препараты принимаются. При абстинентном синдроме предварительно может потребоваться детоксикация и стабилизация состояния.]]></answer>
+    </message>
+    <message message_id="157" class_id="237" subdivision_id="35" sub_class_id="199">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.200</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-23 20:55:10</Created>
+      <LastUpdated>2026-09-23 21:31:41</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.200</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[На какой срок можно закодироваться методом Торпедо?]]></question>
+      <answer><![CDATA[Продолжительность действия зависит от конкретного препарата, его лекарственной формы и выбранной схемы терапии. Нельзя определять срок только по названию «Торпедо». До процедуры врач должен объяснить, какое средство применяется, как оно действует и в течение какого периода необходимо строго воздерживаться от алкоголя.]]></answer>
+    </message>
+    <message message_id="158" class_id="237" subdivision_id="35" sub_class_id="199">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.200</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-23 20:55:10</Created>
+      <LastUpdated>2026-09-23 21:31:52</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.200</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Есть ли противопоказания к кодированию Торпедо?]]></question>
+      <answer><![CDATA[Да. Ограничения зависят от используемого препарата и состояния здоровья пациента. Особое значение могут иметь заболевания сердца, печени и почек, некоторые психические и неврологические заболевания, а также взаимодействие с другими лекарствами. Возможность проведения кодирования определяется врачом после консультации и обследования.]]></answer>
+    </message>
+    <message message_id="159" class_id="237" subdivision_id="35" sub_class_id="199">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.200</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-23 20:55:10</Created>
+      <LastUpdated>2026-09-23 21:32:10</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.200</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли употреблять алкоголь после кодирования Торпедо?]]></question>
+      <answer><![CDATA[Если для кодирования используется препарат, несовместимый с алкоголем, употребление спиртного может привести к серьезной нежелательной реакции. Нельзя самостоятельно употреблять алкоголь для проверки действия кодировки. Все ограничения и возможные риски врач должен подробно объяснить пациенту перед началом лечения.]]></answer>
+    </message>
+    <message message_id="160" class_id="237" subdivision_id="35" sub_class_id="199">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.200</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-23 20:55:10</Created>
+      <LastUpdated>2026-09-23 21:32:24</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.200</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли повторно провести кодирование методом Торпедо?]]></question>
+      <answer><![CDATA[Возможность повторного кодирования определяется индивидуально. Врач учитывает ранее использованный препарат, прошедшее после процедуры время, состояние здоровья пациента и причины возможного возвращения к употреблению алкоголя. При необходимости специалист может предложить повторную процедуру или другой вариант лечения зависимости.]]></answer>
+    </message>
+    <message message_id="147" class_id="237" subdivision_id="34" sub_class_id="191">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 18:08:06</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что такое терапия от алкоголизма?]]></question>
+      <answer><![CDATA[Терапия от алкоголизма — это комплексная программа восстановления, направленная не только на прекращение употребления спиртного, но и на работу с психологическими и поведенческими механизмами зависимости. Пациент учится распознавать ситуации, провоцирующие употребление алкоголя, справляться со стрессом без спиртного и постепенно возвращаться к полноценной трезвой жизни.]]></answer>
+    </message>
+    <message message_id="148" class_id="237" subdivision_id="34" sub_class_id="191">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 18:08:06</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Чем терапия отличается от вывода из запоя и детоксикации?]]></question>
+      <answer><![CDATA[Вывод из запоя и детоксикация прежде всего направлены на стабилизацию физического состояния после употребления алкоголя. Терапия решает другую задачу — помогает работать с самой зависимостью, ее психологическими причинами, привычками и рисками повторного употребления. Поэтому детоксикация при необходимости может стать первым этапом лечения, но не заменяет полноценную восстановительную программу.]]></answer>
+    </message>
+    <message message_id="149" class_id="237" subdivision_id="34" sub_class_id="191">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 18:08:06</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как проходит терапия от алкогольной зависимости?]]></question>
+      <answer><![CDATA[Программа составляется индивидуально. Она может включать оценку физического и психологического состояния, индивидуальную и групповую психотерапию, работу с мотивацией, обучение навыкам профилактики срывов и постепенную социальную адаптацию. После основного курса пациенту может быть рекомендовано дальнейшее амбулаторное сопровождение.]]></answer>
+    </message>
+    <message message_id="150" class_id="237" subdivision_id="34" sub_class_id="191">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 18:08:06</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Сколько длится терапия от алкоголизма?]]></question>
+      <answer><![CDATA[Продолжительность программы зависит от длительности и тяжести зависимости, предыдущих попыток лечения, состояния здоровья, мотивации пациента и динамики восстановления. Терапия может занимать от нескольких недель до нескольких месяцев. Оптимальный срок определяется специалистами индивидуально и при необходимости корректируется в процессе лечения.]]></answer>
+    </message>
+    <message message_id="151" class_id="237" subdivision_id="34" sub_class_id="191">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 18:08:06</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Обязательно ли проходить терапию в стационаре?]]></question>
+      <answer><![CDATA[Не всегда, однако стационарный формат часто используется на основном этапе терапии, поскольку позволяет временно исключить доступ к алкоголю и привычные провоцирующие факторы. Пациент находится в структурированной среде и регулярно работает со специалистами. После стабилизации возможен переход к амбулаторному сопровождению.]]></answer>
+    </message>
+    <message message_id="152" class_id="237" subdivision_id="34" sub_class_id="191">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 18:08:06</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Может ли семья участвовать в терапии пациента?]]></question>
+      <answer><![CDATA[Да. Работа с родственниками может быть важной частью восстановления. Специалисты помогают близким лучше понимать природу зависимости, выстраивать здоровые границы и поддерживать пациента без чрезмерного контроля или поведения, которое невольно способствует продолжению употребления алкоголя.]]></answer>
+    </message>
+    <message message_id="153" class_id="237" subdivision_id="34" sub_class_id="191">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 18:08:06</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что помогает предотвратить срыв после терапии?]]></question>
+      <answer><![CDATA[Снизить риск возврата к алкоголю помогают продолжение психотерапевтической поддержки, соблюдение рекомендаций специалистов, изменение привычного образа жизни и окружения, а также своевременное обращение за помощью при появлении тяги или других признаков возможного срыва. Важную роль играет и постепенная адаптация пациента к самостоятельной трезвой жизни.]]></answer>
+    </message>
+    <message message_id="140" class_id="237" subdivision_id="33" sub_class_id="183">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 17:51:27</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что включает терапия наркозависимых?]]></question>
+      <answer><![CDATA[Терапия — это комплексная программа восстановления после употребления психоактивных веществ. Она может включать медицинскую стабилизацию, диагностику, индивидуальную и групповую психотерапию, работу с мотивацией, формирование новых моделей поведения и подготовку к возвращению в семью и общество. Программа подбирается индивидуально с учетом состояния и истории зависимости пациента.]]></answer>
+    </message>
+    <message message_id="141" class_id="237" subdivision_id="33" sub_class_id="183">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 17:51:27</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Сколько длится терапия от наркозависимости?]]></question>
+      <answer><![CDATA[Продолжительность зависит от вида и длительности зависимости, состояния здоровья, психологических особенностей и динамики восстановления. Одним пациентам требуется более короткая программа, другим — несколько месяцев последовательной восстановительной работы. Оптимальный срок специалисты определяют индивидуально после оценки состояния.]]></answer>
+    </message>
+    <message message_id="142" class_id="237" subdivision_id="33" sub_class_id="183">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 17:51:27</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Нужно ли проходить детоксикацию перед терапией?]]></question>
+      <answer><![CDATA[Если у пациента сохраняются признаки интоксикации или абстинентного синдрома, сначала может потребоваться медицинская стабилизация и детоксикация. После нормализации физического состояния можно переходить к основному восстановительному этапу. Необходимость и объем медицинской помощи определяет врач.]]></answer>
+    </message>
+    <message message_id="143" class_id="237" subdivision_id="33" sub_class_id="183">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 17:51:27</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Почему терапию наркозависимых часто проводят в стационаре?]]></question>
+      <answer><![CDATA[Стационар позволяет временно исключить привычные провоцирующие факторы и организовать структурированный режим восстановления. Пациент находится под наблюдением специалистов, регулярно участвует в индивидуальной и групповой работе и может сосредоточиться на лечении без воздействия прежнего окружения.]]></answer>
+    </message>
+    <message message_id="144" class_id="237" subdivision_id="33" sub_class_id="183">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 17:51:27</Created>
+      <LastUpdated>2026-09-06 18:06:14</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что происходит во время психотерапии при наркозависимости?]]></question>
+      <answer><![CDATA[Психотерапевтическая работа помогает разобраться с причинами и обстоятельствами, связанными с употреблением, научиться распознавать провоцирующие ситуации и формировать более безопасные способы справляться со стрессом и эмоциями. В программе могут сочетаться индивидуальные консультации и групповые занятия.]]></answer>
+    </message>
+    <message message_id="145" class_id="237" subdivision_id="33" sub_class_id="183">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 17:51:27</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Участвуют ли родственники в терапии наркозависимого?]]></question>
+      <answer><![CDATA[Работа с семьей может быть важной частью программы. Специалисты помогают родственникам лучше понимать зависимость, выстраивать личные границы, корректировать привычные модели общения и правильно поддерживать человека после возвращения домой. Это также помогает снизить влияние семейных конфликтов на процесс восстановления.]]></answer>
+    </message>
+    <message message_id="146" class_id="237" subdivision_id="33" sub_class_id="183">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 17:51:27</Created>
+      <LastUpdated>2026-10-18 01:18:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что помогает снизить риск срыва после терапии?]]></question>
+      <answer><![CDATA[После завершения основной программы важны дальнейшая психологическая поддержка, соблюдение рекомендаций специалистов, изменение привычного окружения и образа жизни, а также своевременное обращение за помощью при появлении трудностей. Последующое сопровождение помогает пациенту постепенно адаптироваться к самостоятельной жизни и поддерживать достигнутые изменения.]]></answer>
+    </message>
+    <message message_id="133" class_id="237" subdivision_id="32" sub_class_id="175">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 13:24:08</Created>
+      <LastUpdated>2026-09-06 13:35:52</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что такое кодирование гипнозом от алкоголизма?]]></question>
+      <answer><![CDATA[Кодирование гипнозом — психотерапевтический метод помощи при алкогольной зависимости. Во время сеанса специалист работает с установками, привычными моделями поведения и мотивацией пациента к трезвости. Метод не предполагает введения кодирующих препаратов, а его результат во многом зависит от индивидуальных особенностей и готовности человека участвовать в лечении.]]></answer>
+    </message>
+    <message message_id="134" class_id="237" subdivision_id="32" sub_class_id="175">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 13:24:08</Created>
+      <LastUpdated>2026-09-06 13:36:04</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как проходит кодирование от алкоголизма гипнозом?]]></question>
+      <answer><![CDATA[Перед процедурой проводится консультация со специалистом, который оценивает состояние пациента, историю зависимости, мотивацию и возможные противопоказания. Во время сеанса пациент находится в состоянии расслабления и сохраняет контакт со специалистом. Психотерапевтическая работа направлена на укрепление установки на отказ от алкоголя и изменение отношения к употреблению спиртного.]]></answer>
+    </message>
+    <message message_id="135" class_id="237" subdivision_id="32" sub_class_id="175">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 13:24:08</Created>
+      <LastUpdated>2026-09-06 13:36:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Нужно ли воздерживаться от алкоголя перед сеансом гипноза?]]></question>
+      <answer><![CDATA[Да. Кодирование проводится в трезвом состоянии, без алкогольного опьянения и выраженного абстинентного синдрома. Необходимый период воздержания определяется специалистом индивидуально. Если человеку сложно самостоятельно прекратить употребление алкоголя, предварительно может потребоваться медицинская детоксикация и стабилизация состояния.]]></answer>
+    </message>
+    <message message_id="136" class_id="237" subdivision_id="32" sub_class_id="175">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 13:24:08</Created>
+      <LastUpdated>2026-09-06 13:36:29</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли закодировать человека гипнозом без его желания?]]></question>
+      <answer><![CDATA[Нет. Для психотерапевтической работы необходимы добровольное согласие пациента и хотя бы минимальная мотивация к отказу от алкоголя. Попытка провести кодирование против воли человека не позволяет обеспечить полноценное участие пациента в терапии. Если зависимый отказывается лечиться, родственники могут сначала получить консультацию специалиста по вопросам мотивации к лечению.]]></answer>
+    </message>
+    <message message_id="137" class_id="237" subdivision_id="32" sub_class_id="175">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 13:24:08</Created>
+      <LastUpdated>2026-09-06 13:36:41</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Всем ли подходит кодирование алкоголизма гипнозом?]]></question>
+      <answer><![CDATA[Нет. Возможность применения метода определяется индивидуально. Процедура может быть отложена или не рекомендована при алкогольном опьянении, тяжелом абстинентном состоянии, некоторых психических расстройствах, острых заболеваниях и других противопоказаниях. Перед кодированием специалист должен оценить состояние пациента.]]></answer>
+    </message>
+    <message message_id="138" class_id="237" subdivision_id="32" sub_class_id="175">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 13:24:08</Created>
+      <LastUpdated>2026-09-06 13:36:55</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[На какой срок действует кодирование гипнозом?]]></question>
+      <answer><![CDATA[Продолжительность эффекта индивидуальна и зависит от мотивации пациента, особенностей зависимости, применяемой психотерапевтической методики и дальнейшего образа жизни. Нельзя гарантировать отсутствие тяги или срывов на определенный срок. Для более устойчивой ремиссии кодирование рекомендуется рассматривать как часть комплексного лечения зависимости.]]></answer>
+    </message>
+    <message message_id="139" class_id="237" subdivision_id="32" sub_class_id="175">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 13:24:08</Created>
+      <LastUpdated>2026-09-06 13:37:09</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли повторно пройти кодирование гипнозом?]]></question>
+      <answer><![CDATA[Да, возможность повторной процедуры рассматривается индивидуально. Если произошел срыв или эффект предыдущего кодирования оказался недостаточным, специалист сначала оценивает причины возвращения к употреблению алкоголя. После этого может быть рекомендован повторный сеанс, психотерапия или другая программа лечения.]]></answer>
+    </message>
+    <message message_id="126" class_id="237" subdivision_id="31" sub_class_id="167">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 12:31:08</Created>
+      <LastUpdated>2026-09-06 13:21:40</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что такое кодирование от алкоголизма по методу Довженко?]]></question>
+      <answer><![CDATA[Метод Довженко — психотерапевтический подход к лечению алкогольной зависимости, при котором врач формирует у пациента установку на отказ от спиртного на определенный период. Процедура проводится без введения препаратов и предполагает активное участие самого пациента. Важным условием является добровольное желание отказаться от употребления алкоголя.]]></answer>
+    </message>
+    <message message_id="127" class_id="237" subdivision_id="31" sub_class_id="167">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 12:31:08</Created>
+      <LastUpdated>2026-09-06 13:21:52</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как проходит кодирование по методу Довженко?]]></question>
+      <answer><![CDATA[Перед процедурой проводится консультация, во время которой специалист оценивает состояние пациента, историю употребления алкоголя, мотивацию и возможные противопоказания. Основной этап представляет собой психотерапевтический сеанс, направленный на укрепление установки на трезвость и снижение психологической привлекательности алкоголя.]]></answer>
+    </message>
+    <message message_id="128" class_id="237" subdivision_id="31" sub_class_id="167">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 12:31:08</Created>
+      <LastUpdated>2026-09-06 13:22:09</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Нужно ли воздерживаться от алкоголя перед кодированием?]]></question>
+      <answer><![CDATA[Да. Процедуру проводят в трезвом состоянии, без признаков алкогольного опьянения или выраженного абстинентного синдрома. Необходимая продолжительность периода трезвости определяется индивидуально. Если человеку сложно самостоятельно прекратить употребление алкоголя, врач может сначала рекомендовать детоксикацию и стабилизацию состояния.]]></answer>
+    </message>
+    <message message_id="129" class_id="237" subdivision_id="31" sub_class_id="167">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 12:31:08</Created>
+      <LastUpdated>2026-09-06 13:22:25</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Используются ли при методе Довженко лекарства или уколы?]]></question>
+      <answer><![CDATA[Нет, классический метод Довженко относится к психотерапевтическим способам кодирования и не предусматривает введения препаратов, имплантацию или другие медикаментозные методы. Если пациенту требуется лекарственная терапия по другим медицинским показаниям, она назначается врачом отдельно.]]></answer>
+    </message>
+    <message message_id="130" class_id="237" subdivision_id="31" sub_class_id="167">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 12:31:08</Created>
+      <LastUpdated>2026-09-06 13:22:40</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[На какой срок можно закодироваться методом Довженко?]]></question>
+      <answer><![CDATA[Срок установки определяется индивидуально после консультации и зависит от состояния пациента, его мотивации и целей лечения. Важно понимать, что выбранный срок не является гарантией отсутствия тяги или срывов. Для устойчивой ремиссии кодирование желательно сочетать с дальнейшей психотерапевтической поддержкой и работой с причинами зависимости.]]></answer>
+    </message>
+    <message message_id="131" class_id="237" subdivision_id="31" sub_class_id="167">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 12:31:08</Created>
+      <LastUpdated>2026-09-06 13:22:54</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Есть ли противопоказания к кодированию по методу Довженко?]]></question>
+      <answer><![CDATA[Да. Процедура может быть противопоказана или временно отложена при алкогольном опьянении, выраженном абстинентном синдроме, некоторых острых психических и тяжелых соматических состояниях. Окончательное решение о возможности кодирования принимает специалист после консультации и оценки состояния пациента.]]></answer>
+    </message>
+    <message message_id="132" class_id="237" subdivision_id="31" sub_class_id="167">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 12:31:08</Created>
+      <LastUpdated>2026-09-06 13:23:08</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли повторно пройти кодирование методом Довженко?]]></question>
+      <answer><![CDATA[Возможность повторного кодирования рассматривается индивидуально. Если срок предыдущей установки закончился или произошел срыв, сначала рекомендуется обратиться к специалисту и разобраться в причинах возвращения к алкоголю. После оценки ситуации врач определит, подходит ли повторная процедура или необходимо изменить программу лечения.]]></answer>
+    </message>
+    <message message_id="119" class_id="237" subdivision_id="30" sub_class_id="159">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 11:43:38</Created>
+      <LastUpdated>2026-09-06 12:08:24</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что такое детоксикация от алкоголя?]]></question>
+      <answer><![CDATA[Детоксикация от алкоголя — это комплекс медицинских мероприятий, направленных на стабилизацию состояния после употребления спиртного и коррекцию связанных с ним нарушений. Врач оценивает состояние пациента и при необходимости назначает инфузионную и симптоматическую терапию, контролируя давление, пульс и другие показатели.]]></answer>
+    </message>
+    <message message_id="120" class_id="237" subdivision_id="30" sub_class_id="159">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 11:43:38</Created>
+      <LastUpdated>2026-09-06 12:08:37</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Когда необходима алкогольная детоксикация?]]></question>
+      <answer><![CDATA[Медицинская помощь может потребоваться после длительного запоя, при выраженном похмельном или абстинентном синдроме, обезвоживании, сильной слабости, тошноте, треморе и других заметных нарушениях самочувствия. Если состояние тяжелое, вопрос о формате лечения должен решать врач после осмотра.]]></answer>
+    </message>
+    <message message_id="121" class_id="237" subdivision_id="30" sub_class_id="159">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 11:43:38</Created>
+      <LastUpdated>2026-09-06 12:08:50</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как проходит детоксикация организма от алкоголя?]]></question>
+      <answer><![CDATA[Сначала врач проводит осмотр, уточняет продолжительность употребления алкоголя, наличие хронических заболеваний и принимаемых лекарств. Затем индивидуально подбирается терапия. Во время процедуры медицинский специалист наблюдает за состоянием пациента и при необходимости корректирует лечение.]]></answer>
+    </message>
+    <message message_id="122" class_id="237" subdivision_id="30" sub_class_id="159">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 11:43:38</Created>
+      <LastUpdated>2026-09-06 12:09:03</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Сколько длится детоксикация от алкоголя?]]></question>
+      <answer><![CDATA[Продолжительность зависит от состояния человека, длительности употребления алкоголя, выраженности симптомов и сопутствующих заболеваний. В некоторых случаях достаточно нескольких часов наблюдения и терапии, при более тяжелом состоянии лечение может продолжаться дольше и потребовать пребывания в стационаре.]]></answer>
+    </message>
+    <message message_id="123" class_id="237" subdivision_id="30" sub_class_id="159">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 11:43:38</Created>
+      <LastUpdated>2026-09-06 12:09:20</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли провести детоксикацию от алкоголя на дому?]]></question>
+      <answer><![CDATA[В определенных случаях детоксикация может проводиться на дому после осмотра врача. Такой формат подходит не всем пациентам. При тяжелом состоянии, длительном запое, серьезных хронических заболеваниях или высоком риске осложнений врач может рекомендовать госпитализацию.]]></answer>
+    </message>
+    <message message_id="124" class_id="237" subdivision_id="30" sub_class_id="159">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 11:43:38</Created>
+      <LastUpdated>2026-09-06 12:09:32</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Чем детоксикация от алкоголя отличается от обычной капельницы?]]></question>
+      <answer><![CDATA[Капельница является одним из возможных элементов медицинской детоксикации, но сама детоксикация представляет собой более широкий комплекс помощи. Он может включать врачебный осмотр, инфузионную и симптоматическую терапию, наблюдение за состоянием пациента и определение дальнейшей тактики лечения.]]></answer>
+    </message>
+    <message message_id="125" class_id="237" subdivision_id="30" sub_class_id="159">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 11:43:38</Created>
+      <LastUpdated>2026-09-06 12:09:48</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.189.102</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Безопасно ли самостоятельно проводить алкогольную детоксикацию?]]></question>
+      <answer><![CDATA[Самостоятельно ставить капельницы или принимать лекарственные препараты для устранения последствий употребления алкоголя небезопасно. У препаратов существуют противопоказания и лекарственные взаимодействия, а некоторые симптомы могут указывать на состояние, требующее не домашнего лечения, а срочной медицинской помощи. Схему терапии должен определять врач.]]></answer>
+    </message>
+    <message message_id="112" class_id="237" subdivision_id="18" sub_class_id="147">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 14:23:03</Created>
+      <LastUpdated>2026-08-05 14:59:48</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что такое кодирование от алкоголизма?]]></question>
+      <answer><![CDATA[Кодирование от алкоголизма — это один из методов комплексного лечения алкогольной зависимости, направленный на формирование устойчивого отказа от употребления спиртных напитков. Методика подбирается врачом индивидуально после консультации, оценки состояния здоровья пациента и выявления возможных противопоказаний.]]></answer>
+    </message>
+    <message message_id="113" class_id="237" subdivision_id="18" sub_class_id="147">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 14:23:03</Created>
+      <LastUpdated>2026-08-05 15:00:02</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Какие методы кодирования применяются?]]></question>
+      <answer><![CDATA[В клинике «МедЭльта» используются современные методы кодирования, выбор которых зависит от клинической ситуации и рекомендаций врача. Методика определяется индивидуально после обследования пациента и обсуждения всех возможных вариантов лечения.]]></answer>
+    </message>
+    <message message_id="114" class_id="237" subdivision_id="18" sub_class_id="147">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 14:23:03</Created>
+      <LastUpdated>2026-08-05 15:00:18</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Кому подходит кодирование от алкоголизма?]]></question>
+      <answer><![CDATA[Кодирование может быть рекомендовано пациентам с алкогольной зависимостью, которые осознанно приняли решение отказаться от употребления алкоголя и готовы соблюдать рекомендации врача. Перед процедурой обязательно проводится медицинский осмотр для определения показаний и исключения противопоказаний.]]></answer>
+    </message>
+    <message message_id="115" class_id="237" subdivision_id="18" sub_class_id="147">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 14:23:03</Created>
+      <LastUpdated>2026-08-05 15:00:34</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Нужно ли полностью отказаться от алкоголя перед кодированием?]]></question>
+      <answer><![CDATA[Да. Перед проведением процедуры необходимо соблюдать период трезвости. Его продолжительность зависит от выбранного метода кодирования и определяется лечащим врачом. Это необходимо для безопасности пациента и достижения максимальной эффективности лечения.]]></answer>
+    </message>
+    <message message_id="116" class_id="237" subdivision_id="18" sub_class_id="147">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 14:23:03</Created>
+      <LastUpdated>2026-08-05 15:00:53</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Насколько эффективно кодирование?]]></question>
+      <answer><![CDATA[Кодирование является эффективным методом лечения при условии комплексного подхода. Наилучшие результаты достигаются при сочетании процедуры с психотерапией, медицинским наблюдением, поддержкой близких и выполнением рекомендаций специалистов.]]></answer>
+    </message>
+    <message message_id="117" class_id="237" subdivision_id="18" sub_class_id="147">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 14:23:03</Created>
+      <LastUpdated>2026-08-05 15:01:09</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли проводить кодирование анонимно?]]></question>
+      <answer><![CDATA[Да. Все процедуры в клинике «МедЭльта» проводятся с соблюдением полной конфиденциальности. Информация о пациенте и проведенном лечении является врачебной тайной и не передается третьим лицам без законных оснований.]]></answer>
+    </message>
+    <message message_id="118" class_id="237" subdivision_id="18" sub_class_id="147">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 14:23:03</Created>
+      <LastUpdated>2026-08-05 15:01:25</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Есть ли противопоказания к кодированию?]]></question>
+      <answer><![CDATA[Да. Перед процедурой врач обязательно проводит обследование пациента. Кодирование может быть противопоказано при некоторых тяжелых заболеваниях, острых психических расстройствах, алкогольном опьянении, а также при других состояниях, которые определяются специалистом во время консультации.]]></answer>
+    </message>
+    <message message_id="105" class_id="237" subdivision_id="38" sub_class_id="139">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:06:16</Created>
+      <LastUpdated>2026-08-21 14:31:09</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Когда рекомендуется лечение алкоголизма в стационаре?]]></question>
+      <answer><![CDATA[Стационарное лечение может быть рекомендовано при длительном или повторяющемся употреблении алкоголя, выраженном абстинентном синдроме, частых срывах, сопутствующих заболеваниях или невозможности обеспечить безопасное лечение дома. Решение о госпитализации принимает врач после оценки состояния пациента.]]></answer>
+    </message>
+    <message message_id="106" class_id="237" subdivision_id="38" sub_class_id="139">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:06:16</Created>
+      <LastUpdated>2026-08-21 14:31:30</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как проходит лечение алкоголизма в стационаре?]]></question>
+      <answer><![CDATA[Программа составляется индивидуально. Обычно она включает первичный осмотр и диагностику, стабилизацию состояния, детоксикационную и медикаментозную терапию по показаниям, наблюдение врача, психологическую помощь и дальнейшую работу с алкогольной зависимостью. После стабилизации специалист определяет дальнейшую тактику лечения и профилактики рецидивов.]]></answer>
+    </message>
+    <message message_id="107" class_id="237" subdivision_id="38" sub_class_id="139">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:06:16</Created>
+      <LastUpdated>2026-08-21 14:31:57</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Сколько длится лечение алкоголизма в стационаре?]]></question>
+      <answer><![CDATA[Продолжительность зависит от состояния пациента, длительности употребления алкоголя, выраженности абстиненции, наличия хронических заболеваний и целей лечения. В одних случаях достаточно нескольких дней медицинской стабилизации, в других требуется более продолжительная комплексная программа. Точные сроки определяются врачом индивидуально.]]></answer>
+    </message>
+    <message message_id="108" class_id="237" subdivision_id="38" sub_class_id="139">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:06:16</Created>
+      <LastUpdated>2026-08-21 14:32:18</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Чем лечение алкоголизма в стационаре отличается от лечения на дому?]]></question>
+      <answer><![CDATA[Главное преимущество стационара — возможность круглосуточного наблюдения и своевременной коррекции терапии. Пациент находится в контролируемой обстановке без доступа к алкоголю и привычных провоцирующих факторов. Кроме медицинской помощи, стационар позволяет подключить психологическую и психотерапевтическую поддержку.]]></answer>
+    </message>
+    <message message_id="109" class_id="237" subdivision_id="38" sub_class_id="139">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:06:16</Created>
+      <LastUpdated>2026-08-21 14:32:41</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли обратиться в стационар после длительного запоя?]]></question>
+      <answer><![CDATA[Да. После продолжительного употребления алкоголя самостоятельная резкая отмена может сопровождаться серьезным ухудшением самочувствия. В стационаре врач оценивает состояние пациента, при необходимости проводит детоксикацию и лечение абстинентного синдрома, контролируя основные показатели здоровья.]]></answer>
+    </message>
+    <message message_id="110" class_id="237" subdivision_id="38" sub_class_id="139">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:06:16</Created>
+      <LastUpdated>2026-08-21 14:33:03</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Нужно ли оставаться в клинике круглосуточно?]]></question>
+      <answer><![CDATA[Это зависит от состояния и выбранной программы. При круглосуточном стационаре пациент остается под наблюдением медицинского персонала в течение всего периода лечения. В отдельных случаях врач может предложить другой формат помощи, если состояние пациента позволяет безопасно проводить лечение без постоянного пребывания в клинике.]]></answer>
+    </message>
+    <message message_id="111" class_id="237" subdivision_id="38" sub_class_id="139">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:06:16</Created>
+      <LastUpdated>2026-08-21 14:33:27</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Проводится ли лечение алкоголизма в стационаре анонимно?]]></question>
+      <answer><![CDATA[Да, обращение за медицинской помощью и сведения о состоянии здоровья пациента относятся к конфиденциальной информации. В центре «МедЭльта» соблюдаются принципы врачебной тайны и защиты персональных данных. Подробности об условиях анонимного обращения можно уточнить во время консультации.]]></answer>
+    </message>
+    <message message_id="98" class_id="237" subdivision_id="28" sub_class_id="134">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:22:21</Created>
+      <LastUpdated>2026-08-21 15:31:02</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что значит «прокапаться от алкоголя»?]]></question>
+      <answer><![CDATA[Под этим обычно подразумевают проведение внутривенной инфузионной терапии после употребления алкоголя. Капельница назначается врачом после оценки состояния пациента и может использоваться для коррекции обезвоживания, водно-электролитных нарушений и уменьшения отдельных симптомов алкогольной интоксикации или абстинентного синдрома.]]></answer>
+    </message>
+    <message message_id="99" class_id="237" subdivision_id="28" sub_class_id="134">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:22:21</Created>
+      <LastUpdated>2026-08-21 15:31:13</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[В каких случаях можно прокапаться после алкоголя?]]></question>
+      <answer><![CDATA[Инфузионная терапия может применяться при плохом самочувствии после употребления алкоголя, выраженной слабости, тошноте, обезвоживании и других симптомах. Однако необходимость капельницы определяет врач: в некоторых случаях требуется не домашняя процедура, а обследование или лечение в стационаре.]]></answer>
+    </message>
+    <message message_id="100" class_id="237" subdivision_id="28" sub_class_id="134">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:22:21</Created>
+      <LastUpdated>2026-08-21 15:31:26</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Какие препараты входят в капельницу от алкоголя?]]></question>
+      <answer><![CDATA[Универсального состава капельницы не существует. Врач подбирает растворы и лекарственные препараты индивидуально с учетом симптомов, возраста, хронических заболеваний, принимаемых лекарств и результатов осмотра. Самостоятельно выбирать или вводить препараты небезопасно.]]></answer>
+    </message>
+    <message message_id="101" class_id="237" subdivision_id="28" sub_class_id="134">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:22:21</Created>
+      <LastUpdated>2026-08-21 15:31:42</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Через сколько после алкоголя можно ставить капельницу?]]></question>
+      <answer><![CDATA[Единого безопасного интервала для всех пациентов нет. Время проведения процедуры зависит от количества употребленного алкоголя, состояния человека и наличия сопутствующих заболеваний. Перед началом инфузионной терапии врач оценивает основные показатели здоровья и определяет допустимую тактику помощи.]]></answer>
+    </message>
+    <message message_id="102" class_id="237" subdivision_id="28" sub_class_id="134">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:22:21</Created>
+      <LastUpdated>2026-08-21 15:32:05</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли прокапаться от алкоголя на дому?]]></question>
+      <answer><![CDATA[В некоторых случаях врач может провести инфузионную терапию на дому, если состояние пациента позволяет это сделать безопасно. При тяжелой интоксикации, нарушении сознания, судорогах, выраженных сердечно-сосудистых или других опасных симптомах может потребоваться госпитализация и наблюдение в стационаре.]]></answer>
+    </message>
+    <message message_id="103" class_id="237" subdivision_id="28" sub_class_id="134">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:22:21</Created>
+      <LastUpdated>2026-08-21 15:32:18</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Сколько длится капельница после употребления алкоголя?]]></question>
+      <answer><![CDATA[Продолжительность процедуры зависит от объема и состава назначенной терапии, а также состояния пациента. Врач определяет скорость введения растворов и наблюдает за самочувствием во время процедуры. При необходимости объем медицинской помощи может быть изменен.]]></answer>
+    </message>
+    <message message_id="104" class_id="237" subdivision_id="28" sub_class_id="134">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:22:21</Created>
+      <LastUpdated>2026-08-21 15:32:37</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Помогает ли капельница полностью вывести алкоголь из организма?]]></question>
+      <answer><![CDATA[Капельница не способна мгновенно удалить весь алкоголь из организма или моментально сделать человека трезвым. Этанол перерабатывается преимущественно организмом естественным путем. Инфузионная терапия применяется для коррекции определенных нарушений и облегчения состояния по медицинским показаниям.]]></answer>
+    </message>
+    <message message_id="91" class_id="237" subdivision_id="16" sub_class_id="129">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 15:02:35</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что входит в наркологическую помощь?]]></question>
+      <answer><![CDATA[Наркологическая помощь включает диагностику состояния пациента, консультацию врача-нарколога, детоксикацию организма, вывод из запоя, лечение алкогольной и наркотической зависимости, медикаментозную терапию, психотерапию, терапию и последующее медицинское сопровождение. Программа помощи подбирается индивидуально с учетом состояния здоровья и клинической ситуации.]]></answer>
+    </message>
+    <message message_id="92" class_id="237" subdivision_id="16" sub_class_id="129">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 15:02:35</Created>
+      <LastUpdated>2026-08-05 15:29:06</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[В каких случаях необходимо обратиться к врачу-наркологу?]]></question>
+      <answer><![CDATA[Обратиться за наркологической помощью рекомендуется при регулярном употреблении алкоголя или наркотических веществ, длительных запоях, появлении симптомов зависимости, тяжелом похмелье, абстинентном синдроме, а также при неудачных попытках самостоятельно отказаться от употребления психоактивных веществ.]]></answer>
+    </message>
+    <message message_id="93" class_id="237" subdivision_id="16" sub_class_id="129">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 15:02:35</Created>
+      <LastUpdated>2026-08-05 15:29:23</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли получить наркологическую помощь анонимно?]]></question>
+      <answer><![CDATA[Да. Клиника «МедЭльта» гарантирует полную конфиденциальность. Все обращения, консультации, обследования и лечение проводятся с соблюдением врачебной тайны и требований законодательства о защите персональных данных.]]></answer>
+    </message>
+    <message message_id="94" class_id="237" subdivision_id="16" sub_class_id="129">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 15:02:35</Created>
+      <LastUpdated>2026-08-05 15:29:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как проходит первичная консультация врача-нарколога?]]></question>
+      <answer><![CDATA[Во время первичного приема врач проводит осмотр пациента, собирает анамнез, оценивает степень зависимости, общее состояние здоровья и наличие сопутствующих заболеваний. По результатам консультации составляется индивидуальный план лечения и при необходимости назначаются дополнительные обследования.]]></answer>
+    </message>
+    <message message_id="95" class_id="237" subdivision_id="16" sub_class_id="129">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 15:02:35</Created>
+      <LastUpdated>2026-08-05 15:30:11</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Какие заболевания лечит врач-нарколог?]]></question>
+      <answer><![CDATA[Врач-нарколог занимается диагностикой и лечением алкогольной, наркотической и лекарственной зависимости, помогает при алкогольной интоксикации, абстинентном синдроме, запоях и других состояниях, связанных с употреблением психоактивных веществ. При необходимости к лечению привлекаются врачи других специальностей.]]></answer>
+    </message>
+    <message message_id="96" class_id="237" subdivision_id="16" sub_class_id="129">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 15:02:35</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что делать после оказания наркологической помощи?]]></question>
+      <answer><![CDATA[После стабилизации состояния важно продолжить лечение основной причины зависимости. Врач может рекомендовать курс психотерапии, кодирование, программу лечения алкогольной или наркотической зависимости, медицинскую терапию и регулярные контрольные консультации для профилактики рецидивов.]]></answer>
+    </message>
+    <message message_id="97" class_id="237" subdivision_id="16" sub_class_id="129">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 15:02:35</Created>
+      <LastUpdated>2026-08-05 15:30:42</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Почему важно своевременно обратиться за наркологической помощью?]]></question>
+      <answer><![CDATA[Раннее обращение к специалисту позволяет быстрее стабилизировать состояние пациента, снизить риск тяжелых осложнений, подобрать наиболее эффективную программу лечения и повысить вероятность достижения длительной ремиссии. Чем раньше начинается терапия, тем выше шансы на успешное восстановление здоровья и возвращение к полноценной жизни.]]></answer>
+    </message>
+    <message message_id="84" class_id="237" subdivision_id="36" sub_class_id="122">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.101</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-06 11:12:05</Created>
+      <LastUpdated>2026-08-06 13:00:01</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.181.101</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[В каких случаях стоит вызвать врача-нарколога на дом?]]></question>
+      <answer><![CDATA[Вызов врача-нарколога на дом рекомендуется при алкогольной интоксикации, длительном запое, выраженном похмельном синдроме, абстинентном состоянии, ухудшении самочувствия после употребления психоактивных веществ, а также в случаях, когда пациент не может самостоятельно приехать в клинику.]]></answer>
+    </message>
+    <message message_id="85" class_id="237" subdivision_id="36" sub_class_id="122">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.101</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-06 11:12:05</Created>
+      <LastUpdated>2026-08-06 13:00:15</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.181.101</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как быстро приезжает нарколог на дом?]]></question>
+      <answer><![CDATA[Время прибытия врача зависит от удаленности адреса, дорожной ситуации и загруженности специалистов. После оформления заявки клиника направляет ближайшего свободного врача, чтобы пациент получил медицинскую помощь в максимально короткие сроки.]]></answer>
+    </message>
+    <message message_id="86" class_id="237" subdivision_id="36" sub_class_id="122">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.101</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-06 11:12:05</Created>
+      <LastUpdated>2026-08-06 13:00:29</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.181.101</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Какие процедуры может выполнить врач на дому?]]></question>
+      <answer><![CDATA[Во время выезда врач проводит осмотр пациента, оценивает его состояние, при наличии показаний выполняет детоксикацию организма, назначает медикаментозную терапию, оказывает помощь при алкогольной интоксикации, запое или абстинентном синдроме, а также дает рекомендации по дальнейшему лечению.]]></answer>
+    </message>
+    <message message_id="87" class_id="237" subdivision_id="36" sub_class_id="122">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.101</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-06 11:12:05</Created>
+      <LastUpdated>2026-08-06 13:00:45</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.181.101</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли вызвать нарколога на дом круглосуточно?]]></question>
+      <answer><![CDATA[Да. Клиника «МедЭльта» предоставляет услугу вызова врача-нарколога на дом круглосуточно. Это позволяет получить квалифицированную медицинскую помощь независимо от времени суток при состояниях, требующих оперативного вмешательства специалиста.]]></answer>
+    </message>
+    <message message_id="88" class_id="237" subdivision_id="36" sub_class_id="122">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.101</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-06 11:12:05</Created>
+      <LastUpdated>2026-08-06 13:01:06</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.181.101</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Когда домашнего лечения недостаточно?]]></question>
+      <answer><![CDATA[Если во время осмотра врач выявляет признаки тяжелой интоксикации, нарушения сознания, судороги, алкогольный делирий, выраженные нарушения дыхания или другие опасные состояния, пациенту может быть рекомендована госпитализация для лечения под круглосуточным медицинским наблюдением.]]></answer>
+    </message>
+    <message message_id="89" class_id="237" subdivision_id="36" sub_class_id="122">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.101</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-06 11:12:05</Created>
+      <LastUpdated>2026-08-06 13:01:28</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.181.101</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[От чего зависит стоимость вызова нарколога?]]></question>
+      <answer><![CDATA[Стоимость услуги определяется индивидуально и зависит от состояния пациента, объема необходимой медицинской помощи, применяемых лекарственных препаратов, продолжительности лечения и необходимости дополнительных медицинских мероприятий. Точную цену врач сможет определить после осмотра.]]></answer>
+    </message>
+    <message message_id="90" class_id="237" subdivision_id="36" sub_class_id="122">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.101</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-06 11:12:05</Created>
+      <LastUpdated>2026-08-06 13:01:44</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.181.101</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Сохраняется ли конфиденциальность при вызове врача?]]></question>
+      <answer><![CDATA[Да. Все обращения в клинику «МедЭльта» являются полностью конфиденциальными. Медицинская помощь оказывается анонимно, а сведения о пациенте, диагнозе и лечении защищены врачебной тайной и не передаются третьим лицам без предусмотренных законодательством оснований.]]></answer>
+    </message>
+    <message message_id="69" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-02 21:07:11</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Какие услуги оказывает наркологическая клиника «МедЭльта»?]]></question>
+      <answer><![CDATA[Клиника «МедЭльта» оказывает комплексную наркологическую помощь пациентам с алкогольной и наркотической зависимостью. Среди основных услуг — вывод из запоя, лечение алкоголизма, лечение наркомании, кодирование от алкоголизма, детоксикация организма, консультации врача-нарколога и программы медицинской терапии.]]></answer>
+    </message>
+    <message message_id="70" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-02 21:07:19</Created>
+      <LastUpdated>2026-08-05 21:00:41</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Когда необходимо обратиться к врачу-наркологу?]]></question>
+      <answer><![CDATA[Обратиться за помощью рекомендуется при первых признаках зависимости, регулярном употреблении алкоголя или наркотических веществ, длительных запоях, появлении симптомов абстинентного синдрома или неудачных попытках самостоятельно отказаться от употребления психоактивных веществ.]]></answer>
+    </message>
+    <message message_id="71" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-02 21:07:28</Created>
+      <LastUpdated>2026-08-05 21:00:55</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Лечение проводится анонимно?]]></question>
+      <answer><![CDATA[Да. Клиника «МедЭльта» гарантирует полную конфиденциальность. Все обращения, консультации и лечение осуществляются с соблюдением врачебной тайны и требований законодательства о защите персональных данных.]]></answer>
+    </message>
+    <message message_id="72" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:01:10</Created>
+      <LastUpdated>2026-08-05 21:01:10</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Как проходит первичная консультация?]]></question>
+      <answer><![CDATA[Во время первичного приема врач-нарколог проводит осмотр, собирает анамнез, оценивает состояние здоровья пациента, определяет степень зависимости и составляет индивидуальный план лечения. При необходимости назначаются дополнительные обследования.]]></answer>
+    </message>
+    <message message_id="73" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:01:23</Created>
+      <LastUpdated>2026-08-05 21:01:23</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Можно ли вызвать врача на дом?]]></question>
+      <answer><![CDATA[Да. Если состояние пациента позволяет проводить лечение вне стационара, врач-нарколог может приехать по указанному адресу, провести осмотр, оказать необходимую медицинскую помощь и определить дальнейшую тактику лечения.]]></answer>
+    </message>
+    <message message_id="74" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:01:33</Created>
+      <LastUpdated>2026-08-05 21:01:33</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[В каких случаях необходима госпитализация?]]></question>
+      <answer><![CDATA[Стационарное лечение рекомендуется при тяжелой алкогольной или наркотической интоксикации, выраженном абстинентном синдроме, наличии хронических заболеваний, риске осложнений, судорогах, нарушении сознания или других состояниях, требующих круглосуточного медицинского наблюдения.]]></answer>
+    </message>
+    <message message_id="75" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:01:44</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Сколько времени занимает лечение зависимости?]]></question>
+      <answer><![CDATA[Продолжительность лечения зависит от состояния пациента, вида зависимости и выбранной программы терапии. Острые состояния могут быть устранены за несколько часов или дней, однако комплексное лечение и терапия обычно занимают значительно больше времени и определяются индивидуально.]]></answer>
+    </message>
+    <message message_id="76" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>8</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:01:57</Created>
+      <LastUpdated>2026-08-05 21:01:57</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Что такое детоксикация организма?]]></question>
+      <answer><![CDATA[Детоксикация — это медицинская процедура, направленная на выведение токсических продуктов распада алкоголя или наркотических веществ, уменьшение интоксикации, восстановление водно-электролитного баланса и подготовку пациента к дальнейшему лечению зависимости.]]></answer>
+    </message>
+    <message message_id="77" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>9</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:02:09</Created>
+      <LastUpdated>2026-08-05 21:02:09</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Можно ли полностью избавиться от зависимости?]]></question>
+      <answer><![CDATA[Алкогольная и наркотическая зависимость относятся к хроническим заболеваниям. При своевременном обращении к специалистам, прохождении полного курса лечения и соблюдении рекомендаций врача возможно достижение длительной ремиссии и возвращение к полноценной жизни.]]></answer>
+    </message>
+    <message message_id="78" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>10</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:02:19</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Чем отличается вывод из запоя от лечения алкоголизма?]]></question>
+      <answer><![CDATA[Вывод из запоя направлен на устранение острого состояния и алкогольной интоксикации. Лечение алкоголизма — это комплексная программа, включающая диагностику, медикаментозную терапию, психотерапию, кодирование (при наличии показаний) и терапию для предотвращения повторных срывов.]]></answer>
+    </message>
+    <message message_id="79" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>11</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:02:31</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Что входит в программу лечения алкогольной и наркотической зависимости?]]></question>
+      <answer><![CDATA[Программа лечения может включать консультацию врача-нарколога, диагностику, детоксикацию организма, медикаментозную терапию, психотерапию, кодирование (при необходимости), медицинскую терапию и сопровождение пациента после завершения основного курса лечения.]]></answer>
+    </message>
+    <message message_id="80" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>12</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:02:49</Created>
+      <LastUpdated>2026-08-05 21:02:49</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Оказываете ли вы помощь родственникам пациентов?]]></question>
+      <answer><![CDATA[Да. Специалисты клиники консультируют родственников, помогают понять особенности зависимости, дают рекомендации по взаимодействию с близким человеком и объясняют, как правильно поддерживать пациента во время лечения и восстановления.]]></answer>
+    </message>
+    <message message_id="81" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>13</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:03:02</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Какие методы лечения используются в клинике?]]></question>
+      <answer><![CDATA[В клинике применяются современные методы лечения алкогольной и наркотической зависимости, включая медикаментозную терапию, психотерапевтическую помощь, детоксикацию организма, кодирование по показаниям, восстановительное лечение и программы терапии.]]></answer>
+    </message>
+    <message message_id="82" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>14</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:03:12</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Что делать после завершения лечения?]]></question>
+      <answer><![CDATA[После окончания основного курса рекомендуется соблюдать рекомендации врача, посещать контрольные консультации, продолжать психотерапию при необходимости и участвовать в программах терапии. Такой подход помогает закрепить результат лечения и снизить риск рецидива.]]></answer>
+    </message>
+    <message message_id="83" class_id="237" subdivision_id="25" sub_class_id="111">
+      <User_ID>1</User_ID>
+      <Priority>15</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 21:03:23</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Почему пациенты выбирают клинику «МедЭльта»?]]></question>
+      <answer><![CDATA[Пациенты доверяют клинике «МедЭльта» благодаря профессионализму врачей, индивидуальному подходу, современным методам лечения, конфиденциальности, комплексным программам терапии и сопровождению на всех этапах восстановления — от первичной консультации до терапии.]]></answer>
+    </message>
+    <message message_id="62" class_id="237" subdivision_id="39" sub_class_id="109">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:35:03</Created>
+      <LastUpdated>2026-08-21 15:00:49</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Когда может понадобиться капельница от похмелья?]]></question>
+      <answer><![CDATA[Капельница может применяться при выраженном похмельном синдроме, когда человека беспокоят слабость, тошнота, головная боль, обезвоживание и общее ухудшение самочувствия. Перед процедурой врач оценивает состояние пациента и определяет, требуется ли инфузионная терапия или другой вид медицинской помощи.]]></answer>
+    </message>
+    <message message_id="63" class_id="237" subdivision_id="39" sub_class_id="109">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:35:03</Created>
+      <LastUpdated>2026-08-21 15:01:02</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что входит в состав капельницы от похмелья?]]></question>
+      <answer><![CDATA[Состав подбирается индивидуально с учетом состояния пациента, сопутствующих заболеваний и выраженности симптомов. По медицинским показаниям могут использоваться инфузионные растворы и лекарственные препараты для коррекции водно-электролитного баланса и уменьшения отдельных симптомов. Конкретные препараты назначает только врач после осмотра.]]></answer>
+    </message>
+    <message message_id="64" class_id="237" subdivision_id="39" sub_class_id="109">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:35:03</Created>
+      <LastUpdated>2026-08-21 15:01:15</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как действует капельница при похмелье?]]></question>
+      <answer><![CDATA[Инфузионная терапия позволяет вводить назначенные врачом растворы непосредственно внутривенно. Ее задача — помочь скорректировать обезвоживание и другие нарушения, возникшие после употребления алкоголя, а также уменьшить неприятные симптомы. Скорость улучшения зависит от состояния организма и не может быть одинаковой у всех пациентов.]]></answer>
+    </message>
+    <message message_id="65" class_id="237" subdivision_id="39" sub_class_id="109">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:35:03</Created>
+      <LastUpdated>2026-08-21 15:01:28</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Сколько времени занимает процедура?]]></question>
+      <answer><![CDATA[Продолжительность капельницы зависит от назначенного состава, объема инфузии и состояния пациента. Врач определяет скорость введения препаратов и контролирует самочувствие во время процедуры. При необходимости лечение может быть скорректировано или дополнено другими медицинскими мероприятиями.]]></answer>
+    </message>
+    <message message_id="66" class_id="237" subdivision_id="39" sub_class_id="109">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:35:03</Created>
+      <LastUpdated>2026-08-21 15:01:46</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли поставить капельницу от похмелья на дому?]]></question>
+      <answer><![CDATA[Возможность проведения процедуры на дому определяется после оценки состояния пациента. Если врач не выявляет показаний для госпитализации, инфузионная терапия в некоторых случаях может проводиться на дому под медицинским контролем. При тяжелом состоянии может потребоваться лечение в стационаре.]]></answer>
+    </message>
+    <message message_id="67" class_id="237" subdivision_id="39" sub_class_id="109">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:35:03</Created>
+      <LastUpdated>2026-08-21 15:02:04</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Есть ли противопоказания к капельнице от похмелья?]]></question>
+      <answer><![CDATA[Да. Ограничения зависят от общего состояния пациента, хронических заболеваний, принимаемых лекарств и состава предполагаемой терапии. Поэтому капельницу нельзя подбирать самостоятельно: перед процедурой необходим осмотр врача и сбор медицинского анамнеза.]]></answer>
+    </message>
+    <message message_id="68" class_id="237" subdivision_id="39" sub_class_id="109">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:35:03</Created>
+      <LastUpdated>2026-08-21 15:03:50</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Когда при похмелье необходимо обратиться за срочной медицинской помощью?]]></question>
+      <answer><![CDATA[Срочная медицинская оценка необходима при резком ухудшении состояния, нарушении сознания, затрудненном дыхании, судорогах, выраженной боли или других необычных и тяжелых симптомах. В подобных ситуациях не следует рассчитывать только на обычную капельницу от похмелья — пациенту может потребоваться экстренная помощь.]]></answer>
+    </message>
+    <message message_id="53" class_id="237" subdivision_id="12" sub_class_id="93">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-07-31 22:26:16</Created>
+      <LastUpdated>2026-08-03 21:11:41</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.181.241</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Когда необходимо обращаться в наркологическую клинику?]]></question>
+      <answer><![CDATA[Обратиться к врачу рекомендуется при регулярном употреблении алкоголя или наркотических веществ, появлении запоев, выраженного похмельного синдрома, потере контроля над употреблением, а также при ухудшении физического или психического состояния. Чем раньше начинается лечение, тем выше вероятность полного восстановления.]]></answer>
+    </message>
+    <message message_id="54" class_id="237" subdivision_id="12" sub_class_id="93">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-07-31 22:26:31</Created>
+      <LastUpdated>2026-08-03 21:12:00</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.181.241</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Лечение проводится анонимно?]]></question>
+      <answer><![CDATA[Да. Частная наркологическая клиника «МедЭльта» гарантирует полную конфиденциальность. Все обращения осуществляются анонимно, а персональные данные пациентов надежно защищены и не передаются третьим лицам без предусмотренных законом оснований.]]></answer>
+    </message>
+    <message message_id="55" class_id="237" subdivision_id="12" sub_class_id="93">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-07-31 22:26:45</Created>
+      <LastUpdated>2026-08-03 21:12:17</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.181.241</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Какие заболевания лечат специалисты клиники?]]></question>
+      <answer><![CDATA[Мы оказываем помощь при алкогольной зависимости, наркотической зависимости, запойных состояниях, абстинентном синдроме, а также проводим лечение сопутствующих психических и соматических нарушений, возникающих вследствие употребления психоактивных веществ.]]></answer>
+    </message>
+    <message message_id="56" class_id="237" subdivision_id="12" sub_class_id="93">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.241</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 21:12:32</Created>
+      <LastUpdated>2026-08-03 21:12:32</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Можно ли вызвать врача на дом?]]></question>
+      <answer><![CDATA[Да. При необходимости врач-нарколог может выехать на дом для проведения осмотра, детоксикации, вывода из запоя и оказания экстренной медицинской помощи. Решение принимается индивидуально после оценки состояния пациента.]]></answer>
+    </message>
+    <message message_id="57" class_id="237" subdivision_id="12" sub_class_id="93">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.241</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 21:12:47</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Как проходит лечение алкоголизма и наркомании?]]></question>
+      <answer><![CDATA[Лечение начинается с консультации врача и диагностики. После оценки состояния пациента составляется индивидуальный план терапии, который может включать детоксикацию, медикаментозное лечение, психотерапию, кодирование, терапию и последующее наблюдение специалистов.]]></answer>
+    </message>
+    <message message_id="58" class_id="237" subdivision_id="12" sub_class_id="93">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.241</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 21:13:11</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Сколько длится лечение зависимости?]]></question>
+      <answer><![CDATA[Продолжительность лечения зависит от вида зависимости, стажа употребления, общего состояния здоровья и индивидуальных особенностей пациента. Детоксикация может занять несколько дней, а полноценная программа лечения и терапии — от нескольких недель до нескольких месяцев.]]></answer>
+    </message>
+    <message message_id="59" class_id="237" subdivision_id="12" sub_class_id="93">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.241</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 21:13:32</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Можно ли вылечить зависимость полностью?]]></question>
+      <answer><![CDATA[Алкогольная и наркотическая зависимость являются хроническими заболеваниями, однако современная медицина позволяет добиться длительной и устойчивой ремиссии. При соблюдении рекомендаций врача, прохождении полного курса лечения и терапии человек может вернуться к полноценной жизни без употребления психоактивных веществ.]]></answer>
+    </message>
+    <message message_id="60" class_id="237" subdivision_id="12" sub_class_id="93">
+      <User_ID>1</User_ID>
+      <Priority>8</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.241</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 21:13:50</Created>
+      <LastUpdated>2026-08-03 21:13:50</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Почему стоит выбрать частную наркологическую клинику?]]></question>
+      <answer><![CDATA[Частная клиника обеспечивает индивидуальный подход, комфортные условия пребывания, минимальное время ожидания, современное оборудование, круглосуточную медицинскую помощь и высокий уровень конфиденциальности. Все программы лечения подбираются персонально для каждого пациента.]]></answer>
+    </message>
+    <message message_id="61" class_id="237" subdivision_id="12" sub_class_id="93">
+      <User_ID>1</User_ID>
+      <Priority>9</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.241</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 21:14:34</Created>
+      <LastUpdated>2026-08-03 21:14:34</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Где находятся клиника и как узнать контакты?]]></question>
+      <answer><![CDATA[На сайте «МедЭльта» всегда доступны актуальные адреса, телефон и номер для записи. Если у вас возникли вопросы, свяжитесь с нами удобным способом — мы предоставим необходимую информацию и организуем консультацию специалиста.]]></answer>
+    </message>
+    <message message_id="46" class_id="237" subdivision_id="29" sub_class_id="87">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:33:30</Created>
+      <LastUpdated>2026-08-21 15:43:55</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Когда может понадобиться капельница от запоя?]]></question>
+      <answer><![CDATA[Капельница может применяться при выраженном абстинентном синдроме после продолжительного употребления алкоголя, когда появляются слабость, тошнота, тремор, нарушения сна, обезвоживание и другие симптомы. Перед процедурой врач обязательно оценивает состояние пациента и определяет, допустимо ли лечение на дому или требуется стационар.]]></answer>
+    </message>
+    <message message_id="47" class_id="237" subdivision_id="29" sub_class_id="87">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:33:30</Created>
+      <LastUpdated>2026-08-21 15:44:07</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как действует капельница при выводе из запоя?]]></question>
+      <answer><![CDATA[Инфузионная терапия применяется для коррекции обезвоживания и водно-электролитных нарушений, а также для уменьшения отдельных проявлений абстинентного синдрома. Состав и объем терапии врач определяет индивидуально после осмотра пациента.]]></answer>
+    </message>
+    <message message_id="48" class_id="237" subdivision_id="29" sub_class_id="87">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:33:30</Created>
+      <LastUpdated>2026-08-21 15:44:19</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что входит в состав капельницы от запоя?]]></question>
+      <answer><![CDATA[Единого состава капельницы для всех пациентов не существует. В зависимости от состояния врач может назначить инфузионные растворы и лекарственные препараты для коррекции выявленных нарушений и облегчения симптомов. При подборе терапии учитываются возраст, продолжительность запоя, хронические заболевания, принимаемые лекарства и противопоказания.]]></answer>
+    </message>
+    <message message_id="49" class_id="237" subdivision_id="29" sub_class_id="87">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:33:30</Created>
+      <LastUpdated>2026-08-21 15:44:33</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Сколько капельниц необходимо для выхода из запоя?]]></question>
+      <answer><![CDATA[Количество процедур определяется индивидуально. Оно зависит от продолжительности употребления алкоголя, выраженности абстинентного синдрома, общего состояния и сопутствующих заболеваний. Одному пациенту может быть достаточно одной процедуры, другому потребуется дальнейшее медицинское наблюдение и продолжение терапии.]]></answer>
+    </message>
+    <message message_id="50" class_id="237" subdivision_id="29" sub_class_id="87">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:33:30</Created>
+      <LastUpdated>2026-08-21 15:44:49</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли поставить капельницу от запоя на дому?]]></question>
+      <answer><![CDATA[Да, в определенных случаях инфузионная терапия может проводиться на дому после осмотра врача. Клиника «МедЭльта» предусматривает выезд специалиста к пациенту. Если состояние тяжелое или домашнее лечение небезопасно, врач может рекомендовать госпитализацию в стационар.]]></answer>
+    </message>
+    <message message_id="51" class_id="237" subdivision_id="29" sub_class_id="87">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:33:30</Created>
+      <LastUpdated>2026-08-21 15:45:02</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Когда при запое необходимо лечение в стационаре?]]></question>
+      <answer><![CDATA[Стационар может потребоваться при тяжелом состоянии пациента, продолжительном запое, серьезных сопутствующих заболеваниях или повышенном риске осложнений. В клинике возможно круглосуточное медицинское наблюдение и своевременная корректировка терапии. На странице услуги «МедЭльта» также предусмотрены как выездная помощь, так и стационарный формат лечения.]]></answer>
+    </message>
+    <message message_id="52" class_id="237" subdivision_id="29" sub_class_id="87">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:33:30</Created>
+      <LastUpdated>2026-08-21 15:45:15</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли самостоятельно подобрать капельницу для выхода из запоя?]]></question>
+      <answer><![CDATA[Нет. Состав инфузионной терапии должен определять врач после осмотра пациента. Самостоятельное внутривенное введение препаратов может быть опасным из-за противопоказаний, несовместимости лекарств и риска осложнений. При выраженных симптомах после прекращения употребления алкоголя необходима медицинская оценка состояния.]]></answer>
+    </message>
+    <message message_id="39" class_id="237" subdivision_id="27" sub_class_id="79">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:55:28</Created>
+      <LastUpdated>2026-08-05 13:00:39</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[В каких случаях рекомендуется вывод из запоя в стационаре?]]></question>
+      <answer><![CDATA[Лечение в стационаре рекомендуется пациентам с длительным запоем, тяжелой алкогольной интоксикацией, выраженным абстинентным синдромом, хроническими заболеваниями, высоким риском осложнений или при отсутствии возможности обеспечить безопасное лечение дома. Решение о госпитализации принимает врач после осмотра пациента.]]></answer>
+    </message>
+    <message message_id="40" class_id="237" subdivision_id="27" sub_class_id="79">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:55:28</Created>
+      <LastUpdated>2026-08-05 13:00:53</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как проходит вывод из запоя в стационаре?]]></question>
+      <answer><![CDATA[После поступления в клинику врач проводит осмотр, оценивает состояние пациента и назначает индивидуальную программу лечения. Она может включать детоксикацию организма, инфузионную терапию, медикаментозную поддержку, контроль жизненно важных показателей и круглосуточное медицинское наблюдение до полной стабилизации состояния.]]></answer>
+    </message>
+    <message message_id="41" class_id="237" subdivision_id="27" sub_class_id="79">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:55:28</Created>
+      <LastUpdated>2026-08-05 13:01:06</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Какие преимущества имеет лечение в стационаре?]]></question>
+      <answer><![CDATA[Главное преимущество стационарного лечения — постоянное наблюдение медицинского персонала. Врачи могут своевременно корректировать терапию, контролировать состояние пациента и быстро реагировать при возникновении осложнений. Это особенно важно при тяжелом течении алкогольной интоксикации.]]></answer>
+    </message>
+    <message message_id="42" class_id="237" subdivision_id="27" sub_class_id="79">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:55:28</Created>
+      <LastUpdated>2026-08-05 13:01:22</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Сколько времени необходимо находиться в стационаре?]]></question>
+      <answer><![CDATA[Продолжительность лечения зависит от состояния пациента, длительности запоя, наличия сопутствующих заболеваний и скорости восстановления организма. В большинстве случаев лечение занимает от одного до нескольких дней, однако при необходимости врач может рекомендовать более длительное пребывание под наблюдением.]]></answer>
+    </message>
+    <message message_id="43" class_id="237" subdivision_id="27" sub_class_id="79">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:55:28</Created>
+      <LastUpdated>2026-08-05 13:01:38</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что входит в программу лечения в стационаре?]]></question>
+      <answer><![CDATA[Программа лечения может включать медицинское обследование, детоксикацию организма, инфузионную терапию, медикаментозное лечение, контроль артериального давления, сердечного ритма и других жизненно важных показателей, а также консультации врача-нарколога и рекомендации по дальнейшему лечению алкогольной зависимости.]]></answer>
+    </message>
+    <message message_id="44" class_id="237" subdivision_id="27" sub_class_id="79">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:55:28</Created>
+      <LastUpdated>2026-08-05 13:01:58</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Лечение в стационаре проводится анонимно?]]></question>
+      <answer><![CDATA[Да. Клиника «МедЭльта» обеспечивает полную конфиденциальность. Информация о пациенте и ходе лечения является врачебной тайной и не передается третьим лицам без законных оснований.]]></answer>
+    </message>
+    <message message_id="45" class_id="237" subdivision_id="27" sub_class_id="79">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:55:28</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что делать после завершения лечения в стационаре?]]></question>
+      <answer><![CDATA[Вывод из запоя устраняет последствия алкогольной интоксикации, но не устраняет причину зависимости. После стабилизации состояния рекомендуется продолжить лечение алкогольной зависимости, пройти консультацию врача-нарколога, при необходимости выполнить кодирование и рассмотреть программу медицинской терапии.]]></answer>
+    </message>
+    <message message_id="32" class_id="237" subdivision_id="40" sub_class_id="71">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:12:00</Created>
+      <LastUpdated>2026-08-04 21:52:13</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[В каких случаях можно провести вывод из запоя на дому?]]></question>
+      <answer><![CDATA[Вывод из запоя на дому возможен, если состояние пациента позволяет проводить лечение вне стационара. После осмотра врач оценивает общее самочувствие, наличие хронических заболеваний, длительность запоя и риск осложнений. При отсутствии противопоказаний лечение проводится в домашних условиях.]]></answer>
+    </message>
+    <message message_id="33" class_id="237" subdivision_id="40" sub_class_id="71">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:12:00</Created>
+      <LastUpdated>2026-08-04 21:52:27</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как проходит вывод из запоя на дому?]]></question>
+      <answer><![CDATA[После приезда врач-нарколог проводит осмотр пациента, измеряет артериальное давление, пульс, уровень насыщения крови кислородом, собирает анамнез и подбирает индивидуальную схему лечения. В зависимости от состояния пациента могут применяться капельницы, медикаментозная терапия и препараты для уменьшения симптомов алкогольной интоксикации.]]></answer>
+    </message>
+    <message message_id="34" class_id="237" subdivision_id="40" sub_class_id="71">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:12:00</Created>
+      <LastUpdated>2026-08-04 21:52:42</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Через какое время приезжает врач?]]></question>
+      <answer><![CDATA[Время прибытия специалиста зависит от удаленности пациента и дорожной ситуации. После оформления заявки клиника направляет ближайшего свободного врача, чтобы медицинская помощь была оказана максимально быстро.]]></answer>
+    </message>
+    <message message_id="35" class_id="237" subdivision_id="40" sub_class_id="71">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:12:00</Created>
+      <LastUpdated>2026-08-04 21:53:00</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли провести процедуру полностью анонимно?]]></question>
+      <answer><![CDATA[Да. Выезд врача и оказание медицинской помощи осуществляются конфиденциально. Персональные данные пациента защищены, а информация о лечении не передается третьим лицам без законных оснований.]]></answer>
+    </message>
+    <message message_id="36" class_id="237" subdivision_id="40" sub_class_id="71">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:12:00</Created>
+      <LastUpdated>2026-08-04 21:53:21</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Сколько времени занимает вывод из запоя на дому?]]></question>
+      <answer><![CDATA[Продолжительность процедуры зависит от состояния пациента, степени алкогольной интоксикации и объема необходимой медицинской помощи. В среднем лечение занимает несколько часов, после чего врач оценивает динамику состояния и дает рекомендации по дальнейшему восстановлению.]]></answer>
+    </message>
+    <message message_id="37" class_id="237" subdivision_id="40" sub_class_id="71">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:12:00</Created>
+      <LastUpdated>2026-08-04 21:53:39</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Когда требуется госпитализация вместо лечения на дому?]]></question>
+      <answer><![CDATA[Если у пациента наблюдаются судороги, потеря сознания, признаки алкогольного делирия («белой горячки»), выраженные нарушения сердечной деятельности, дыхания или другие тяжелые осложнения, врач может рекомендовать немедленную госпитализацию. В таких случаях лечение в стационаре является наиболее безопасным вариантом.]]></answer>
+    </message>
+    <message message_id="38" class_id="237" subdivision_id="40" sub_class_id="71">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:12:00</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что делать после вывода из запоя на дому?]]></question>
+      <answer><![CDATA[Вывод из запоя устраняет последствия алкогольной интоксикации, но не устраняет саму зависимость. Для достижения долгосрочного результата рекомендуется пройти консультацию врача-нарколога, рассмотреть программу лечения алкогольной зависимости, психотерапию и, при необходимости, курс медицинской терапии.]]></answer>
+    </message>
+    <message message_id="25" class_id="237" subdivision_id="17" sub_class_id="50">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:40:15</Created>
+      <LastUpdated>2026-08-04 21:02:46</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Когда необходим вывод из запоя?]]></question>
+      <answer><![CDATA[Обратиться за медицинской помощью рекомендуется, если человек употребляет алкоголь несколько дней подряд, не может самостоятельно прекратить запой, испытывает сильное ухудшение самочувствия, симптомы абстинентного синдрома, скачки давления, нарушения сердечного ритма или выраженную слабость. Своевременное лечение помогает снизить риск серьезных осложнений.]]></answer>
+    </message>
+    <message message_id="26" class_id="237" subdivision_id="17" sub_class_id="50">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:40:22</Created>
+      <LastUpdated>2026-08-04 21:03:00</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли самостоятельно выйти из запоя?]]></question>
+      <answer><![CDATA[При непродолжительном употреблении алкоголя некоторые люди могут справиться самостоятельно, однако при длительном запое это может быть опасно. Резкий отказ от алкоголя способен привести к тяжелому абстинентному синдрому, судорогам, алкогольному делирию и другим осложнениям. Безопаснее проходить лечение под наблюдением врача.]]></answer>
+    </message>
+    <message message_id="27" class_id="237" subdivision_id="17" sub_class_id="50">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:40:31</Created>
+      <LastUpdated>2026-08-04 21:03:17</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Как проходит процедура вывода из запоя?]]></question>
+      <answer><![CDATA[После осмотра врач оценивает состояние пациента, измеряет основные показатели, собирает анамнез и подбирает индивидуальную схему лечения. В зависимости от клинической ситуации могут применяться инфузионная терапия, препараты для уменьшения интоксикации, восстановления водно-электролитного баланса и нормализации работы внутренних органов.]]></answer>
+    </message>
+    <message message_id="28" class_id="237" subdivision_id="17" sub_class_id="50">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:03:31</Created>
+      <LastUpdated>2026-08-04 21:03:31</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Сколько времени занимает вывод из запоя?]]></question>
+      <answer><![CDATA[Продолжительность процедуры зависит от длительности запоя, общего состояния здоровья и степени алкогольной интоксикации. В большинстве случаев улучшение самочувствия наступает уже в первые часы после начала лечения, однако для полного восстановления может потребоваться несколько дней и дальнейшая терапия.]]></answer>
+    </message>
+    <message message_id="29" class_id="237" subdivision_id="17" sub_class_id="50">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:04:02</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Что делать после вывода из запоя?]]></question>
+      <answer><![CDATA[Вывод из запоя устраняет последствия алкогольной интоксикации, но не лечит саму зависимость. Для снижения риска повторных запоев рекомендуется пройти консультацию врача-нарколога, рассмотреть программу лечения алкогольной зависимости, психотерапию и последующее восстановление.]]></answer>
+    </message>
+    <message message_id="30" class_id="237" subdivision_id="17" sub_class_id="50">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:05:25</Created>
+      <LastUpdated>2026-08-04 21:05:25</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Какие существуют противопоказания для вывода из запоя?]]></question>
+      <answer><![CDATA[Тактика лечения определяется врачом после осмотра пациента. При тяжелом состоянии, выраженных нарушениях сердечно-сосудистой системы, потере сознания, судорогах, признаках алкогольного делирия («белой горячки») или других опасных осложнениях может потребоваться срочная госпитализация и лечение в условиях стационара. Именно поэтому перед началом терапии специалист обязательно оценивает состояние пациента и выбирает наиболее безопасный вариант оказания медицинской помощи.]]></answer>
+    </message>
+    <message message_id="31" class_id="237" subdivision_id="17" sub_class_id="50">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:05:38</Created>
+      <LastUpdated>2026-08-04 21:05:38</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Гарантируется ли конфиденциальность лечения?]]></question>
+      <answer><![CDATA[Да. Все обращения в клинику «МедЭльта» являются конфиденциальными. Персональные данные пациентов защищены, а медицинская помощь оказывается с соблюдением требований законодательства и принципов врачебной тайны.]]></answer>
+    </message>
+    <message message_id="18" class_id="237" subdivision_id="24" sub_class_id="31">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:26:06</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что включает в себя лечение наркомании?]]></question>
+      <answer><![CDATA[Лечение наркомании — это комплекс медицинских, психологических и восстановительных мероприятий. В зависимости от состояния пациента программа может включать диагностику, детоксикацию организма, медикаментозную терапию, лечение абстинентного синдрома, психотерапию, терапию и профилактику рецидивов. План лечения разрабатывается индивидуально врачом-наркологом.]]></answer>
+    </message>
+    <message message_id="19" class_id="237" subdivision_id="24" sub_class_id="31">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:26:06</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли полностью избавиться от наркотической зависимости?]]></question>
+      <answer><![CDATA[Наркотическая зависимость является хроническим заболеванием, однако при своевременном обращении за медицинской помощью, прохождении полного курса лечения и терапии возможно достижение длительной ремиссии и возвращение к полноценной жизни без употребления психоактивных веществ.]]></answer>
+    </message>
+    <message message_id="20" class_id="237" subdivision_id="24" sub_class_id="31">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:26:06</Created>
+      <LastUpdated>2026-08-05 14:19:59</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[С чего начинается лечение наркомании?]]></question>
+      <answer><![CDATA[Первым этапом является консультация врача-нарколога. Специалист проводит осмотр, оценивает общее состояние пациента, выясняет историю заболевания, определяет вид употребляемых веществ и составляет индивидуальную программу лечения. При необходимости назначаются дополнительные обследования.]]></answer>
+    </message>
+    <message message_id="21" class_id="237" subdivision_id="24" sub_class_id="31">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:26:06</Created>
+      <LastUpdated>2026-08-05 14:20:16</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Нужно ли проходить детоксикацию перед лечением?]]></question>
+      <answer><![CDATA[Да, во многих случаях детоксикация является обязательным этапом лечения. Она помогает вывести из организма наркотические вещества и продукты их распада, уменьшить симптомы интоксикации, облегчить абстинентный синдром и подготовить пациента к дальнейшей терапии.]]></answer>
+    </message>
+    <message message_id="22" class_id="237" subdivision_id="24" sub_class_id="31">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:26:06</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Какие методы лечения применяются при наркомании?]]></question>
+      <answer><![CDATA[В клинике «МедЭльта» используются современные методы лечения наркотической зависимости: медикаментозная терапия, психотерапия, психологическая поддержка, лечение сопутствующих нарушений, программы медицинской терапии и социальная адаптация. Методика лечения подбирается индивидуально с учетом состояния пациента.]]></answer>
+    </message>
+    <message message_id="23" class_id="237" subdivision_id="24" sub_class_id="31">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:26:06</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Какую роль играет терапия после лечения?]]></question>
+      <answer><![CDATA[Терапия помогает закрепить результаты основного курса лечения, восстановить физическое и психологическое состояние, адаптироваться к жизни без наркотиков и значительно снизить риск повторного употребления. Продолжительность программы определяется индивидуально в зависимости от потребностей пациента.]]></answer>
+    </message>
+    <message message_id="24" class_id="237" subdivision_id="24" sub_class_id="31">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:26:06</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что делать после завершения лечения наркомании?]]></question>
+      <answer><![CDATA[После окончания основного курса важно продолжать наблюдение у врача, соблюдать рекомендации специалистов, посещать контрольные консультации и при необходимости участвовать в восстановительных программах. Комплексное сопровождение после лечения способствует сохранению длительной ремиссии и снижает вероятность рецидива заболевания.]]></answer>
+    </message>
+    <message message_id="11" class_id="237" subdivision_id="37" sub_class_id="21">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 12:31:40</Created>
+      <LastUpdated>2026-08-21 14:21:44</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли принудительно лечить человека от алкоголизма без его согласия?]]></question>
+      <answer><![CDATA[Обычное лечение алкогольной зависимости проводится с согласия пациента. Госпитализация или медицинское вмешательство без согласия возможны только при предусмотренных законом основаниях, например при тяжелом психическом расстройстве, непосредственной опасности для себя или окружающих, беспомощном состоянии либо других экстренных медицинских показаниях. В остальных случаях специалисты помогают родственникам мотивировать человека добровольно начать лечение.]]></answer>
+    </message>
+    <message message_id="12" class_id="237" subdivision_id="37" sub_class_id="21">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 12:31:40</Created>
+      <LastUpdated>2026-08-21 14:21:56</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что делать, если человек с алкоголизмом категорически отказывается лечиться?]]></question>
+      <answer><![CDATA[Если зависимый не признает проблему и отказывается обращаться к врачу, родственники могут сначала проконсультироваться со специалистом самостоятельно. Врач оценит ситуацию и подскажет безопасную тактику общения. Одним из вариантов может быть мотивационная интервенция — беседа со специалистом, цель которой помочь человеку осознать последствия зависимости и добровольно согласиться на лечение.]]></answer>
+    </message>
+    <message message_id="13" class_id="237" subdivision_id="37" sub_class_id="21">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 12:31:40</Created>
+      <LastUpdated>2026-08-21 14:22:10</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[В каких случаях возможна госпитализация без согласия пациента?]]></question>
+      <answer><![CDATA[Недобровольная госпитализация допускается не просто из-за наличия алкогольной зависимости, а при наличии установленных законом медицинских оснований. К ним могут относиться непосредственная опасность человека для себя или окружающих, выраженная беспомощность или тяжелое психическое состояние, при котором отсутствие медицинской помощи способно причинить существенный вред здоровью. Решение принимается медицинскими специалистами в установленном законом порядке.]]></answer>
+    </message>
+    <message message_id="14" class_id="237" subdivision_id="37" sub_class_id="21">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 12:31:40</Created>
+      <LastUpdated>2026-08-21 14:22:27</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что такое интервенция при алкоголизме?]]></question>
+      <answer><![CDATA[Интервенция — это профессиональная мотивационная беседа с человеком, который отказывается признавать зависимость или необходимость лечения. Специалист без угроз и принуждения помогает пациенту увидеть последствия употребления алкоголя, обсудить возможные варианты помощи и сформировать мотивацию к лечению. Задача интервенции — добиться осознанного и добровольного обращения за медицинской помощью.]]></answer>
+    </message>
+    <message message_id="15" class_id="237" subdivision_id="37" sub_class_id="21">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 12:31:40</Created>
+      <LastUpdated>2026-08-21 14:22:45</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли вызвать нарколога на дом, если больной отказывается ехать в клинику?]]></question>
+      <answer><![CDATA[Да, родственники могут обратиться за консультацией и уточнить возможность выезда специалиста. Врач на месте оценивает состояние человека, наличие медицинских рисков и необходимость дальнейшей помощи. Сам по себе вызов нарколога не означает, что пациента можно принудительно увезти в стационар: при отсутствии законных оснований решение о лечении принимает сам пациент.]]></answer>
+    </message>
+    <message message_id="16" class_id="237" subdivision_id="37" sub_class_id="21">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 12:31:40</Created>
+      <LastUpdated>2026-08-21 14:23:02</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли тайно давать лекарства от алкоголизма без ведома человека?]]></question>
+      <answer><![CDATA[Нет. Давать препараты от алкогольной зависимости тайно, добавлять их в пищу или напитки без назначения врача опасно. Некоторые лекарственные средства могут взаимодействовать с алкоголем и вызывать тяжелые осложнения. Безопасная терапия подбирается врачом после оценки состояния пациента, противопоказаний и возможных рисков.]]></answer>
+    </message>
+    <message message_id="17" class_id="237" subdivision_id="37" sub_class_id="21">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 12:31:40</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.186.22</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Сколько длится лечение алкогольной зависимости после госпитализации?]]></question>
+      <answer><![CDATA[Продолжительность зависит от состояния пациента, длительности употребления алкоголя, наличия сопутствующих заболеваний и выбранной программы. В некоторых случаях сначала требуется детоксикация и стабилизация состояния, после чего проводится основной этап лечения, психотерапия и восстановление. Точные сроки врач определяет индивидуально после обследования.]]></answer>
+    </message>
+    <message message_id="4" class_id="237" subdivision_id="20" sub_class_id="17">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:51:40</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Что включает в себя лечение алкоголизма?]]></question>
+      <answer><![CDATA[Лечение алкоголизма представляет собой комплекс медицинских и психотерапевтических мероприятий. В зависимости от состояния пациента программа может включать диагностику, детоксикацию организма, медикаментозную терапию, психотерапию, кодирование, терапию и профилактику повторных срывов. План лечения составляется индивидуально после консультации врача.]]></answer>
+    </message>
+    <message message_id="5" class_id="237" subdivision_id="20" sub_class_id="17">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:51:40</Created>
+      <LastUpdated>2026-08-05 13:20:31</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Можно ли полностью избавиться от алкогольной зависимости?]]></question>
+      <answer><![CDATA[Алкогольная зависимость является хроническим заболеванием, однако при своевременном обращении за медицинской помощью и соблюдении рекомендаций специалистов возможно достижение длительной и устойчивой ремиссии. Комплексный подход значительно повышает вероятность сохранения трезвого образа жизни.]]></answer>
+    </message>
+    <message message_id="6" class_id="237" subdivision_id="20" sub_class_id="17">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:51:40</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <question><![CDATA[Сколько времени занимает лечение алкоголизма?]]></question>
+      <answer><![CDATA[Продолжительность лечения зависит от стадии заболевания, общего состояния здоровья, стажа употребления алкоголя и выбранной программы терапии. Детоксикация может занимать несколько дней, тогда как полноценное лечение и терапия продолжаются от нескольких недель до нескольких месяцев.]]></answer>
+    </message>
+    <message message_id="7" class_id="237" subdivision_id="20" sub_class_id="17">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:20:59</Created>
+      <LastUpdated>2026-08-05 13:20:59</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Нужно ли проходить детоксикацию перед началом лечения?]]></question>
+      <answer><![CDATA[Если пациент длительное время употреблял алкоголь или находится в состоянии запоя, врач может рекомендовать проведение детоксикации. Она помогает устранить алкогольную интоксикацию, стабилизировать состояние организма и подготовить пациента к дальнейшему лечению зависимости.]]></answer>
+    </message>
+    <message message_id="8" class_id="237" subdivision_id="20" sub_class_id="17">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:21:12</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Какие методы лечения алкоголизма применяются?]]></question>
+      <answer><![CDATA[В клинике «МедЭльта» используются современные методы лечения алкогольной зависимости: медикаментозная терапия, психотерапия, кодирование, восстановительное лечение, психологическая поддержка и программы терапии. Методика подбирается индивидуально после обследования пациента.]]></answer>
+    </message>
+    <message message_id="9" class_id="237" subdivision_id="20" sub_class_id="17">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:21:24</Created>
+      <LastUpdated>2026-08-05 13:21:24</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Лечение проводится анонимно?]]></question>
+      <answer><![CDATA[Да. Все обращения в клинику являются конфиденциальными. Персональные данные пациентов и информация о лечении защищены в соответствии с законодательством и принципами врачебной тайны.]]></answer>
+    </message>
+    <message message_id="10" class_id="237" subdivision_id="20" sub_class_id="17">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:21:44</Created>
+      <LastUpdated>2026-10-18 01:04:47</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Что делать после завершения курса лечения?]]></question>
+      <answer><![CDATA[После окончания основного курса лечения важно соблюдать рекомендации врача, посещать контрольные консультации, при необходимости продолжать психотерапию и участвовать в восстановительных программах. Такой подход помогает закрепить достигнутый результат, снизить риск рецидива и сохранить длительную ремиссию.]]></answer>
+    </message>
+    <message message_id="1" class_id="237" subdivision_id="19" sub_class_id="9">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:44:20</Created>
+      <LastUpdated>2026-08-01 17:44:20</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Как проходит первичная консультация?]]></question>
+      <answer><![CDATA[Первичная консультация — беседа с психологом или наркологом. <br/>
+						Обсуждаем ситуацию, составляем план. Консультация бесплатная и анонимная, длится 30–60 минут.]]></answer>
+    </message>
+    <message message_id="2" class_id="237" subdivision_id="19" sub_class_id="9">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:44:20</Created>
+      <LastUpdated>2026-08-01 17:44:20</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Гарантируется ли полная анонимность лечения?]]></question>
+      <answer><![CDATA[Первичная консультация — беседа с психологом или наркологом. <br/>
+						Обсуждаем ситуацию, составляем план. Консультация бесплатная и анонимная, длится 30–60 минут.]]></answer>
+    </message>
+    <message message_id="3" class_id="237" subdivision_id="19" sub_class_id="9">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:44:20</Created>
+      <LastUpdated>2026-08-01 17:44:20</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <question><![CDATA[Можно ли привезти человека без его согласия?]]></question>
+      <answer><![CDATA[Первичная консультация — беседа с психологом или наркологом. <br/>
+						Обсуждаем ситуацию, составляем план. Консультация бесплатная и анонимная, длится 30–60 минут.]]></answer>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

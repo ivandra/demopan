@@ -1,0 +1,273 @@
+<?= $f_AdminButtons; ?>
+
+	<div class="doctor">
+		<div class="wrap">
+			<div class="flex">
+				<div class="doctor__info">
+					<div class="breadcrumbs">
+						<?=shortcode_component(nc_browse_path_range(-1, $sub_level_count-1, $breadcrumbs_template,0,2))?>
+					</div>
+					<h1 class="doctor__name"><?=$f_fio?></h1>
+					<div class="doctor__prof">
+						<?=$f_position?>
+					</div>
+					<? if($f_bio){?>
+					<div class="doctor__history">
+						<?=shortcode_component($f_bio)?>
+					</div>
+					<?}?>
+				</div>
+				<div class="doctor__photo">
+					<img src="<?=$f_img?>">
+				</div>
+			</div>
+			<button data-fancybox="popup-<?=rand(0,999999)?>" data-src="#popup" class="doctor__button">записаться к <?=$f_fio_short?></button>
+		</div>
+	</div>
+	<?
+		/* =================================================================
+		   РАСПИСАНИЕ
+		   Пример заполнения :
+
+			   ПН: 10:00, 11:00, (12:00), 13:00, 14:00
+			   ВТ: 10:00, 11:00, 12:00
+			   СР: выходной
+			   ЧТ: 09:00, (11:00), 14:30
+
+		   ================================================================= */
+
+		$sch_days_to_show = 6;
+
+		$sch_names = array(1=>'ПН', 2=>'ВТ', 3=>'СР', 4=>'ЧТ', 5=>'ПТ', 6=>'СБ', 7=>'ВС');
+		$sch_alias = array(
+			'ПН'=>1, 'ПОНЕДЕЛЬНИК'=>1, 'ВТ'=>2, 'ВТОРНИК'=>2,
+			'СР'=>3, 'СРЕДА'=>3,       'ЧТ'=>4, 'ЧЕТВЕРГ'=>4,
+			'ПТ'=>5, 'ПЯТНИЦА'=>5,     'СБ'=>6, 'СУББОТА'=>6,
+			'ВС'=>7, 'ВОСКРЕСЕНЬЕ'=>7,
+		);
+
+		/* --- 1. Разбираем поле: собираем сырые строки времени --- */
+		$sch_week  = array();   /* [1..7]    => "10:00, (12:00)" */
+		$sch_dates = array();   /* Y-m-d     => "10:00, (12:00)" */
+
+		if ($f_shedule) {
+			$sch_raw = strip_tags(str_replace(array('<br>','<br/>','<br />','</p>'), "\n", shortcode_component($f_shedule)));
+			$sch_raw = str_replace("\xC2\xA0", ' ', html_entity_decode($sch_raw, ENT_QUOTES, 'UTF-8'));
+
+			foreach (preg_split('/\r\n|\n|\r/', $sch_raw) as $sch_line) {
+				$sch_line = trim($sch_line);
+				if ($sch_line === '') continue;
+
+				/* конкретная дата: 15.08 или 15.08.2026 */
+				if (preg_match('/^(\d{1,2})\.(\d{1,2})(?:\.(\d{4}))?\s*[:\-]?\s*(.*)$/u', $sch_line, $sch_m)) {
+					$sch_year = $sch_m[3] ? (int)$sch_m[3] : (int)date('Y');
+					$sch_dates[sprintf('%04d-%02d-%02d', $sch_year, $sch_m[2], $sch_m[1])] = $sch_m[4];
+					continue;
+				}
+
+				/* день недели: ПН / Пн / Понедельник */
+				if (preg_match('/^([А-Яа-яЁё]+)\s*[:\-]?\s*(.*)$/u', $sch_line, $sch_m)) {
+					$sch_code = mb_strtoupper($sch_m[1], 'UTF-8');
+					if (isset($sch_alias[$sch_code])) {
+						$sch_week[$sch_alias[$sch_code]] = $sch_m[2];
+					}
+				}
+			}
+		}
+
+		/* --- 2. Раскладываем на ближайшие рабочие дни --- */
+		$sch_items = array();
+
+		for ($sch_i = 0; $sch_i < 30 && count($sch_items) < $sch_days_to_show; $sch_i++) {
+			$sch_ts  = strtotime("+$sch_i day");
+			$sch_dow = (int)date('N', $sch_ts);
+			$sch_key = date('Y-m-d', $sch_ts);
+
+			/* приоритет: конкретная дата → шаблон недели */
+			if (array_key_exists($sch_key, $sch_dates)) {
+				$sch_src = $sch_dates[$sch_key];
+			} elseif (isset($sch_week[$sch_dow])) {
+				$sch_src = $sch_week[$sch_dow];
+			} else {
+				continue;
+			}
+
+			/* разбираем слоты: "(12:00)" = занято, "12:00" = свободно */
+			$sch_times = '';
+			foreach (preg_split('/[,;]+/u', $sch_src) as $sch_slot) {
+				$sch_slot = trim($sch_slot);
+				if ($sch_slot === '') continue;
+
+				$sch_free = (mb_strpos($sch_slot, '(', 0, 'UTF-8') === false);
+				$sch_time = trim($sch_slot, "()[] \t");
+
+				if (!preg_match('/^(\d{1,2})[:.](\d{2})$/', $sch_time, $sch_t)) continue;
+
+				$sch_times .= '<li' . ($sch_free ? ' class="free"' : '') . '>'
+							. sprintf('%02d:%02d', $sch_t[1], $sch_t[2]) . '</li>';
+			}
+
+			if ($sch_times === '') continue;   /* выходной — день не показываем */
+
+			$sch_items[] = '
+							<div class="schedule__item">
+								<div class="schedule__date">
+									' . $sch_names[$sch_dow] . ' <br/>
+									' . date('j', $sch_ts) . '
+								</div>
+								<ul class="schedule__times">' . $sch_times . '</ul>
+							</div>';
+		}
+	?>
+	<?if($sch_items){?>
+		<div class="schedule">
+			<div class="wrap">
+				<h2 class="schedule__name"><?=$f_maintitle ? shortcode_component($f_maintitle) : 'Расписание приемов'?></h2>
+
+				<div class="schedule__list2">
+					<?foreach($sch_items as $sch_item){?><?=$sch_item?><?}?>
+				</div>
+
+				<div class="schedule__list swiper4">
+					<div class="swiper-wrapper">
+						<?foreach($sch_items as $sch_item){?>
+						<div class="swiper-slide">
+							<?=$sch_item?>
+						</div>
+						<?}?>
+					</div>
+				</div>
+
+				<div class="schedule__bottom-blocks">
+					<div class="schedule__bottom-block">
+						<span class="free"></span> Свободно
+					</div>
+					<div class="schedule__bottom-block">
+						<span></span> Занято
+					</div>
+				</div>
+				<div class="schedule__banner">
+					<h3>Не нашли удобное время?</h3>
+					Позвоните нам и мы подберём удобное для вас время записи
+					<button data-fancybox="popup-<?=rand(0,999999)?>" data-src="#popup">Перезвоните мне</button>
+				</div>
+			</div>
+		</div>
+	<?}?>
+
+
+	<?
+		/* =================================================================
+		   ДОКУМЕНТЫ И СЕРТИФИКАТЫ  (nc_multifield)
+		   ================================================================= */
+
+		$doc_items   = array();
+		$doc_records = array();
+
+		if (isset($f_diploms) && is_object($f_diploms)) {
+
+			/* 1) пробуем публичные методы получения записей */
+			foreach (array('get_records', 'getRecords', 'get_files', 'records') as $doc_m) {
+				if (method_exists($f_diploms, $doc_m)) {
+					$doc_records = $f_diploms->$doc_m();
+					break;
+				}
+			}
+
+			/* 2) records — приватное свойство: достаём через Reflection */
+			if (!$doc_records) {
+				try {
+					$doc_ref = new ReflectionObject($f_diploms);
+					if ($doc_ref->hasProperty('records')) {
+						$doc_prop = $doc_ref->getProperty('records');
+						$doc_prop->setAccessible(true);
+						$doc_val = $doc_prop->getValue($f_diploms);
+						if (is_array($doc_val)) $doc_records = $doc_val;
+					}
+				} catch (Exception $e) {}
+			}
+		}
+
+		/* 3) из каждого файла достаём path (и preview) */
+		foreach ((array)$doc_records as $doc_file) {
+			$doc_path = $doc_prev = '';
+
+			if (is_object($doc_file)) {
+				/* геттеры, если есть */
+				foreach (array('get_path','getPath','get_url','getUrl') as $doc_g) {
+					if (method_exists($doc_file, $doc_g)) { $doc_path = (string)$doc_file->$doc_g(); if ($doc_path !== '') break; }
+				}
+				foreach (array('get_preview','getPreview') as $doc_g) {
+					if (method_exists($doc_file, $doc_g)) { $doc_prev = (string)$doc_file->$doc_g(); if ($doc_prev !== '') break; }
+				}
+
+				/* магическое свойство: $doc_file->path */
+				if ($doc_path === '' && isset($doc_file->path))    $doc_path = (string)$doc_file->path;
+				if ($doc_prev === '' && isset($doc_file->preview)) $doc_prev = (string)$doc_file->preview;
+
+				/* защищённый properties['path'] — как в дампе */
+				if ($doc_path === '') {
+					try {
+						$doc_fref = new ReflectionObject($doc_file);
+						if ($doc_fref->hasProperty('properties')) {
+							$doc_pp = $doc_fref->getProperty('properties');
+							$doc_pp->setAccessible(true);
+							$doc_props = (array)$doc_pp->getValue($doc_file);
+							if (!empty($doc_props['path']))    $doc_path = (string)$doc_props['path'];
+							if (empty($doc_prev) && !empty($doc_props['preview'])) $doc_prev = (string)$doc_props['preview'];
+						}
+					} catch (Exception $e) {}
+				}
+			} elseif (is_array($doc_file)) {
+				if (!empty($doc_file['path']))    $doc_path = (string)$doc_file['path'];
+				if (!empty($doc_file['preview'])) $doc_prev = (string)$doc_file['preview'];
+			}
+
+			if ($doc_path === '') continue;
+			if ($doc_prev === '') $doc_prev = $doc_path;   /* превью нет → сам файл */
+
+			$doc_items[] = array($doc_path, $doc_prev);
+		}
+	?>
+	<?if($doc_items){?>
+		<div class="docs">
+			<div class="wrap">
+				<h2 class="docs__name">Документы и сертификаты</h2>
+				<div class="docs__list">
+					<?foreach($doc_items as $doc_item){?>
+					<div class="docs__item">
+						<a href="<?=htmlspecialchars($doc_item[0], ENT_QUOTES, 'UTF-8')?>" data-fancybox="docs">
+							<img src="<?=htmlspecialchars($doc_item[1], ENT_QUOTES, 'UTF-8')?>" alt="Документы и сертификаты — <?=htmlspecialchars($f_fio, ENT_QUOTES, 'UTF-8')?>">
+						</a>
+					</div>
+					<?}?>
+				</div>
+			</div>
+		</div>
+	<?}?>
+
+<?
+		/* Есть ли статьи у этого врача */
+		$art_count = (int)$nc_core->db->get_var(
+			"SELECT COUNT(*) FROM Message93
+			 WHERE Sub_Class_ID = 116
+			   AND docID = " . (int)$f_RowID . "
+			   AND Checked = 1"
+		);
+	?>
+	<?if($art_count){?>
+		<div class="article">
+			<div class="wrap">
+				<div class="article__articles">
+					<h2 class="docs__name">Статьи <?=$f_fio_short?></h2>
+					<div class="article__articles-list">
+						<?php echo nc_objects_list(6, 116, "nc_ctpl=251&idObj=" . (int)$f_RowID); ?>
+					</div>
+				</div>
+				<a href="/blog/" class="article__bottom-link">Читать все статьи</a>
+			</div>
+		</div>
+	<?}?>
+	
+	<?php print_physician_schema($f_fio, $f_position, (string)$f_img_url, $f_bio); ?>
+<?php print_breadcrumbs_schema_from_html(nc_browse_path_range(-1, $sub_level_count-1, $breadcrumbs_template, 0, 2)); ?>

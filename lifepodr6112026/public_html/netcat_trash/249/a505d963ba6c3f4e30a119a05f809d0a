@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="5" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>О нас</Subdivision_Name>
+      <EnglishName>life-old-5</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="202" subdivision_id="5" class_id="249">
+      <Sub_Class_Name>Текст интро о нас</Sub_Class_Name>
+      <EnglishName>tekst-intro-o-nas</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="436" type_of_data_id="3">
+      <Field_Name>maintitle</Field_Name>
+      <Description>Заголовок</Description>
+    </field>
+    <field field_id="435" type_of_data_id="3">
+      <Field_Name>text</Field_Name>
+      <Description>Текст основной</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="1" class_id="249" subdivision_id="5" sub_class_id="202">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-14 00:44:22</Created>
+      <LastUpdated>2026-10-14 00:44:22</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Профессиональная помощь в&nbsp;лечении зависимостей]]></maintitle>
+      <text><![CDATA[<p>Наркологическая клиника «МедЭльта» в [inCity] специализируется на оказании помощи людям с алкогольной и наркотической зависимостью. Работа клиники строится на комплексном подходе: специалисты оценивают не только текущее самочувствие пациента, но и причины развития заболевания, сопутствующие нарушения, психологическое состояние и факторы, которые могут повышать риск повторного употребления.</p>
+    <p>Зависимость затрагивает физическое и психоэмоциональное состояние человека, влияет на отношения с близкими, профессиональную деятельность и привычный образ жизни. Поэтому лечение не должно ограничиваться устранением отдельных симптомов. Задача специалистов — определить индивидуальную клиническую ситуацию и подобрать последовательную программу медицинской и психологической помощи.</p>
+    <p>В клинике можно получить консультацию, пройти диагностику и лечение, получить помощь при острых состояниях, связанных с употреблением алкоголя или психоактивных веществ. При выборе терапии учитываются состояние здоровья, длительность заболевания, предыдущий опыт лечения и другие индивидуальные особенности пациента.</p>]]></text>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

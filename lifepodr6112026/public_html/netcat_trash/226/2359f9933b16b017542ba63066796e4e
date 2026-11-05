@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="4" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Контакты</Subdivision_Name>
+      <EnglishName>life-old-4</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="23" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Отзывы</Subdivision_Name>
+      <EnglishName>life-old-23</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="1" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Статьи</Subdivision_Name>
+      <EnglishName>life-old-1</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="26" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лицензии</Subdivision_Name>
+      <EnglishName>life-old-26</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="22" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Фото</Subdivision_Name>
+      <EnglishName>life-old-22</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="13" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Цены</Subdivision_Name>
+      <EnglishName>life-old-13</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="25" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вопросы и ответы</Subdivision_Name>
+      <EnglishName>life-old-25</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="21" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Специалисты</Subdivision_Name>
+      <EnglishName>life-old-21</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="14" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Услуги</Subdivision_Name>
+      <EnglishName>life-old-14</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="2" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кейсы</Subdivision_Name>
+      <EnglishName>life-old-2</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="157" subdivision_id="4" class_id="226">
+      <Sub_Class_Name>Заголовок. Обычные страницы</Sub_Class_Name>
+      <EnglishName>zagolovok-obychnye-stranitsy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="151" subdivision_id="23" class_id="226">
+      <Sub_Class_Name>Заголовок. Обычные страницы</Sub_Class_Name>
+      <EnglishName>zagolovok-obychnye-stranitsy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="132" subdivision_id="1" class_id="226">
+      <Sub_Class_Name>Заголовок. Обычные страницы</Sub_Class_Name>
+      <EnglishName>zagolovok-obychnye-stranitsy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="130" subdivision_id="26" class_id="226">
+      <Sub_Class_Name>Заголовок. Обычные страницы</Sub_Class_Name>
+      <EnglishName>zagolovok-obychnye-stranitsy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="114" subdivision_id="22" class_id="226">
+      <Sub_Class_Name>Заголовок. Обычные страницы</Sub_Class_Name>
+      <EnglishName>zagolovok-obychnye-stranitsy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="113" subdivision_id="13" class_id="226">
+      <Sub_Class_Name>Заголовок. Обычные страницы</Sub_Class_Name>
+      <EnglishName>zagolovok-obychnye-stranitsy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="110" subdivision_id="25" class_id="226">
+      <Sub_Class_Name>Заголовок. Обычные страницы</Sub_Class_Name>
+      <EnglishName>zagolovok-obychnye-stranitsy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="103" subdivision_id="21" class_id="226">
+      <Sub_Class_Name>Заголовок. Обычные страницы</Sub_Class_Name>
+      <EnglishName>zagolovok-obychnye-stranitsy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="62" subdivision_id="14" class_id="226">
+      <Sub_Class_Name>Заголовок. Обычные страницы</Sub_Class_Name>
+      <EnglishName>zagolovok-obychnye-stranitsy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="60" subdivision_id="2" class_id="226">
+      <Sub_Class_Name>Заголовок страницы</Sub_Class_Name>
+      <EnglishName>zagolovok-stranitsy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="364" type_of_data_id="5">
+      <Field_Name>h1</Field_Name>
+      <Description>Сделать H1</Description>
+    </field>
+    <field field_id="365" type_of_data_id="1">
+      <Field_Name>maintitle</Field_Name>
+      <Description>Заголовок</Description>
+    </field>
+    <field field_id="418" type_of_data_id="3">
+      <Field_Name>subtitle</Field_Name>
+      <Description>подзаголовок</Description>
+    </field>
+    <field field_id="400" type_of_data_id="5">
+      <Field_Name>hide</Field_Name>
+      <Description>Скрыть крошки</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="10" class_id="226" subdivision_id="4" sub_class_id="157">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-02 20:20:58</Created>
+      <LastUpdated>2026-08-02 20:20:58</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <h1>1</h1>
+      <maintitle><![CDATA[Контактная информация]]></maintitle>
+      <subtitle><![CDATA[]]></subtitle>
+      <hide/>
+    </message>
+    <message message_id="9" class_id="226" subdivision_id="23" sub_class_id="151">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>77.246.110.113</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 13:57:46</Created>
+      <LastUpdated>2026-08-07 13:57:46</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <h1>1</h1>
+      <maintitle><![CDATA[Отзывы]]></maintitle>
+      <subtitle><![CDATA[]]></subtitle>
+      <hide/>
+    </message>
+    <message message_id="8" class_id="226" subdivision_id="1" sub_class_id="132">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-02 14:35:56</Created>
+      <LastUpdated>2026-08-07 11:39:06</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.53</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <h1>1</h1>
+      <maintitle><![CDATA[Блог клиники «МедЭльта»]]></maintitle>
+      <subtitle><![CDATA[В нашем блоге опытные психологи и психотерапевты делятся профессиональными знаниями, практическими рекомендациями и результатами исследований. Здесь вы найдете полезную информацию о психическом здоровье, методах лечения и профилактике различных расстройств.]]></subtitle>
+      <hide/>
+    </message>
+    <message message_id="7" class_id="226" subdivision_id="26" sub_class_id="130">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-02 21:16:22</Created>
+      <LastUpdated>2026-08-07 11:36:52</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.53</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <h1>1</h1>
+      <maintitle><![CDATA[Лицензии и документы клиники]]></maintitle>
+      <subtitle><![CDATA[]]></subtitle>
+      <hide/>
+    </message>
+    <message message_id="6" class_id="226" subdivision_id="22" sub_class_id="114">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 00:19:22</Created>
+      <LastUpdated>2026-08-07 11:25:38</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.53</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <h1>1</h1>
+      <maintitle><![CDATA[Фото клиники]]></maintitle>
+      <subtitle><![CDATA[]]></subtitle>
+      <hide/>
+    </message>
+    <message message_id="5" class_id="226" subdivision_id="13" sub_class_id="113">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>77.246.110.113</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 23:43:55</Created>
+      <LastUpdated>2026-08-04 23:43:55</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <h1>1</h1>
+      <maintitle><![CDATA[Цены]]></maintitle>
+      <subtitle><![CDATA[]]></subtitle>
+      <hide/>
+    </message>
+    <message message_id="4" class_id="226" subdivision_id="25" sub_class_id="110">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-02 21:06:54</Created>
+      <LastUpdated>2026-08-02 21:06:54</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <h1>1</h1>
+      <maintitle><![CDATA[Вопросы и ответы]]></maintitle>
+      <subtitle><![CDATA[]]></subtitle>
+      <hide/>
+    </message>
+    <message message_id="3" class_id="226" subdivision_id="21" sub_class_id="103">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 18:15:15</Created>
+      <LastUpdated>2026-08-07 11:22:18</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.53</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <h1>1</h1>
+      <maintitle><![CDATA[Специалисты наркологической клиники в [inCity]]]></maintitle>
+      <subtitle><![CDATA[Вы сами выбираете специалиста к которому хотите обратиться.]]></subtitle>
+      <hide/>
+    </message>
+    <message message_id="2" class_id="226" subdivision_id="14" sub_class_id="62">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 16:39:43</Created>
+      <LastUpdated>2026-08-03 16:39:43</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <h1>1</h1>
+      <maintitle><![CDATA[Услуги]]></maintitle>
+      <subtitle><![CDATA[]]></subtitle>
+      <hide/>
+    </message>
+    <message message_id="1" class_id="226" subdivision_id="2" sub_class_id="60">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 01:22:58</Created>
+      <LastUpdated>2026-08-03 01:22:58</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <h1>1</h1>
+      <maintitle><![CDATA[Кейсы]]></maintitle>
+      <subtitle><![CDATA[]]></subtitle>
+      <hide/>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

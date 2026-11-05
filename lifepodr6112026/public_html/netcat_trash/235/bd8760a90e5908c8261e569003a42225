@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="23" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Отзывы</Subdivision_Name>
+      <EnglishName>life-old-23</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="56" subdivision_id="23" class_id="235">
+      <Sub_Class_Name>Отзывы ручное добавление</Sub_Class_Name>
+      <EnglishName>otzyvy-ruchnoe-dobavlenie</EnglishName>
+      <Checked>0</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="402" type_of_data_id="1">
+      <Field_Name>name</Field_Name>
+      <Description>Имя</Description>
+    </field>
+    <field field_id="380" type_of_data_id="3">
+      <Field_Name>text</Field_Name>
+      <Description>Текст отзыва</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="1" class_id="235" subdivision_id="23" sub_class_id="56">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>77.246.110.113</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 13:56:12</Created>
+      <LastUpdated>2026-08-07 14:37:50</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.53</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <name><![CDATA[Андрей]]></name>
+      <text><![CDATA[Обращался в «МедЭльта» за помощью после длительного запоя. Переживал, что будут читать нотации, но ничего подобного не было. Врач спокойно поговорил со мной, провел осмотр и объяснил, что будем делать. Спасибо за нормальное человеческое отношение.]]></text>
+    </message>
+    <message message_id="2" class_id="235" subdivision_id="23" sub_class_id="56">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>77.246.110.113</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 13:56:29</Created>
+      <LastUpdated>2026-08-07 14:38:02</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.53</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <name><![CDATA[Елена]]></name>
+      <text><![CDATA[Вызывали нарколога для мужа на дом. Врач приехал, внимательно его осмотрел, уточнил хронические заболевания и только потом приступил к процедурам. После оказания помощи рассказал, за чем нужно следить в ближайшее время и когда обращаться повторно. Остались благодарны.]]></text>
+    </message>
+    <message message_id="3" class_id="235" subdivision_id="23" sub_class_id="56">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>77.246.110.113</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 13:56:39</Created>
+      <LastUpdated>2026-08-07 14:38:17</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.53</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <name><![CDATA[Максим]]></name>
+      <text><![CDATA[Долго откладывал обращение к наркологу, потому что был уверен, что справлюсь самостоятельно. В итоге пришел после очередного срыва. Понравилось, что со мной разговаривали открыто и без давления. Сейчас продолжаю лечение и понимаю, что обратиться стоило намного раньше.]]></text>
+    </message>
+    <message message_id="4" class_id="235" subdivision_id="23" sub_class_id="56">
+      <User_ID>1</User_ID>
+      <Priority>4</Priority>
+      <Checked>1</Checked>
+      <IP>77.246.110.113</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 13:57:12</Created>
+      <LastUpdated>2026-08-07 14:38:32</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.53</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <name><![CDATA[Светлана]]></name>
+      <text><![CDATA[Спасибо психологу клиники за консультацию. Я пришла из-за проблемы сына и совершенно не понимала, как с ним разговаривать и чем действительно можно помочь. Мне многое объяснили и подсказали, как действовать дальше. Для нашей семьи эта встреча оказалась очень полезной.]]></text>
+    </message>
+    <message message_id="5" class_id="235" subdivision_id="23" sub_class_id="56">
+      <User_ID>1</User_ID>
+      <Priority>5</Priority>
+      <Checked>1</Checked>
+      <IP>77.246.110.113</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 13:57:28</Created>
+      <LastUpdated>2026-08-07 14:38:48</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.53</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <name><![CDATA[Виктор]]></name>
+      <text><![CDATA[Проходил лечение в стационаре. Первые дни были непростыми, поэтому особенно благодарен медсестрам за внимание и терпение. Врачи регулярно контролировали мое состояние. Условия хорошие, отношение уважительное, никаких лишних вопросов.]]></text>
+    </message>
+    <message message_id="6" class_id="235" subdivision_id="23" sub_class_id="56">
+      <User_ID>1</User_ID>
+      <Priority>6</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.53</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 14:39:00</Created>
+      <LastUpdated>2026-08-07 14:39:00</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Анна]]></name>
+      <text><![CDATA[Обратились ночью, когда состояние близкого человека резко ухудшилось после нескольких дней употребления алкоголя. Очень волновались. Нам объяснили порядок действий и организовали медицинскую помощь. Спасибо сотрудникам за спокойствие и профессиональное отношение в такой сложной ситуации.]]></text>
+    </message>
+    <message message_id="7" class_id="235" subdivision_id="23" sub_class_id="56">
+      <User_ID>1</User_ID>
+      <Priority>7</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.53</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 14:39:14</Created>
+      <LastUpdated>2026-08-07 14:39:14</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Игорь]]></name>
+      <text><![CDATA[Пришел в клинику на консультацию по поводу кодирования. Думал, что можно просто пройти процедуру и на этом закончить. Врач объяснил, почему сначала важно разобраться в моей ситуации и что одного кодирования может быть недостаточно. Понравился именно такой серьезный подход.]]></text>
+    </message>
+    <message message_id="8" class_id="235" subdivision_id="23" sub_class_id="56">
+      <User_ID>1</User_ID>
+      <Priority>8</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.53</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 14:39:24</Created>
+      <LastUpdated>2026-08-07 14:39:24</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Наталья]]></name>
+      <text><![CDATA[Хочу поблагодарить сотрудников «МедЭльта» за деликатность. Для нашей семьи было принципиально важно, чтобы обращение оставалось конфиденциальным. Все прошло спокойно, корректно и без осуждения. Получили помощь и понятные рекомендации на будущее.]]></text>
+    </message>
+    <message message_id="9" class_id="235" subdivision_id="23" sub_class_id="56">
+      <User_ID>1</User_ID>
+      <Priority>9</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.53</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 14:39:35</Created>
+      <LastUpdated>2026-08-07 14:39:35</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Денис]]></name>
+      <text><![CDATA[Обратился после того, как несколько раз пытался прекратить употребление самостоятельно и снова возвращался к наркотикам. Сначала относился ко всему довольно скептически. После нескольких встреч со специалистами мое отношение изменилось. Сейчас продолжаю работать над собой и не собираюсь останавливаться.]]></text>
+    </message>
+    <message message_id="10" class_id="235" subdivision_id="23" sub_class_id="56">
+      <User_ID>1</User_ID>
+      <Priority>10</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.53</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 14:39:45</Created>
+      <LastUpdated>2026-08-07 14:39:45</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Людмила]]></name>
+      <text><![CDATA[Записывала на прием родственника. Хочу отдельно отметить, что нам ничего не обещали заранее и не пытались убедить в «быстром результате». Врач сначала разобрался в ситуации, рассказал о вариантах лечения и ответил на наши вопросы. Такой подход вызывает доверие.]]></text>
+    </message>
+    <message message_id="11" class_id="235" subdivision_id="23" sub_class_id="56">
+      <User_ID>1</User_ID>
+      <Priority>11</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.53</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 14:39:55</Created>
+      <LastUpdated>2026-08-07 14:39:55</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Артем]]></name>
+      <text><![CDATA[После очередного запоя понял, что просто капельницами проблему уже не решить. В «МедЭльта» после восстановления состояния предложили продолжить лечение и поработать с психологом. Пока нахожусь в процессе, но уже многое изменил в своем отношении к зависимости. Спасибо специалистам за поддержку.]]></text>
+    </message>
+    <message message_id="12" class_id="235" subdivision_id="23" sub_class_id="56">
+      <User_ID>1</User_ID>
+      <Priority>12</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.53</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-07 14:40:05</Created>
+      <LastUpdated>2026-08-07 14:40:05</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <name><![CDATA[Оксана]]></name>
+      <text><![CDATA[Обращались за помощью для отца. Сначала он категорически не хотел разговаривать о лечении, и мы уже не знали, что делать. После консультации со специалистом удалось постепенно изменить ситуацию. Благодарна за терпение, тактичность и за то, что нам не давали пустых обещаний.]]></text>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

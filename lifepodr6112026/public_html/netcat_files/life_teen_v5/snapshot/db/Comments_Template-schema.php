@@ -1,0 +1,30 @@
+<?php
+return array (
+  'sql' => 'CREATE TABLE `Comments_Template` (
+  `ID` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(64) NOT NULL DEFAULT \'\',
+  `Default` tinyint(4) unsigned NOT NULL DEFAULT \'0\',
+  `Prefix` varchar(255) NOT NULL DEFAULT \'\',
+  `Comment_Block` text NOT NULL,
+  `Reply_Block` text NOT NULL,
+  `Comment_Link` varchar(255) NOT NULL DEFAULT \'\',
+  `Reply_Link` varchar(255) NOT NULL DEFAULT \'\',
+  `Edit_Link` varchar(255) NOT NULL DEFAULT \'\',
+  `Delete_Link` varchar(255) NOT NULL DEFAULT \'\',
+  `Add_Block` text NOT NULL,
+  `Edit_Block` text NOT NULL,
+  `Delete_Block` text NOT NULL,
+  `Suffix` varchar(255) NOT NULL DEFAULT \'\',
+  `User_Field` varchar(255) DEFAULT \'Email\',
+  `Value` text,
+  `Premod_Text` text,
+  `Warn_Text` text,
+  `New_Comment_Button` text,
+  `Pagination` text,
+  `Show_All` text,
+  `Rating_Block` text NOT NULL,
+  `Moderator_Block` text NOT NULL,
+  `Not_User_Auth_Block` text,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8',
+);

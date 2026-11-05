@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="35" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование методом торпедо</Subdivision_Name>
+      <EnglishName>life-old-35</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="34" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Комплексное лечение алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-34</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="33" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Комплексное лечение наркомании</Subdivision_Name>
+      <EnglishName>life-old-33</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="32" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование гипнозом от алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-32</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="31" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование по методу Довженко</Subdivision_Name>
+      <EnglishName>life-old-31</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="38" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение алкоголизма в стационаре</Subdivision_Name>
+      <EnglishName>life-old-38</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="16" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Наркологическая помощь</Subdivision_Name>
+      <EnglishName>life-old-16</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="36" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вызов нарколога на дом</Subdivision_Name>
+      <EnglishName>life-old-36</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="39" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Капельница от похмелья</Subdivision_Name>
+      <EnglishName>life-old-39</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="29" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Капельница от запоя</Subdivision_Name>
+      <EnglishName>life-old-29</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="27" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вывод из запоя в стационаре</Subdivision_Name>
+      <EnglishName>life-old-27</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="40" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вывод из запоя на дому</Subdivision_Name>
+      <EnglishName>life-old-40</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="12" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Титульная страница</Subdivision_Name>
+      <EnglishName>life-old-12</EnglishName>
+      <Checked>0</Checked>
+    </subdivision>
+    <subdivision subdivision_id="17" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вывод из запоя</Subdivision_Name>
+      <EnglishName>life-old-17</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="18" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование от алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-18</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="24" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение наркомании</Subdivision_Name>
+      <EnglishName>life-old-24</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="37" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Принудительное лечение алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-37</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="20" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-20</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="19" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение ПТСР</Subdivision_Name>
+      <EnglishName>life-old-19</EnglishName>
+      <Checked>0</Checked>
+    </subdivision>
+    <subdivision subdivision_id="28" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Прокапаться от алкоголя</Subdivision_Name>
+      <EnglishName>life-old-28</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="30" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Детоксикация от алкоголя</Subdivision_Name>
+      <EnglishName>life-old-30</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="197" subdivision_id="35" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="189" subdivision_id="34" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="181" subdivision_id="33" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="173" subdivision_id="32" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="165" subdivision_id="31" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="142" subdivision_id="38" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="127" subdivision_id="16" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="120" subdivision_id="36" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="107" subdivision_id="39" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="85" subdivision_id="29" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="77" subdivision_id="27" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="69" subdivision_id="40" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="51" subdivision_id="12" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="48" subdivision_id="17" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="37" subdivision_id="18" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="29" subdivision_id="24" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="19" subdivision_id="37" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="15" subdivision_id="20" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="7" subdivision_id="19" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="4" subdivision_id="28" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="2" subdivision_id="30" class_id="246">
+      <Sub_Class_Name>Лечим причины, а не симптомы</Sub_Class_Name>
+      <EnglishName>lechim-prichiny-a-ne-simptomy</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="439" type_of_data_id="1">
+      <Field_Name>maintitle</Field_Name>
+      <Description>Заголовок блока ссылок (например Вывод из запоя)</Description>
+    </field>
+    <field field_id="440" type_of_data_id="3">
+      <Field_Name>linksblock</Field_Name>
+      <Description>Блок ссылок</Description>
+    </field>
+    <field field_id="441" type_of_data_id="3">
+      <Field_Name>comment</Field_Name>
+      <Description>Комментарий под списком (например "Индивидуальный подход к каждому")</Description>
+    </field>
+    <field field_id="442" type_of_data_id="1">
+      <Field_Name>buttonname</Field_Name>
+      <Description>Название кнопки (например Консультация)</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="23" class_id="246" subdivision_id="35" sub_class_id="197">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.200</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-23 20:55:10</Created>
+      <LastUpdated>2026-09-23 20:55:10</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="22" class_id="246" subdivision_id="34" sub_class_id="189">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 18:08:06</Created>
+      <LastUpdated>2026-09-06 18:08:06</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="21" class_id="246" subdivision_id="33" sub_class_id="181">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 17:51:27</Created>
+      <LastUpdated>2026-09-06 17:51:27</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="20" class_id="246" subdivision_id="32" sub_class_id="173">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 13:24:08</Created>
+      <LastUpdated>2026-09-06 13:24:08</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="19" class_id="246" subdivision_id="31" sub_class_id="165">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 12:31:08</Created>
+      <LastUpdated>2026-09-06 12:31:08</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="18" class_id="246" subdivision_id="38" sub_class_id="142">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:06:16</Created>
+      <LastUpdated>2026-08-21 14:06:16</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="17" class_id="246" subdivision_id="16" sub_class_id="127">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 15:02:35</Created>
+      <LastUpdated>2026-08-05 15:02:35</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="16" class_id="246" subdivision_id="36" sub_class_id="120">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.101</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-06 11:12:05</Created>
+      <LastUpdated>2026-08-06 11:12:05</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="15" class_id="246" subdivision_id="39" sub_class_id="107">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:35:03</Created>
+      <LastUpdated>2026-08-21 14:35:03</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="14" class_id="246" subdivision_id="29" sub_class_id="85">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:33:30</Created>
+      <LastUpdated>2026-08-21 15:33:30</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="13" class_id="246" subdivision_id="27" sub_class_id="77">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:55:28</Created>
+      <LastUpdated>2026-08-04 21:55:28</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="12" class_id="246" subdivision_id="40" sub_class_id="69">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:12:00</Created>
+      <LastUpdated>2026-08-04 21:18:31</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="9" class_id="246" subdivision_id="12" sub_class_id="51">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>0</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-19 00:02:41</Created>
+      <LastUpdated>2026-10-19 18:46:45</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>193.233.129.42</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Вывод из запоя]]></maintitle>
+      <linksblock><![CDATA[<a href="/uslugi/vyvod-iz-zapoya/vyvod-iz-zapoya-na-domu/">Вывод из запоя на дому</a>
+<a href="/uslugi/vyvod-iz-zapoya/vyvod-iz-zapoya-v-statsionare/">Вывод из запоя в стационаре</a>]]></linksblock>
+      <comment><![CDATA[Передовые методы и препараты]]></comment>
+      <buttonname><![CDATA[Вызов нарколога]]></buttonname>
+    </message>
+    <message message_id="10" class_id="246" subdivision_id="12" sub_class_id="51">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>0</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-19 00:03:45</Created>
+      <LastUpdated>2026-10-19 18:46:46</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>193.233.129.42</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Лечение зависимостей]]></maintitle>
+      <linksblock><![CDATA[<a href="/uslugi/lechenie-alkogolizma/">Лечение алкоголизма</a>
+<a href="/uslugi/lechenie-narkomanii/">Лечение наркомании</a>
+<a href="/uslugi/narkologicheskaya-pomosch/">Наркологическая помощь</a>]]></linksblock>
+      <comment><![CDATA[Работаем со всеми видами зависимостей]]></comment>
+      <buttonname><![CDATA[Консультация психиатра]]></buttonname>
+    </message>
+    <message message_id="11" class_id="246" subdivision_id="12" sub_class_id="51">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>0</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-19 00:04:32</Created>
+      <LastUpdated>2026-10-19 18:46:48</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>193.233.129.42</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Кодирование]]></maintitle>
+      <linksblock><![CDATA[<a href="/uslugi/kodirovanie-ot-alkogolizma/">Кодирование от алкоголизма</a>]]></linksblock>
+      <comment><![CDATA[Индивидуальный подход к каждому]]></comment>
+      <buttonname><![CDATA[консультация]]></buttonname>
+    </message>
+    <message message_id="8" class_id="246" subdivision_id="17" sub_class_id="48">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:38:30</Created>
+      <LastUpdated>2026-08-04 20:48:47</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.180.28</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="7" class_id="246" subdivision_id="18" sub_class_id="37">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 14:23:03</Created>
+      <LastUpdated>2026-08-05 14:23:03</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="6" class_id="246" subdivision_id="24" sub_class_id="29">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:26:06</Created>
+      <LastUpdated>2026-08-05 13:26:06</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="5" class_id="246" subdivision_id="37" sub_class_id="19">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 12:31:40</Created>
+      <LastUpdated>2026-08-21 12:31:40</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="4" class_id="246" subdivision_id="20" sub_class_id="15">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:51:40</Created>
+      <LastUpdated>2026-08-05 13:07:55</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.179.81</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="3" class_id="246" subdivision_id="19" sub_class_id="7">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:44:20</Created>
+      <LastUpdated>2026-08-01 17:44:20</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="2" class_id="246" subdivision_id="28" sub_class_id="4">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:22:21</Created>
+      <LastUpdated>2026-08-21 15:22:21</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+    <message message_id="1" class_id="246" subdivision_id="30" sub_class_id="2">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 11:43:38</Created>
+      <LastUpdated>2026-09-06 11:43:38</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <linksblock><![CDATA[]]></linksblock>
+      <comment><![CDATA[]]></comment>
+      <buttonname><![CDATA[]]></buttonname>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

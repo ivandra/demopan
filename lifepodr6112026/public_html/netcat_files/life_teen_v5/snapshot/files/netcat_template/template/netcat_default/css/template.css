@@ -1,0 +1,156 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    font-size: 1rem;
+    font-family: Arial, Helvetica, "Liberation Sans", sans-serif;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+a {
+    color: var(--tpl-color-brand, #0000EE);
+}
+
+a:hover {
+    color: var(--tpl-color-brand-light, #0000EE);
+}
+
+a:active {
+    color: var(--tpl-color-brand-lighter, #FF0000);
+}
+
+a:hover {
+    color: var(--tpl-color-brand-dark, #551A8B);
+}
+
+img {
+    vertical-align: middle;
+    border-style: none; /* Remove the border on images inside links in IE 10 - . */
+}
+
+table {
+    border-collapse: collapse;
+}
+
+label {
+    display: inline-block;
+    margin-bottom: .5rem;
+}
+
+button {
+    border-radius: 0;
+}
+
+input,
+button,
+select,
+optgroup,
+textarea {
+    margin: 0;
+    font-size: inherit;
+    line-height: inherit;
+    text-transform: none; /* Remove the inheritance of text transform in Firefox */
+}
+
+button {
+    line-height: normal !important;
+}
+
+input {
+    overflow: visible; /* Show the overflow in Edge */
+}
+
+/* Remove inner border and padding from Firefox, but don't restore the outline like Normalize. */
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+    padding: 0;
+    border-style: none;
+}
+
+textarea {
+    overflow: auto;
+    resize: vertical;
+}
+
+/*
+// 1. Correct the text wrapping in Edge and IE.
+// 2. Correct the color inheritance from `fieldset` elements in IE.
+*/
+legend {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    margin-bottom: .5rem;
+    font-size: 1.5rem;
+    line-height: inherit;
+    color: inherit;
+    white-space: normal;
+}
+
+::-webkit-file-upload-button {
+    font: inherit;
+    -webkit-appearance: button;
+}
+
+/* pagination */
+.pagination { /* nav */
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.pagination .pagination-item { /* a */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.25rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    text-decoration: none;
+    color: inherit;
+    box-sizing: border-box;
+}
+
+.pagination .pagination-item.active { /* a */
+    pointer-events: none;
+    cursor: auto;
+    background: var(--tpl-color-background-accent);
+    color: var(--tpl-color-foreground);
+    border-radius: 50%;
+}
+
+.pagination .pagination-item.disabled { /* a */
+    pointer-events: none;
+    cursor: auto;
+    color: inherit;
+}
+
+@media (max-width: 560px) {
+    .pagination .pagination-page {
+        display: none;
+    }
+
+    .pagination .pagination-page.active,
+    .pagination .pagination-page.pagination-page-visible {
+        display: inline-flex;
+    }
+}

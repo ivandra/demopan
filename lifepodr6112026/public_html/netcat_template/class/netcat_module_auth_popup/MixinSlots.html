@@ -1,0 +1,14 @@
+<?php
+/**
+ * Слоты миксинов для попапа авторизации
+ *
+ * Попап переносится в body через JS, поэтому слоты используют portal: true.
+ * JS добавляет классы tpl-block-XXX на элемент попапа для применения стилей.
+ */
+return array(
+    'full_popup' => array(
+        'name' => 'Попап (контейнер)',
+        'selector' => '.nc-auth-popup__container',
+        'portal' => true,
+    ),
+);

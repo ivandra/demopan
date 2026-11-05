@@ -1,0 +1,55 @@
+<!-- FormPrefix --><?= $f_AdminCommon; ?>
+
+<?php if ($cc_settings['display_as'] == 'li'): ?>
+<ul>
+    <?php endif; ?>
+    <!-- /FormPrefix -->
+
+<!-- RecordTemplate --><?= $f_AdminButtons; ?>
+    <?php
+    $buttonText = nc_edit_inline('Name', $f_RowID, $cc_env['Sub_Class_ID']);
+    $title_class = trim((string)($cc_settings['title_classname'] ?? ''));
+    $description = trim((string)($f_Description ?? ''));
+    ?>
+    <div>
+    <?php switch ($cc_settings['display_as']) {
+        case "li":
+            ?>
+            <li <?= $cc_settings['li_style'] == 'outDots' ? "class='no-bullet'" : ""; ?>>
+                <div  class="<?= $title_class; ?>">
+                    <a href="<?= $f_Link; ?>" <?= $f_NewWindow ? "target='_blank'" : ""; ?>><?= $buttonText; ?></a>
+                </div>    
+                <?php if ($description !== ''): ?>
+                    <div class="tpl-text-default-paragraph"><?= nc_edit_inline('Description', $f_RowID, $cc_env['Sub_Class_ID']); ?></div>
+                <?php endif; ?>
+            </li>
+            <?php
+            break;
+        case "button":
+            ?>
+            <button type="button" title="<?= $description; ?>"
+                    class="tpl-button tpl-button-<?= $f_IsPrimary ? "primary" : "secondary" ?>"
+                    onclick="window.open('<?= $f_Link; ?>','<?= $f_NewWindow ? '_blank' : "_self"; ?>');">
+                <?= $buttonText; ?>
+            </button>
+            <?php
+            break;
+        case "a":
+        default:
+            ?>
+            <div  class="<?= $title_class; ?>">
+                <a href="<?= $f_Link; ?>" <?= $f_NewWindow ?
+                    "target='_blank'" : ""; ?>><?= $buttonText; ?></a>
+            </div>        
+            <?php if ($description !== ''): ?>
+                <div class="tpl-text-default-paragraph"><?= nc_edit_inline('Description', $f_RowID, $cc_env['Sub_Class_ID']); ?></div>
+            <?php endif; ?>
+            <?php
+            break;
+    } ?>
+    </div><!-- /RecordTemplate -->
+
+<!-- FormSuffix -->    <?php if ($cc_settings['display_as'] == 'li'): ?>
+</ul>
+<?php endif; ?>
+<!-- /FormSuffix -->

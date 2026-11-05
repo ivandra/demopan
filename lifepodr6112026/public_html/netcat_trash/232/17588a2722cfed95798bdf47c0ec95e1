@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="22" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Фото</Subdivision_Name>
+      <EnglishName>life-old-22</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="99" subdivision_id="22" class_id="232">
+      <Sub_Class_Name>Фотогалерея - Массовая загрузка фото</Sub_Class_Name>
+      <EnglishName>fotogalereya-massovaya-zagruzka-foto</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="387" type_of_data_id="1">
+      <Field_Name>maintitle</Field_Name>
+      <Description>Заголовок списка фоток</Description>
+    </field>
+    <field field_id="382" type_of_data_id="11">
+      <Field_Name>img</Field_Name>
+      <Description>Изображение (превью будет 340x228)</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="1" class_id="232" subdivision_id="22" sub_class_id="99">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-03 00:28:14</Created>
+      <LastUpdated>2026-10-08 21:37:45</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>62.60.230.8</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[]]></maintitle>
+      <img/>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

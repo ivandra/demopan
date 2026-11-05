@@ -1,0 +1,56 @@
+<?/* Служебная часть */for ($f_RowNum = 0; $f_RowNum < $rowCount; $f_RowNum++) {    if($fetch_row[$f_RowNum] instanceof Iterator) {        extract($fetch_row[$f_RowNum]->to_array(), EXTR_PREFIX_ALL, "f");    } else {        extract($fetch_row[$f_RowNum], EXTR_PREFIX_ALL, "f");    }    foreach($iteration_RecordTemplate[$f_RowNum] as $value) {        extract($value);    }    !isset($cc_env["convert2txt"]) ? $cc_env["convert2txt"] = null : null;    eval($cc_env["convert2txt"]);    ob_start();/* Конец служебной части */?>
+        <?= $f_AdminButtons ?>
+        <div class="contacts-page__main contacts-page__main--service">
+            <div class="contacts-page__header">
+                <h1 class="hero__title">
+                    <?= project_title($f_name) ?>
+                </h1>
+                <p class="hero__description">
+                    <?= shortcode_component((string)$f_text) ?>
+                </p>
+                <a class="hero__button hero__button--primary" href="/kontakty/">Получить поддержку →</a>
+            </div>
+            <div class="contacts-page__top-image">
+                <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/service.png" />
+            </div>
+            <div class="contacts-page__list">
+                <div class="contacts-page__card">
+                    <div class="contacts-page__card-name">
+                        <div class="contacts-page__card-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/service-icon1.svg" />
+                        </div>
+                        <h3 class="contacts-page__card-title">Понимание</h3>
+                    </div>
+                    <p class="contacts-page__card-note">Мы внимательно слушаем и не осуждаем</p>
+                </div>
+                <div class="contacts-page__card">
+                    <div class="contacts-page__card-name">
+                        <div class="contacts-page__card-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/service-icon2.svg" />
+                        </div>
+                        <h3 class="contacts-page__card-title">Профессионально</h3>
+                    </div>
+                    <p class="contacts-page__card-note">Работаем с опытными психологами</p>
+                </div>
+                <div class="contacts-page__card">
+                    <div class="contacts-page__card-name">
+                        <div class="contacts-page__card-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/service-icon3.svg" />
+                        </div>
+                        <h3 class="contacts-page__card-title">Конфиденциально</h3>
+                    </div>
+                    <p class="contacts-page__card-note">Все что ты расскажешь останется между нами</p>
+                </div>
+                <div class="contacts-page__card">
+                    <div class="contacts-page__card-name">
+                        <div class="contacts-page__card-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/service-icon4.svg" />
+                        </div>
+                        <h3 class="contacts-page__card-title">Реальные решения</h3>
+                    </div>
+                    <p class="contacts-page__card-note">Помогает шаг за шагом вернуть спокойствие</p>
+                </div>
+            </div>
+        </div>
+
+<?/* Служебная часть */    echo nc_finishing_RecordTemplate(ob_get_clean(), $inside_admin, $classID, $f_RowID, $parent_message, $cc, $cc_env["Class_Name"], $no_cache_marks);}/* Конец служебной части */?>

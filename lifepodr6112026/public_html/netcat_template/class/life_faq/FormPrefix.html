@@ -1,0 +1,10 @@
+<?= $f_AdminCommon ?>
+<section class="faq-block">
+    <div class="wrap">
+        <span class="hero__label">FAQ</span>
+        <h1 class="faq-block__title">
+            <?= shortcode_component((string)($cc_settings['heading'] ?? '')) ?>
+        </h1>
+        <?php $project_faq_row = 0; $project_faq_split = (int)ceil((int)$totRows / 2); ?>
+        <div class="faq-block__list">
+            <div class="faq-block__col">

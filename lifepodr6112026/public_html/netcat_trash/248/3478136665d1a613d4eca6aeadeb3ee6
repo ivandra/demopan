@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="5" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>О нас</Subdivision_Name>
+      <EnglishName>life-old-5</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="201" subdivision_id="5" class_id="248">
+      <Sub_Class_Name>Верхний баннер (о нас)</Sub_Class_Name>
+      <EnglishName>verhniy-banner-o-nas</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="432" type_of_data_id="1">
+      <Field_Name>maintitle</Field_Name>
+      <Description>Основной заголовок</Description>
+    </field>
+    <field field_id="434" type_of_data_id="3">
+      <Field_Name>descr</Field_Name>
+      <Description>Приемущества. Каждое обернуть в &lt;li&gt;&lt;/li&gt;</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="1" class_id="248" subdivision_id="5" sub_class_id="201">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-14 00:43:37</Created>
+      <LastUpdated>2026-10-14 00:51:19</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>193.233.129.42</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Наркологическая клиника «МедЭльта» в [inCity]]]></maintitle>
+      <descr><![CDATA[<li>Профессиональная помощь при алкогольной и наркотической зависимости</li>
+      <li>Работаем по комплексному подходу — лечим не симптом, а причину</li>
+      <li>Анонимно, круглосуточно, с выездом врача на дом</li>]]></descr>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

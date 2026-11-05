@@ -1,0 +1,35 @@
+<!-- FormPrefix --><?php $project_directory_documents = project_is_specialist_directory((int)$sub); if ($project_directory_documents) { echo project_specialist_documents_block(); } else { ?>
+<?= $f_AdminCommon ?>
+<section class="certificates">
+    <div class="wrap">
+        <h2 class="hero__title">
+            <?= shortcode_component((string)($cc_settings['heading'] ?? '')) ?>
+        </h2>
+        <div class="swiper3 certificates__list">
+            <div class="swiper-wrapper">
+
+<?php } ?>
+<!-- /FormPrefix -->
+<!-- RecordTemplate --><?php if (!$project_directory_documents) { ?>
+                <?= $f_AdminButtons ?>
+                <div class="swiper-slide certificates__item">
+                    <a data-fancybox="" href="<?= htmlspecialchars((string)$f_file!==''?(string)$f_file:(string)$f_img,ENT_QUOTES,'UTF-8') ?>">
+                        <img alt="<?= htmlspecialchars($f_name,ENT_QUOTES,'UTF-8') ?>" decoding="async" src="<?= htmlspecialchars(shortcode((string)$f_img),ENT_QUOTES,'UTF-8') ?>" />
+                    </a>
+                </div>
+
+<?php } ?>
+<!-- /RecordTemplate -->
+<!-- FormSuffix --><?php if (!$project_directory_documents) { echo project_document_slides(project_specialist_documents()); ?>
+            </div>
+            <div class="slider-nav">
+                <a class="slider-nav__link slider-nav__link--prev" href="#"></a>
+                <div class="slider-nav__dots"></div>
+                <a class="slider-nav__link slider-nav__link--next" href="#"></a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<?php } ?>
+<!-- /FormSuffix -->

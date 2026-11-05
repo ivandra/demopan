@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="35" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование методом торпедо</Subdivision_Name>
+      <EnglishName>life-old-35</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="34" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Комплексное лечение алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-34</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="33" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Комплексное лечение наркомании</Subdivision_Name>
+      <EnglishName>life-old-33</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="32" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование гипнозом от алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-32</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="31" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование по методу Довженко</Subdivision_Name>
+      <EnglishName>life-old-31</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="37" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Принудительное лечение алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-37</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="16" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Наркологическая помощь</Subdivision_Name>
+      <EnglishName>life-old-16</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="38" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение алкоголизма в стационаре</Subdivision_Name>
+      <EnglishName>life-old-38</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="39" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Капельница от похмелья</Subdivision_Name>
+      <EnglishName>life-old-39</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="29" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Капельница от запоя</Subdivision_Name>
+      <EnglishName>life-old-29</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="36" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вызов нарколога на дом</Subdivision_Name>
+      <EnglishName>life-old-36</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="30" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Детоксикация от алкоголя</Subdivision_Name>
+      <EnglishName>life-old-30</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="17" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вывод из запоя</Subdivision_Name>
+      <EnglishName>life-old-17</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="28" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Прокапаться от алкоголя</Subdivision_Name>
+      <EnglishName>life-old-28</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="27" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вывод из запоя в стационаре</Subdivision_Name>
+      <EnglishName>life-old-27</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="40" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Вывод из запоя на дому</Subdivision_Name>
+      <EnglishName>life-old-40</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="19" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение ПТСР</Subdivision_Name>
+      <EnglishName>life-old-19</EnglishName>
+      <Checked>0</Checked>
+    </subdivision>
+    <subdivision subdivision_id="18" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Кодирование от алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-18</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="24" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение наркомании</Subdivision_Name>
+      <EnglishName>life-old-24</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+    <subdivision subdivision_id="20" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Лечение алкоголизма</Subdivision_Name>
+      <EnglishName>life-old-20</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="192" subdivision_id="35" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="184" subdivision_id="34" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="176" subdivision_id="33" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="168" subdivision_id="32" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="160" subdivision_id="31" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="153" subdivision_id="37" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="146" subdivision_id="16" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="145" subdivision_id="38" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="137" subdivision_id="39" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="133" subdivision_id="29" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="115" subdivision_id="36" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="101" subdivision_id="30" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="94" subdivision_id="17" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="83" subdivision_id="28" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="72" subdivision_id="27" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="64" subdivision_id="40" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="38" subdivision_id="19" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="32" subdivision_id="18" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="24" subdivision_id="24" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+    <sub_class sub_class_id="10" subdivision_id="20" class_id="242">
+      <Sub_Class_Name>Услуги верхний баннер</Sub_Class_Name>
+      <EnglishName>uslugi-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="391" type_of_data_id="1">
+      <Field_Name>maintitle</Field_Name>
+      <Description>Основной заголовок</Description>
+    </field>
+    <field field_id="392" type_of_data_id="3">
+      <Field_Name>adv</Field_Name>
+      <Description>Приемущества. Каждое обернуть в &lt;li&gt;&lt;/li&gt;</Description>
+    </field>
+    <field field_id="393" type_of_data_id="5">
+      <Field_Name>h1</Field_Name>
+      <Description>Вывести заголовок как h1</Description>
+    </field>
+    <field field_id="413" type_of_data_id="3">
+      <Field_Name>price</Field_Name>
+      <Description>Цена в подзаголовке. Например: от 3000 рублей с помощью капельницы</Description>
+    </field>
+    <field field_id="363" type_of_data_id="2">
+      <Field_Name>docID</Field_Name>
+      <Description>Доктор на странице</Description>
+    </field>
+    <field field_id="414" type_of_data_id="3">
+      <Field_Name>quote</Field_Name>
+      <Description>Предупреждение. Например: Если в течение 24 часов после процедуры пациент...</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="20" class_id="242" subdivision_id="35" sub_class_id="192">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.200</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-23 20:55:10</Created>
+      <LastUpdated>2026-10-21 16:26:42</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.177</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Кодирование методом торпедо от алкоголизма <br/>в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Медикаментозное кодирование под контролем врача-нарколога</li>
+<li>Предварительная диагностика и проверка противопоказаний</li>
+<li>Подробная консультация и рекомендации по сохранению трезвости</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 7000 рублей за программу]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Врач оценивает состояние пациента, подбирает препарат и объясняет особенности его действия, возможные побочные эффекты и ограничения.]]></quote>
+    </message>
+    <message message_id="19" class_id="242" subdivision_id="34" sub_class_id="184">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 18:08:06</Created>
+      <LastUpdated>2026-10-21 16:31:08</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.177</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Комплексное лечение алкоголизма <br/>в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Поэтапная терапия с устранением причин и последствий зависимости</li>
+<li>Совместная работа наркологов, психотерапевтов и психологов</li>
+<li>Реабилитация и сопровождение для закрепления результатов лечения</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 5500 рублей за программу]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Программа разрабатывается индивидуально и может включать детоксикацию, медикаментозную терапию, психотерапию и профилактику рецидивов.]]></quote>
+    </message>
+    <message message_id="18" class_id="242" subdivision_id="33" sub_class_id="176">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 17:51:27</Created>
+      <LastUpdated>2026-10-21 17:07:41</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.177</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Комплексное лечение наркомании <br/>в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Многоэтапная программа лечения с учётом вида и тяжести зависимости</li>
+<li>Сочетание медикаментозной терапии, психотерапии и реабилитации</li>
+<li>Долгосрочное сопровождение и помощь в социальной адаптации</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 5500 рублей за программу]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Индивидуальная программа включает диагностику, детоксикацию при необходимости, работу с причинами зависимости и профилактику рецидивов.]]></quote>
+    </message>
+    <message message_id="17" class_id="242" subdivision_id="32" sub_class_id="168">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 13:24:08</Created>
+      <LastUpdated>2026-10-21 16:24:59</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.177</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Кодирование гипнозом от алкоголизма <br/>в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Психотерапевтическое воздействие без введения медикаментов</li>
+<li>Работа с психологическими причинами алкогольной зависимости</li>
+<li>Комфортные условия проведения сеанса и внимательное отношение к пациенту</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 7000 рублей за программу]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Гипнотерапия может применяться как дополнительный метод в комплексном лечении алкогольной зависимости, но не заменяет основные методы терапии.]]></quote>
+    </message>
+    <message message_id="16" class_id="242" subdivision_id="31" sub_class_id="160">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 12:31:07</Created>
+      <LastUpdated>2026-10-21 16:22:14</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.177</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Кодирование от алкоголизма по методу Довженко <br/>в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Безмедикаментозный метод психологического воздействия</li>
+<li>Индивидуальная консультация и оценка готовности к лечению</li>
+<li>Добровольное проведение процедуры без применения препаратов</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 7000 рублей за программу]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Кодирование по методу Довженко основано на психотерапевтическом внушении, направленном на формирование установки на трезвость.]]></quote>
+    </message>
+    <message message_id="15" class_id="242" subdivision_id="37" sub_class_id="153">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 12:31:40</Created>
+      <LastUpdated>2026-10-21 16:35:57</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.177</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Принудительное лечение алкоголизма <br/>в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Консультация родственников при отказе пациента от лечения</li>
+<li>Оценка состояния и разъяснение законных оснований госпитализации</li>
+<li>Помощь в мотивации пациента к лечению алкогольной зависимости</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 5500 рублей за программу]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Если зависимый человек отказывается от медицинской помощи, специалисты проконсультируют родственников, помогут оценить ситуацию и выбрать законные способы решения проблемы.]]></quote>
+    </message>
+    <message message_id="14" class_id="242" subdivision_id="16" sub_class_id="146">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 15:02:35</Created>
+      <LastUpdated>2026-10-21 17:09:42</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.177</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Наркологическая помощь <br/> в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Бесплатная первичная консультация</li>
+<li>Гарантируем полную анонимность</li>
+<li>Полный спектр медицинских услуг по лечению зависимости</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 4500 рублей с помощью капельницы]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Врач оценивает самочувствие, определяет необходимый объём медицинских мероприятий и подбирает терапию с учётом индивидуальных показаний.]]></quote>
+    </message>
+    <message message_id="13" class_id="242" subdivision_id="38" sub_class_id="145">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:06:16</Created>
+      <LastUpdated>2026-10-21 16:33:10</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.177</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Лечение алкоголизма в стационаре <br/>в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Круглосуточная медицинская помощь и наблюдение специалистов</li>
+<li>Индивидуальная терапия с возможностью корректировки лечения</li>
+<li>Уютные палаты, полноценное питание и комфортные условия пребывания</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 5500 рублей за программу]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Лечение алкоголизма в стационаре обеспечивает комплексную медицинскую помощь в безопасных и контролируемых условиях.]]></quote>
+    </message>
+    <message message_id="12" class_id="242" subdivision_id="39" sub_class_id="137">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 14:35:02</Created>
+      <LastUpdated>2026-10-20 15:46:09</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.90</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Капельница <br/>от похмелья  в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Медицинская помощь с соблюдением врачебной тайны.</li>
+<li>Подбор терапии с учётом состояния пациента и противопоказаний</li>
+<li>Прозрачные условия лечения и оформление медицинских документов</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 3500 рублей с помощью капельницы]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Капельница от похмелья помогает восполнить дефицит жидкости, восстановить водно-электролитный баланс и уменьшить проявления алкогольной интоксикации.]]></quote>
+    </message>
+    <message message_id="11" class_id="242" subdivision_id="29" sub_class_id="133">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:33:30</Created>
+      <LastUpdated>2026-10-20 15:07:04</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.90</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Капельница <br/>от запоя  в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Полная анонимность и конфиденциальность</li>
+<li>Осмотр врача и индивидуальный подбор капельницы</li>
+<li>Сертифицированные препараты и официальный договор</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 3500 рублей с помощью капельницы]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Во время процедуры врач контролирует состояние организма, а после лечения даёт рекомендации для дальнейшего восстановления.]]></quote>
+    </message>
+    <message message_id="10" class_id="242" subdivision_id="36" sub_class_id="115">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.181.101</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-06 11:12:05</Created>
+      <LastUpdated>2026-10-21 17:11:24</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.177</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Вызов нарколога <br/>на дом  в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Круглосуточный выезд врача-нарколога по указанному адресу</li>
+<li>Осмотр, диагностика и оказание медицинской помощи на месте</li>
+<li>Дискретное посещение без лишнего внимания и огласки</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 3500 рублей с помощью капельницы]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Вызов нарколога на дом позволяет получить квалифицированную медицинскую помощь в привычной обстановке без посещения клиники.]]></quote>
+    </message>
+    <message message_id="9" class_id="242" subdivision_id="30" sub_class_id="101">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.189.102</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-09-06 11:43:38</Created>
+      <LastUpdated>2026-10-20 15:54:31</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.90</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Детоксикация <br/>от алкоголя  в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Современные методы очищения и восстановления организма</li>
+<li>Безопасная терапия с учётом состояния здоровья пациента</li>
+<li>Комплексная медицинская поддержка на всех этапах лечения</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 3500 рублей с помощью капельницы]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Врач оценивает состояние пациента, подбирает необходимые препараты и контролирует процесс лечения.]]></quote>
+    </message>
+    <message message_id="8" class_id="242" subdivision_id="17" sub_class_id="94">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 00:59:15</Created>
+      <LastUpdated>2026-10-20 14:49:11</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.90</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Вывод из запоя <br/> в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Полная анонимность и конфиденциальность</li>
+<li>Осмотр врача и индивидуальный подбор лечения</li>
+<li>Официальный договор и чеки на препараты</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 3500 рублей с помощью капельницы]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Если в течение 24 часов после вывода из запоя состояние пациента не улучшится, врач проведёт повторный осмотр.]]></quote>
+    </message>
+    <message message_id="7" class_id="242" subdivision_id="28" sub_class_id="83">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.186.22</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-21 15:22:21</Created>
+      <LastUpdated>2026-10-20 14:51:14</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.90</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Прокапаться <br/>от алкоголя в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Полная анонимность и конфиденциальность</li>
+<li> Осмотр врача и индивидуальный подбор капельницы</li>
+<li>Препараты с доказанной эффективностью</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 3500 рублей с помощью капельницы]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Перед процедурой врач оценивает состояние пациента, определяет показания к капельнице от алкоголя и подбирает состав препаратов.]]></quote>
+    </message>
+    <message message_id="6" class_id="242" subdivision_id="27" sub_class_id="72">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:55:28</Created>
+      <LastUpdated>2026-10-20 15:52:21</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.90</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Вывод из запоя <br/>в стационаре  в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Круглосуточное наблюдение врачей и медицинского персонала</li>
+<li>Комплексное обследование и контроль состояния пациента</li>
+<li>Комфортные условия для лечения и восстановления организма</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 5500 рублей с помощью капельницы]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Вывод из запоя в стационаре проводится под наблюдением специалистов с возможностью круглосуточного контроля состояния пациента.]]></quote>
+    </message>
+    <message message_id="5" class_id="242" subdivision_id="40" sub_class_id="64">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.180.28</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-04 21:12:00</Created>
+      <LastUpdated>2026-10-20 15:48:44</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.90</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Вывод из запоя <br/>на дому  в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Медицинская помощь в привычной и комфортной обстановке</li>
+<li>Конфиденциальное обслуживание без постановки на учёт</li>
+<li>Комплексная диагностика</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 3500 рублей с помощью капельницы]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Врач оценивает состояние пациента, подбирает лечение и при наличии показаний проводит детоксикационную терапию.]]></quote>
+    </message>
+    <message message_id="4" class_id="242" subdivision_id="19" sub_class_id="38">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:44:20</Created>
+      <LastUpdated>2026-08-01 17:57:25</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>62.60.156.219</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Лечение ПТСР <br/>в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Приём без очереди и без направления, закроем больничный и справки</li>
+<li>Лечение амбулаторно или в комфортной палате</li>
+<li>Современные препараты без “тяжелых побочек”</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 20000 рублей за индивидуальный курс]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Интенсивная 2-недельная программа с использованием современных технологий для безопасного проживания и проработки травматических воспоминаний, а также ежедневной групповой поддержкой]]></quote>
+    </message>
+    <message message_id="3" class_id="242" subdivision_id="18" sub_class_id="32">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 14:23:03</Created>
+      <LastUpdated>2026-10-21 16:20:14</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.177</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Кодирование от алкоголизма <br/>в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Современные методы кодирования с доказанной эффективностью</li>
+<li>Индивидуальный выбор методики с учётом противопоказаний</li>
+<li>Психологическая поддержка и рекомендации после процедуры </li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 7000 рублей за программу]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Врач подбирает подходящий метод лечения, объясняет особенности процедуры и возможные ограничения.]]></quote>
+    </message>
+    <message message_id="2" class_id="242" subdivision_id="24" sub_class_id="24">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>84.15.179.81</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-05 13:26:06</Created>
+      <LastUpdated>2026-10-21 16:38:06</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.177</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Лечение наркомании <br/>в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Помощь квалифицированных наркологов и психотерапевтов</li>
+<li>Современные методы лечения различных видов наркотической зависимости</li>
+<li>Конфиденциальность, уважительное отношение и поддержка близких</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 5500 рублей за программу]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Лечение наркомании направлено на преодоление физической и психологической зависимости от наркотических веществ.]]></quote>
+    </message>
+    <message message_id="1" class_id="242" subdivision_id="20" sub_class_id="10">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-08-01 17:51:40</Created>
+      <LastUpdated>2026-10-21 16:29:18</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.177</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Лечение алкоголизма <br/>в [inCity]]]></maintitle>
+      <adv><![CDATA[<li>Комплексная помощь опытных врачей-наркологов</li>
+<li>Персональная программа лечения с учётом стадии зависимости</li>
+<li>Поддержка пациента и профилактика повторных срывов</li>]]></adv>
+      <h1>1</h1>
+      <price><![CDATA[от 5500 рублей за программу]]></price>
+      <docID>1</docID>
+      <quote><![CDATA[Программа включает медицинскую диагностику, детоксикацию при необходимости, медикаментозную терапию и психологическую помощь.]]></quote>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

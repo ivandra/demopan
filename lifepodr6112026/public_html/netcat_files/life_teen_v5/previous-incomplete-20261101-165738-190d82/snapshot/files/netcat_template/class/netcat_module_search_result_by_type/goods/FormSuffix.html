@@ -1,0 +1,66 @@
+<?php if ($nc_search_unique_count > $recNum): ?>
+    <?= nc_browse_messages($cc_env, 10); ?>
+<?php endif; ?>
+<script>
+(function() {
+    // Галерея при наведении
+    document.querySelectorAll('.item-card__image--gallery').forEach(function(container) {
+        var slides = container.querySelectorAll('.item-card__gallery-slide');
+        var dots = container.querySelectorAll('.item-card__gallery-dot');
+        var count = slides.length;
+        if (count < 2) return;
+
+        var currentIndex = 0;
+        var isSwiping = false;
+        var startX = 0;
+
+        function showSlide(index) {
+            if (index < 0) index = count - 1;
+            if (index >= count) index = 0;
+            currentIndex = index;
+            slides.forEach(function(s, i) { s.classList.toggle('is-active', i === index); });
+            dots.forEach(function(d, i) { d.classList.toggle('is-active', i === index); });
+        }
+
+        // Mouse hover для desktop
+        container.addEventListener('mousemove', function(e) {
+            if (isSwiping) return;
+            var rect = container.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var segment = rect.width / count;
+            var index = Math.floor(x / segment);
+            showSlide(index);
+        });
+
+        // Touch swipe для mobile
+        container.addEventListener('touchstart', function(e) {
+            isSwiping = true;
+            container.classList.add('is-swiping');
+            startX = e.touches[0].clientX;
+        }, {passive: true});
+
+        container.addEventListener('touchmove', function(e) {
+            if (!isSwiping) return;
+            var diff = startX - e.touches[0].clientX;
+            if (Math.abs(diff) > 30) {
+                showSlide(currentIndex + (diff > 0 ? 1 : -1));
+                startX = e.touches[0].clientX;
+            }
+        }, {passive: true});
+
+        container.addEventListener('touchend', function() {
+            isSwiping = false;
+            container.classList.remove('is-swiping');
+        });
+
+        // Клик по точкам
+        dots.forEach(function(dot, i) {
+            dot.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                showSlide(i);
+            });
+        });
+    });
+})();
+</script>

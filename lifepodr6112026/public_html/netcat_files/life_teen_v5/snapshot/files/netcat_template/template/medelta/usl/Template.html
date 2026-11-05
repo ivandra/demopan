@@ -1,0 +1,15 @@
+<!-- Header -->%Header
+<div class="wrap">
+  <div class="navi mb">
+   <?=shortcode_component(nc_browse_path_range(-1, $sub_level_count-1, $breadcrumbs_template,0,2))?>
+  </div><!-- /Header -->
+
+<!-- Footer -->    <? //отзывы
+       echo nc_objects_list(3, 1359);
+    ?>
+      <? //галерея
+       echo nc_objects_list(3, 1367);
+    ?>
+</div>
+
+%Footer<!-- /Footer -->

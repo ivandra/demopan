@@ -1,0 +1,28 @@
+<?php
+/**
+ * Слоты миксинов для компонента "Контакты (персональные)"
+ */
+return array(
+    // Слоты для списка
+    'list_image' => array(
+        'name' => 'Фото (список)',
+        'selector' => '.person-image-wrapper',
+        'scopes' => array('border', 'border_radius', 'shadow', 'effect'),
+    ),
+    'list_content' => array(
+        'name' => 'Информация (список)',
+        'selector' => '.item-description-wrapper',
+        'scopes' => array('color', 'padding', 'margin', 'background', 'border', 'border_radius', 'shadow'),
+    ),
+
+    // Слоты для страницы полного вывода
+    'full_block' => array(
+        'name' => 'Страница контакта (весь блок)',
+        'selector' => '',
+    ),
+    'full_image' => array(
+        'name' => 'Фото (страница)',
+        'selector' => '.person-image-wrapper',
+        'scopes' => array('border', 'border_radius', 'shadow', 'effect'),
+    ),
+);

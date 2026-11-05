@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="12" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>Титульная страница</Subdivision_Name>
+      <EnglishName>life-old-12</EnglishName>
+      <Checked>0</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="84" subdivision_id="12" class_id="228">
+      <Sub_Class_Name>Главная верхний баннер</Sub_Class_Name>
+      <EnglishName>glavnaya-verhniy-banner</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="374" type_of_data_id="1">
+      <Field_Name>name</Field_Name>
+      <Description>Название</Description>
+    </field>
+    <field field_id="375" type_of_data_id="3">
+      <Field_Name>descrp</Field_Name>
+      <Description>Описание</Description>
+    </field>
+    <field field_id="386" type_of_data_id="5">
+      <Field_Name>h1</Field_Name>
+      <Description>Вывести текст как h1</Description>
+    </field>
+    <field field_id="406" type_of_data_id="6">
+      <Field_Name>img</Field_Name>
+      <Description>Изображение (424x480)</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="1" class_id="228" subdivision_id="12" sub_class_id="84">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>62.60.156.219</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-07-30 14:30:53</Created>
+      <LastUpdated>2026-10-18 22:20:59</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>84.15.178.154</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <name><![CDATA[Наркологическая клиника «МедЭльта» в [inCity]]]></name>
+      <descrp><![CDATA[<li>Комфортные и безопасные условия размещения и лечения</li>
+<li>Помогаем справиться с любой зависимостью и знаем, как мотивировать на лечение</li>
+<li>Срочный выезд бригады в любой район города</li>]]></descrp>
+      <h1>1</h1>
+      <img path=""/>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>

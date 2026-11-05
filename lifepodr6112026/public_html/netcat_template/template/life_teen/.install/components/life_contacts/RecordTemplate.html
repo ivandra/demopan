@@ -1,0 +1,137 @@
+        <?= $f_AdminButtons ?>
+        <div class="contacts-page__main">
+            <div class="contacts-page__header">
+                <h1 class="hero__title">
+                    <?= project_title($f_name) ?>
+                </h1>
+                <p class="hero__description">
+                    <?= shortcode_component((string)$f_text) ?>
+                </p>
+            </div>
+            <div class="contacts-page__top-image">
+                <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/contacts.png" />
+            </div>
+            <div class="contacts-page__subheader">
+                <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/contacts.svg" />
+            </div>
+            <div class="contacts-page__list">
+                <div class="contacts-page__card">
+                    <div class="contacts-page__card-name">
+                        <div class="contacts-page__card-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/contacts-icon1.svg" />
+                        </div>
+                        <h3 class="contacts-page__card-title">Телефон</h3>
+                    </div>
+                    <p class="contacts-page__card-value">
+                        <?= htmlspecialchars(shortcode('[phone]'),ENT_QUOTES,'UTF-8') ?>
+                    </p>
+                    <p class="contacts-page__card-note">
+                        <?= nl2br(htmlspecialchars(preg_replace('~<br\s*/?>~i', "\n", shortcode('[regim]')), ENT_QUOTES, 'UTF-8')) ?>
+                    </p>
+                    <p class="contacts-page__card-note">Ответим на ваши вопросы в рабочее время</p>
+                </div>
+                <div class="contacts-page__card">
+                    <div class="contacts-page__card-name">
+                        <div class="contacts-page__card-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/contacts-icon2.svg" />
+                        </div>
+                        <h3 class="contacts-page__card-title">Email</h3>
+                    </div>
+                    <p class="contacts-page__card-value">
+                        <?= htmlspecialchars(shortcode('[email]'),ENT_QUOTES,'UTF-8') ?>
+                    </p>
+                    <p class="contacts-page__card-note">Ответим в течение 24 часов</p>
+                </div>
+                <div class="contacts-page__card">
+                    <div class="contacts-page__card-name">
+                        <div class="contacts-page__card-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/contacts-icon3.svg" />
+                        </div>
+                        <h3 class="contacts-page__card-title">Мессенджеры</h3>
+                    </div>
+                    <p class="contacts-page__card-value">Telegram, WhatsApp</p>
+                    <p class="contacts-page__card-note">Напишите нам в удобном мессенджере — мы на связи</p>
+                </div>
+                <div class="contacts-page__card">
+                    <div class="contacts-page__card-name">
+                        <div class="contacts-page__card-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/contacts-icon4.svg" />
+                        </div>
+                        <h3 class="contacts-page__card-title">Адрес</h3>
+                    </div>
+                    <p class="contacts-page__card-value">
+                        <?= htmlspecialchars(shortcode('[city]'),ENT_QUOTES,'UTF-8') ?> ,
+                        <?= htmlspecialchars(shortcode('[address]'),ENT_QUOTES,'UTF-8') ?>
+                    </p>
+                    <p class="contacts-page__card-note">Офис и консультационный центр (по предварительной записи)</p>
+                </div>
+            </div>
+        </div>
+        <div class="contacts-page__dual-section">
+            <div class="contacts-page__form-block">
+                <h3 class="contacts-page__form-title">Напишите нам</h3>
+                <h2 class="contacts-page__form-subtitle"> Остались вопросы?
+                    <br /> Мы поможем!
+                </h2>
+                <p class="hero__description"> Заполните форму, и мы свяжемся с вами! </p>
+                <form action="/netcat/add.php" class="contacts-page__form" data-zhp-form="contact" method="post">
+                    <input class="contacts-page__form-input" name="f_name" placeholder="Ваше имя" type="text" />
+                    <input class="contacts-page__form-input" name="f_contact" placeholder="Email или телефон" required="" type="text" />
+                    <textarea class="contacts-page__form-textarea" name="f_message" placeholder="Ваше сообщение"></textarea>
+                    <input id="privacy-policy" name="f_consent" required="" type="checkbox" value="1" />
+                    <label class="contacts-page__form-label" for="privacy-policy"> Я согласен(а) на <a href="/politika-konfidentsialnosti/">обработку персональных данных</a>
+                    </label>
+                    <button class="hero__button hero__button--primary" type="submit"> Отправить сообщение → </button>
+                    <input name="catalogue" type="hidden" value="<?= (int)$catalogue ?>" />
+                    <input name="sub" type="hidden" value="<?= (int)$current_catalogue['zakaz_sub'] ?>" />
+                    <input name="cc" type="hidden" value="<?= (int)$current_catalogue['zakaz_cc'] ?>" />
+                    <input name="posting" type="hidden" value="1" />
+                    <input name="life_nonce" type="hidden" value="<?= htmlspecialchars((string)($_SESSION['life_form_nonce']??''),ENT_QUOTES,'UTF-8') ?>" />
+                    <input name="isNaked" type="hidden" value="1" />
+                    <input name="f_form_type" type="hidden" value="contact" />
+                    <input name="f_page_url" type="hidden" value="<?= htmlspecialchars($_SERVER['REQUEST_URI'],ENT_QUOTES,'UTF-8') ?>" />
+                    <input name="f_request_key" type="hidden" value="<?= bin2hex(random_bytes(16)) ?>" />
+                    <?= $nc_core->token->get_input() ?>
+                    <input name="life_website" type="hidden" value="" />
+                    <output data-form-status="" role="status"></output>
+                </form>
+            </div>
+            <aside class="contacts-page__socials-block">
+                <h3 class="contacts-page__socials-title">Мы в социальных сетях</h3>
+                <p class="hero__description"> Подписывайтесь на наши страницы, чтобы получать полезный контент и быть в курсе новостей проекта. </p>
+                <div class="contacts-page__socials-list">
+                    <div class="contacts-page__socials-card">
+                        <div class="contacts-page__socials-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/social1.svg" />
+                        </div>
+                        <h4 class="contacts-page__socials-name">YouTube</h4>
+                        <p class="contacts-page__socials-desc"> Видео, лекции и советы специалистов </p>
+                        <a class="first-step__link" href="<?= htmlspecialchars(shortcode('[youtube]'),ENT_QUOTES,'UTF-8') ?>">Перейти →</a>
+                    </div>
+                    <div class="contacts-page__socials-card">
+                        <div class="contacts-page__socials-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/social2.svg" />
+                        </div>
+                        <h4 class="contacts-page__socials-name">VK</h4>
+                        <p class="contacts-page__socials-desc"> Видео, лекции и советы специалистов </p>
+                        <a class="first-step__link" href="<?= htmlspecialchars(shortcode('[vk]'),ENT_QUOTES,'UTF-8') ?>">Перейти →</a>
+                    </div>
+                    <div class="contacts-page__socials-card">
+                        <div class="contacts-page__socials-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/social3.svg" />
+                        </div>
+                        <h4 class="contacts-page__socials-name">Instagram</h4>
+                        <p class="contacts-page__socials-desc"> Видео, лекции и советы специалистов </p>
+                        <a class="first-step__link" href="<?= htmlspecialchars(shortcode('[instagram]'),ENT_QUOTES,'UTF-8') ?>">Перейти →</a>
+                    </div>
+                    <div class="contacts-page__socials-card">
+                        <div class="contacts-page__socials-icon">
+                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/social4.svg" />
+                        </div>
+                        <h4 class="contacts-page__socials-name">Telegram</h4>
+                        <p class="contacts-page__socials-desc"> Видео, лекции и советы специалистов </p>
+                        <a class="first-step__link" href="<?= htmlspecialchars(shortcode('[telegram]'),ENT_QUOTES,'UTF-8') ?>">Перейти →</a>
+                    </div>
+                </div>
+            </aside>
+        </div>

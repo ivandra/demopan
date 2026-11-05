@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<netcatml>
+  <subdivisions>
+    <subdivision subdivision_id="5" catalogue_id="1" parent_sub_id="0">
+      <Subdivision_Name>О нас</Subdivision_Name>
+      <EnglishName>life-old-5</EnglishName>
+      <Checked>1</Checked>
+    </subdivision>
+  </subdivisions>
+  <sub_classes>
+    <sub_class sub_class_id="203" subdivision_id="5" class_id="250">
+      <Sub_Class_Name>Текст второй о нас</Sub_Class_Name>
+      <EnglishName>tekst-vtoroy-o-nas</EnglishName>
+      <Checked>1</Checked>
+    </sub_class>
+  </sub_classes>
+  <fields>
+    <field field_id="438" type_of_data_id="3">
+      <Field_Name>maintitle</Field_Name>
+      <Description>Заголовок</Description>
+    </field>
+    <field field_id="437" type_of_data_id="3">
+      <Field_Name>text</Field_Name>
+      <Description>Текст основной</Description>
+    </field>
+    <field field_id="433" type_of_data_id="6">
+      <Field_Name>img</Field_Name>
+      <Description>Картинка</Description>
+    </field>
+  </fields>
+  <messages>
+    <message message_id="1" class_id="250" subdivision_id="5" sub_class_id="203">
+      <User_ID>1</User_ID>
+      <Priority>1</Priority>
+      <Checked>1</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-14 00:47:09</Created>
+      <LastUpdated>2026-10-14 01:08:23</LastUpdated>
+      <LastUser_ID>1</LastUser_ID>
+      <LastIP>193.233.129.42</LastIP>
+      <LastUserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</LastUserAgent>
+      <Keyword/>
+      <maintitle><![CDATA[Конфиденциальность и уважительное отношение]]></maintitle>
+      <text><![CDATA[<p>Обращение за наркологической помощью нередко сопровождается тревогой, страхом осуждения или нежеланием рассказывать окружающим о существующей проблеме. В &laquo;МедЭльта&raquo; уделяется внимание конфиденциальности медицинской информации и корректному взаимодействию с пациентом.</p>
+<p>Специалисты придерживаются профессиональной этики и уважительно относятся к человеку независимо от продолжительности заболевания, количества предыдущих срывов или обстоятельств обращения.</p>
+<p>Задача врача &mdash; объективно оценить ситуацию и помочь пациенту выбрать медицински обоснованный путь лечения, а не давать моральную оценку его поступкам.</p>]]></text>
+      <img path=""/>
+    </message>
+    <message message_id="2" class_id="250" subdivision_id="5" sub_class_id="203">
+      <User_ID>1</User_ID>
+      <Priority>2</Priority>
+      <Checked>1</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-14 01:31:40</Created>
+      <LastUpdated>2026-10-14 01:31:40</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Помощь родственникам пациента]]></maintitle>
+      <text><![CDATA[<p>Зависимость влияет не только на самого человека, но и на его близких. Родственники могут годами пытаться контролировать употребление, убеждать пациента обратиться к врачу или самостоятельно справляться с последствиями очередного срыва.</p>
+<p>Специалисты клиники помогают близким понять, как правильно действовать в конкретной ситуации, какие признаки требуют медицинского вмешательства и как разговаривать с человеком о необходимости лечения.</p>
+<p>При этом решение о терапии должно приниматься с учётом состояния пациента, медицинских показаний и требований законодательства. Давление и конфликт не всегда помогают сформировать устойчивую мотивацию, поэтому взаимодействие с зависимым человеком требует взвешенного подхода.</p>]]></text>
+      <img path=""/>
+    </message>
+    <message message_id="3" class_id="250" subdivision_id="5" sub_class_id="203">
+      <User_ID>1</User_ID>
+      <Priority>3</Priority>
+      <Checked>1</Checked>
+      <IP>193.233.129.42</IP>
+      <UserAgent>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36</UserAgent>
+      <Parent_Message_ID>0</Parent_Message_ID>
+      <Created>2026-10-14 01:32:19</Created>
+      <LastUpdated>2026-10-14 01:32:19</LastUpdated>
+      <LastUser_ID>0</LastUser_ID>
+      <LastIP/>
+      <LastUserAgent/>
+      <Keyword/>
+      <maintitle><![CDATA[Помощь на дому и в клинике]]></maintitle>
+      <text><![CDATA[<p>Состояние пациентов при обращении может существенно отличаться. В некоторых ситуациях необходимую помощь возможно оказать на дому, в других безопаснее проводить лечение в условиях медицинского учреждения.</p>
+<p>Выезд врача позволяет провести первичный осмотр по месту нахождения пациента, оценить его состояние и определить дальнейшую тактику. Если выявляются признаки тяжёлых осложнений или требуется постоянное наблюдение, специалист может рекомендовать госпитализацию.</p>
+<p>Стационарный формат даёт возможность контролировать состояние пациента и своевременно корректировать назначенную терапию. Выбор между лечением на дому и в клинике определяется прежде всего медицинскими показаниями и безопасностью.</p>]]></text>
+      <img path=""/>
+    </message>
+  </messages>
+  <comments/>
+</netcatml>
