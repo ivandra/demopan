@@ -1,9 +1,9 @@
 <?= $f_AdminCommon ?>
 <section class="reviews">
     <div class="wrap">
-        <h2 class="hero__title">
-            <?= shortcode_component((string)($cc_settings['heading'] ?? '')) ?>
-        </h2>
+        <?php if (project_filled(project_setting_heading($cc_settings))) { ?><h2 class="hero__title">
+            <?= project_setting_heading($cc_settings) ?>
+        </h2><?php } ?>
         <div class="reviews__content">
             <div class="swiper2 reviews__list">
                 <div class="swiper-wrapper">

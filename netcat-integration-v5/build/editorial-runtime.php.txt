@@ -1,0 +1,179 @@
+function project_filled($value)
+{
+    $value = shortcode((string)$value);
+    return trim(str_replace("\xc2\xa0", ' ', html_entity_decode(strip_tags($value), ENT_QUOTES, 'UTF-8'))) !== ''
+        || (bool)preg_match('~<(?:img|video|iframe)\b[^>]*(?:src|data-src)=~i', $value);
+}
+
+function project_plain($value)
+{
+    return htmlspecialchars(shortcode((string)$value), ENT_QUOTES, 'UTF-8');
+}
+
+function project_line_list($value, $class = '')
+{
+    $items = preg_split('/\R/u', trim((string)$value), -1, PREG_SPLIT_NO_EMPTY);
+    $output = '';
+    foreach ($items as $item) {
+        if (!project_filled($item)) { continue; }
+        $output .= '<li'.($class ? ' class="'.htmlspecialchars($class, ENT_QUOTES, 'UTF-8').'"' : '').'>'.project_plain(trim($item)).'</li>';
+    }
+    return $output;
+}
+
+function project_setting_heading(array $settings)
+{
+    return project_title($settings['heading'] ?? '');
+}
+
+function project_category_slug($value, $table)
+{
+    static $maps = [];
+    if (!in_array($table, ['LifeArticleCategory','LifePhotoCategory'], true)) { return ''; }
+    if (!isset($maps[$table])) {
+        $maps[$table] = [];
+        $db = nc_core()->db;
+        if ($db->get_var("SELECT Classificator_ID FROM Classificator WHERE Table_Name='".$table."'")) {
+            foreach ((array)$db->get_results('SELECT '.$table.'_ID,'.$table.'_Name,Value FROM Classificator_'.$table, ARRAY_A) as $row) {
+                $token=$row['Value']!==''?$row['Value']:'category-'.(int)$row[$table.'_ID'];
+                $maps[$table][(string)$row[$table.'_ID']] = $token;
+                $maps[$table][$row[$table.'_Name']] = $token;
+                $maps[$table][$token] = $token;
+            }
+        }
+    }
+    return $maps[$table][(string)$value] ?? (string)$value;
+}
+
+function project_article_category($value)
+{
+    return project_category_slug($value, 'LifeArticleCategory');
+}
+
+function project_article_category_condition($value)
+{
+    $db = nc_core()->db;
+    $class = (int)$db->get_var("SELECT Class_ID FROM Class WHERE Keyword='life_articles' AND ClassTemplate=0");
+    if ((int)$db->get_var("SELECT TypeOfData_ID FROM Field WHERE Class_ID=".$class." AND Field_Name='category'") === 4) {
+        $id=0;foreach(project_category_items('LifeArticleCategory') as $item){if($item['value']===$value){$id=$item['id'];break;}}
+        return 'a.category='.$id;
+    }
+    return "a.category='".$db->escape($value)."'";
+}
+
+function project_specialist_extras($keyword, $specialist)
+{
+    if (!in_array($keyword, ['life_specialist_methods','life_specialist_education'], true)) { return []; }
+    $db = nc_core()->db;
+    $class = (int)$db->get_var("SELECT Class_ID FROM Class WHERE Keyword='".$keyword."' AND ClassTemplate=0");
+    if (!$class) { return []; }
+    $rows = (array)$db->get_results('SELECT * FROM Message'.$class.' WHERE specialist='.(int)$specialist.' AND Checked=1 ORDER BY Priority,Message_ID', ARRAY_A);
+    foreach ($rows as &$row) { $row['image_url'] = nc_file_path($class, $row['Message_ID'], 'img'); } unset($row);
+    return array_values(array_filter($rows, function ($row) { return project_filled($row['name']) || project_filled($row['description']) || project_filled($row['period'] ?? '') || project_filled($row['image_url']); }));
+}
+
+function project_specialist_extras_editor($keyword)
+{
+    if (!nc_core()->InsideAdminAccess()) { return ''; }
+    $db = nc_core()->db;
+    if (!in_array($keyword, ['life_specialist_methods','life_specialist_education'], true)) { return ''; }
+    $block = (int)$db->get_var("SELECT s.Sub_Class_ID FROM Sub_Class s JOIN Class c USING(Class_ID) WHERE c.Keyword='".$keyword."' AND c.ClassTemplate=0 LIMIT 1");
+    if (!$block) { return ''; }
+    return '<a class="project-editor-link" href="/netcat/admin/#object.list('.$block.')">'.($keyword === 'life_specialist_methods' ? 'Редактировать методы специалистов' : 'Редактировать образование специалистов').'</a>';
+}
+
+function project_service_has_text_heading($subdivision)
+{
+    $db = nc_core()->db;
+    return !(bool)$db->get_var("SELECT s.Sub_Class_ID FROM Sub_Class s JOIN Class c ON c.Class_ID=IF(s.Class_Template_ID>0,s.Class_Template_ID,s.Class_ID) WHERE s.Subdivision_ID=".(int)$subdivision." AND s.Checked=1 AND c.Keyword LIKE 'life_banner%' LIMIT 1");
+}
+
+function project_other_specialists($message, $class)
+{
+    global $catalogue;
+    $db = nc_core()->db;
+    $related = $db->get_row("SELECT s.Sub_Class_ID,s.Subdivision_ID,c.Class_ID AS View_ID FROM Sub_Class s JOIN Class c ON c.ClassTemplate=s.Class_ID AND c.Keyword='life_specialists_other' WHERE s.Catalogue_ID=".(int)$catalogue.' AND s.Class_ID='.(int)$class.' AND s.Class_Template_ID=0 AND s.Checked=1 ORDER BY s.Priority LIMIT 1', ARRAY_A);
+    if (!$related) { return ''; }
+    $previous = $GLOBALS['project_current_specialist'] ?? null;
+    $GLOBALS['project_current_specialist'] = (int)$message;
+    $output = nc_objects_list((int)$related['Subdivision_ID'], (int)$related['Sub_Class_ID'], 'nc_ctpl='.(int)$related['View_ID']);
+    if ($previous === null) { unset($GLOBALS['project_current_specialist']); } else { $GLOBALS['project_current_specialist'] = $previous; }
+    return $output;
+}
+
+function project_text_block_visible($block)
+{
+    static $values = [];
+    if (!array_key_exists($block, $values)) {
+        $values[$block] = false;
+        $db = nc_core()->db;
+        $class = (int)$db->get_var("SELECT Class_ID FROM Class WHERE Keyword='life_text' AND ClassTemplate=0");
+        foreach ((array)$db->get_results('SELECT text,heading FROM Message'.$class.' WHERE Sub_Class_ID='.(int)$block.' AND Checked=1', ARRAY_A) as $row) {
+            if (project_filled($row['text']) || project_filled($row['heading'])) { $values[$block] = true; break; }
+        }
+    }
+    return $values[$block];
+}
+
+function project_article_meta($date, $readtime)
+{
+    $parts = [];
+    if (project_schema_date($date)) { $parts[] = date('d.m.Y', strtotime($date)); }
+    if (project_filled($readtime)) { $parts[] = shortcode($readtime); }
+    return htmlspecialchars(implode(' • ', $parts), ENT_QUOTES, 'UTF-8');
+}
+
+function project_setting_title(array $settings, $key)
+{
+    return project_title($settings[$key] ?? '');
+}
+
+function project_category_items($table)
+{
+    static $items = [];
+    if (!in_array($table, ['LifeArticleCategory','LifePhotoCategory'], true)) { return []; }
+    if (!array_key_exists($table, $items)) {
+        $db=nc_core()->db;$items[$table]=[];
+        if ($db->get_var("SELECT Classificator_ID FROM Classificator WHERE Table_Name='".$table."'")) {
+            foreach ((array)$db->get_results('SELECT '.$table.'_ID,'.$table.'_Name,Value FROM Classificator_'.$table.' WHERE Checked=1 ORDER BY '.$table.'_Priority,'.$table.'_ID', ARRAY_A) as $row) {
+                $id=(int)$row[$table.'_ID'];$items[$table][]=['id'=>$id,'name'=>$row[$table.'_Name'],'value'=>$row['Value']!==''?$row['Value']:'category-'.$id];
+            }
+        }
+    }
+    return $items[$table];
+}
+
+function project_article_category_label($value)
+{
+    if ($value === null || (string)$value === '' || (string)$value === '0') { return ''; }
+    $slug=project_article_category($value);
+    foreach(project_category_items('LifeArticleCategory') as $item){if($item['value']===$slug){return $item['name'];}}
+    return ['teens'=>'Подросткам','parents'=>'Родителям','specialists'=>'Специалистам'][$slug]??$slug;
+}
+
+function project_article_tips($article)
+{
+    $db=nc_core()->db;$class=(int)$db->get_var("SELECT Class_ID FROM Class WHERE Keyword='life_article_tips' AND ClassTemplate=0");
+    if(!$class){return [];}$rows=(array)$db->get_results('SELECT * FROM Message'.$class.' WHERE article='.(int)$article.' AND Checked=1 ORDER BY Priority,Message_ID',ARRAY_A);
+    foreach($rows as &$row){$row['image_url']=nc_file_path($class,$row['Message_ID'],'img');}unset($row);return array_values(array_filter($rows,function($row){return project_filled($row['name'])||project_filled($row['description'])||project_filled($row['image_url']);}));
+}
+
+function project_article_tips_editor()
+{
+    if(!nc_core()->InsideAdminAccess()){return '';}$db=nc_core()->db;$block=(int)$db->get_var("SELECT s.Sub_Class_ID FROM Sub_Class s JOIN Class c USING(Class_ID) WHERE c.Keyword='life_article_tips' AND c.ClassTemplate=0 LIMIT 1");
+    return $block?'<a class="project-editor-link" href="/netcat/admin/#object.list('.$block.')">Редактировать советы в статьях</a>':'';
+}
+
+function project_stat_result($value)
+{
+    $value=shortcode((string)$value);
+    if(preg_match('/\A(.*?\d(?:[\d\s.,]*\d)?)(?:\s+(.+))?\z/u',$value,$parts)){return [$parts[1],$parts[2]??''];}
+    return [$value,''];
+}
+
+function project_online_info($value)
+{
+    $value=shortcode((string)$value);
+    if(preg_match('/\A(.+?)\s*\((.*)\)\z/u',$value,$parts)){return '<span>'.project_plain($parts[1]).'</span> ('.project_plain($parts[2]).')';}
+    return project_plain($value);
+}

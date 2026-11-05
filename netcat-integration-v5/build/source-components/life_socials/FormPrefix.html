@@ -1,11 +1,9 @@
 <section class="socials">
     <div class="wrap">
         <div class="socials__header">
-            <h2 class="hero__title">
-                <span class="hero__title-accent">МЫ В СОЦСЕТЯХ</span>
-            </h2>
+            <?php if (project_filled(project_setting_title($cc_settings, 'content_formprefix_1'))) { ?><h2 class="hero__title"><?= project_setting_title($cc_settings, 'content_formprefix_1') ?></h2><?php } ?>
             <h3 class="socials__main-title"> Подписывайтесь и будьте в курсе </h3>
-            <p class="hero__description"> Полезные посты, прямые эфиры, истории, вебинары и ответы на важные вопросы. </p>
+            <?php if (project_filled($cc_settings['content_formprefix_2'] ?? '')) { ?><p class="hero__description"><?= nl2br(project_plain($cc_settings['content_formprefix_2'] ?? ''), false) ?></p><?php } ?>
         </div>
         <div class="socials__list">
             <a class="socials__item" href="<?= htmlspecialchars(shortcode('[instagram]'),ENT_QUOTES,'UTF-8') ?>">

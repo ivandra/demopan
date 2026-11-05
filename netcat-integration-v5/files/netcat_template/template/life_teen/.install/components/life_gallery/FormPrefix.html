@@ -1,11 +1,8 @@
 <?= $f_AdminCommon ?>
-<section class="gallery">
-    <div class="wrap">
-        <nav class="specialists-block__filters">
-            <button class="specialists-block__filter specialists-block__filter--active" data-filter="all" type="button"> Все фото </button>
-            <button class="specialists-block__filter" data-filter="classes" type="button"> Занятия </button>
-            <button class="specialists-block__filter" data-filter="events" type="button"> Мероприятия </button>
-            <button class="specialists-block__filter" data-filter="team" type="button"> Команда </button>
-            <button class="specialists-block__filter" data-filter="more" type="button"> Ещё </button>
-        </nav>
-        <div class="gallery__list gallery__list--all">
+<section class="gallery"><div class="wrap">
+<nav class="specialists-block__filters" aria-label="Категории фотографий">
+<button class="specialists-block__filter specialists-block__filter--active" data-filter="all" type="button">Все фото</button>
+<?php foreach (project_category_items('LifePhotoCategory') as $project_category_item) { ?>
+<button class="specialists-block__filter" data-filter="<?= project_plain($project_category_item['value']) ?>" type="button"><?= project_plain($project_category_item['name']) ?></button>
+<?php } ?>
+</nav><div class="gallery__list gallery__list--all">

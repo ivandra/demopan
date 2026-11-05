@@ -1,17 +1,20 @@
         <?= $f_AdminButtons ?>
         <div class="program__features">
-            <div class="program__feature">
-                <h3 class="program__subtitle">Как понять, что это тревога?</h3>
-                <div class="hero__description">
+            <?php if (project_filled($f_directions) || project_filled($f_text)) { ?><div class="program__feature">
+                <?php if (project_filled($f_name) || project_filled(project_setting_title($cc_settings, 'content_recordtemplate_1'))) { ?><h3 class="program__subtitle"><?= project_filled($f_name) ? project_title($f_name) : project_setting_title($cc_settings, 'content_recordtemplate_1') ?></h3><?php } ?>
+                <?php if (project_filled($f_text)) { ?><div class="hero__description">
                     <?= shortcode_component((string)$f_text) ?>
-                </div>
-                <ul class="program__list">
-                    <?= shortcode_component((string)$f_directions) ?>
-                </ul>
-            </div>
+                </div><?php } ?>
+                <?php if (project_filled($f_directions)) { ?><ul class="program__list">
+                    <?= project_line_list($f_directions, 'program__list-item') ?>
+                </ul><?php } ?>
+            </div><?php } ?>
+            <?php if (project_filled($f_support)) { ?><div class="program__feature">
+                <h3 class="program__subtitle">Сопровождение</h3><ul class="program__list"><?= project_line_list($f_support, 'program__list-item') ?></ul>
+            </div><?php } ?>
             <div class="program__banner">
                 <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/service2.png" />
                 <img alt="" class="program__banner-before" decoding="async" src="/netcat_template/template/life_teen/img/before10.svg" />
-                <div class="program__banner-quote"> «Тревога не делает тебя слабым. Она просто говорит о том, что сейчас тебе нужна поддержка» </div>
+                <?php if (project_filled($cc_settings['banner_quote'] ?? '')) { ?><div class="program__banner-quote"><?= project_plain($cc_settings['banner_quote']) ?></div><?php } ?>
             </div>
         </div>

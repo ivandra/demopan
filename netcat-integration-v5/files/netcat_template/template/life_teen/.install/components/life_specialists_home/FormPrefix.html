@@ -1,9 +1,8 @@
 <?= $f_AdminCommon ?>
 <section class="specialists">
     <div class="wrap">
-        <h2 class="hero__title"> НАШИ <span class="hero__title-accent">СПЕЦИАЛИСТЫ</span>
-        </h2>
-        <p class="hero__description"> Рядом с вами – профессионалы, которые понимают, поддерживают и помогают находить решение. </p>
+        <?php if (project_filled(project_setting_title($cc_settings, 'content_formprefix_1'))) { ?><h2 class="hero__title"><?= project_setting_title($cc_settings, 'content_formprefix_1') ?></h2><?php } ?>
+        <?php if (project_filled($cc_settings['content_formprefix_2'] ?? '')) { ?><p class="hero__description"><?= nl2br(project_plain($cc_settings['content_formprefix_2'] ?? ''), false) ?></p><?php } ?>
         <div class="specialists__content">
             <img alt="" class="specialists__icon specialists__icon--icon1" decoding="async" src="/netcat_template/template/life_teen/img/specialists-icon.svg" />
             <img alt="" class="specialists__icon specialists__icon--icon2" decoding="async" src="/netcat_template/template/life_teen/img/specialists-icon2.svg" />

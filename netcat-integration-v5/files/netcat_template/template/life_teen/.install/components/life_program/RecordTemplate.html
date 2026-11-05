@@ -1,49 +1,35 @@
         <?= $f_AdminButtons ?>
         <div class="program__info">
             <div class="program__header">
-                <p class="hero__label">СИСТЕМА СОПРОВОЖДЕНИЯ</p>
-                <h2 class="hero__title">
+                <?php if (project_filled($cc_settings['content_recordtemplate_1'] ?? '')) { ?><p class="hero__label"><?= nl2br(project_plain($cc_settings['content_recordtemplate_1'] ?? ''), false) ?></p><?php } ?>
+                <?php if (project_filled($f_name)) { ?><h2 class="hero__title">
                     <?= project_title($f_name) ?>
-                </h2>
-                <p class="hero__description">
+                </h2><?php } ?>
+                <?php if (project_filled($f_text)) { ?><p class="hero__description">
                     <?= shortcode_component((string)$f_text) ?>
-                </p>
-                <div class="program__benefits">
-                    <div class="program__benefit-item">
-                        <span class="program__benefit-icon">
-                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/program-icon1.svg" />
-                        </span>
-                        <span class="program__benefit-text">Практический опыт команды</span>
-                    </div>
-                    <div class="program__benefit-item">
-                        <span class="program__benefit-icon">
-                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/program-icon2.svg" />
-                        </span>
-                        <span class="program__benefit-text">Единая методология</span>
-                    </div>
-                    <div class="program__benefit-item">
-                        <span class="program__benefit-icon">
-                            <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/program-icon3.svg" />
-                        </span>
-                        <span class="program__benefit-text">Реальные результаты</span>
-                    </div>
-                </div>
+                </p><?php } ?>
+                <?php $project_benefits=preg_split('/\R/u', trim($cc_settings['benefits'] ?? ''), -1, PREG_SPLIT_NO_EMPTY); if ($project_benefits) { ?><div class="program__benefits">
+                    <?php foreach ($project_benefits as $index=>$benefit) { ?><div class="program__benefit-item">
+                        <span class="program__benefit-icon"><img alt="" src="/netcat_template/template/life_teen/img/program-icon<?= $index%3+1 ?>.svg"></span>
+                        <span class="program__benefit-text"><?= project_plain($benefit) ?></span>
+                    </div><?php } ?>
+                </div><?php } ?>
             </div>
             <div class="program__image">
                 <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/program.png" />
             </div>
         </div>
         <div class="program__features">
-            <div class="program__feature">
-                <h3 class="program__subtitle">Основные направления программы</h3>
+            <?php if (project_filled($f_directions)) { ?><div class="program__feature">
+                <?php if (project_filled(project_setting_title($cc_settings, 'content_recordtemplate_2'))) { ?><h3 class="program__subtitle"><?= project_setting_title($cc_settings, 'content_recordtemplate_2') ?></h3><?php } ?>
                 <ul class="program__list">
-                    <?= shortcode_component((string)$f_directions) ?>
+                    <?= project_line_list($f_directions, 'program__list-item') ?>
                 </ul>
-            </div>
-            <div class="program__feature">
-                <h3 class="program__subtitle">Что входит в сопровождение</h3>
+            </div><?php } ?>
+            <?php if (project_filled($f_support)) { ?><div class="program__feature">
+                <?php if (project_filled(project_setting_title($cc_settings, 'content_recordtemplate_3'))) { ?><h3 class="program__subtitle"><?= project_setting_title($cc_settings, 'content_recordtemplate_3') ?></h3><?php } ?>
                 <ul class="program__list">
-                    <?= shortcode_component((string)$f_support) ?>
+                    <?= project_line_list($f_support, 'program__list-item') ?>
                 </ul>
-            </div>
+            </div><?php } ?>
         </div>

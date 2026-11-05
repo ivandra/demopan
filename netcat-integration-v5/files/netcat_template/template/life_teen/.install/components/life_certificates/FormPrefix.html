@@ -1,8 +1,8 @@
 <?= $f_AdminCommon ?>
 <section class="certificates">
     <div class="wrap">
-        <h1 class="hero__title">
-            <?= shortcode_component((string)($cc_settings['heading'] ?? '')) ?>
-        </h1>
+        <?php if (project_filled(project_setting_heading($cc_settings))) { ?><h1 class="hero__title">
+            <?= project_setting_heading($cc_settings) ?>
+        </h1><?php } ?>
         <div class="swiper3 certificates__list">
             <div class="swiper-wrapper">

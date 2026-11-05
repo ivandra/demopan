@@ -1,0 +1,653 @@
+{
+  "version": "5.3.0",
+  "new_fields": {
+    "life_specialists": [
+      {
+        "name": "city_from_region",
+        "label": "Город: брать из настроек региона",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "name": "city",
+        "label": "Город: своё значение",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "work_format",
+        "label": "Формат работы, например: очно и онлайн",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "experience",
+        "label": "Опыт работы, например: 8 лет",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "clients_count",
+        "label": "Кому помогли, например: более 300 подростков и семей",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "reception_from_region",
+        "label": "Очный приём: брать адрес из региона",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "name": "reception_address",
+        "label": "Адрес очного приёма",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "online_platforms",
+        "label": "Онлайн-консультации: география и платформы",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "session_duration",
+        "label": "Продолжительность сеанса",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "session_price",
+        "label": "Стоимость сеанса, с валютой",
+        "type": "string",
+        "required": false
+      },
+      {
+        "name": "bio_quote",
+        "label": "Цитата в отдельном блоке",
+        "type": "text",
+        "required": false
+      }
+    ],
+    "life_cards": [
+      {
+        "name": "items",
+        "label": "Пункты списка: каждый с новой строки",
+        "type": "text",
+        "required": false
+      }
+    ],
+    "life_articles": [
+      {
+        "name": "recommended",
+        "label": "Рекомендуемая статья",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "name": "tips_heading",
+        "label": "Заголовок блока практических советов",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "life_text": [
+      {
+        "name": "heading",
+        "label": "Заголовок текстового блока (необязательно)",
+        "type": "string",
+        "required": false
+      }
+    ]
+  },
+  "new_components": {
+    "life_specialist_methods": {
+      "name": "Методы работы специалистов",
+      "fields": [
+        {
+          "name": "specialist",
+          "label": "Специалист",
+          "type": "relation",
+          "required": true
+        },
+        {
+          "name": "name",
+          "label": "Название метода",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "description",
+          "label": "Краткое описание",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "img",
+          "label": "Иконка или изображение",
+          "type": "file",
+          "required": false
+        }
+      ]
+    },
+    "life_specialist_education": {
+      "name": "Образование специалистов",
+      "fields": [
+        {
+          "name": "specialist",
+          "label": "Специалист",
+          "type": "relation",
+          "required": true
+        },
+        {
+          "name": "name",
+          "label": "Учебное заведение или название документа",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "description",
+          "label": "Специальность или программа обучения",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "period",
+          "label": "Годы обучения или год выдачи",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "img",
+          "label": "Иконка или логотип",
+          "type": "file",
+          "required": false
+        }
+      ]
+    },
+    "life_article_tips": {
+      "name": "Практические советы в статьях",
+      "fields": [
+        {
+          "name": "article",
+          "label": "Статья",
+          "type": "relation",
+          "parent": "life_articles",
+          "required": true
+        },
+        {
+          "name": "name",
+          "label": "Заголовок совета",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "description",
+          "label": "Текст совета",
+          "type": "text",
+          "required": false
+        },
+        {
+          "name": "img",
+          "label": "Иконка или номер",
+          "type": "file",
+          "required": false
+        }
+      ]
+    }
+  },
+  "category_lists": {
+    "life_articles": {
+      "table": "LifeArticleCategory",
+      "label": "Категории статей",
+      "items": {
+        "teens": "Подросткам",
+        "parents": "Родителям",
+        "specialists": "Специалистам"
+      }
+    },
+    "life_gallery": {
+      "table": "LifePhotoCategory",
+      "label": "Категории фотогалереи",
+      "items": {
+        "classes": "Занятия",
+        "events": "Мероприятия",
+        "team": "Команда",
+        "more": "Ещё"
+      }
+    }
+  },
+  "settings": {
+    "life_articles_featured": {
+      "content_recordtemplate_2": {
+        "caption": "Описание «Практические советы, проверенные экспертом материалы и истории, к»",
+        "type": "textarea",
+        "default_value": "Практические советы, проверенные экспертом материалы и истории, которые помогут лучше понимать друг друга и справляться с трудностями.",
+        "codemirror": false
+      },
+      "content_recordtemplate_3": {
+        "caption": "Текст кнопки «Читать статью →»",
+        "type": "string",
+        "default_value": "Читать статью →"
+      },
+      "content_recordtemplate_1": {
+        "caption": "Заголовок «Полезные статьи»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "Полезные<br><span class=\"hero__title-accent\">статьи</span>"
+      }
+    },
+    "life_articles_home": {
+      "content_formprefix_1": {
+        "caption": "Заголовок «БЛОГ: ПОЛЕЗНЫЕ СТАТЬИ»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "БЛОГ: <span class=\"hero__title-accent\">ПОЛЕЗНЫЕ СТАТЬИ</span>"
+      }
+    },
+    "life_articles_related": {
+      "content_formsuffix_1": {
+        "caption": "Текст кнопки «Все статьи →»",
+        "type": "string",
+        "default_value": "Все статьи →"
+      }
+    },
+    "life_banner": {
+      "content_recordtemplate_1": {
+        "caption": "Метка блока «МЫ РЯДОМ»",
+        "type": "string",
+        "default_value": "МЫ РЯДОМ"
+      },
+      "content_recordtemplate_2": {
+        "caption": "Текст кнопки «Я подросток →»",
+        "type": "string",
+        "default_value": "Я подросток →"
+      },
+      "content_recordtemplate_3": {
+        "caption": "Текст кнопки «Я родитель»",
+        "type": "string",
+        "default_value": "Я родитель"
+      }
+    },
+    "life_banner_about": {
+      "content_recordtemplate_1": {
+        "caption": "Метка блока «О ПРОЕКТЕ»",
+        "type": "string",
+        "default_value": "О ПРОЕКТЕ"
+      }
+    },
+    "life_banner_about_text": {
+      "content_recordtemplate_1": {
+        "caption": "Метка блока «НАША ИДЕЯ»",
+        "type": "string",
+        "default_value": "НАША ИДЕЯ"
+      },
+      "content_recordtemplate_2": {
+        "caption": "Описание ««Подростковый мир» появился, чтобы создавать безопасное пространс»",
+        "type": "textarea",
+        "default_value": "«Подростковый мир» появился, чтобы создавать безопасное пространство, где подростки и их родители могут получить поддержку, знания и уверенность.",
+        "codemirror": false
+      }
+    },
+    "life_banner_home": {
+      "content_recordtemplate_1": {
+        "caption": "Метка блока «МЫ РЯДОМ»",
+        "type": "string",
+        "default_value": "МЫ РЯДОМ"
+      },
+      "content_recordtemplate_2": {
+        "caption": "Текст кнопки «Я подросток →»",
+        "type": "string",
+        "default_value": "Я подросток →"
+      },
+      "content_recordtemplate_3": {
+        "caption": "Текст кнопки «Я родитель»",
+        "type": "string",
+        "default_value": "Я родитель"
+      }
+    },
+    "life_banner_service": {
+      "content_recordtemplate_1": {
+        "caption": "Текст кнопки «Получить поддержку →»",
+        "type": "string",
+        "default_value": "Получить поддержку →"
+      }
+    },
+    "life_banner_specialists": {
+      "content_recordtemplate_1": {
+        "caption": "Метка блока «СПЕЦИАЛИСТЫ»",
+        "type": "string",
+        "default_value": "СПЕЦИАЛИСТЫ"
+      }
+    },
+    "life_calculator": {
+      "content_formprefix_1": {
+        "caption": "Метка блока «ПРЕДВАРИТЕЛЬНЫЙ РАСЧЁТ»",
+        "type": "string",
+        "default_value": "ПРЕДВАРИТЕЛЬНЫЙ РАСЧЁТ"
+      },
+      "content_formprefix_3": {
+        "caption": "Описание «Цена зависит от продолжительности и необходимого объёма сопровожд»",
+        "type": "textarea",
+        "default_value": "Цена зависит от продолжительности и необходимого объёма сопровождения. Выберите количество суток и ориентировочную ставку, чтобы увидеть диапазон бюджета.",
+        "codemirror": false
+      },
+      "content_formprefix_4": {
+        "caption": "Текст кнопки «Получить точный расчёт →»",
+        "type": "string",
+        "default_value": "Получить точный расчёт →"
+      },
+      "content_formprefix_2": {
+        "caption": "Заголовок «Стоимость пребывания»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "Стоимость <span class=\"hero__title-accent\">пребывания</span>"
+      }
+    },
+    "life_cards": {
+      "content_recordtemplate_1": {
+        "caption": "Текст кнопки «Узнать больше»",
+        "type": "string",
+        "default_value": "Узнать больше"
+      }
+    },
+    "life_cards_peoples": {
+      "content_formprefix_1": {
+        "caption": "Метка блока «ДЛЯ КОГО МЫ»",
+        "type": "string",
+        "default_value": "ДЛЯ КОГО МЫ"
+      }
+    },
+    "life_cards_values": {
+      "content_formprefix_1": {
+        "caption": "Метка блока «НАШИ ЦЕННОСТИ»",
+        "type": "string",
+        "default_value": "НАШИ ЦЕННОСТИ"
+      }
+    },
+    "life_cards_way": {
+      "content_formprefix_1": {
+        "caption": "Метка блока «КАК МЫ РАБОТАЕМ»",
+        "type": "string",
+        "default_value": "КАК МЫ РАБОТАЕМ"
+      }
+    },
+    "life_cards_whom": {
+      "content_recordtemplate_1": {
+        "caption": "Текст кнопки «Узнать больше»",
+        "type": "string",
+        "default_value": "Узнать больше"
+      }
+    },
+    "life_contacts": {
+      "content_recordtemplate_1": {
+        "caption": "Описание «Заполните форму, и мы свяжемся с вами!»",
+        "type": "string",
+        "default_value": "Заполните форму, и мы свяжемся с вами!"
+      },
+      "content_recordtemplate_2": {
+        "caption": "Описание «Подписывайтесь на наши страницы, чтобы получать полезный контент »",
+        "type": "textarea",
+        "default_value": "Подписывайтесь на наши страницы, чтобы получать полезный контент и быть в курсе новостей проекта.",
+        "codemirror": false
+      },
+      "content_recordtemplate_3": {
+        "caption": "Текст ссылки «Перейти →»",
+        "type": "string",
+        "default_value": "Перейти →"
+      },
+      "content_recordtemplate_4": {
+        "caption": "Текст ссылки «Перейти →»",
+        "type": "string",
+        "default_value": "Перейти →"
+      },
+      "content_recordtemplate_5": {
+        "caption": "Текст ссылки «Перейти →»",
+        "type": "string",
+        "default_value": "Перейти →"
+      },
+      "content_recordtemplate_6": {
+        "caption": "Текст ссылки «Перейти →»",
+        "type": "string",
+        "default_value": "Перейти →"
+      }
+    },
+    "life_faq": {
+      "content_formprefix_1": {
+        "caption": "Метка блока «FAQ»",
+        "type": "string",
+        "default_value": "FAQ"
+      }
+    },
+    "life_faq_contacts": {
+      "content_formprefix_1": {
+        "caption": "Метка блока «FAQ»",
+        "type": "string",
+        "default_value": "FAQ"
+      }
+    },
+    "life_first_step": {
+      "content_formprefix_1": {
+        "caption": "Метка блока «СДЕЛАЙТЕ ПЕРВЫЙ ШАГ»",
+        "type": "string",
+        "default_value": "СДЕЛАЙТЕ ПЕРВЫЙ ШАГ"
+      },
+      "content_formprefix_3": {
+        "caption": "Описание «Позвоните нам, познакомьтесь с проектом в видео или присоединитес»",
+        "type": "textarea",
+        "default_value": "Позвоните нам, познакомьтесь с проектом в видео или присоединитесь к группе для родителей.",
+        "codemirror": false
+      },
+      "content_formprefix_4": {
+        "caption": "Текст ссылки «Присоединиться →»",
+        "type": "string",
+        "default_value": "Присоединиться →"
+      },
+      "content_formprefix_5": {
+        "caption": "Текст ссылки «Смотреть видео →»",
+        "type": "string",
+        "default_value": "Смотреть видео →"
+      },
+      "content_formprefix_2": {
+        "caption": "Заголовок «Давайте обсудим, какая поддержка нужна»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "Давайте обсудим, <span class=\"hero__title-accent\">какая поддержка нужна</span>"
+      }
+    },
+    "life_founder": {
+      "content_recordtemplate_1": {
+        "caption": "Метка блока «ОСНОВАТЕЛЬ ПРОЕКТА»",
+        "type": "string",
+        "default_value": "ОСНОВАТЕЛЬ ПРОЕКТА"
+      }
+    },
+    "life_location": {
+      "content_recordtemplate_1": {
+        "caption": "Текст кнопки «Построить маршрут →»",
+        "type": "string",
+        "default_value": "Построить маршрут →"
+      }
+    },
+    "life_parent_group": {
+      "content_formprefix_2": {
+        "caption": "Описание «Присоединяйтесь к каналу для родителей: полезные материалы, подде»",
+        "type": "textarea",
+        "default_value": "Присоединяйтесь к каналу для родителей: полезные материалы, поддержка и новости проекта.",
+        "codemirror": false
+      },
+      "content_formprefix_3": {
+        "caption": "Текст кнопки «Присоединиться к группе →»",
+        "type": "string",
+        "default_value": "Присоединиться к группе →"
+      },
+      "content_formprefix_1": {
+        "caption": "Заголовок «Группа для родителей в MAX»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "Группа для родителей в MAX"
+      }
+    },
+    "life_program": {
+      "content_recordtemplate_1": {
+        "caption": "Метка блока «СИСТЕМА СОПРОВОЖДЕНИЯ»",
+        "type": "string",
+        "default_value": "СИСТЕМА СОПРОВОЖДЕНИЯ"
+      },
+      "content_recordtemplate_2": {
+        "caption": "Подзаголовок «Основные направления программы»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "Основные направления программы"
+      },
+      "content_recordtemplate_3": {
+        "caption": "Подзаголовок «Что входит в сопровождение»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "Что входит в сопровождение"
+      },
+      "benefits": {
+        "caption": "Преимущества: каждое с новой строки",
+        "type": "textarea",
+        "default_value": "Практический опыт команды\nЕдиная методология\nРеальные результаты"
+      }
+    },
+    "life_program_service": {
+      "content_recordtemplate_1": {
+        "caption": "Подзаголовок «Как понять, что это тревога?»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "Как понять, что это тревога?"
+      },
+      "banner_quote": {
+        "caption": "Цитата рядом с программой",
+        "type": "textarea",
+        "default_value": "«Тревога не делает тебя слабым. Она просто говорит о том, что сейчас тебе нужна поддержка»"
+      }
+    },
+    "life_quiz": {
+      "content_formprefix_1": {
+        "caption": "Метка блока «ПОДБЕРЁМ ПОДХОДЯЩИЙ ФОРМАТ»",
+        "type": "string",
+        "default_value": "ПОДБЕРЁМ ПОДХОДЯЩИЙ ФОРМАТ"
+      },
+      "content_formprefix_3": {
+        "caption": "Описание «Это займёт около двух минут и поможет специалисту подготовиться к»",
+        "type": "textarea",
+        "default_value": "Это займёт около двух минут и поможет специалисту подготовиться к первому разговору.",
+        "codemirror": false
+      },
+      "content_formprefix_2": {
+        "caption": "Заголовок «Ответьте на 6 вопросов»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "Ответьте на <span class=\"hero__title-accent\">6 вопросов</span>"
+      }
+    },
+    "life_socials": {
+      "content_formprefix_2": {
+        "caption": "Описание «Полезные посты, прямые эфиры, истории, вебинары и ответы на важны»",
+        "type": "string",
+        "default_value": "Полезные посты, прямые эфиры, истории, вебинары и ответы на важные вопросы."
+      },
+      "content_formprefix_1": {
+        "caption": "Заголовок «МЫ В СОЦСЕТЯХ»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "<span class=\"hero__title-accent\">МЫ В СОЦСЕТЯХ</span>"
+      }
+    },
+    "life_specialists_home": {
+      "content_formprefix_2": {
+        "caption": "Описание «Рядом с вами – профессионалы, которые понимают, поддерживают и по»",
+        "type": "textarea",
+        "default_value": "Рядом с вами – профессионалы, которые понимают, поддерживают и помогают находить решение.",
+        "codemirror": false
+      },
+      "content_formprefix_1": {
+        "caption": "Заголовок «НАШИ СПЕЦИАЛИСТЫ»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "НАШИ <span class=\"hero__title-accent\">СПЕЦИАЛИСТЫ</span>"
+      }
+    },
+    "life_specialists_team": {
+      "content_formprefix_1": {
+        "caption": "Метка блока «НАША КОМАНДА»",
+        "type": "string",
+        "default_value": "НАША КОМАНДА"
+      },
+      "content_formprefix_3": {
+        "caption": "Описание «Психологи, педагоги и специалисты, которые работают с подростками»",
+        "type": "textarea",
+        "default_value": "Психологи, педагоги и специалисты, которые работают с подростками и их родителями.",
+        "codemirror": false
+      },
+      "content_formprefix_2": {
+        "caption": "Заголовок «За проектом стоят люди , которые умеют слушать»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "За проектом стоят <span class=\"hero__title-accent\">люди</span> , которые умеют слушать"
+      }
+    },
+    "life_subscription": {
+      "content_formprefix_2": {
+        "caption": "Описание «Подпишитесь на нашу рассылку — раз в неделю присылаем только поле»",
+        "type": "string",
+        "default_value": "Подпишитесь на нашу рассылку — раз в неделю присылаем только полезное и важное."
+      },
+      "content_formprefix_1": {
+        "caption": "Заголовок «БУДЕМ НА СВЯЗИ!»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "БУДЕМ НА СВЯЗИ!"
+      }
+    },
+    "life_subscription_shared": {
+      "content_formprefix_2": {
+        "caption": "Описание «Подпишитесь на нашу рассылку — раз в неделю присылаем только поле»",
+        "type": "string",
+        "default_value": "Подпишитесь на нашу рассылку — раз в неделю присылаем только полезное и важное."
+      },
+      "content_formprefix_1": {
+        "caption": "Заголовок «БУДЕМ НА СВЯЗИ!»",
+        "type": "textarea",
+        "embededitor": false,
+        "codemirror": false,
+        "default_value": "БУДЕМ НА СВЯЗИ!"
+      }
+    },
+    "life_text": {
+      "content_recordtemplate_1": {
+        "caption": "Текст кнопки «На главную →»",
+        "type": "string",
+        "default_value": "На главную →"
+      },
+      "content_recordtemplate_2": {
+        "caption": "Текст кнопки «Контакты →»",
+        "type": "string",
+        "default_value": "Контакты →"
+      }
+    },
+    "life_video": {
+      "content_recordtemplate_1": {
+        "caption": "Метка блока «ПОЗНАКОМЬТЕСЬ С НАМИ БЛИЖЕ»",
+        "type": "string",
+        "default_value": "ПОЗНАКОМЬТЕСЬ С НАМИ БЛИЖЕ"
+      }
+    }
+  }
+}

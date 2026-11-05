@@ -1,0 +1,196 @@
+{
+  "version": "5.3.0",
+  "components": {
+    "life_article_tips": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_articles": [
+      "FormPrefix",
+      "RecordTemplate",
+      "RecordTemplateFull",
+      "Settings"
+    ],
+    "life_articles_featured": [
+      "FormPrefix",
+      "RecordTemplate",
+      "Settings"
+    ],
+    "life_articles_home": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_articles_related": [
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_banner": [
+      "RecordTemplate"
+    ],
+    "life_banner_about": [
+      "RecordTemplate"
+    ],
+    "life_banner_about_text": [
+      "RecordTemplate"
+    ],
+    "life_banner_gallery": [
+      "RecordTemplate"
+    ],
+    "life_banner_home": [
+      "RecordTemplate"
+    ],
+    "life_banner_service": [
+      "RecordTemplate"
+    ],
+    "life_banner_specialists": [
+      "RecordTemplate"
+    ],
+    "life_calculator": [
+      "FormPrefix"
+    ],
+    "life_cards": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_cards_help": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_cards_offer": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_cards_peoples": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_cards_reasons": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_cards_steps": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_cards_values": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_cards_way": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_cards_whom": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_certificates": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_certificates_home": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_contacts": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_faq": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_faq_contacts": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_first_step": [
+      "FormPrefix"
+    ],
+    "life_founder": [
+      "RecordTemplate"
+    ],
+    "life_gallery": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_location": [
+      "RecordTemplate"
+    ],
+    "life_parent_group": [
+      "FormPrefix"
+    ],
+    "life_program": [
+      "RecordTemplate"
+    ],
+    "life_program_service": [
+      "RecordTemplate"
+    ],
+    "life_quiz": [
+      "FormPrefix"
+    ],
+    "life_reviews": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_reviews_home": [
+      "FormPrefix",
+      "RecordTemplate"
+    ],
+    "life_socials": [
+      "FormPrefix"
+    ],
+    "life_specialist_education": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_specialist_methods": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_specialists": [
+      "RecordTemplate",
+      "RecordTemplateFull"
+    ],
+    "life_specialists_home": [
+      "FormPrefix",
+      "RecordTemplate",
+      "RecordTemplateFull"
+    ],
+    "life_specialists_other": [
+      "RecordTemplate",
+      "RecordTemplateFull"
+    ],
+    "life_specialists_team": [
+      "FormPrefix",
+      "RecordTemplate",
+      "RecordTemplateFull"
+    ],
+    "life_subscription": [
+      "FormPrefix"
+    ],
+    "life_subscription_shared": [
+      "FormPrefix"
+    ],
+    "life_text": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_video": [
+      "RecordTemplate"
+    ]
+  },
+  "theme": [
+    "Header.html",
+    "Footer.html",
+    "function.inc.php.txt",
+    "css/project-ui.css",
+    "js/project-ui.js",
+    "js/common.js",
+    "js/forms.js"
+  ]
+}

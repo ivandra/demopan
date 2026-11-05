@@ -1,0 +1,106 @@
+{
+  "version": "5.3.0",
+  "baseline": "lifepodr6112026/public_html + 6112026postroisvo_zhizn.sql.zip",
+  "netcat": "7.2.0",
+  "mysql": "5.7.27",
+  "php74": {
+    "version": "7.4.33",
+    "browser": {
+      "checks": 228,
+      "failures": []
+    },
+    "page_viewports": 45,
+    "lifecycle": {
+      "checks": 182,
+      "failures": []
+    },
+    "lint": {
+      "php": "7.4.33",
+      "files": 92,
+      "failures": []
+    },
+    "final_native_editor": {
+      "checks": 50,
+      "failures": []
+    }
+  },
+  "php83": {
+    "version": "8.3.36",
+    "native_editor": {
+      "checks": 48,
+      "failures": []
+    },
+    "lifecycle": {
+      "checks": 18,
+      "failures": []
+    },
+    "lint": {
+      "php": "8.3.36",
+      "files": 92,
+      "failures": []
+    }
+  },
+  "schema": {
+    "checks": 1743,
+    "failures": [],
+    "pages": 11,
+    "external_schema_org": "blocked: proxy CONNECT 403",
+    "external_google_rich_results": "blocked: proxy CONNECT 403"
+  },
+  "preservation": {
+    "original_records_compared": 61,
+    "immutable_column_mismatches": [],
+    "original_media_core_region_files": 12519,
+    "file_mismatches": [],
+    "service_text_blocks": 19,
+    "imported_items": {
+      "life_specialist_methods": 4,
+      "life_specialist_education": 3,
+      "life_article_tips": 4
+    },
+    "site_checked": 0
+  },
+  "rollback_database": {
+    "total_original_tables": 267,
+    "content_tables_compared": 123,
+    "content_mismatches": [],
+    "all_changed_table_names": [
+      "Class_Multipurpose_Template_Cache",
+      "Class_StyleCache",
+      "Logging",
+      "Session",
+      "Version",
+      "Version_Changeset",
+      "Version_ContentHistory",
+      "Version_File"
+    ],
+    "new_table_names": []
+  },
+  "rollback_files": {
+    "original_files": 23611,
+    "compared_files": 23610,
+    "mismatches": [],
+    "excluded_self_updater": [
+      "zhp-update.php"
+    ]
+  },
+  "site_checked": 0,
+  "live_deployment": false,
+  "preservation_php74": {
+    "original_records_compared": 61,
+    "immutable_column_mismatches": [],
+    "original_media_core_region_files": 12519,
+    "file_mismatches": [],
+    "service_text_blocks": 19,
+    "imported_items": {
+      "life_specialist_methods": 4,
+      "life_specialist_education": 3,
+      "life_article_tips": 4
+    },
+    "site_checked": 0
+  },
+  "json_script_injection": {
+    "php74": true,
+    "php83": true
+  }
+}

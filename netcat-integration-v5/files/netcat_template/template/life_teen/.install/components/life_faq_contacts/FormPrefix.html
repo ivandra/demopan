@@ -1,10 +1,10 @@
 <?= $f_AdminCommon ?>
 <section class="faq-block">
     <div class="wrap">
-        <span class="hero__label">FAQ</span>
-        <h2 class="faq-block__title">
-            <?= shortcode_component((string)($cc_settings['heading'] ?? '')) ?>
-        </h2>
+        <?php if (project_filled($cc_settings['content_formprefix_1'] ?? '')) { ?><span class="hero__label"><?= nl2br(project_plain($cc_settings['content_formprefix_1'] ?? ''), false) ?></span><?php } ?>
+        <?php if (project_filled(project_setting_heading($cc_settings))) { ?><h2 class="faq-block__title">
+            <?= project_setting_heading($cc_settings) ?>
+        </h2><?php } ?>
         <?php $project_faq_row = 0; $project_faq_split = (int)ceil((int)$totRows / 2); ?>
         <div class="faq-block__list">
             <div class="faq-block__col">

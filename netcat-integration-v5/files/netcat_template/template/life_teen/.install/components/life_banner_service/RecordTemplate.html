@@ -1,13 +1,14 @@
+<?php project_schema_service($f_name, $f_text); ?>
         <?= $f_AdminButtons ?>
         <div class="contacts-page__main contacts-page__main--service">
             <div class="contacts-page__header">
-                <h1 class="hero__title">
+                <?php if (project_filled($f_name)) { ?><h1 class="hero__title">
                     <?= project_title($f_name) ?>
-                </h1>
-                <p class="hero__description">
+                </h1><?php } ?>
+                <?php if (project_filled($f_text)) { ?><p class="hero__description">
                     <?= shortcode_component((string)$f_text) ?>
-                </p>
-                <a class="hero__button hero__button--primary" href="/kontakty/">Получить поддержку →</a>
+                </p><?php } ?>
+                <?php if (project_filled($cc_settings['content_recordtemplate_1'] ?? '')) { ?><a class="hero__button hero__button--primary" href="/kontakty/"><?= nl2br(project_plain($cc_settings['content_recordtemplate_1'] ?? ''), false) ?></a><?php } ?>
             </div>
             <div class="contacts-page__top-image">
                 <img alt="" decoding="async" src="/netcat_template/template/life_teen/img/service.png" />

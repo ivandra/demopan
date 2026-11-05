@@ -1,8 +1,11 @@
 from pathlib import Path
 import json,shutil,subprocess,re,copy,html
-from bs4 import BeautifulSoup
 
 R=Path(__file__).resolve().parents[1]
+# The historical seed manifest does not describe the incremental 5.3 data model.
+if (R/'updates/v5.3/model.json').exists():
+ raise SystemExit('Для обновления 5.3 используйте build/editorial-update-package.py OUTPUT. Полный установщик собирается из исторической версии проекта.')
+from bs4 import BeautifulSoup
 D=R/'files/netcat_template/template/life_teen'
 B=R/'build'
 OLD='/netcat_template/template/zhizn_podrostka/'
@@ -22,7 +25,7 @@ for p in C.rglob('*.html'):p.write_text(convert(p.read_text()))
 source=B/'source-layout'
 for name in ['Header.html','Footer.html','function.inc.php.txt','regions-widget.html']:
  value=convert((source/name).read_text())
- if name=='function.inc.php.txt':value+='\n'+(B/'problem1-runtime.php.txt').read_text()
+ if name=='function.inc.php.txt':value+='\n'+(B/'problem1-runtime.php.txt').read_text()+'\n'+(B/'editorial-runtime.php.txt').read_text()+'\n'+(B/'schema-runtime.php.txt').read_text()
  (D/name).write_text(value)
 (D/'Header.html').write_text((D/'Header.html').read_text().replace('$life_mobile','$mobile_menu').replace('$life_menu','$h_menu'))
 (D/'js/forms.js').write_text((source/'forms.js').read_text())

@@ -2,7 +2,7 @@
 <section class="block-for-whom">
     <div class="wrap">
         <div class="block-for-whom__inner">
-            <h2 class="hero__title">
-                <?= shortcode_component((string)($cc_settings['heading'] ?? '')) ?>
-            </h2>
+            <?php if (project_filled(project_setting_heading($cc_settings))) { ?><h2 class="hero__title">
+                <?= project_setting_heading($cc_settings) ?>
+            </h2><?php } ?>
             <div class="block-for-whom__list">

@@ -36,7 +36,7 @@ if (!($inside_admin && $nc_core->InsideAdminAccess()) && $posting) {
     if (!in_array($life_type, ["contact", "consult", "subscribe", "quiz", "calc"], true)) {
         $life_fail = "Неизвестная форма.";
     }
-    if (in_array($life_type, ["contact", "subscribe", "consult"], true) && empty($f_consent)) {
+    if (in_array($life_type, ["contact", "subscribe"], true) && empty($f_consent)) {
         $life_fail = "Необходимо согласие на обработку данных.";
     }
     if (

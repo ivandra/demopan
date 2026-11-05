@@ -1,3 +1,7 @@
 <?= $f_AdminCommon ?>
-<section class="articles-block">
+<section class="articles-block<?= $totRows ? '' : ' project-no-feature' ?>">
     <div class="wrap">
+        <div class="articles-block__text">
+            <?php if (project_filled(project_setting_title($cc_settings, 'content_recordtemplate_1'))) { ?><h1 class="hero__title"><?= project_setting_title($cc_settings, 'content_recordtemplate_1') ?><img alt="" class="hero__title-line" decoding="async" src="/netcat_template/template/life_teen/img/line3.svg"/></h1><?php } ?>
+            <?php if (project_filled($cc_settings['content_recordtemplate_2'] ?? '')) { ?><p class="hero__description"><?= nl2br(project_plain($cc_settings['content_recordtemplate_2'] ?? ''), false) ?></p><?php } ?>
+        </div>

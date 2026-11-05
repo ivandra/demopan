@@ -1,0 +1,206 @@
+function project_schema_text($value)
+{
+    $value = shortcode((string)$value);
+    $value = preg_replace('~<(script|style)\b[^>]*>.*?</\1>~is', '', $value);
+    $value = preg_replace('~<(?:br\b[^>]*|/p|/div|/li)>~i', ' ', $value);
+    return trim(preg_replace('/[\s\x{00a0}]+/u', ' ', html_entity_decode(strip_tags($value), ENT_QUOTES, 'UTF-8')));
+}
+
+function project_schema_url($value)
+{
+    $value = trim((string)$value);
+    if ($value === '' || preg_match('/[\x00-\x20]/', $value)) { return ''; }
+    if (substr($value, 0, 1) === '/' && substr($value, 0, 2) !== '//') {
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        if (!preg_match('/\A[a-z0-9.-]+(?::[0-9]+)?\z/i', $host)) { return ''; }
+        $secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+        $secure = $secure || ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https';
+        return ($secure ? 'https://' : 'http://').$host.$value;
+    }
+    $parts = parse_url($value);
+    return !empty($parts['host']) && in_array(strtolower($parts['scheme'] ?? ''), ['http','https'], true) ? $value : '';
+}
+
+function project_schema_page_url()
+{
+    $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+    $parameters = [];
+    foreach (['category','curPos'] as $key) {
+        if (isset($_GET[$key]) && is_scalar($_GET[$key]) && (string)$_GET[$key] !== '') { $parameters[$key] = (string)$_GET[$key]; }
+    }
+    return project_schema_url($path.($parameters ? '?'.http_build_query($parameters) : ''));
+}
+
+function project_schema_clean(array $value)
+{
+    $output = [];
+    foreach ($value as $key=>$item) {
+        if (is_array($item)) { $item = project_schema_clean($item); }
+        if ($item === null || $item === '' || $item === []) { continue; }
+        $output[$key] = $item;
+    }
+    return array_keys($value) === range(0, count($value)-1) ? array_values($output) : $output;
+}
+
+function project_schema_add(array $node)
+{
+    if (empty($node['@id']) || empty($node['@type'])) { return; }
+    $node = project_schema_clean($node);
+    $GLOBALS['life_schema_graph'][$node['@id']] = array_replace($GLOBALS['life_schema_graph'][$node['@id']] ?? [], $node);
+}
+
+function project_schema_start()
+{
+    global $current_catalogue, $current_sub;
+    if (!empty($GLOBALS['life_schema_started'])) { return; }
+    $GLOBALS['life_schema_started'] = true;
+    $origin = project_schema_url('/');
+    $page = project_schema_page_url();
+    if (!$origin || !$page) { return; }
+    $name = project_schema_text($current_catalogue['Catalogue_Name'] ?? '');
+    $region = project_region_values();
+    $sameAs = [];
+    foreach (['vk','telegram','youtube','instagram','inst','whatsapp','max'] as $field) {
+        $url = project_schema_url($region[$field] ?? '');
+        if ($url) { $sameAs[] = $url; }
+    }
+    $address = [];
+    if (project_filled($region['address'] ?? '') || project_filled($region['city'] ?? '')) {
+        $address = ['@type'=>'PostalAddress','streetAddress'=>project_schema_text($region['address'] ?? ''),'addressLocality'=>project_schema_text($region['city'] ?? '')];
+    }
+    $email = filter_var($region['email'] ?? '', FILTER_VALIDATE_EMAIL) ?: '';
+    $phone = project_schema_text($region['phone'] ?? '');
+    project_schema_add(['@type'=>'Organization','@id'=>$origin.'#organization','name'=>$name,'url'=>$origin,'logo'=>project_schema_url('/netcat_template/template/life_teen/img/logo.svg'),'telephone'=>$phone,'email'=>$email,'address'=>$address,'sameAs'=>array_values(array_unique($sameAs))]);
+    project_schema_add(['@type'=>'WebSite','@id'=>$origin.'#website','url'=>$origin,'name'=>$name,'inLanguage'=>'ru-RU','publisher'=>['@id'=>$origin.'#organization']]);
+    project_schema_add(['@type'=>'WebPage','@id'=>$page.'#webpage','url'=>$page,'name'=>project_schema_text($current_sub['Subdivision_Name'] ?? $name),'inLanguage'=>'ru-RU','isPartOf'=>['@id'=>$origin.'#website'],'about'=>['@id'=>$origin.'#organization']]);
+}
+
+function project_schema_page_type($type, array $extra = [])
+{
+    project_schema_start();
+    $id = project_schema_page_url().'#webpage';
+    if (!isset($GLOBALS['life_schema_graph'][$id])) { return; }
+    $old = (array)$GLOBALS['life_schema_graph'][$id]['@type'];
+    $types = array_values(array_unique(array_merge($old, (array)$type)));
+    $GLOBALS['life_schema_graph'][$id] = array_replace($GLOBALS['life_schema_graph'][$id], project_schema_clean($extra), ['@type'=>count($types) === 1 ? $types[0] : $types]);
+}
+
+function project_schema_breadcrumbs(array $items)
+{
+    project_schema_start();
+    $elements = [];
+    foreach ($items as $item) {
+        $url = project_schema_url($item['url']);
+        $name = project_schema_text($item['name']);
+        if (!$url || $name === '') { continue; }
+        $elements[] = ['@type'=>'ListItem','position'=>count($elements)+1,'name'=>$name,'item'=>$url];
+    }
+    if (count($elements) < 2) { return; }
+    $id = project_schema_page_url().'#breadcrumbs';
+    project_schema_add(['@type'=>'BreadcrumbList','@id'=>$id,'itemListElement'=>$elements]);
+    project_schema_page_type('WebPage', ['breadcrumb'=>['@id'=>$id]]);
+}
+
+function project_schema_faq($question, $answer, $anchor)
+{
+    $question = project_schema_text($question);
+    $answer = project_schema_text($answer);
+    if ($question === '' || $answer === '') { return; }
+    project_schema_start();
+    $id = project_schema_page_url().'#'.$anchor;
+    $GLOBALS['life_schema_questions'][$id] = ['@type'=>'Question','@id'=>$id,'name'=>$question,'acceptedAnswer'=>['@type'=>'Answer','text'=>$answer]];
+}
+
+function project_schema_date($value)
+{
+    if (!preg_match('/\A(\d{4})-(\d{2})-(\d{2})/', (string)$value, $match) || !checkdate((int)$match[2], (int)$match[3], (int)$match[1])) { return ''; }
+    return $match[1].'-'.$match[2].'-'.$match[3];
+}
+
+function project_schema_blog()
+{
+    project_schema_start();
+    $id = project_schema_url('/blog/').'#blog';
+    project_schema_add(['@type'=>'Blog','@id'=>$id,'url'=>project_schema_url('/blog/'),'name'=>'Блог','inLanguage'=>'ru-RU','publisher'=>['@id'=>project_schema_url('/').'#organization']]);
+    project_schema_page_type('CollectionPage', ['mainEntity'=>['@id'=>$id]]);
+}
+
+function project_schema_article(array $article, $full = false)
+{
+    $name = project_schema_text($article['name'] ?? '');
+    $url = project_schema_url($article['url'] ?? '');
+    if ($name === '' || !$url) { return; }
+    project_schema_start();
+    $id = $url.'#article';
+    $node = ['@type'=>'BlogPosting','@id'=>$id,'url'=>$url,'headline'=>$name,'description'=>project_schema_text($article['intro'] ?? ''),'image'=>project_schema_url($article['image'] ?? ''),'datePublished'=>project_schema_date($article['date'] ?? ''),'dateModified'=>project_schema_date($article['modified'] ?? ''),'inLanguage'=>'ru-RU','isPartOf'=>['@id'=>project_schema_url('/blog/').'#blog'],'publisher'=>['@id'=>project_schema_url('/').'#organization']];
+    if ($full) { $node['articleBody'] = project_schema_text($article['text'] ?? ''); $node['mainEntityOfPage'] = ['@id'=>project_schema_page_url().'#webpage']; }
+    project_schema_add($node);
+    if ($full) { project_schema_page_type('WebPage', ['mainEntity'=>['@id'=>$id],'name'=>$name]); }
+    else { $GLOBALS['life_schema_articles'][$id] = ['@id'=>$id]; }
+}
+
+function project_schema_service($name, $description)
+{
+    $name = project_schema_text($name);
+    if ($name === '') { return; }
+    $GLOBALS['life_schema_service_main'] = true;
+    project_schema_start();
+    $id = project_schema_page_url().'#service';
+    project_schema_add(['@type'=>'Service','@id'=>$id,'name'=>$name,'description'=>project_schema_text($description),'url'=>project_schema_page_url(),'provider'=>['@id'=>project_schema_url('/').'#organization']]);
+    project_schema_page_type('WebPage', ['mainEntity'=>['@id'=>$id]]);
+}
+
+function project_schema_service_collection()
+{
+    global $sub, $catalogue;
+    $db = nc_core()->db;
+    $children = (array)$db->get_results('SELECT child.Subdivision_ID,child.Subdivision_Name,child.Hidden_URL FROM Subdivision child WHERE child.Catalogue_ID='.(int)$catalogue.' AND child.Parent_Sub_ID='.(int)$sub.' AND child.Checked=1 AND child.Read_Access_ID=1 AND EXISTS (SELECT 1 FROM Sub_Class b WHERE b.Subdivision_ID=child.Subdivision_ID AND b.Checked=1 AND b.Class_ID IN (SELECT Class_ID FROM Class WHERE Keyword=\'life_banner\' AND ClassTemplate=0)) ORDER BY child.Priority,child.Subdivision_ID', ARRAY_A);
+    $items = [];
+    foreach ($children as $child) { $items[] = ['@type'=>'ListItem','position'=>count($items)+1,'name'=>project_schema_text($child['Subdivision_Name']),'url'=>project_schema_url($child['Hidden_URL'])]; }
+    project_schema_page_type('CollectionPage');
+    if (!$items) { return; }
+    $id = project_schema_page_url().'#services';
+    project_schema_add(['@type'=>'ItemList','@id'=>$id,'name'=>'Услуги','itemListElement'=>$items]);
+    project_schema_page_type('CollectionPage', ['mainEntity'=>['@id'=>$id]]);
+}
+
+function project_schema_review($id, $name, $text)
+{
+    $name = project_schema_text($name);
+    $text = project_schema_text($text);
+    if ($name === '' || $text === '') { return; }
+    project_schema_start();
+    $url = project_schema_page_url().'#review-'.(int)$id;
+    project_schema_add(['@type'=>'Review','@id'=>$url,'author'=>['@type'=>'Person','name'=>$name],'reviewBody'=>$text,'itemReviewed'=>['@id'=>project_schema_url('/').'#organization']]);
+    $GLOBALS['life_schema_reviews'][$url] = ['@id'=>$url];
+}
+
+function project_schema_jsonld()
+{
+    global $sub, $current_catalogue;
+    if ((int)$sub === (int)$current_catalogue['E404_Sub_ID']) { return ''; }
+    project_schema_start();
+    if (empty($GLOBALS['life_schema_service_main'])) {
+        $layout = nc_core()->db->get_var('SELECT File_Path FROM Template WHERE Template_ID='.(int)($GLOBALS['current_sub']['Template_ID'] ?? 0));
+        if (strpos((string)$layout, '/life_teen/service/') === 0) { project_schema_service_collection(); }
+    }
+    if (!empty($GLOBALS['life_schema_questions'])) {
+        if (!empty($GLOBALS['life_schema_faq_main'])) { project_schema_page_type('FAQPage', ['mainEntity'=>array_values($GLOBALS['life_schema_questions'])]); }
+        else {
+            $faq = project_schema_page_url().'#faq';
+            project_schema_add(['@type'=>'FAQPage','@id'=>$faq,'mainEntity'=>array_values($GLOBALS['life_schema_questions']),'isPartOf'=>['@id'=>project_schema_page_url().'#webpage']]);
+            project_schema_page_type('WebPage', ['hasPart'=>['@id'=>$faq]]);
+        }
+    }
+    if (!empty($GLOBALS['life_schema_articles'])) {
+        $blog = project_schema_url('/blog/').'#blog';
+        project_schema_add(['@type'=>'Blog','@id'=>$blog,'url'=>project_schema_url('/blog/'),'name'=>'Блог','blogPost'=>array_values($GLOBALS['life_schema_articles'])]);
+    }
+    if (!empty($GLOBALS['life_schema_reviews'])) {
+        $id = project_schema_url('/').'#organization';
+        project_schema_add(['@type'=>'Organization','@id'=>$id,'review'=>array_values($GLOBALS['life_schema_reviews'])]);
+    }
+    $graph = array_values($GLOBALS['life_schema_graph'] ?? []);
+    if (!$graph) { return ''; }
+    return '<script type="application/ld+json">'.json_encode(['@context'=>'https://schema.org','@graph'=>$graph], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_INVALID_UTF8_SUBSTITUTE|JSON_THROW_ON_ERROR).'</script>';
+}

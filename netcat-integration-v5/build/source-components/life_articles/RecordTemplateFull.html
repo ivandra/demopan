@@ -1,28 +1,34 @@
+<?php $project_tips=project_article_tips((int)$f_RowID); $project_article_category = project_article_category($f_category_id ?? $f_category); project_schema_article(['name'=>$f_name,'url'=>$_SERVER['REQUEST_URI'],'intro'=>$f_intro,'text'=>$f_text.' '.implode(' ',array_map(function($item){return $item['name'].' '.$item['description'];},$project_tips)),'image'=>$f_img,'date'=>$f_date,'modified'=>$f_LastUpdated ?? ''], true); ?>
 <?= $f_AdminButtons ?>
 <section class="article-preview">
     <div class="wrap">
-        <div class="blog__item-tag">
-            <?= htmlspecialchars(array('teens'=>'Подросткам','parents'=>'Родителям','specialists'=>'Специалистам')[$f_category]??'',ENT_QUOTES,'UTF-8') ?>
-        </div>
-        <h1 class="hero__title">
+        <?php if (project_filled(project_article_category_label($f_category_id ?? $f_category))) { ?><div class="blog__item-tag">
+            <?= project_plain(project_article_category_label($f_category_id ?? $f_category)) ?>
+        </div><?php } ?>
+        <?php if (project_filled($f_name)) { ?><h1 class="hero__title">
             <?= htmlspecialchars(shortcode((string)$f_name),ENT_QUOTES,'UTF-8') ?>
-        </h1>
-        <p class="hero__description">
+        </h1><?php } ?>
+        <?php if (project_filled($f_intro)) { ?><p class="hero__description">
             <?= htmlspecialchars(shortcode((string)$f_intro),ENT_QUOTES,'UTF-8') ?>
-        </p>
-        <div class="blog__item-meta">
-            <?= date('d.m.Y',strtotime($f_date)) ?> •
-            <?= htmlspecialchars($f_readtime,ENT_QUOTES,'UTF-8') ?>
-        </div>
+        </p><?php } ?>
+        <?php if (project_article_meta($f_date, $f_readtime) !== "") { ?><div class="blog__item-meta"><?= project_article_meta($f_date, $f_readtime) ?></div><?php } ?>
     </div>
 </section>
 <article class="article-page">
     <div class="wrap">
         <div class="article-page__left">
-            <div class="article-page__hero">
-                <img alt="<?= htmlspecialchars(shortcode((string)$f_name),ENT_QUOTES,'UTF-8') ?>" src="<?= htmlspecialchars(shortcode((string)$f_img),ENT_QUOTES,'UTF-8') ?>" />
-            </div>
-            <?= shortcode_component((string)$f_text) ?>
+            <?php if (project_filled($f_img)) { ?><div class="article-page__hero"><img alt="<?= htmlspecialchars(shortcode((string)$f_name),ENT_QUOTES,'UTF-8') ?>" src="<?= htmlspecialchars(shortcode((string)$f_img),ENT_QUOTES,'UTF-8') ?>" /></div><?php } ?>
+            <div class="article-page__text"><?= shortcode_component((string)$f_text) ?></div>
+            <?= project_article_tips_editor() ?>
+            <?php if ($project_tips) { ?>
+                <?php if (project_filled($f_tips_heading)) { ?><h2 class="article-page__section-title"><?= project_plain($f_tips_heading) ?></h2><?php } ?>
+                <ol class="article-page__tips-list"><?php foreach ($project_tips as $project_tip) { ?>
+                    <li class="article-page__tip-item">
+                        <?php if (project_filled($project_tip['image_url'])) { ?><div class="article-page__tip-number"><img alt="" src="<?= project_plain($project_tip['image_url']) ?>"></div><?php } ?>
+                        <?php if (project_filled($project_tip['name'])) { ?><h3 class="article-page__tip-title"><?= project_plain($project_tip['name']) ?></h3><?php } ?>
+                        <?php if (project_filled($project_tip['description'])) { ?><p class="article-page__tip-text"><?= project_plain($project_tip['description']) ?></p><?php } ?>
+                    </li><?php } ?></ol>
+            <?php } ?>
         </div>
         <div class="article-page__right">
             <?php

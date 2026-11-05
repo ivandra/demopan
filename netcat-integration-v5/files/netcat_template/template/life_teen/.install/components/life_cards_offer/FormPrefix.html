@@ -2,8 +2,8 @@
 <section class="what-we-offer">
     <div class="wrap">
         <div class="what-we-offer__header">
-            <h2 class="hero__title">
-                <?= shortcode_component((string)($cc_settings['heading'] ?? '')) ?>
-            </h2>
+            <?php if (project_filled(project_setting_heading($cc_settings))) { ?><h2 class="hero__title">
+                <?= project_setting_heading($cc_settings) ?>
+            </h2><?php } ?>
         </div>
         <div class="what-we-offer__list">

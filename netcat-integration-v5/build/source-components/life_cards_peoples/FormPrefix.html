@@ -2,8 +2,8 @@
 <section class="peoples">
     <div class="wrap">
         <img alt="" class="peoples__top-image" decoding="async" src="/netcat_template/template/life_teen/img/before8.svg" />
-        <p class="hero__label">ДЛЯ КОГО МЫ</p>
-        <h2 class="hero__title">
-            <?= shortcode_component((string)($cc_settings['heading'] ?? '')) ?>
-        </h2>
+        <?php if (project_filled($cc_settings['content_formprefix_1'] ?? '')) { ?><p class="hero__label"><?= nl2br(project_plain($cc_settings['content_formprefix_1'] ?? ''), false) ?></p><?php } ?>
+        <?php if (project_filled(project_setting_heading($cc_settings))) { ?><h2 class="hero__title">
+            <?= project_setting_heading($cc_settings) ?>
+        </h2><?php } ?>
         <div class="peoples__list">

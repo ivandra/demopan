@@ -85,7 +85,8 @@ function formatDate($day, $month, $year)
 function project_title($value)
 {
     $value = preg_replace("~<img\b[^>]*hero__title-line[^>]*>~i", "", (string) $value);
-    return shortcode_component($value);
+    $value = preg_replace("~</p>\\s*<p[^>]*>~i", "<br>", $value);
+    return shortcode_component(strip_tags($value, "<span><br><strong><em><b><i><u>"));
 }
 function project_text($value)
 {

@@ -1,9 +1,9 @@
 <?= $f_AdminCommon ?>
 <section class="steps">
     <div class="wrap">
-        <h2 class="hero__title">
-            <?= shortcode_component((string)($cc_settings['heading'] ?? '')) ?>
-        </h2>
+        <?php if (project_filled(project_setting_heading($cc_settings))) { ?><h2 class="hero__title">
+            <?= project_setting_heading($cc_settings) ?>
+        </h2><?php } ?>
         <p class="hero__description">
             <?= shortcode_component((string)($cc_settings['description'] ?? '')) ?>
         </p>
