@@ -96,7 +96,7 @@ function project_other_specialists($message, $class)
     if (!$related) { return ''; }
     $previous = $GLOBALS['project_current_specialist'] ?? null;
     $GLOBALS['project_current_specialist'] = (int)$message;
-    $output = nc_objects_list((int)$related['Subdivision_ID'], (int)$related['Sub_Class_ID'], 'nc_ctpl='.(int)$related['View_ID']);
+    $output = (string)nc_objects_list((int)$related['Subdivision_ID'], (int)$related['Sub_Class_ID'], 'nc_ctpl='.(int)$related['View_ID']);
     if ($previous === null) { unset($GLOBALS['project_current_specialist']); } else { $GLOBALS['project_current_specialist'] = $previous; }
     return $output;
 }

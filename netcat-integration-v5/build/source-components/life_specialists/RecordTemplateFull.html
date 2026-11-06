@@ -1,9 +1,10 @@
 <?= $f_AdminButtons ?>
 <?php
-$project_city = !empty($f_city_from_region) ? shortcode('[city]') : (string)$f_city;
-$project_reception = !empty($f_reception_from_region) ? trim(implode(', ', array_filter([shortcode('[city]'), shortcode('[address]')]))) : (string)$f_reception_address;
-$project_methods = project_specialist_extras('life_specialist_methods', (int)$f_RowID);
-$project_education = project_specialist_extras('life_specialist_education', (int)$f_RowID);
+$project_region = project_person_region((int)$f_RowID);
+$project_city = $project_region['city'] ?? '';
+$project_reception = !empty($f_reception_from_region) ? trim(implode(', ', array_filter([$project_city, $project_region['address'] ?? '']))) : (string)$f_reception_address;
+$project_methods = project_person_methods((int)$f_RowID);
+$project_education = project_person_education((int)$f_RowID);
 $project_result = project_stat_result($f_clients_count);
 ?>
 <section class="specialist-page">
@@ -39,7 +40,6 @@ $project_result = project_stat_result($f_clients_count);
         <?php if (project_filled($f_bio)) { ?><div class="specialist-page__about-text"><h2 class="specialist-page__about-title">О специалисте</h2><div class="specialist-page__about-content"><?= shortcode_component($f_bio) ?></div></div><?php } ?>
         <?php if (project_filled($f_bio_quote)) { ?><div class="specialist-page__quote-bubble"><p><?= project_plain($f_bio_quote) ?></p></div><?php } ?>
     </div></div><?php } ?>
-    <?= project_specialist_extras_editor('life_specialist_methods') ?>
     <?php if ($project_methods || project_filled($f_methods)) { ?><div class="specialist-page__methods"><div class="wrap">
         <h2 class="specialist-page__about-title">Методы и подходы</h2>
         <?php if (project_filled($f_methods)) { ?><p class="hero__description"><?= project_plain($f_methods) ?></p><?php } ?>
@@ -50,7 +50,6 @@ $project_result = project_stat_result($f_clients_count);
                 <?php if (project_filled($project_method['description'])) { ?><p class="specialist-page__method-desc"><?= project_plain($project_method['description']) ?></p><?php } ?>
             </article><?php } ?></div><?php } ?>
     </div></div><?php } ?>
-    <?= project_specialist_extras_editor('life_specialist_education') ?>
     <?php if ($project_education) { ?><div class="specialist-page__education"><div class="wrap">
         <h2 class="specialist-page__about-title">Образование и сертификаты</h2>
         <div class="specialist-page__education-list"><?php foreach ($project_education as $project_education_item) { ?>

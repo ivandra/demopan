@@ -5,4 +5,8 @@ if ($posting && !array_key_exists("f_Keyword", $_POST)) {
         "SELECT Keyword FROM Message" . (int) $classID . " WHERE Message_ID=" . (int) $message,
     );
 }
+if ($posting) {
+    $project_error = project_specialist_post_error($f_region ?? 0, $f_education ?? '');
+    if ($project_error) { $warnText .= $project_error; }
+}
 ?>

@@ -1,0 +1,6 @@
+.project-education-editor > p { font-size: 13px; color: #666; }
+.project-education-row { display: grid; grid-template-columns: 2fr 2fr 1fr auto; gap: 12px; margin: 12px 0; padding: 12px; border: 1px solid #ddd; border-radius: 8px; }
+.project-education-row label { display: flex; flex-direction: column; gap: 6px; min-width: 0; font-size: 13px; }
+.project-education-row input { box-sizing: border-box; width: 100%; }
+.project-education-row button { align-self: end; }
+@media (max-width: 700px) { .project-education-row { grid-template-columns: 1fr; } }

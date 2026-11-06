@@ -1,3 +1,5 @@
+<?= project_shared_before() ?>
+<?= project_shared_named('life_popup') ?? '' ?>
 <footer class="footer">
     <div class="wrap">
         <div class="footer__col footer__col--logo">
@@ -101,15 +103,14 @@
     <p>Мы используем cookies для работы сайта и анализа посещений. Подробнее — в <a href="/politika-konfidentsialnosti/">политике конфиденциальности</a>.</p>
     <button type="button">Согласен</button>
 </section>
-<?php if ((int)$sub !== (int)$current_catalogue['Title_Sub_ID']) { echo project_shared_block('life_popup'); } ?>
 <?= project_schema_jsonld() ?>
 <script src="/netcat_template/template/life_teen/js/jquery.min.js"></script>
 <script src="/netcat_template/template/life_teen/js/swiper-bundle.min.js"></script>
 <script src="/netcat_template/template/life_teen/js/jquery.fancybox.min.js"></script>
 <script src="/netcat_template/template/life_teen/js/jquery-ui.min.js"></script>
 <script src="/netcat_template/template/life_teen/js/jquery.ui.touch-punch.min.js"></script>
-<script src="/netcat_template/template/life_teen/js/common.js?v=5.3.0"></script>
-<script src="/netcat_template/template/life_teen/js/forms.js?v=5.3.0"></script>
-<script src="/netcat_template/template/life_teen/js/project-ui.js?v=5.3.0"></script>
+<script src="/netcat_template/template/life_teen/js/common.js?v=5.4.0"></script>
+<script src="/netcat_template/template/life_teen/js/forms.js?v=5.4.0"></script>
+<script src="/netcat_template/template/life_teen/js/project-ui.js?v=5.4.0"></script>
 </body>
 </html>

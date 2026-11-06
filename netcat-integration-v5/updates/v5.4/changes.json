@@ -1,0 +1,67 @@
+{
+  "version": "5.4.0",
+  "components": {
+    "life_articles": [
+      "FormPrefix"
+    ],
+    "life_banner": [
+      "FormPrefix"
+    ],
+    "life_banner_about": [
+      "FormPrefix"
+    ],
+    "life_banner_about_text": [
+      "FormPrefix"
+    ],
+    "life_banner_gallery": [
+      "FormPrefix"
+    ],
+    "life_banner_home": [
+      "FormPrefix"
+    ],
+    "life_banner_service": [
+      "FormPrefix"
+    ],
+    "life_banner_specialists": [
+      "FormPrefix"
+    ],
+    "life_gallery": [
+      "FormPrefix"
+    ],
+    "life_gallery_bulk": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate",
+      "Settings"
+    ],
+    "life_specialists": [
+      "AddCond",
+      "AddTemplate",
+      "EditCond",
+      "EditTemplate",
+      "FormPrefix",
+      "RecordTemplateFull"
+    ],
+    "life_specialists_home": [
+      "RecordTemplateFull"
+    ],
+    "life_specialists_other": [
+      "RecordTemplateFull",
+      "Settings"
+    ],
+    "life_specialists_team": [
+      "RecordTemplateFull"
+    ],
+    "life_text": [
+      "FormPrefix",
+      "RecordTemplate"
+    ]
+  },
+  "theme": [
+    "Header.html",
+    "Footer.html",
+    "function.inc.php.txt",
+    "css/content-editor.css",
+    "js/content-editor.js"
+  ]
+}

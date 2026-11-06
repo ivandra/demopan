@@ -1,0 +1,94 @@
+{
+  "version": "5.4.0",
+  "base_update": "5.3",
+  "netcat": "7.2.0",
+  "mysql": "5.7.27",
+  "nofile_limit": 64,
+  "live_hosting_changed": false,
+  "site_checked_before": 0,
+  "site_checked_after": 0,
+  "php74": {
+    "version": "7.4.33",
+    "pages": 45,
+    "viewports": [
+      1440,
+      820,
+      390
+    ],
+    "page_checks": 180,
+    "behavior_checks": 56,
+    "lifecycle_checks": 169,
+    "browser_update_checkpoints": 149,
+    "max_request_ms": 319,
+    "lint_files": 31,
+    "failures": []
+  },
+  "php83": {
+    "version": "8.3.36",
+    "pages": 45,
+    "viewports": [
+      1440,
+      820,
+      390
+    ],
+    "page_and_behavior_checks": 236,
+    "lifecycle_checks": 19,
+    "cli_update": true,
+    "lint_files": 31,
+    "failures": []
+  },
+  "preservation": {
+    "mode": "installed",
+    "original_records_compared": 96,
+    "immutable_column_mismatches": [],
+    "original_files_compared": 13553,
+    "file_mismatches": [],
+    "site_checked": 0,
+    "gallery_groups": 4,
+    "gallery_photos": 12
+  },
+  "rollback_php74": {
+    "mode": "rollback",
+    "original_records_compared": 96,
+    "immutable_column_mismatches": [],
+    "original_files_compared": 24812,
+    "file_mismatches": [],
+    "site_checked": 0
+  },
+  "rollback_php83": {
+    "mode": "rollback",
+    "original_records_compared": 96,
+    "immutable_column_mismatches": [],
+    "original_files_compared": 24812,
+    "file_mismatches": [],
+    "site_checked": 0
+  },
+  "schema_php74": {
+    "checks": 1743,
+    "failures": [],
+    "pages": 11,
+    "external_schema_org": "blocked: proxy CONNECT 403",
+    "external_google_rich_results": "blocked: proxy CONNECT 403"
+  },
+  "schema_php83": {
+    "checks": 1743,
+    "failures": [],
+    "pages": 11,
+    "external_schema_org": "blocked: proxy CONNECT 403",
+    "external_google_rich_results": "blocked: proxy CONNECT 403"
+  },
+  "migration": {
+    "common_placements": 39,
+    "common_sources": 28,
+    "pinned_native_views": 34,
+    "gallery_groups": 4,
+    "original_photos": 12,
+    "service_text_editors": 19,
+    "legacy_education_rows_preserved": 3
+  },
+  "external_validators": {
+    "schema_org": "unavailable: proxy CONNECT 403",
+    "google_rich_results": "unavailable: proxy CONNECT 403"
+  },
+  "private_data_in_package": false
+}

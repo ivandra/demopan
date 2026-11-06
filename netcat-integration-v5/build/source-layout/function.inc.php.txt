@@ -100,6 +100,7 @@ function project_label($value)
 }
 function project_shared_block($keyword)
 {
+    if (function_exists('project_shared_named')) { $shared = project_shared_named($keyword); if ($shared !== null) { return $shared; } }
     global $db, $catalogue;
     $block = $db->get_row(
         "SELECT s.Subdivision_ID,s.Sub_Class_ID FROM Sub_Class s JOIN Class c USING(Class_ID) " .

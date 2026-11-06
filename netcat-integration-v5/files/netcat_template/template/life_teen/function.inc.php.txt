@@ -100,6 +100,7 @@ function project_label($value)
 }
 function project_shared_block($keyword)
 {
+    if (function_exists('project_shared_named')) { $shared = project_shared_named($keyword); if ($shared !== null) { return $shared; } }
     global $db, $catalogue;
     $block = $db->get_row(
         "SELECT s.Subdivision_ID,s.Sub_Class_ID FROM Sub_Class s JOIN Class c USING(Class_ID) " .
@@ -380,7 +381,7 @@ function project_other_specialists($message, $class)
     if (!$related) { return ''; }
     $previous = $GLOBALS['project_current_specialist'] ?? null;
     $GLOBALS['project_current_specialist'] = (int)$message;
-    $output = nc_objects_list((int)$related['Subdivision_ID'], (int)$related['Sub_Class_ID'], 'nc_ctpl='.(int)$related['View_ID']);
+    $output = (string)nc_objects_list((int)$related['Subdivision_ID'], (int)$related['Sub_Class_ID'], 'nc_ctpl='.(int)$related['View_ID']);
     if ($previous === null) { unset($GLOBALS['project_current_specialist']); } else { $GLOBALS['project_current_specialist'] = $previous; }
     return $output;
 }
@@ -667,4 +668,238 @@ function project_schema_jsonld()
     $graph = array_values($GLOBALS['life_schema_graph'] ?? []);
     if (!$graph) { return ''; }
     return '<script type="application/ld+json">'.json_encode(['@context'=>'https://schema.org','@graph'=>$graph], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_INVALID_UTF8_SUBSTITUTE|JSON_THROW_ON_ERROR).'</script>';
+}
+
+function project_native_config()
+{
+    static $config;
+    if ($config === null) {
+        $config = [];
+        $path = rtrim(nc_core()->FILES_FOLDER, '/') . '/life_teen_v54/layout.php';
+        if (is_file($path)) {
+            $bytes = file_get_contents($path);
+            $marker = "__halt_compiler();\n";
+            $offset = strpos($bytes, $marker);
+            if ($offset !== false) { $config = json_decode(substr($bytes, $offset + strlen($marker)), true) ?: []; }
+        }
+    }
+    return $config;
+}
+
+function project_shared_source_where($source, $where = '')
+{
+    $scope = 'a.Sub_Class_ID=' . (int)$source;
+    return $where ? '(' . $where . ') AND ' . $scope : $scope;
+}
+
+function project_shared_render(array $placement)
+{
+    $source = (int)$placement['source'];
+    $config = project_native_config();
+    $block = $config['sources'][$source] ?? null;
+    $host = (int)($placement['settings_source'] ?? $placement['host'] ?? $source);
+    $host_block = $config['sources'][$host] ?? $block;
+    if (!$block || empty(nc_core()->sub_class->get_by_id($source, 'Checked'))) { return ''; }
+    $previous = $GLOBALS['project_shared_context'] ?? null;
+    $GLOBALS['project_shared_context'] = ['cc'=>$source, 'sub'=>(int)$block['sub'], 'class'=>(int)$block['class'], 'host'=>$host];
+    $GLOBALS['project_shared_depth'] = ($GLOBALS['project_shared_depth'] ?? 0) + 1;
+    try {
+        $output = (string)nc_objects_list((int)$host_block['sub'], $host, 'nc_ctpl='.(int)$placement['view']);
+        $GLOBALS['project_shared_sources_rendered'][$source] = true;
+        return $output;
+    } finally {
+        $GLOBALS['project_shared_depth']--;
+        if ($previous === null) { unset($GLOBALS['project_shared_context']); } else { $GLOBALS['project_shared_context'] = $previous; }
+    }
+}
+
+function project_shared_before($anchor = 0)
+{
+    if (!empty($GLOBALS['project_shared_depth']) || ($GLOBALS['action'] ?? '') === 'full') { return ''; }
+    $config = project_native_config();
+    $subdivision = (int)($GLOBALS['sub'] ?? 0);
+    $placements = $config['pages'][$subdivision] ?? [];
+    $output = '';
+    foreach ($placements as $placement) {
+        $key = $subdivision . ':' . $placement['placement'];
+        if (!empty($GLOBALS['project_shared_placements'][$key])) { continue; }
+        if ($anchor && (int)$placement['before'] !== (int)$anchor) { continue; }
+        $GLOBALS['project_shared_placements'][$key] = true;
+        $output .= project_shared_render($placement);
+    }
+    return $output;
+}
+
+function project_shared_named($keyword)
+{
+    $config = project_native_config();
+    if (!isset($config['named'][$keyword])) { return null; }
+    $placement = $config['named'][$keyword];
+    if ($keyword === 'life_popup' && !empty($GLOBALS['project_shared_sources_rendered'][$placement['source']])) { return ''; }
+    return project_shared_render($placement);
+}
+
+function project_regions($selected = 0)
+{
+    static $cache = [];
+    $config = project_native_config();
+    $class = (int)($config['regions_class'] ?? 0);
+    if (!$class) { return []; }
+    if (!isset($cache[$class])) {
+        $cache[$class] = (array)nc_core()->db->get_results('SELECT Message_ID,city,address,Checked FROM Message'.$class.' WHERE Sub_Class_ID='.(int)$config['regions_cc']." AND TRIM(city)<>'' ORDER BY Priority,Message_ID", ARRAY_A);
+    }
+    return array_values(array_filter($cache[$class], function ($row) use ($selected) { return !empty($row['Checked']) || (int)$row['Message_ID']===(int)$selected; }));
+}
+
+function project_region_select($selected)
+{
+    $selected = (int)$selected;
+    $rows = project_regions($selected);
+    $counts = array_count_values(array_column($rows, 'city'));
+    $output = '<div class="nc-field"><label class="nc-field-caption" for="project-region">Город из справочника «Регионы»:</label><select name="f_region" id="project-region"><option value="0">Не указан</option>';
+    foreach ($rows as $row) {
+        $label = $row['city'];
+        if (($counts[$label] ?? 0) > 1 && project_filled($row['address'])) { $label .= ' — '.$row['address']; }
+        $output .= '<option value="'.(int)$row['Message_ID'].'"'.((int)$row['Message_ID']===$selected?' selected':'').'>'.project_plain($label).'</option>';
+    }
+    return $output.'</select></div>';
+}
+
+function project_person_data($message)
+{
+    static $cache = [];
+    if (!isset($cache[$message])) {
+        $class = (int)(project_native_config()['specialist_class'] ?? 0);
+        $cache[$message] = $class ? (array)nc_core()->db->get_row('SELECT region,method_choices,education,city FROM Message'.$class.' WHERE Message_ID='.(int)$message, ARRAY_A) : [];
+    }
+    return $cache[$message];
+}
+
+function project_person_region($message)
+{
+    $data = project_person_data($message);
+    foreach (project_regions((int)($data['region'] ?? 0)) as $region) {
+        if ((int)$region['Message_ID']===(int)($data['region'] ?? 0)) { return $region; }
+    }
+    return ['city'=>$data['city'] ?? '', 'address'=>''];
+}
+
+function project_education_rows($value)
+{
+    $rows = json_decode((string)$value, true);
+    if (!is_array($rows)) { return []; }
+    $result = [];
+    foreach ($rows as $row) {
+        if (!is_array($row)) { continue; }
+        $item = [];
+        foreach (['name','description','period'] as $key) { $item[$key] = trim((string)($row[$key] ?? '')); }
+        if (!array_filter($item, 'project_filled')) { continue; }
+        $item['image_url'] = '/netcat_template/template/life_teen/img/'.(preg_match('/сертификат|диплом|курс/ui', $item['name']) ? 'education2.svg' : 'education1.svg');
+        $result[] = $item;
+    }
+    return $result;
+}
+
+function project_education_editor($value)
+{
+    $rows = project_education_rows($value);
+    $output = '<div class="nc-field project-education-editor" data-education-editor><span class="nc-field-caption">Образование:</span><p>Добавьте учебное заведение или документ, программу и годы. Пустые строки не выводятся.</p><input type="hidden" name="f_education" data-education-store value="'.htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8').'"><div data-education-rows>';
+    foreach ($rows as $row) { $output .= project_education_editor_row($row); }
+    $output .= '</div><button type="button" data-education-add>Добавить образование</button><template data-education-template>'.project_education_editor_row([]).'</template></div>';
+    return $output;
+}
+
+function project_education_editor_row(array $row)
+{
+    $output = '<div class="project-education-row" data-education-row>';
+    foreach (['name'=>'Учебное заведение / документ','description'=>'Специальность / программа','period'=>'Годы / год выдачи'] as $key=>$label) {
+        $output .= '<label>'.$label.'<input type="text" data-education-field="'.$key.'" value="'.htmlspecialchars($row[$key] ?? '', ENT_QUOTES, 'UTF-8').'"></label>';
+    }
+    return $output.'<button type="button" data-education-remove>Удалить строку</button></div>';
+}
+
+function project_person_education($message)
+{
+    return project_education_rows(project_person_data($message)['education'] ?? '');
+}
+
+function project_method_icon($name, $id = 0)
+{
+    $names = ['Интерактивный подход'=>1,'Поддержка и принятие'=>2,'Работа с подростками и родителями'=>3,'Практические инструменты'=>4];
+    $icons = project_native_config()['method_icons'] ?? [];
+    return '/netcat_template/template/life_teen/img/method'.($icons[$id] ?? $names[$name] ?? 1).'.png';
+}
+
+function project_method_catalogue()
+{
+    $config = project_native_config();
+    $class = (int)($config['methods_class'] ?? 0);
+    $block = (int)($config['methods_cc'] ?? 0);
+    if (!$class || !$block) { return []; }
+    return (array)nc_core()->db->get_results('SELECT Message_ID,Keyword,name,description,Priority FROM Message'.$class.' WHERE Sub_Class_ID='.$block.' AND Checked=1 ORDER BY Priority,Message_ID', ARRAY_A);
+}
+
+function project_sync_method_list()
+{
+    if (!nc_core()->InsideAdminAccess()) { return; }
+    $db = nc_core()->db;
+    $catalogue = project_method_catalogue();
+    $active = [];
+    foreach ($catalogue as $method) {
+        $value = $db->escape('catalogue-'.(int)$method['Message_ID']);
+        $active[] = "'".$value."'";
+        $id = (int)$db->get_var("SELECT LifeSpecialistMethod_ID FROM Classificator_LifeSpecialistMethod WHERE Value='".$value."' LIMIT 1");
+        $name = $db->escape($method['name']);
+        if ($id) {
+            $db->query("UPDATE Classificator_LifeSpecialistMethod SET LifeSpecialistMethod_Name='".$name."',Checked=1,LifeSpecialistMethod_Priority=".(int)$method['Priority'].' WHERE LifeSpecialistMethod_ID='.$id);
+        } else {
+            $db->query("INSERT INTO Classificator_LifeSpecialistMethod (LifeSpecialistMethod_Name,LifeSpecialistMethod_Priority,Value,Checked) VALUES ('".$name."',".(int)$method['Priority'].",'".$value."',1)");
+        }
+    }
+    $db->query("UPDATE Classificator_LifeSpecialistMethod SET Checked=0 WHERE Value LIKE 'catalogue-%'".($active ? ' AND Value NOT IN ('.implode(',', $active).')' : ''));
+}
+
+function project_person_methods($message)
+{
+    $selected = array_filter(array_map('intval', explode(',', project_person_data($message)['method_choices'] ?? '')));
+    if (!$selected) { return []; }
+    $db = nc_core()->db;
+    $choices = (array)$db->get_results('SELECT LifeSpecialistMethod_ID,Value,LifeSpecialistMethod_Name FROM Classificator_LifeSpecialistMethod WHERE Checked=1 ORDER BY LifeSpecialistMethod_Priority,LifeSpecialistMethod_ID', ARRAY_A);
+    $catalogue = [];
+    foreach (project_method_catalogue() as $item) { $catalogue['catalogue-'.(int)$item['Message_ID']] = $item; }
+    $result = [];
+    foreach ($choices as $choice) {
+        if (!in_array((int)$choice['LifeSpecialistMethod_ID'], $selected, true)) { continue; }
+        if (!isset($catalogue[$choice['Value']])) { continue; }
+        $item = $catalogue[$choice['Value']];
+        $item['image_url'] = project_method_icon($item['name'], (int)$item['Message_ID']);
+        $result[] = $item;
+    }
+    return $result;
+}
+
+function project_specialist_post_error($region, $education)
+{
+    if ((int)$region && !in_array((int)$region, array_map(function ($row) { return (int)$row['Message_ID']; }, project_regions((int)$region)), true)) { return 'Выберите город из справочника «Регионы».'; }
+    $rows = json_decode((string)$education, true);
+    if ($education !== '' && (!is_array($rows) || json_last_error() !== JSON_ERROR_NONE)) { return 'Не удалось прочитать образование. Откройте карточку повторно и заполните строки образования.'; }
+    return '';
+}
+
+function project_service_text_editor($block)
+{
+    if (!nc_core()->InsideAdminAccess()) { return ''; }
+    $config = project_native_config();
+    $item = $config['service_texts'][$block] ?? null;
+    if (!$item) { return ''; }
+    $url = '/netcat/message.php?inside_admin=1&catalogue=1&sub='.(int)$item['sub'].'&cc='.(int)$block.'&message='.(int)$item['message'].'&isModal=1';
+    return '<div class="project-editor-link"><a href="'.htmlspecialchars($url, ENT_QUOTES, 'UTF-8').'" onclick="if(window.nc&&nc.load_dialog){nc.load_dialog(this.href);return false;}">Редактировать текст этой страницы услуги</a></div>';
+}
+
+function project_gallery_category_label($value)
+{
+    foreach (project_category_items('LifePhotoCategory') as $item) {
+        if ((string)$item['id']===(string)$value || $item['value']===(string)$value || $item['name']===(string)$value) { return $item['name']; }
+    }
+    return '';
 }

@@ -1,0 +1,15 @@
+<?php
+project_sync_method_list();
+$project_form_code = nc_fields_form_fs($action);
+$project_region_field = <<<'FIELD'
+<div class='nc-field nc-field-type-relation'><?= nc_related_field('region', "") ?></div>
+FIELD;
+$project_education_field = <<<'FIELD'
+<div class='nc-field nc-field-type-text'><?= nc_text_field('education', "", ($class_id ? $class_id : $classID), 1) ?></div>
+FIELD;
+$project_form_code = str_replace($project_region_field, '<?= project_region_select($f_region ?? 0) ?>', $project_form_code);
+$project_form_code = str_replace($project_education_field, '<?= project_education_editor($f_education ?? "") ?>', $project_form_code);
+eval('?>'.$project_form_code);
+?>
+<link rel="stylesheet" href="/netcat_template/template/life_teen/css/content-editor.css?v=5.4.0">
+<script src="/netcat_template/template/life_teen/js/content-editor.js?v=5.4.0"></script>

@@ -1,0 +1,9 @@
+<?= project_shared_before((int)$cc) ?>
+<?= $f_AdminCommon ?>
+<section class="gallery"><div class="wrap">
+<nav class="specialists-block__filters" aria-label="Категории фотографий">
+<button class="specialists-block__filter specialists-block__filter--active" data-filter="all" type="button">Все фото</button>
+<?php foreach (project_category_items('LifePhotoCategory') as $project_category_item) { ?>
+<button class="specialists-block__filter" data-filter="<?= project_plain($project_category_item['value']) ?>" type="button"><?= project_plain($project_category_item['name']) ?></button>
+<?php } ?>
+</nav><div class="gallery__list gallery__list--all">
