@@ -1,0 +1,127 @@
+{
+  "version": "5.5.0",
+  "components": {
+    "life_articles": [
+      "FormPrefix"
+    ],
+    "life_articles_featured": [
+      "FormPrefix"
+    ],
+    "life_articles_home": [
+      "Settings"
+    ],
+    "life_articles_related": [
+      "Settings"
+    ],
+    "life_banner": [
+      "FormPrefix"
+    ],
+    "life_banner_about": [
+      "FormPrefix"
+    ],
+    "life_banner_about_text": [
+      "FormPrefix"
+    ],
+    "life_banner_gallery": [
+      "FormPrefix"
+    ],
+    "life_banner_home": [
+      "FormPrefix"
+    ],
+    "life_banner_service": [
+      "FormPrefix"
+    ],
+    "life_banner_specialists": [
+      "FormPrefix"
+    ],
+    "life_cards": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_cards_help": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_cards_offer": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_cards_peoples": [
+      "FormPrefix",
+      "FormSuffix"
+    ],
+    "life_cards_reasons": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_cards_steps": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_cards_values": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_cards_way": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_cards_whom": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate"
+    ],
+    "life_certificates_home": [
+      "FormPrefix",
+      "FormSuffix",
+      "Settings"
+    ],
+    "life_faq": [
+      "FormPrefix",
+      "FormSuffix"
+    ],
+    "life_faq_contacts": [
+      "FormPrefix",
+      "FormSuffix",
+      "Settings"
+    ],
+    "life_gallery": [
+      "FormPrefix"
+    ],
+    "life_gallery_bulk": [
+      "FormPrefix"
+    ],
+    "life_reviews_home": [
+      "Settings"
+    ],
+    "life_specialists": [
+      "FormPrefix"
+    ],
+    "life_specialists_home": [
+      "Settings"
+    ],
+    "life_specialists_team": [
+      "Settings"
+    ],
+    "life_subscription_shared": [
+      "Settings"
+    ],
+    "life_text": [
+      "FormPrefix"
+    ]
+  },
+  "theme": [
+    "Header.html",
+    "Footer.html",
+    "function.inc.php.txt",
+    "css/content-editor.css",
+    "js/content-editor.js"
+  ]
+}

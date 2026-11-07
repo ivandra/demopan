@@ -3,7 +3,8 @@ function project_native_config()
     static $config;
     if ($config === null) {
         $config = [];
-        $path = rtrim(nc_core()->FILES_FOLDER, '/') . '/life_teen_v54/layout.php';
+        $path = rtrim(nc_core()->FILES_FOLDER, '/') . '/life_teen_v55/layout.php';
+        if (!is_file($path)) { $path = rtrim(nc_core()->FILES_FOLDER, '/') . '/life_teen_v54/layout.php'; }
         if (is_file($path)) {
             $bytes = file_get_contents($path);
             $marker = "__halt_compiler();\n";
@@ -16,55 +17,58 @@ function project_native_config()
 
 function project_shared_source_where($source, $where = '')
 {
-    $scope = 'a.Sub_Class_ID=' . (int)$source;
+    $block = nc_core()->db->get_row('SELECT Checked FROM Sub_Class WHERE Sub_Class_ID='.(int)$source, ARRAY_A);
+    if (!$block || empty($block['Checked'])) { return '1=0'; }
+    $scope = 'a.Sub_Class_ID='.(int)$source;
     return $where ? '(' . $where . ') AND ' . $scope : $scope;
 }
 
-function project_shared_render(array $placement)
-{
-    $source = (int)$placement['source'];
-    $config = project_native_config();
-    $block = $config['sources'][$source] ?? null;
-    $host = (int)($placement['settings_source'] ?? $placement['host'] ?? $source);
-    $host_block = $config['sources'][$host] ?? $block;
-    if (!$block || empty(nc_core()->sub_class->get_by_id($source, 'Checked'))) { return ''; }
-    $previous = $GLOBALS['project_shared_context'] ?? null;
-    $GLOBALS['project_shared_context'] = ['cc'=>$source, 'sub'=>(int)$block['sub'], 'class'=>(int)$block['class'], 'host'=>$host];
-    $GLOBALS['project_shared_depth'] = ($GLOBALS['project_shared_depth'] ?? 0) + 1;
-    try {
-        $output = (string)nc_objects_list((int)$host_block['sub'], $host, 'nc_ctpl='.(int)$placement['view']);
-        $GLOBALS['project_shared_sources_rendered'][$source] = true;
-        return $output;
-    } finally {
-        $GLOBALS['project_shared_depth']--;
-        if ($previous === null) { unset($GLOBALS['project_shared_context']); } else { $GLOBALS['project_shared_context'] = $previous; }
-    }
-}
-
-function project_shared_before($anchor = 0)
-{
-    if (!empty($GLOBALS['project_shared_depth']) || ($GLOBALS['action'] ?? '') === 'full') { return ''; }
-    $config = project_native_config();
-    $subdivision = (int)($GLOBALS['sub'] ?? 0);
-    $placements = $config['pages'][$subdivision] ?? [];
-    $output = '';
-    foreach ($placements as $placement) {
-        $key = $subdivision . ':' . $placement['placement'];
-        if (!empty($GLOBALS['project_shared_placements'][$key])) { continue; }
-        if ($anchor && (int)$placement['before'] !== (int)$anchor) { continue; }
-        $GLOBALS['project_shared_placements'][$key] = true;
-        $output .= project_shared_render($placement);
-    }
-    return $output;
-}
+// Compatibility with previously compiled templates. Page composition is native.
+function project_shared_before($anchor = 0) { return ''; }
 
 function project_shared_named($keyword)
 {
-    $config = project_native_config();
-    if (!isset($config['named'][$keyword])) { return null; }
-    $placement = $config['named'][$keyword];
-    if ($keyword === 'life_popup' && !empty($GLOBALS['project_shared_sources_rendered'][$placement['source']])) { return ''; }
-    return project_shared_render($placement);
+    $db = nc_core()->db;
+    $block = $db->get_row("SELECT b.Sub_Class_ID,b.Subdivision_ID,b.Checked FROM Sub_Class b JOIN Class c USING(Class_ID) WHERE b.Catalogue_ID=".(int)($GLOBALS['catalogue'] ?? 1)." AND b.Subdivision_ID=".(int)($GLOBALS['sub'] ?? 0)." AND c.Keyword='".$db->escape($keyword)."' ORDER BY b.Priority,b.Sub_Class_ID LIMIT 1", ARRAY_A);
+    if (!$block || empty($block['Checked'])) { return ''; }
+    return (string)nc_objects_list((int)$block['Subdivision_ID'], (int)$block['Sub_Class_ID']);
+}
+
+function project_popup_widget()
+{
+    $db = nc_core()->db;
+    $local = $db->get_var("SELECT b.Sub_Class_ID FROM Sub_Class b JOIN Class c USING(Class_ID) WHERE b.Catalogue_ID=".(int)($GLOBALS['catalogue'] ?? 1)." AND b.Subdivision_ID=".(int)($GLOBALS['sub'] ?? 0)." AND c.Keyword='life_popup' LIMIT 1");
+    // A native placement, including a disabled one, owns this page's popup.
+    if ($local) { return ''; }
+    $source = (int)(project_native_config()['popup_source'] ?? 0);
+    if (!$source) { return ''; }
+    $block = nc_core()->db->get_row('SELECT Subdivision_ID,Checked FROM Sub_Class WHERE Sub_Class_ID='.$source, ARRAY_A);
+    return !empty($block['Checked']) ? (string)nc_objects_list((int)$block['Subdivision_ID'], $source) : '';
+}
+
+function project_source_notice($source)
+{
+    if (!nc_core()->InsideAdminAccess()) { return ''; }
+    $block = nc_core()->db->get_row('SELECT Sub_Class_Name FROM Sub_Class WHERE Sub_Class_ID='.(int)$source, ARRAY_A);
+    $url = '/netcat/admin/#object.list('.(int)$source.')';
+    return '<div class="project-editor-link">Повторяемое содержимое: '.project_plain($block['Sub_Class_Name'] ?? '').'. Заголовок и настройки этого блока редактируются в текущем разделе. <a href="'.$url.'" target="_blank" rel="noopener">Открыть общий источник</a></div>';
+}
+
+function project_card_icon($value, $variant, $index)
+{
+    if (project_filled($value)) { return (string)$value; }
+    $sets = [
+        'life_cards'=>['block-for-whom1.png','block-for-whom2.png','block-for-whom3.png'],
+        'life_cards_whom'=>['block-for-whom1.png','block-for-whom2.png','block-for-whom3.png'],
+        'life_cards_steps'=>['step1.svg','step2.svg','step3.svg','step4.svg'],
+        'life_cards_reasons'=>['step1.svg','step5.svg','step6.svg','step4.svg'],
+        'life_cards_help'=>['help1.png','help2.png','help3.png','help4.png'],
+        'life_cards_way'=>['way1.png','way2.png','way3.png','way4.png'],
+        'life_cards_offer'=>['what-we-offer1.png','what-we-offer2.png','what-we-offer3.png','what-we-offer4.png','what-we-offer5.png'],
+        'life_cards_values'=>['our-values1.png','our-values2.png','our-values3.png','our-values4.png'],
+    ];
+    $icons = $sets[$variant] ?? [];
+    return $icons ? '/netcat_template/template/life_teen/img/'.$icons[(int)$index % count($icons)] : '';
 }
 
 function project_regions($selected = 0)
