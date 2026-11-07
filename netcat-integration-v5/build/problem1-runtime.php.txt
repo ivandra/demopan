@@ -110,13 +110,13 @@ function project_specialist_documents($message = 0)
     return $documents;
 }
 
-function project_global_documents()
+function project_global_documents($source = 0)
 {
     global $catalogue;
     $db = nc_core()->db;
     $class = (int)$db->get_var("SELECT Class_ID FROM Class WHERE Keyword='life_certificates' AND ClassTemplate=0");
     if (!$class) { return []; }
-    $rows = (array)$db->get_results('SELECT certificate.Message_ID,certificate.name FROM Message'.$class.' certificate JOIN Sub_Class block USING(Sub_Class_ID) WHERE certificate.Checked=1 AND block.Checked=1 AND block.Catalogue_ID='.(int)$catalogue.' ORDER BY certificate.Priority,certificate.Message_ID', ARRAY_A);
+    $rows = (array)$db->get_results('SELECT certificate.Message_ID,certificate.name FROM Message'.$class.' certificate JOIN Sub_Class block USING(Sub_Class_ID) WHERE certificate.Checked=1 AND block.Checked=1 AND block.Catalogue_ID='.(int)$catalogue.($source ? ' AND certificate.Sub_Class_ID='.(int)$source : '').' ORDER BY certificate.Priority,certificate.Message_ID', ARRAY_A);
     $documents = [];
     foreach ($rows as $row) {
         $image = project_document_url(nc_file_path($class, $row['Message_ID'], 'img'));
@@ -150,15 +150,18 @@ function project_is_specialist_directory($subdivision)
     return (bool)$db->get_var("SELECT block.Sub_Class_ID FROM Sub_Class block JOIN Class component USING(Class_ID) WHERE component.Keyword='life_specialists' AND block.Class_Template_ID=0 AND block.Checked=1 AND block.Subdivision_ID=".(int)$subdivision.' LIMIT 1');
 }
 
-function project_specialist_documents_block($message = 0, $includeGlobal = true)
+function project_specialist_documents_block($message = 0, $includeGlobal = true, array $settings = [], $source = 0)
 {
     $documents = project_specialist_documents($message);
-    if ($includeGlobal) { $documents = array_merge($documents, project_global_documents()); }
+    if ($includeGlobal) { $documents = array_merge($documents, project_global_documents($source)); }
     if (!$documents) { return ''; }
+    $label = $settings['content_formprefix_1'] ?? 'Дипломы и сертификаты';
+    $heading = array_key_exists('heading', $settings) ? project_setting_heading($settings) : 'Профессионализм в основе <span class="hero__title-accent">нашей работы</span>';
+    $description = $settings['content_formprefix_2'] ?? 'Наши специалисты постоянно развиваются, проходят обучение и повышают квалификацию, чтобы оказать вам качественную поддержку.';
     return '<section class="certificates-block"><div class="wrap"><div class="certificates-block__content">'.
-        '<div class="certificates-block__text"><p class="hero__label">Дипломы и сертификаты</p>'.
-        '<h2 class="hero__title">Профессионализм в основе <span class="hero__title-accent">нашей работы</span></h2>'.
-        '<p class="hero__description">Наши специалисты постоянно развиваются, проходят обучение и повышают квалификацию, чтобы оказать вам качественную поддержку.</p></div>'.
+        '<div class="certificates-block__text">'.(project_filled($label) ? '<p class="hero__label">'.project_plain($label).'</p>' : '').
+        (project_filled($heading) ? '<h2 class="hero__title">'.$heading.'</h2>' : '').
+        (project_filled($description) ? '<p class="hero__description">'.project_plain($description).'</p>' : '').'</div>'.
         '<div class="certificates-block__slider"><div class="certificates-block__list swiper4"><div class="swiper-wrapper">'.
         project_document_slides($documents, 'certificates-block').'</div></div></div>'.
         '<div class="certificates-block__actions"><a class="specialists__all-btn" href="/o-nas/sertifikaty/">Все дипломы и сертификаты →</a></div>'.

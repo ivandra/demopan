@@ -1,5 +1,5 @@
 <?= $f_AdminCommon ?>
-<section class="articles-block<?= $totRows ? '' : ' project-no-feature' ?>">
+<section class="articles-block<?=  $rowCount ? '' : ' project-no-feature' ?>">
     <div class="wrap">
         <div class="articles-block__text">
             <?php if (project_filled(project_setting_title($cc_settings, 'content_recordtemplate_1'))) { ?><h1 class="hero__title"><?= project_setting_title($cc_settings, 'content_recordtemplate_1') ?><img alt="" class="hero__title-line" decoding="async" src="/netcat_template/template/life_teen/img/line3.svg"/></h1><?php } ?>

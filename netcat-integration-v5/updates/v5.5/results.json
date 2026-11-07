@@ -1,0 +1,93 @@
+{
+  "version": "5.5.0",
+  "status": "passed",
+  "tested_on": "2026-11-07",
+  "cms": "Netcat 7.2.0",
+  "mysql": "5.7.27",
+  "baseline": "Provided November 6 backup, then unchanged updates 5.3 and 5.4",
+  "scope": "Disposable local Docker fixture; no live hosting writes",
+  "nofile_limit": 64,
+  "php74": {
+    "version": "7.4.33",
+    "native_admin_checks": 44,
+    "editorial_checks": 56,
+    "browser_install_lifecycle_checks": 280
+  },
+  "php83": {
+    "version": "8.3.36",
+    "installation": "CLI",
+    "page_and_editorial_checks": 236,
+    "page_viewport_runs": 45,
+    "lifecycle_checks": 19
+  },
+  "syntax": [
+    {
+      "php": "7.4.33",
+      "files": 1332,
+      "failures": []
+    },
+    {
+      "php": "8.3.36",
+      "files": 1332,
+      "failures": []
+    }
+  ],
+  "preservation": [
+    {
+      "php": "7.4.33",
+      "mode": "installed",
+      "original_records_compared": 119,
+      "immutable_column_mismatches": [],
+      "original_files_compared": 14585,
+      "file_mismatches": [],
+      "site_checked": 0,
+      "gallery_groups": 4,
+      "gallery_photos": 12
+    },
+    {
+      "php": "8.3.36",
+      "mode": "installed",
+      "original_records_compared": 119,
+      "immutable_column_mismatches": [],
+      "original_files_compared": 14585,
+      "file_mismatches": [],
+      "site_checked": 0,
+      "gallery_groups": 4,
+      "gallery_photos": 12
+    }
+  ],
+  "rollback": [
+    {
+      "php": "7.4.33",
+      "mode": "rollback",
+      "original_records_compared": 119,
+      "immutable_column_mismatches": [],
+      "original_files_compared": 26593,
+      "file_mismatches": [],
+      "site_checked": 0
+    },
+    {
+      "php": "8.3.36",
+      "mode": "rollback",
+      "original_records_compared": 119,
+      "immutable_column_mismatches": [],
+      "original_files_compared": 26593,
+      "file_mismatches": [],
+      "site_checked": 0
+    }
+  ],
+  "schema": {
+    "local_semantic_checks": 1743,
+    "page_types": 11,
+    "failures": [],
+    "external_schema_org": "blocked: proxy CONNECT 403",
+    "external_google_rich_results": "blocked: proxy CONNECT 403",
+    "external_validation_claimed": false
+  },
+  "site_checked": 0,
+  "empty_menu_sections": {
+    "count": 18,
+    "status": "visible and empty"
+  },
+  "scripts": "netcat-integration-v5/tests/native-v55"
+}
