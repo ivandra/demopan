@@ -42,8 +42,8 @@
 .team__slider .swiper-wrapper { height: auto; align-items: stretch; }
 .team__slider .team__item,
 .team__slider .team__item:last-child { display: block; flex-shrink: 0; height: auto; margin-bottom: 0; }
-.team__item-photo { aspect-ratio: 4 / 5; object-fit: cover; object-position: center top; border-radius: 24px; display: block; }
-.specialists__item-img { aspect-ratio: 4 / 5; overflow: hidden; border-radius: 22px; }
+.team__item-photo { aspect-ratio: 194 / 217; object-fit: cover; object-position: center top; border-radius: 24px; display: block; }
+.specialists__item-img { aspect-ratio: 6 / 5; overflow: hidden; border-radius: 22px; }
 .specialists__item-img img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 .specialists-block__card-image { aspect-ratio: 4 / 5; overflow: hidden; border-radius: 22px; }
 .specialists-block__card-image img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
@@ -58,8 +58,8 @@
 .faq-block__trigger::after { flex: 0 0 auto; }
 .faq-block__question { display: block; }
 .faq-block__answer { overflow-wrap: anywhere; }
-.project-breadcrumbs { padding-top: 22px; padding-bottom: 8px; }
-.project-breadcrumbs ol { display: flex; flex-wrap: wrap; gap: 6px 10px; padding: 0; margin: 0; list-style: none; font-size: 14px; line-height: 1.5; }
+.project-breadcrumbs { padding: 20px 0; font-weight: 600; }
+.project-breadcrumbs ol { display: flex; flex-wrap: wrap; gap: 6px 10px; padding: 0; margin: 0; list-style: none; font-size: 13px; line-height: 1.35; }
 .project-breadcrumbs li { display: flex; gap: 10px; align-items: baseline; }
 .project-breadcrumbs li + li::before { content: "›"; color: #17131c; }
 .project-breadcrumbs a { color: inherit; text-decoration: none; }
@@ -122,3 +122,6 @@
 .article-page__text h2 { margin-bottom: 16px; font-size: 20px; font-weight: 700; }
 
 .articles-block__card.project-card-no-image { grid-template-columns: 1fr; }
+
+.project-person-link { color: inherit; text-decoration: none; }
+.project-person-link:focus-visible { outline: 2px solid #7b60f2; outline-offset: 4px; }

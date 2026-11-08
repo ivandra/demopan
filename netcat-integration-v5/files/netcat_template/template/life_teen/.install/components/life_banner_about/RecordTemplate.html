@@ -1,8 +1,8 @@
         <?= $f_AdminButtons ?>
         <div class="about__text">
             <?php if (project_filled($cc_settings['content_recordtemplate_1'] ?? '')) { ?><p class="hero__label"><?= nl2br(project_plain($cc_settings['content_recordtemplate_1'] ?? ''), false) ?></p><?php } ?>
-            <?php if (project_filled($f_name)) { ?><h1 class="hero__title">
-                <?= project_title($f_name) ?>
+            <?php if (project_filled(project_page_heading($f_name))) { ?><h1 class="hero__title">
+                <?= project_page_heading($f_name) ?>
             </h1><?php } ?>
             <div class="hero__description">
                 <?= shortcode_component((string)$f_text) ?>

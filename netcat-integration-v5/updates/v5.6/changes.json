@@ -1,0 +1,62 @@
+{
+  "version": "5.6.0",
+  "components": {
+    "life_articles": [
+      "RecordTemplateFull"
+    ],
+    "life_banner": [
+      "RecordTemplate"
+    ],
+    "life_banner_about": [
+      "RecordTemplate"
+    ],
+    "life_banner_about_text": [
+      "RecordTemplate"
+    ],
+    "life_banner_gallery": [
+      "RecordTemplate"
+    ],
+    "life_banner_home": [
+      "RecordTemplate"
+    ],
+    "life_banner_service": [
+      "RecordTemplate"
+    ],
+    "life_banner_specialists": [
+      "RecordTemplate"
+    ],
+    "life_cards_way": [
+      "FormPrefix",
+      "FormSuffix",
+      "RecordTemplate",
+      "Settings"
+    ],
+    "life_contacts": [
+      "RecordTemplate"
+    ],
+    "life_specialists": [
+      "RecordTemplate"
+    ],
+    "life_specialists_home": [
+      "RecordTemplate"
+    ],
+    "life_specialists_other": [
+      "RecordTemplate"
+    ],
+    "life_specialists_team": [
+      "RecordTemplate"
+    ],
+    "life_text": [
+      "RecordTemplate"
+    ]
+  },
+  "theme": [
+    "Header.html",
+    "Footer.html",
+    "function.inc.php.txt",
+    "css/content-editor.css",
+    "js/content-editor.js",
+    "css/project-ui.css",
+    "js/input-masks.js"
+  ]
+}

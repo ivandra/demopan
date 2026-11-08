@@ -1,0 +1,33 @@
+function project_page_heading($fallback)
+{
+    $explicit = ($GLOBALS['current_sub']['ncH1'] ?? '');
+    return project_title(($GLOBALS['action'] ?? '') !== 'full' && project_filled($explicit) ? $explicit : $fallback);
+}
+
+function project_meta_tags()
+{
+    // Expand before inserting into attributes: regional values must stay escaped.
+    return preg_replace_callback('/\[[a-zA-Z_][a-zA-Z0-9_]*\]/', function ($match) {
+        return project_plain($match[0]);
+    }, nc_core()->page->get_metatags());
+}
+
+function project_person_link($class, $message)
+{
+    return (string)nc_message_link((int)$message, (int)$class);
+}
+
+function project_article_navigation($class, $message)
+{
+    $db = nc_core()->db;
+    $current = $db->get_row('SELECT Sub_Class_ID FROM Message'.(int)$class.' WHERE Message_ID='.(int)$message, ARRAY_A);
+    if (!$current) { return ''; }
+    $block = $db->get_row('SELECT b.Checked,s.Hidden_URL FROM Sub_Class b JOIN Subdivision s USING(Subdivision_ID) WHERE b.Sub_Class_ID='.(int)$current['Sub_Class_ID'], ARRAY_A);
+    if (!$block) { return ''; }
+    $ids = array_map('intval', (array)$db->get_col('SELECT Message_ID FROM Message'.(int)$class.' WHERE Checked=1 AND Parent_Message_ID=0 AND Sub_Class_ID='.(int)$current['Sub_Class_ID'].' ORDER BY Priority,Message_ID'));
+    $position = array_search((int)$message, $ids, true);
+    $next = $position !== false && count($ids) > 1 && !empty($block['Checked']) ? $ids[($position + 1) % count($ids)] : 0;
+    return '<nav class="article-page__nav" aria-label="Навигация по статьям">'.
+        '<a class="article-page__btn article-page__btn--prev" href="'.project_plain($block['Hidden_URL']).'">← К списку статей</a>'.
+        ($next ? '<a class="article-page__btn article-page__btn--next" href="'.project_plain(nc_message_link($next, (int)$class)).'">Следующая статья →</a>' : '').'</nav>';
+}

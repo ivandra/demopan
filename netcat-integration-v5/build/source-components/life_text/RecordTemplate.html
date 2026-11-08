@@ -3,7 +3,7 @@
 <?php $project_page_sub = (int)($GLOBALS['sub'] ?? $sub); $project_is_404 = $project_page_sub === (int)$current_catalogue['E404_Sub_ID']; ?>
 <?php if ($project_is_404) { ?><div class="project-404"><span class="project-404__code" aria-hidden="true">404</span><?php } ?>
 <?php if (project_filled($f_heading)) { ?><h2><?= project_plain($f_heading) ?></h2>
-<?php } elseif ($project_page_sub !== (int)$current_catalogue['Title_Sub_ID'] && project_service_has_text_heading($project_page_sub)) { ?><h1><?= project_plain($current_sub['Subdivision_Name']) ?></h1><?php } ?>
+<?php } elseif ($project_page_sub !== (int)$current_catalogue['Title_Sub_ID'] && project_service_has_text_heading($project_page_sub)) { ?><h1><?= project_page_heading($current_sub['Subdivision_Name']) ?></h1><?php } ?>
 <?php if (project_filled($f_text)) { ?><?= project_text($f_text) ?><?php } ?>
 <?php if ($project_is_404) { ?><div class="project-404__actions"><?php if (project_filled($cc_settings['content_recordtemplate_1'] ?? '')) { ?><a class="header__button" href="/"><?= nl2br(project_plain($cc_settings['content_recordtemplate_1'] ?? ''), false) ?></a><?php } ?><?php if (project_filled($cc_settings['content_recordtemplate_2'] ?? '')) { ?><a class="header__button" href="/kontakty/"><?= nl2br(project_plain($cc_settings['content_recordtemplate_2'] ?? ''), false) ?></a><?php } ?></div></div><?php } ?>
 <?php } ?>
