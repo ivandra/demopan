@@ -1,9 +1,9 @@
-<?php project_schema_service($f_name, $f_text); ?>
+<?php project_schema_service(project_page_heading($f_name), $f_text); ?>
         <?= $f_AdminButtons ?>
         <div class="contacts-page__main contacts-page__main--service">
             <div class="contacts-page__header">
-                <?php if (project_filled($f_name)) { ?><h1 class="hero__title">
-                    <?= project_title($f_name) ?>
+                <?php if (project_filled(project_page_heading($f_name))) { ?><h1 class="hero__title">
+                    <?= project_page_heading($f_name) ?>
                 </h1><?php } ?>
                 <?php if (project_filled($f_text)) { ?><p class="hero__description">
                     <?= shortcode_component((string)$f_text) ?>

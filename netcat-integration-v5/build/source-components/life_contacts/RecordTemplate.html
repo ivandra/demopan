@@ -2,7 +2,8 @@
         <div class="contacts-page__main">
             <div class="contacts-page__header">
                 <?php if (project_filled($f_name)) { ?><h1 class="hero__title">
-                    <?= project_title($f_name) ?>
+                    <?= project_page_heading($f_name) ?>
+                    <img alt="" aria-hidden="true" src="/netcat_template/template/life_teen/img/line5.svg" class="hero__title-line" />
                 </h1><?php } ?>
                 <?php if (project_filled($f_text)) { ?><p class="hero__description">
                     <?= shortcode_component((string)$f_text) ?>

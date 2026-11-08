@@ -1,0 +1,144 @@
+{
+  "version": "5.6.0",
+  "status": "passed",
+  "tested_on": "2026-11-09",
+  "test_timezone": "Europe/Moscow",
+  "cms": "Netcat 7.2.0",
+  "mysql": "5.7.27",
+  "baseline": "Provided November 6 backup plus unchanged 5.3, 5.4 and 5.5 updates",
+  "scope": "Isolated Docker fixture; no live hosting writes",
+  "nofile_limit": 64,
+  "prepared_pages": 18,
+  "newly_filled_pages": 17,
+  "teen_subpages": 16,
+  "site_checked": 0,
+  "php74": {
+    "version": "7.4.33",
+    "installation": "browser checkpoints",
+    "new_fixes": {
+      "checks": 169,
+      "page_viewport_runs": 54
+    },
+    "native_editors_regression": {
+      "checks": 236,
+      "page_viewport_runs": 45
+    },
+    "native_block_architecture": {
+      "checks": 44,
+      "page_viewport_runs": 0
+    },
+    "lifecycle": {
+      "checks": 204,
+      "page_viewport_runs": 0,
+      "http_requests": 189
+    }
+  },
+  "php83": {
+    "version": "8.3.36",
+    "installation": "CLI",
+    "new_fixes": {
+      "checks": 169,
+      "page_viewport_runs": 54
+    },
+    "native_editors_regression": {
+      "checks": 236,
+      "page_viewport_runs": 45
+    },
+    "lifecycle": {
+      "checks": 19,
+      "page_viewport_runs": 0
+    }
+  },
+  "preservation": [
+    {
+      "php": "7.4.33",
+      "mode": "installed",
+      "original_records_compared": 113,
+      "retired_archive_records": 12,
+      "record_mismatches": [],
+      "original_files_compared": 18507,
+      "file_mismatches": [],
+      "table_checks": {
+        "Message223": true,
+        "Multifield": true,
+        "Filetable": true
+      },
+      "site_checked": 0,
+      "gallery_photos": 12
+    },
+    {
+      "php": "8.3.36",
+      "mode": "installed",
+      "original_records_compared": 113,
+      "retired_archive_records": 12,
+      "record_mismatches": [],
+      "original_files_compared": 18507,
+      "file_mismatches": [],
+      "table_checks": {
+        "Message223": true,
+        "Multifield": true,
+        "Filetable": true
+      },
+      "site_checked": 0,
+      "gallery_photos": 12
+    }
+  ],
+  "rollback": [
+    {
+      "php": "7.4.33",
+      "mode": "rollback",
+      "original_records_compared": 125,
+      "retired_archive_records": 0,
+      "record_mismatches": [],
+      "original_files_compared": 28101,
+      "file_mismatches": [],
+      "table_checks": {
+        "Message223": true,
+        "Multifield": true,
+        "Filetable": true
+      },
+      "site_checked": 0,
+      "gallery_photos": 12
+    },
+    {
+      "php": "8.3.36",
+      "mode": "rollback",
+      "original_records_compared": 125,
+      "retired_archive_records": 0,
+      "record_mismatches": [],
+      "original_files_compared": 28101,
+      "file_mismatches": [],
+      "table_checks": {
+        "Message223": true,
+        "Multifield": true,
+        "Filetable": true
+      },
+      "site_checked": 0,
+      "gallery_photos": 12
+    }
+  ],
+  "syntax": [
+    {
+      "php": "7.4.33",
+      "files": 1298,
+      "failures": []
+    },
+    {
+      "php": "8.3.36",
+      "files": 1298,
+      "failures": []
+    }
+  ],
+  "schema": {
+    "general_semantic_checks": 1779,
+    "general_page_types": 11,
+    "service_semantic_checks": 145,
+    "service_pages": 18,
+    "failures": [],
+    "external_schema_org": "Unavailable under current proxy policy",
+    "external_google_rich_results": "Unavailable under current proxy policy",
+    "external_validation_claimed": false
+  },
+  "scripts": "netcat-integration-v5/tests/sitefix-v56",
+  "rollback_scope": "Site records, metadata and all 28101 original working files. Root ZIP guides/results, extracted before updater startup, are excluded."
+}

@@ -18,3 +18,4 @@ b74087e98f41899c4282ef389134c16d29127cfa15bc85970ad012cbedd32f4c  lifepodrostka-
 f48419aa281d0beb0df5bfffdadb6dfa9a97bf1af2ffb39b89e12d3053e824d3  lifepodrostka-netcat-v5.3-update.zip
 187578390e113f91a1f81fbc7844952e6d5fd561ea5ca6ac5603351c235203ef  lifepodrostka-netcat-v5.4-update.zip
 9e742d1bb668fe990a29d39cf056e0a01eb3e2e32ddfd3ca068d325cbe8838fd  lifepodrostka-netcat-v5.5-update.zip
+28437c676efd0461ce36ff00a742f752b6ca5aa58185d1993b42e9d0fba1e233  lifepodrostka-netcat-v5.6-update.zip
